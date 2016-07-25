@@ -1,0 +1,27 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.kiven.sample">
+
+    <application
+        android:name="com.kiven.kutils.tools.KContext"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <meta-data android:name="roboguice.annotations.packages" android:value="com.kiven.sample"/>
+
+        <activity android:name=".LauchActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name="com.kiven.kutils.activityHelper.KHelperActivity" />
+        <activity android:name="com.kiven.kutils.logHelper.KShowLog" />
+        <activity android:name="com.kiven.kutils.activityHelper.KRoboHelperActivity" />
+
+    </application>
+
+</manifest>

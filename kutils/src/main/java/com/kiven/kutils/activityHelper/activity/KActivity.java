@@ -13,7 +13,7 @@ import com.kiven.kutils.logHelper.KLog;
 import com.kiven.kutils.logHelper.KShowLog;
 
 /**
- *
+ * 可显示日志父类Activit
  * Created by kiven on 16/5/6.
  */
 public class KActivity extends AppCompatActivity implements SensorEventListener {

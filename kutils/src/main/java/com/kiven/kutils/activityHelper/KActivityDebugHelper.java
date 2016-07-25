@@ -11,6 +11,7 @@ import com.kiven.kutils.logHelper.KLog;
 import com.kiven.kutils.logHelper.KShowLog;
 
 /**
+ * helper, 可显示日志
  * Created by kiven on 16/7/22.
  */
 public class KActivityDebugHelper extends KActivityHelper implements SensorEventListener {

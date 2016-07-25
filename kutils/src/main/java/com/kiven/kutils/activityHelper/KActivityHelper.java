@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- *
+ * 父类helper,
  * Created by kiven on 15/11/5.
  */
 public class KActivityHelper {

@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import org.xutils.x;
 
 /**
+ * 可显示日志, 可使用XUtils3注解
  * Created by kiven on 16/7/22.
  */
 public class KXUtilActivity extends KActivity {

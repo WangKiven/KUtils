@@ -21,6 +21,7 @@ import roboguice.inject.RoboInjector;
 import roboguice.util.RoboContext;
 
 /**
+ * 可显示日志, 可使用Roboguice注解
  * Created by kiven on 16/7/22.
  */
 public class KRoboActivity extends KActivity implements RoboContext {

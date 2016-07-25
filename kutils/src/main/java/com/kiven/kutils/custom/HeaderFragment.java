@@ -46,6 +46,18 @@ public class HeaderFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mLeftBtn.setOnClickListener ( new View.OnClickListener () {
+
+            @Override
+            public void onClick( View v ) {
+                getActivity ().finish ();
+            }
+        } );
+    }
+
     private View findViewById(@IdRes int idRes) {
         return view.findViewById(idRes);
     }

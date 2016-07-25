@@ -7,6 +7,7 @@ import java.io.StringWriter;
 import java.util.LinkedList;
 
 /**
+ *
  * Created by Kiven on 2014/12/12.
  */
 public final class KLog {

@@ -28,7 +28,7 @@ public class KActivity extends AppCompatActivity implements SensorEventListener 
     }
 
     @Override
-    public void onResume() {
+    protected void onResume() {
         super.onResume();
         if (showLog()) {
             showLogTime = System.currentTimeMillis();
@@ -37,7 +37,7 @@ public class KActivity extends AppCompatActivity implements SensorEventListener 
     }
 
     @Override
-    public void onPause() {
+    protected void onPause() {
         super.onPause();
         if (showLog())
             sensorManager.unregisterListener(this);

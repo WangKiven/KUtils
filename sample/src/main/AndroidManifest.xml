@@ -19,7 +19,6 @@
         </activity>
 
         <activity android:name="com.kiven.kutils.activityHelper.KHelperActivity" />
-        <activity android:name="com.kiven.kutils.logHelper.KShowLog" />
         <activity android:name="com.kiven.kutils.activityHelper.KRoboHelperActivity" />
 
     </application>

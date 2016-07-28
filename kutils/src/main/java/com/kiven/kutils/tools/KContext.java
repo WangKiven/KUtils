@@ -7,6 +7,7 @@ import com.kiven.kutils.logHelper.KLog;
 import org.xutils.x;
 
 /**
+ *
  * Created by kiven on 16/5/6.
  */
 public class KContext extends Application {

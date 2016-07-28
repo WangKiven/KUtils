@@ -51,7 +51,7 @@ public class KShowLog extends KActivityHelper implements AdapterView.OnItemClick
 			try {
 				new KShowLogDetail(log).startActivity(mActivity);
 			} catch (Exception e) {
-				KLog.e(e);
+				e.printStackTrace();
 			}
 		}else {
 			try {
@@ -62,7 +62,7 @@ public class KShowLog extends KActivityHelper implements AdapterView.OnItemClick
 					new KShowLogDetail(new Gson().fromJson(jsonElement, Map.class)).startActivity(mActivity);
 				}
 			} catch (Exception e) {
-				KLog.e(e);
+				e.printStackTrace();
 			}
 		}
 	}

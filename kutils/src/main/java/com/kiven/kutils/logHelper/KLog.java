@@ -7,10 +7,11 @@ import java.io.StringWriter;
 import java.util.LinkedList;
 
 /**
- *
+ * 不建议直接使用, 建议在项目中重写
  * Created by Kiven on 2014/12/12.
  */
-public final class KLog {
+@Deprecated
+public class KLog {
 
 	private static KLog myLog;
 

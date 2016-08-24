@@ -24,7 +24,8 @@ public class KActivity extends AppCompatActivity implements SensorEventListener 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        sensorManager = (SensorManager) getSystemService(Activity.SENSOR_SERVICE);
+        if (showLog())
+            sensorManager = (SensorManager) getSystemService(Activity.SENSOR_SERVICE);
     }
 
     @Override
@@ -48,6 +49,7 @@ public class KActivity extends AppCompatActivity implements SensorEventListener 
     }
 
     private long showLogTime;
+
     /**
      * Called when sensor values have changed.
      * <p>See {@link SensorManager SensorManager}

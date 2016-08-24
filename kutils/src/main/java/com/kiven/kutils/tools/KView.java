@@ -2,6 +2,7 @@ package com.kiven.kutils.tools;
 
 import android.annotation.SuppressLint;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
@@ -40,8 +41,6 @@ public class KView {
 	
 	/**
 	 * 设置背景
-	 * @param v
-	 * @param background
 	 */
 	@SuppressLint("NewApi")
 	public static void setBackground( View v, Drawable background ) {
@@ -54,11 +53,18 @@ public class KView {
 	
 	/**
 	 * 显示，隐藏控件
-	 * @param view
-	 * @param isShow
 	 */
 	public static void setVisibility(View view, boolean isShow){
 		view.setVisibility(isShow ? View.VISIBLE: View.GONE);
+	}
+
+	/**
+	 * 旋转，需api>=11才能实现旋转
+     */
+	public static void setRotation(View view, float rotate) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			view.setRotation(rotate);
+		}
 	}
 	
 	/**

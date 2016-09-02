@@ -18,7 +18,9 @@ import android.graphics.drawable.StateListDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.graphics.drawable.shapes.RoundRectShape;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.annotation.ColorRes;
+import android.support.annotation.DrawableRes;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -91,9 +93,6 @@ public class KImage {
 	/**
 	 * 圆角纯色
 	 * 如：TImage.getCornerDrawable(Color.parseColor("#747ae8"), 10)
-	 * @param color
-	 * @param corner
-	 * @return
 	 * 
 	 * RoundRectShape(float[] outerRadii, RectF inset, float[] innerRadii) :指定一个外部（圆角）矩形 和 一个 可选的 内部（圆角）矩形。
 	 */
@@ -105,10 +104,42 @@ public class KImage {
 		return getCornerDrawable(color, corners);
 	}
 	public static ShapeDrawable getCornerDrawable(int color, float[] corners){
-		ShapeDrawable drawable = new ShapeDrawable(new RoundRectShape(corners, null, null));
+		/*ShapeDrawable drawable = new ShapeDrawable(new RoundRectShape(corners, null, null));
 		drawable.getPaint().setColor(color);
-		drawable.getPaint().setStyle(Paint.Style.FILL);
+		drawable.getPaint().setStyle(Paint.Style.FILL);*/
+		return getCornerDrawable(0, corners, color, 0, 0);
+	}
+	public static ShapeDrawable getCornerDrawable(int type, float[] corners, int fillColor, int rimColor, float rimWidth){
+		ShapeDrawable drawable = new ShapeDrawable(new RoundRectShape(corners, null, null));
+		setPaint(drawable.getPaint(), type, fillColor, rimColor, rimWidth);
 		return drawable;
+	}
+
+	/**
+	 * 设置Paint
+	 * @param type			0：仅填充 1：填充+边框 2：仅边框
+	 * @param fillColor		填充颜色
+	 * @param rimColor		边框颜色
+	 * @param rimWidth		边框宽度
+	 */
+	private static void setPaint(Paint paint, int type, int fillColor, int rimColor, float rimWidth) {
+		switch (type) {
+			case 0:
+				paint.setColor(fillColor);
+				paint.setStyle(Paint.Style.FILL);
+				break;
+			case 1:
+				//
+				paint.setColor(fillColor);
+				paint.setStrokeWidth(rimWidth);
+				paint.setStyle(Paint.Style.FILL_AND_STROKE);
+				break;
+			case 2:
+				paint.setColor(rimColor);
+				paint.setStrokeWidth(rimWidth);
+				paint.setStyle(Paint.Style.STROKE);
+				break;
+		}
 	}
 	/**
 	 * 有各种效果的按钮Drawable
@@ -173,21 +204,31 @@ public class KImage {
 	}
 	/**
 	 * 纯色圆，如果View是长方形则显示为椭圆
-	 * @param color
-	 * @return
 	 */
 	public static ShapeDrawable getCircleDrawable(int color){
-		ShapeDrawable drawable = new ShapeDrawable(new OvalShape());
+		/*ShapeDrawable drawable = new ShapeDrawable(new OvalShape());
 		drawable.getPaint().setColor(color);
-		drawable.getPaint().setStyle(Paint.Style.FILL);
+		drawable.getPaint().setStyle(Paint.Style.FILL);*/
 		
+		return getCircleDrawable(0, color, 0, 0);
+	}
+
+	/**
+	 * 获取圆，如果View是长方形则显示为椭圆
+	 * @param type			0：仅填充 1：填充+边框 2：仅边框
+	 * @param fillColor		填充颜色
+	 * @param rimColor		边框颜色
+	 * @param rimWidth		边框宽度
+     */
+	public static ShapeDrawable getCircleDrawable(int type, int fillColor, int rimColor, float rimWidth){
+		ShapeDrawable drawable = new ShapeDrawable(new OvalShape());
+		setPaint(drawable.getPaint(), type, fillColor, rimColor, rimWidth);
+
 		return drawable;
 	}
 	
 	/**
 	 * 压缩图片后显示
-	 * @param imageView
-	 * @param bitmap
 	 */
 	public static void showImage(final View imageView, final Bitmap bitmap){
 		if (bitmap == null || imageView == null) {
@@ -270,6 +311,20 @@ public class KImage {
 			return context.getColor(rId);
 		} else {
 			return context.getResources().getColor(rId);
+		}
+	}
+
+	/**
+	 * 获取drawable
+	 * @param context	context
+	 * @param rId		rId
+	 * @return			Drawable
+	 */
+	public static Drawable getDrawable(Context context, @DrawableRes int rId) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			return context.getDrawable(rId);
+		} else {
+			return context.getResources().getDrawable(rId);
 		}
 	}
 }

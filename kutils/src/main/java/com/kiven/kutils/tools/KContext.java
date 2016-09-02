@@ -20,11 +20,15 @@ public class KContext extends Application {
     }
 
     @Override
-    public void onCreate() {
+    public final void onCreate() {
         super.onCreate();
 
         mInstance = this;
 
+        init();
+    }
+
+    protected void init() {
         x.Ext.init(this);
         x.Ext.setDebug(KLog.isDebug());
     }

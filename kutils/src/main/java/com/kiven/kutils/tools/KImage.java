@@ -25,12 +25,12 @@ import android.widget.ImageView;
 public class KImage {
 	/**
 	 * 图片圆角
-	 * 
+	 *
 	 * 其实主要靠：paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));这行代码，
 	 * 为什么呢，我给大家解释下，SRC_IN这种模式，两个绘制的效果叠加后取交集展现后图，怎么说呢，咱们第一个绘制的是个圆形，
 	 * 第二个绘制的是个Bitmap，于是交集为圆形，展现的是BItmap，就实现了圆形图片效果。圆角，其实就是先绘制圆角矩形，
 	 * 是不是很简单，以后别人再说实现圆角，你就把这一行代码给他就行了。
-	 * 
+	 *
 	 * @param bitmap
 	 * @return
 	 */
@@ -41,17 +41,17 @@ public class KImage {
 		if (bitmap != null) {
 			Bitmap outBitmap = Bitmap.createBitmap(min,
 					min, Config.ARGB_8888);
-			
+
 			Paint paint = new Paint();
 			paint.setAntiAlias(true);
-			
+
 			Rect rect = new Rect(0, 0, min, min);
 
 			Canvas canvas = new Canvas(outBitmap);
 			canvas.drawCircle(min / 2, min / 2, min / 2, paint);
-			
+
 			paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
-			
+
 			canvas.drawBitmap(bitmap, new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight()), rect, paint);
 			return outBitmap;
 		}
@@ -71,18 +71,18 @@ public class KImage {
 		if (bitmap != null) {
 			Bitmap outBitmap = Bitmap.createBitmap(min,
 					min, Config.ARGB_8888);
-			
+
 			Paint paint = new Paint();
 			paint.setAntiAlias(true);
-			
+
 			Rect rect = new Rect(0, 0, min, min);
 			RectF rectF = new RectF(rect);
 
 			Canvas canvas = new Canvas(outBitmap);
 			canvas.drawRoundRect(rectF, radius, radius, paint);
-			
+
 			paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
-			
+
 			canvas.drawBitmap(bitmap, new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight()), rect, paint);
 			return outBitmap;
 		}

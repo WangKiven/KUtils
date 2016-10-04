@@ -9,6 +9,8 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import java.util.Map;
@@ -97,6 +99,10 @@ public class KActivityHelper {
     public void onDestroy() {
 
     }
+
+    public boolean onCreateOptionsMenu(Menu menu){ return  false;}
+
+    public boolean onOptionsItemSelected(MenuItem item){ return false;}
 
     public void onWindowFocusChanged(boolean hasFocus) {
     }

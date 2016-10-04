@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.kiven.kutils.logHelper.KLog;
@@ -152,6 +154,24 @@ public class KHelperActivity extends AppCompatActivity {
         	return b && helper.onKeyDown(keyCode, event);
 		}
     }
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		if (helper == null) {
+			return false;
+		} else {
+			return helper.onCreateOptionsMenu(menu);
+		}
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (helper == null) {
+			return false;
+		} else {
+			return helper.onOptionsItemSelected(item);
+		}
+	}
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

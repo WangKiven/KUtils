@@ -1,5 +1,6 @@
 package com.kiven.kutils.sup.recyclerView;
 
+import android.support.annotation.IdRes;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
@@ -33,5 +34,9 @@ public class BaseRecyclerViewHolder extends RecyclerView.ViewHolder implements V
         if (clickListener != null) {
             clickListener.onItemClick(this, position);
         }
+    }
+
+    public View findViewById(@IdRes int id) {
+        return itemView.findViewById(id);
     }
 }

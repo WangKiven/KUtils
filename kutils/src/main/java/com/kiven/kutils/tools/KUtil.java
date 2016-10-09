@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 /**
+ *
  * Created by Kiven on 2014/12/24.
  */
 public class KUtil {

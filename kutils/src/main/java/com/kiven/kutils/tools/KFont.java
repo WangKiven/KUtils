@@ -16,9 +16,8 @@ public class KFont {
 
     private static Typeface typeface = null;
     /**
-     * 字体
+     * 设置字体
      *
-     * @param context
      * @param root
      *            遍历root下所有TextView系，并设置默认字体
      */
@@ -49,6 +48,10 @@ public class KFont {
         }
     }
 
+    /**
+     * 设置字体
+     * @param textViews 要设置字体的TextView
+     */
     public static void applyFont(Context context, TextView... textViews) {
         if (context == null || textViews == null || textViews.length < 1
                 || android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.GINGERBREAD_MR1) {
@@ -72,6 +75,9 @@ public class KFont {
         }
     }
 
+    /**
+     * 获取字体
+     */
     private static Typeface getTypeface(Context context) throws Exception {
         if (typeface == null) {
             typeface = Typeface.createFromAsset(context.getAssets(), "fonts/FZLanTingHeiS-L-GB.ttf");

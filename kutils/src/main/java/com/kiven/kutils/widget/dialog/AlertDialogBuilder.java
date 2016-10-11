@@ -4,6 +4,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.annotation.IdRes;
+import android.support.annotation.LayoutRes;
+import android.support.annotation.StyleRes;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
@@ -16,6 +18,10 @@ import com.kiven.kutils.R;
  */
 
 public class AlertDialogBuilder {
+    // 使用的布局, 可设置为自己的布局
+    public static @LayoutRes int k_layout = R.layout.k_alert_dialog;
+    public static @StyleRes int k_style = R.style.KAlertDialog;
+
     private Context context;
     private Dialog dialog;
 
@@ -23,9 +29,17 @@ public class AlertDialogBuilder {
     private View.OnClickListener okListener = null;
 
     public AlertDialogBuilder(Context context) {
+        initView(context, k_layout, k_style);
+    }
+
+    public AlertDialogBuilder(Context context, int layout, int style) {
+        initView(context, layout, style);
+    }
+
+    private void initView(Context context, int layout, int style) {
         this.context = context;
-        dialog = new Dialog(context/*, R.style.KAlertDialog*/);
-        dialog.setContentView(R.layout.k_alert_dialog);
+        dialog = new Dialog(context, style);
+        dialog.setContentView(layout);
 //        dialog.setCancelable(false);
 
         dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {

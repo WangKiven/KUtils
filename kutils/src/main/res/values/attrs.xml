@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="item_layout" format="reference"/>
+
+    <attr name="item_background" format="reference" />
+    <attr name="item_show_default_background" format="boolean" />
+    <attr name="item_title" format="string"/>
+    <attr name="item_title_color" format="color"/>
+    <attr name="item_title_size" format="dimension"/>
+
+    <attr name="item_detail" format="string"/>
+    <attr name="item_detail_color" format="color"/>
+    <attr name="item_detail_size" format="dimension"/>
+
+    <attr name="item_detail_hint" format="string"/>
+
+    <declare-styleable name="KNormalItemView">
+        <attr name="item_layout"/>
+
+        <attr name="item_background" />
+        <attr name="item_show_default_background" />
+        <attr name="item_drawableLeft" format="reference"/>
+        <attr name="item_title"/>
+        <attr name="item_title_color"/>
+        <attr name="item_title_bold" format="boolean"/>
+
+        <attr name="item_detail"/>
+        <attr name="item_detail_color"/>
+        <attr name="item_detail_arrow" format="reference"/>
+
+        <attr name="item_detail_hint"/>
+        <attr name="item_detail_show" format="boolean"/>
+    </declare-styleable>
+</resources>

@@ -90,6 +90,15 @@ public class AlertDialogBuilder {
         tv_cancel.setVisibility(View.VISIBLE);
 
         cancleListener = listener;
+        // TODO cancleListener == null时，需创建一个。否则点到界面外时，查询会调用到okListener
+        if (listener == null) {
+            cancleListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            };
+        }
         tv_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

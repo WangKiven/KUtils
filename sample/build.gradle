@@ -13,11 +13,16 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
     sourceSets { main { res.srcDirs = ['src/main/res', 'src/main/res/layout'] } }
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE'
+    }
 }
 
 project.tasks.withType(JavaCompile) { task ->
@@ -28,7 +33,22 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile project(':kutils')
-    compile project(':EveryshereLibrary')
-    compile 'com.android.support:design:24.1.1'
-    compile 'com.android.support:appcompat-v7:24.1.1'
+//    compile project(':EveryshereLibrary')
+    compile 'com.android.support:design:24.2.1'
+    compile 'com.android.support:appcompat-v7:24.2.1'
+    compile 'com.android.support:recyclerview-v7:24.2.1'
+
+    compile 'org.roboguice:roboguice:3.0.1'
+    compile 'org.roboguice:roboblender:3.0.1'
+    compile 'com.google.code.gson:gson:2.7'
+    compile project(':xutils')
 }
+// 打印过时api调用信息
+/*
+allprojects {
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+        }
+    }
+}*/

@@ -31,6 +31,15 @@
 
     </android.support.v7.widget.Toolbar>
 
+    <com.kiven.kutils.widget.KNormalItemView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:item_title="@string/app_name"/>
+
+    <com.kiven.kutils.widget.UIGridView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
     <RelativeLayout
         android:id="@+id/root"
         android:layout_width="match_parent"

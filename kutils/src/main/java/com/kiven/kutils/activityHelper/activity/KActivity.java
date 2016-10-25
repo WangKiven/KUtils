@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.kiven.kutils.logHelper.KLog;
 import com.kiven.kutils.logHelper.KShowLog;
+import com.kiven.kutils.tools.KContext;
 
 /**
  * 可显示日志父类Activit
@@ -31,6 +32,8 @@ public class KActivity extends AppCompatActivity implements SensorEventListener 
     @Override
     protected void onResume() {
         super.onResume();
+        KContext.getInstance().onActivityResume(this);
+
         if (showLog()) {
             showLogTime = System.currentTimeMillis();
             sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
@@ -40,6 +43,8 @@ public class KActivity extends AppCompatActivity implements SensorEventListener 
     @Override
     protected void onPause() {
         super.onPause();
+        KContext.getInstance().onActivityPause(this);
+
         if (showLog())
             sensorManager.unregisterListener(this);
     }

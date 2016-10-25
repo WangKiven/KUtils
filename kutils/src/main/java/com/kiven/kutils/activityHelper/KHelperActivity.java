@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.kiven.kutils.logHelper.KLog;
+import com.kiven.kutils.tools.KContext;
 
 import java.lang.reflect.Constructor;
 
@@ -107,6 +108,7 @@ public class KHelperActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+		KContext.getInstance().onActivityResume(this);
     	if (helper != null) {
             helper.onResume();
 		}
@@ -114,6 +116,7 @@ public class KHelperActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
+		KContext.getInstance().onActivityPause(this);
     	if (helper != null) {
             helper.onPause();
 		}
@@ -122,19 +125,19 @@ public class KHelperActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        super.onStop();
     	if (helper != null) {
             helper.onStop();
 		}
+		super.onStop();
     }
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
     	if (helper != null) {
             helper.onDestroy();
 		}
         KActivityHelper.removeStack(getIntent().getStringExtra("BaseActivityHelper"));//将helper移除
+		super.onDestroy();
     }
     
     @Override

@@ -1,166 +1,197 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+
+<android.support.v4.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
-
-    <android.support.v7.widget.Toolbar
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        app:layout_scrollFlags="scroll|enterAlways|snap"
-        app:navigationIcon="@android:drawable/arrow_down_float"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="hello1"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:text="hello" />
-
-    </android.support.v7.widget.Toolbar>
-
-    <com.kiven.kutils.widget.KNormalItemView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:item_title="@string/app_name"/>
-
-    <com.kiven.kutils.widget.UIGridView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <RelativeLayout
-        android:id="@+id/root"
+    android:layout_height="match_parent">
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        tools:context="com.kiven.sample.LauchActivity">
+        android:orientation="vertical">
 
-        <Button
-            android:id="@+id/button1"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
+        <android.support.v7.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|enterAlways|snap"
+            app:navigationIcon="@android:drawable/arrow_down_float"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="hello1"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:text="hello"/>
+
+        </android.support.v7.widget.Toolbar>
+
+        <com.kiven.kutils.widget.KNormalItemView
+            android:id="@+id/item_setings"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
+            android:clickable="true"
             android:onClick="onClick"
-            android:text="For BaseActivityHelper"/>
+            app:item_title="打开设置界面"/>
 
-        <Button
-            android:id="@+id/button2"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
+        <com.kiven.kutils.widget.KNormalItemView
+            android:id="@+id/item_phone"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/button1"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
+            android:clickable="true"
             android:onClick="onClick"
-            android:text="For "/>
+            app:item_title="拨号"/>
 
-        <android.support.v7.widget.LinearLayoutCompat
-            android:id="@+id/linearLayout"
-            android:layout_width="wrap_content"
+        <com.kiven.kutils.widget.KNormalItemView
+            android:id="@+id/item_mp4"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/button2"
-            android:layout_marginTop="10dp"
-            android:orientation="vertical">
+            android:clickable="true"
+            android:onClick="onClick"
+            app:item_title="mp4 播放"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="我是中国人"/>
+        <com.kiven.kutils.widget.KNormalItemView
+            android:id="@+id/item_float"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:onClick="onClick"
+            app:item_title="悬浮框"/>
 
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:text="我是中国人"
-                android:textAppearance="?android:attr/textAppearanceLarge"/>
+        <com.kiven.kutils.widget.UIGridView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:text="我是中国人"
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
-
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="29dp"
-                android:text="我是中国人"
-                android:textAppearance="?android:attr/textAppearanceSmall"/>
+        <RelativeLayout
+            android:id="@+id/root"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            tools:context="com.kiven.sample.LauchActivity">
 
             <Button
-                android:id="@+id/button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="36dp"
-                android:text="我是中国人"/>
-
-            <Button
-                android:id="@+id/button3"
+                android:id="@+id/button1"
                 style="?android:attr/buttonStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:text="我是中国人"/>
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:onClick="onClick"
+                android:text="For BaseActivityHelper"/>
 
-        </android.support.v7.widget.LinearLayoutCompat>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_below="@id/button2"
-            android:layout_marginTop="10dp"
-            android:orientation="vertical">
-
-            <TextView
+            <Button
+                android:id="@+id/button2"
+                style="?android:attr/buttonStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="中华人民共和国万岁"
-                android:textColor="?android:attr/textColorPrimary"/>
+                android:layout_below="@id/button1"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:onClick="onClick"
+                android:text="For "/>
 
-            <TextView
+            <android.support.v7.widget.LinearLayoutCompat
+                android:id="@+id/linearLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:text="中华人民共和国万岁"
-                android:textColor="?android:attr/textColorSecondary"/>
+                android:layout_below="@id/button2"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
 
-            <TextView
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="我是中国人"/>
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:text="我是中国人"
+                    android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:text="我是中国人"
+                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="29dp"
+                    android:text="我是中国人"
+                    android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+                <Button
+                    android:id="@+id/button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="36dp"
+                    android:text="我是中国人"/>
+
+                <Button
+                    android:id="@+id/button3"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:text="我是中国人"/>
+
+            </android.support.v7.widget.LinearLayoutCompat>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:text="中华人民共和国万岁"
-                android:textColor="?android:attr/textColorTertiary"/>
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/button2"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
 
-            <android.support.v7.widget.AppCompatButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:text="中华人民共和国万岁"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="中华人民共和国万岁"
+                    android:textColor="?android:attr/textColorPrimary"/>
 
-        </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:text="中华人民共和国万岁"
+                    android:textColor="?android:attr/textColorSecondary"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:text="中华人民共和国万岁"
+                    android:textColor="?android:attr/textColorTertiary"/>
+
+                <android.support.v7.widget.AppCompatButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:text="中华人民共和国万岁"/>
+
+            </LinearLayout>
 
 
-    </RelativeLayout>
-</LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+
+</android.support.v4.widget.NestedScrollView>

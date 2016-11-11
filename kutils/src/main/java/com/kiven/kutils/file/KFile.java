@@ -4,15 +4,11 @@ import android.content.Context;
 import android.os.Environment;
 import android.os.StatFs;
 import android.os.storage.StorageManager;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
-
-import com.kiven.kutils.logHelper.KLog;
-import com.kiven.kutils.tools.KContext;
-import com.kiven.kutils.tools.KString;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,67 +19,60 @@ import java.util.List;
  */
 
 public class KFile {
-    public static final String defaultDocDirName = "doc";
-    public static final String defaultImageDirName = "images";
-    public static final String defaultCacheDirName = "cache";
-    public static final String defaultDownloadDirName = "download";
 
-    public static String appDirName = null;
-    public static String docDirName = null;
-    public static String imageDirName = null;
-    public static String cacheDirName = null;
-    public static String downloadDirName = null;
+    private static long frontTime = 0;
+    private static int timeCount = 0;
 
     /**
-     * 创建临时文件
+     * 通过时间获取唯一标识
      */
-    public static File createTempFile(String prefix, String suffix, File directory) {
-        File tmpFile;
-        try {
-            tmpFile = File.createTempFile(prefix, suffix, directory);
-        } catch (IOException e) {
-            KLog.e(e);
-            tmpFile = getAppFileFolderPath(KString.isBlank(cacheDirName)? defaultCacheDirName: cacheDirName);
+    private static String getTimeTag() {
+        long currTime = System.currentTimeMillis();
+        if (currTime == frontTime) {
+            timeCount ++;
+            return String.format("%d_%d", currTime, timeCount);
+        } else {
+            frontTime = currTime;
+            return String.valueOf(currTime);
         }
-        return tmpFile;
-    }
-    /**
-     * 应用图片保存路径
-     *
-     * @return
-     */
-    public static File getAppPictureFolderPath() {
-        return getAppFileFolderPath(KString.isBlank(imageDirName)? defaultImageDirName: imageDirName);
     }
 
     /**
-     * 应用文件保存路径
-     *
-     * @return
+     * 外部目录是否可用
      */
-    public static File getAppDocFolderPath() {
-        return getAppFileFolderPath(KString.isBlank(docDirName)? defaultDocDirName: docDirName);
+    public static boolean isExternalStorageRemovable() {
+        return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) || !Environment.isExternalStorageRemovable();
     }
 
     /**
-     * 文件夹路径
-     *
-     * @param packageName 设置的文件夹名称
+     * 创建文件
+     * @param directory 在此目录下创建文件
      */
-    public static File getAppFileFolderPath(String packageName) {
-
-        File folder = new File(Environment.getExternalStorageDirectory() + "/SXB_FILES/" + packageName);
-
-        if ((!folder.exists()) && !folder.mkdirs()) {
-            folder = new File(KContext.getInstance().getFilesDir(), packageName);
-        }
-        
-        if ((!folder.exists()) && !folder.mkdirs()) {
+    public static File createFile(@NonNull File directory) {
+        if ((!directory.exists()) && (!directory.mkdirs())) {
             return null;
         }
-        return folder;
+        return new File(directory, getTimeTag());
     }
-    public static String[] getStoragePaths(Context cxt) {
+
+    public static File createFile(@NonNull String suffix, @NonNull File directory) {
+        if ((!directory.exists()) && (!directory.mkdirs())) {
+            return null;
+        }
+        return new File(directory, getTimeTag() + suffix);
+    }
+
+    public static File createFile(@NonNull String prefix, @NonNull String suffix, @NonNull File directory) {
+        if ((!directory.exists()) && (!directory.mkdirs())) {
+            return null;
+        }
+        return new File(directory, prefix + "-" + getTimeTag() + suffix);
+    }
+
+    /**
+     * 获取外部存储和sd卡路径
+     */
+    public static String[] getStoragePaths(@NonNull Context cxt) {
         List<String> pathsList = new ArrayList<String>();
         if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.GINGERBREAD) {
             /*StringBuilder sb = new StringBuilder();
@@ -139,7 +128,7 @@ public class KFile {
      *      gif 格式图片详细解析：http://blog.csdn.net/wzy198852/article/details/17266507
      *      JPG文件结构分析：http://blog.csdn.net/hnllei/article/details/6972858
      */
-    public FileType checkFileType(File file) {
+    public FileType checkFileType(@NonNull File file) {
         FileType fileType = FileType.UNKNOWN;
         try {
             FileInputStream inputStream = new FileInputStream(file);

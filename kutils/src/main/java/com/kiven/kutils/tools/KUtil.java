@@ -262,7 +262,7 @@ public class KUtil {
 	static Handler savedHandler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
 //			UIHelper.ToastMessage(KContext.getInstance(), "保存完成");
-		};
+		}
 	};
 
 	/**

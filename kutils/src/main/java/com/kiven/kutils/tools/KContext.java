@@ -1,7 +1,10 @@
 package com.kiven.kutils.tools;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.Application;
+import android.content.Context;
+import android.util.Log;
 
 import com.kiven.kutils.logHelper.KLog;
 
@@ -66,7 +69,31 @@ public class KContext extends Application {
      * @return
      */
     public boolean isOnForeground() {
-        return showActivities.size() == 0;
+        System.out.println("=======获得当前正在运行的activity=========");
+        Context context = this;
+
+        ActivityManager activityManager = (ActivityManager) context
+                .getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager
+                .getRunningAppProcesses();
+        for (ActivityManager.RunningAppProcessInfo appProcess : appProcesses) {
+            if (appProcess.processName.equals(context.getPackageName())) {
+                /*Log.i(context.getPackageName(), "此appimportace ="
+                        + appProcess.importance
+                        + ",context.getClass().getName()="
+                        + context.getClass().getName());*/
+                if (appProcess.importance != ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+                    Log.i(context.getPackageName(), "处于后台"
+                            + appProcess.processName);
+                    return false;
+                } else {
+                    Log.i(context.getPackageName(), "处于前台"
+                            + appProcess.processName);
+                    return true;
+                }
+            }
+        }
+        return showActivities.size() != 0;
     }
     //-----------------------------TODO-------------------------------
 

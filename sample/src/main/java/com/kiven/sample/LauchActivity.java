@@ -4,7 +4,9 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.telephony.TelephonyManager;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.kiven.kutils.activityHelper.activity.KRoboActivity;
+import com.kiven.kutils.file.KFile;
 import com.kiven.kutils.logHelper.KLog;
 import com.kiven.kutils.tools.KGranting;
 import com.kiven.kutils.tools.KPath;
@@ -22,9 +25,9 @@ import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import roboguice.RoboGuice;
@@ -36,6 +39,7 @@ public class LauchActivity extends KRoboActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lauch);
         RoboGuice.setUseAnnotationDatabases(false);
+        KUtil.printDeviceInfo();
     }
 
     public void onClick(View view) {
@@ -82,13 +86,27 @@ public class LauchActivity extends KRoboActivity {
                     }
                 });
                 break;
+            case R.id.item_path:
+                KGranting.requestPermissions(this, 345, Manifest.permission.WRITE_EXTERNAL_STORAGE, "存储空间", new KGranting.GrantingCallBack() {
+                    @Override
+                    public void onGrantSuccess(boolean isSuccess) {
+                        if (isSuccess) {
+                            KLog.i("" + KFile.createFile("tmp", ".img", getDir(Environment.DIRECTORY_PICTURES, 2)).getAbsolutePath());
+                            KLog.i("" + KFile.createFile("tmp", ".img", getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)).getAbsolutePath());
+                            KLog.i("" + KFile.createFile("tmp", ".img", getDatabasePath("db")).getAbsolutePath());
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                KLog.i("" + KFile.createFile("tmp", ".img", getDataDir()).getAbsolutePath());
+                            }
+                        }
+                    }
+                });
+
+
+                break;
             default:
                 new ActivityHTestBase().startActivity(this);
                 break;
         }
-
-        KLog.i("{\"name\":\"kiven\", \"hh\":[\"yy\", \"66\"]}");
-        KUtil.printDeviceInfo();
     }
 
     @Override
@@ -113,8 +131,6 @@ public class LauchActivity extends KRoboActivity {
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
 
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -131,7 +147,6 @@ public class LauchActivity extends KRoboActivity {
                 }
             };
             dialog.show();*/
-
 
 
         }

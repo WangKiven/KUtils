@@ -65,6 +65,13 @@ public class KContext extends Application {
     }
 
     /**
+     *
+     */
+    public boolean isLocal() {
+        return showActivities.size() > 0;
+    }
+
+    /**
      * app是否在前台
      * @return
      */

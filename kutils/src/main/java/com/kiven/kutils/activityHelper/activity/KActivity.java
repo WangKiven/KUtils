@@ -24,9 +24,16 @@ public class KActivity extends AppCompatActivity implements SensorEventListener 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        KContext.getInstance().onActivityCreate(this);
 
         if (showLog())
             sensorManager = (SensorManager) getSystemService(Activity.SENSOR_SERVICE);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        KContext.getInstance().onActivityStart(this);
     }
 
     @Override
@@ -47,6 +54,24 @@ public class KActivity extends AppCompatActivity implements SensorEventListener 
 
         if (showLog())
             sensorManager.unregisterListener(this);
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        KContext.getInstance().onActivityFinish(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        KContext.getInstance().onActivityStop(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        KContext.getInstance().onActivityDestory(this);
     }
 
     protected boolean showLog() {

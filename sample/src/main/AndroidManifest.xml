@@ -29,6 +29,29 @@
         <activity android:name="com.kiven.kutils.activityHelper.KRoboHelperActivity" />
         <service android:name=".floatView.ServiceFloat" />
 
+        <!-- widget start -->
+
+        <activity android:name=".widget.ConfigureWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
+            </intent-filter>
+        </activity>
+        <receiver android:name=".widget.ProviderWidget" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider"
+                       android:resource="@xml/widget_info" />
+        </receiver>
+
+        <!--<service android:name=".widget.ServiceWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.EXAMPLE_APP_WIDGET_SERVICE" />
+            </intent-filter>
+        </service>-->
+
+        <!-- widget end -->
+
     </application>
 
 </manifest>

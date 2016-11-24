@@ -10,7 +10,7 @@
 
         <item name="android:textColorPrimary">#605756</item>
         <item name="android:textColorSecondary">#512B77</item>
-        <item name="android:textColorTertiary">#4af55e</item>
+        <item name="android:textColorTertiary">#43ba50</item>
 
         <item name="android:colorBackground">#cda4d9</item>
         <item name="android:colorForeground">#967ace</item>

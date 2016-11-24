@@ -2,6 +2,7 @@ package com.kiven.sample;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -11,6 +12,7 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.telephony.TelephonyManager;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.kiven.kutils.activityHelper.activity.KRoboActivity;
@@ -25,7 +27,6 @@ import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -135,7 +136,7 @@ public class LauchActivity extends KRoboActivity {
                 e.printStackTrace();
             }
 
-            /*Dialog dialog = new Dialog(this) {
+            Dialog dialog = new Dialog(this) {
                 @Override
                 protected void onCreate(Bundle savedInstanceState) {
                     super.onCreate(savedInstanceState);
@@ -146,7 +147,7 @@ public class LauchActivity extends KRoboActivity {
                     setTitle("已选图片");
                 }
             };
-            dialog.show();*/
+            dialog.show();
 
 
         }

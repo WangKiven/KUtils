@@ -4,5 +4,5 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
-    <drawable name="windowBackground">#ed8787</drawable>
+    <drawable name="windowBackground">#f9e2e2</drawable>
 </resources>

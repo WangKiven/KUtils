@@ -27,6 +27,8 @@ public class KHelperActivity extends AppCompatActivity {
         }else {
             helper.onCreate(this, savedInstanceState);
         }
+
+		KContext.getInstance().onActivityCreate(this);
     }
 
 	@SuppressWarnings({ "rawtypes" })
@@ -100,6 +102,7 @@ public class KHelperActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+		KContext.getInstance().onActivityStart(this);
     	if (helper != null) {
             helper.onStart();
 		}
@@ -123,12 +126,21 @@ public class KHelperActivity extends AppCompatActivity {
         super.onPause();
     }
 
-    @Override
+	@Override
+	public void finish() {
+		super.finish();
+
+		KContext.getInstance().onActivityFinish(this);
+	}
+
+	@Override
     protected void onStop() {
     	if (helper != null) {
             helper.onStop();
 		}
 		super.onStop();
+
+		KContext.getInstance().onActivityStop(this);
     }
 
     @Override
@@ -138,6 +150,7 @@ public class KHelperActivity extends AppCompatActivity {
 		}
         KActivityHelper.removeStack(getIntent().getStringExtra("BaseActivityHelper"));//将helper移除
 		super.onDestroy();
+		KContext.getInstance().onActivityDestory(this);
     }
     
     @Override

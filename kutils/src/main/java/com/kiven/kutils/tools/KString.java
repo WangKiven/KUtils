@@ -17,6 +17,7 @@ import org.xmlpull.v1.XmlPullParser;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
@@ -453,12 +454,22 @@ public class KString {
      * @param value
      * @return
      */
-    public static String formaterWanFloat(int value) {
+    /*public static String formaterWanFloat(int value) {
         if (value < 10000) {
-            return "￥" + value;
+            return value + "元";
         } else {
-            return formaterFloat(value * 1.0 / 10000) + "万元";
+            return formaterFloat(value * 1.0 / 10000) + "万";
         }
+    }*/
+
+    /**
+     * 简化的万单位转化为个位 2.78 —> 27800
+     */
+    public static int fromWanString(String s) {
+        if (isBlank(s)) {
+            return 0;
+        }
+        return new BigDecimal(s).multiply(new BigDecimal(10000)).intValue();
     }
 
     public static String favorableMoney(int money) {

@@ -6,15 +6,25 @@ import android.view.ViewGroup;
 import java.util.List;
 
 /**
+ *
  * Created by kiven on 16/7/3.
  */
 public abstract class BaseRecyclerViewAdapter<T extends BaseRecyclerViewHolder, H> extends RecyclerView.Adapter<T> {
-    private final OnItemClickListener itemClickListener;
+    /**
+     * 行点击事件
+     */
+    private OnItemClickListener itemClickListener;
     protected List<H> mList;
 
     public BaseRecyclerViewAdapter(List<H> list, OnItemClickListener itemClickListener) {
         mList = list;
         this.itemClickListener = itemClickListener;
+    }
+
+    public BaseRecyclerViewAdapter(OnItemClickListener itemClickListener) {
+        this.itemClickListener = itemClickListener;
+    }
+    public BaseRecyclerViewAdapter() {
     }
 
     @Override

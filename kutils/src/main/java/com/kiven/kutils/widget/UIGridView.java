@@ -213,7 +213,7 @@ public class UIGridView extends ViewGroup {
         //childView间的间距
         protected int childMargin;
         /**
-         * 是否是单列，默认是。如果不是单列，UIGridView将根据itemView宽度自动计算进行流布局显示
+         * 是否是单列，默认不是。如果不是单列，UIGridView将根据itemView宽度自动计算进行流布局显示
          */
         protected boolean isSingleCol = false;
 

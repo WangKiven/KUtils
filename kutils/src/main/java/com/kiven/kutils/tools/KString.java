@@ -103,8 +103,6 @@ public class KString {
     /**
      * 以友好的方式显示时间
      *
-     * @param sdate
-     * @return
      */
     public static String friendly_time(String sdate) {
         Date time = toDate(sdate);
@@ -430,14 +428,7 @@ public class KString {
     }
 
     private static DecimalFormat formater = null;
-
-    /**
-     * 11.2000  ->  11.2, 11.230 -> 11.23, 11.236 -> 11.23
-     *
-     * @param value
-     * @return
-     */
-    public static String formaterFloat(double value) {
+    private static void initDecimalFormat() {
         if (formater == null) {
             //			formater = new DecimalFormat("0.00");
             formater = new DecimalFormat("#.##");
@@ -445,22 +436,45 @@ public class KString {
             formater.setGroupingSize(0);
             //	        formater.setRoundingMode(RoundingMode.FLOOR);
         }
+    }
+
+    /**
+     * 11.2000  ->  11.2, 11.230 -> 11.23, 11.236 -> 11.23
+     *
+     */
+    public static String formaterFloat(double value) {
+        initDecimalFormat();
+        return formater.format(value);
+    }
+
+    public static String formaterFloat(BigDecimal value) {
+        initDecimalFormat();
         return formater.format(value);
     }
 
     /**
-     * 格式化金额
-     *
-     * @param value
-     * @return
+     * 格式化金额 23450 -> 2.35
      */
-    /*public static String formaterWanFloat(int value) {
-        if (value < 10000) {
-            return value + "元";
-        } else {
-            return formaterFloat(value * 1.0 / 10000) + "万";
+    public static String formaterWan(int value) {
+        BigDecimal decimal = new BigDecimal(value);
+        decimal = decimal.divide(new BigDecimal(10000));
+        return formaterFloat(decimal);
+    }
+
+    /**
+     * 简化的万单位转化为个位 2.78 —> 27800
+     */
+    public static int fromWan(String s) {
+        if (isBlank(s)) {
+            return 0;
         }
-    }*/
+        try {
+            return new BigDecimal(s).multiply(new BigDecimal(10000)).intValue();
+        } catch (Exception e) {
+            KLog.e(e);
+            return 0;
+        }
+    }
 
     /**
      * 简化的万单位转化为个位 2.78 —> 27800

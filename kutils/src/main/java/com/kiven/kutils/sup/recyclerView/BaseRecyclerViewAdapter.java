@@ -20,6 +20,9 @@ public abstract class BaseRecyclerViewAdapter<T extends BaseRecyclerViewHolder, 
         mList = list;
         this.itemClickListener = itemClickListener;
     }
+    public BaseRecyclerViewAdapter(List<H> list) {
+        mList = list;
+    }
 
     public BaseRecyclerViewAdapter(OnItemClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;

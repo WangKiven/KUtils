@@ -2,6 +2,7 @@ package com.kiven.kutils.widget;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
@@ -23,6 +24,10 @@ import java.util.List;
 
 public class UIGridView extends ViewGroup {
 
+    /**
+     * 水平单元格间距
+     */
+    private int dividWith = 0;
     private UIGridViewAdapter gridViewAdapter;
 
     public UIGridView(Context context) {
@@ -32,25 +37,42 @@ public class UIGridView extends ViewGroup {
 
     public UIGridView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(context);
+        init(context, attrs);
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public UIGridView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(context);
+        init(context, attrs);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public UIGridView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        init(context);
+        init(context, attrs);
     }
 
     private void init(Context context) {
         if (isInEditMode()) {
             setAdapter(new UIGridViewAdapter(context));
         }
+    }
+
+    private void init(Context context, AttributeSet attrs) {
+        init(context);
+        if (attrs == null) {
+            return;
+        }
+        TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.UIGridView);
+        // 水平单元格间距
+        if (typedArray.hasValue(R.styleable.UIGridView_gv_dividWith)) {
+            dividWith = typedArray.getInt(R.styleable.UIGridView_gv_dividWith, 0);
+        }
+        typedArray.recycle();
+    }
+
+    public void setDividWith(int width) {
+        dividWith = width;
     }
 
     public void setAdapter(UIGridViewAdapter gridViewAdapter) {
@@ -103,7 +125,7 @@ public class UIGridView extends ViewGroup {
             //子View占据的高度
             int childHeight = child.getMeasuredHeight() + lp.topMargin + lp.bottomMargin;
             //换行时候
-            if(lineWidth + childWidth > sizeWidth - getPaddingRight() - getPaddingLeft()){
+            if(lineWidth + childWidth + dividWith > sizeWidth - getPaddingRight() - getPaddingLeft()){
                 //对比得到最大的宽度
                 width = Math.max(width, lineWidth);
                 //重置lineWidth
@@ -113,7 +135,7 @@ public class UIGridView extends ViewGroup {
                 lineHeight = childHeight;
             }else{//不换行情况
                 //叠加行宽
-                lineWidth += childWidth;
+                lineWidth += (childWidth + dividWith);
                 //得到最大行高
                 lineHeight = Math.max(lineHeight, childHeight);
             }
@@ -151,7 +173,7 @@ public class UIGridView extends ViewGroup {
             int childHeight = child.getMeasuredHeight();
 
             //如果需要换行
-            if(childWidth + lineWidth + lp.leftMargin + lp.rightMargin > width - getPaddingLeft() - getPaddingRight()){
+            if (childWidth + lineWidth + lp.leftMargin + lp.rightMargin + dividWith > width - getPaddingLeft() - getPaddingRight()) {
                 //记录LineHeight
                 mLineHeight.add(lineHeight);
                 //记录当前行的Views
@@ -162,7 +184,11 @@ public class UIGridView extends ViewGroup {
                 //重置view的集合
                 lineViews = new ArrayList();
             }
-            lineWidth += childWidth + lp.leftMargin + lp.rightMargin;
+            if (lineViews.size() > 0) {
+                lineWidth += childWidth + lp.leftMargin + lp.rightMargin + dividWith;
+            } else {
+                lineWidth += childWidth + lp.leftMargin + lp.rightMargin;
+            }
             lineHeight = Math.max(lineHeight, childHeight + lp.topMargin + lp.bottomMargin);
             lineViews.add(child);
         }
@@ -188,13 +214,13 @@ public class UIGridView extends ViewGroup {
                     continue;
                 }
                 ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) child.getLayoutParams();
-                int cLeft = left + lp.leftMargin;
+                int cLeft = left + lp.leftMargin + (j == 0? 0: dividWith);
                 int cTop = top + lp.topMargin;
                 int cRight = cLeft + child.getMeasuredWidth();
                 int cBottom = cTop + child.getMeasuredHeight();
                 //进行子View进行布局
                 child.layout(cLeft, cTop, cRight, cBottom);
-                left += child.getMeasuredWidth() + lp.leftMargin + lp.rightMargin;
+                left = cRight + lp.rightMargin;
             }
             left = getPaddingLeft();
             top += lineHeight;

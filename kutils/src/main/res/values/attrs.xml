@@ -32,4 +32,8 @@
         <attr name="item_detail_hint"/>
         <attr name="item_detail_show" format="boolean"/>
     </declare-styleable>
+
+    <declare-styleable name="UIGridView">
+        <attr name="gv_dividWith" format="dimension"/>
+    </declare-styleable>
 </resources>

@@ -13,7 +13,6 @@ import com.kiven.sample.LauchActivity;
 import com.kiven.sample.R;
 
 /**
- *
  * Created by kiven on 2016/11/17.
  */
 
@@ -48,7 +47,6 @@ public class ConfigureWidget extends KActivity {
 
             setResult(RESULT_OK, resultValue);
         }
-
         finish();
     }
 }

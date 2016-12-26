@@ -480,10 +480,23 @@ public class KString {
      * 简化的万单位转化为个位 2.78 —> 27800
      */
     public static int fromWanString(String s) {
-        if (isBlank(s)) {
+        /*if (isBlank(s)) {
             return 0;
         }
-        return new BigDecimal(s).multiply(new BigDecimal(10000)).intValue();
+        return new BigDecimal(s).multiply(new BigDecimal(10000)).intValue();*/
+        return fromWan(s);
+    }
+
+    /**
+     * int字符串解析
+     */
+    public static int parseInt(String intStr) {
+        try {
+            return Integer.parseInt(intStr);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 
     public static String favorableMoney(int money) {

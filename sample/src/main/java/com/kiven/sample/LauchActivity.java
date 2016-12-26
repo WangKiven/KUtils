@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.kiven.kutils.activityHelper.activity.KRoboActivity;
 import com.kiven.kutils.file.KFile;
 import com.kiven.kutils.logHelper.KLog;
+import com.kiven.kutils.tools.KAlertDialogHelper;
 import com.kiven.kutils.tools.KGranting;
 import com.kiven.kutils.tools.KPath;
 import com.kiven.kutils.tools.KUtil;
@@ -31,6 +32,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import dalvik.system.PathClassLoader;
 import roboguice.RoboGuice;
 
 public class LauchActivity extends KRoboActivity {
@@ -101,6 +103,9 @@ public class LauchActivity extends KRoboActivity {
                         }
                     }
                 });
+                break;
+            case R.id.item_widget:
+                KAlertDialogHelper.Show1BDialog(this, "在系统widget中去选择要显示的widget");
 
 
                 break;

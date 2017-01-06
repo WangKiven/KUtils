@@ -237,7 +237,11 @@ public class UIGridView extends ViewGroup {
     public static class UIGridViewAdapter implements View.OnClickListener {
 
         //childView间的间距
-        protected int childMargin;
+//        protected int childMargin;
+        protected int childMarginLeft;
+        protected int childMarginTop;
+        protected int childMarginRight;
+        protected int childMarginBottom;
         /**
          * 是否是单列，默认不是。如果不是单列，UIGridView将根据itemView宽度自动计算进行流布局显示
          */
@@ -246,7 +250,14 @@ public class UIGridView extends ViewGroup {
         private UIGridView mGridView;
 
         public UIGridViewAdapter(Context context) {
-            childMargin = KUtil.dip2px(context, 5);
+            setChildMargin(KUtil.dip2px(context, 5));
+        }
+
+        public void setChildMargin(int childMargin) {
+            childMarginLeft = childMargin;
+            childMarginTop = childMargin;
+            childMarginRight = childMargin;
+            childMarginBottom = childMargin;
         }
 
         private void bindGridView(UIGridView gridView) {
@@ -305,7 +316,7 @@ public class UIGridView extends ViewGroup {
                 params.width = isSingleCol? ViewGroup.LayoutParams.MATCH_PARENT: ViewGroup.LayoutParams.WRAP_CONTENT;
                 params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
 //                ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(isSingleCol? ViewGroup.LayoutParams.MATCH_PARENT: ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                params.setMargins(childMargin, childMargin, childMargin, childMargin);
+                params.setMargins(childMarginLeft, childMarginTop, childMarginRight, childMarginBottom);
 
                 if (mGridView.indexOfChild(itemView) < 0) {
                     mGridView.addView(itemView, params);

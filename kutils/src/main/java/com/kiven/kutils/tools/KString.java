@@ -479,6 +479,7 @@ public class KString {
     /**
      * 简化的万单位转化为个位 2.78 —> 27800
      */
+    @Deprecated
     public static int fromWanString(String s) {
         /*if (isBlank(s)) {
             return 0;

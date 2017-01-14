@@ -26,3 +26,5 @@ dependencies {
     provided 'com.google.code.gson:gson:2.7'
     provided project(':xutils')
 }
+apply from: 'jcenerUpload.gradle'
+//apply(from('mavenpush.gradle'))

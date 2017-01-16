@@ -107,7 +107,6 @@ public class LauchActivity extends KRoboActivity {
             case R.id.item_widget:
                 KAlertDialogHelper.Show1BDialog(this, "在系统widget中去选择要显示的widget");
 
-
                 break;
             default:
                 new ActivityHTestBase().startActivity(this);

@@ -52,8 +52,9 @@ task sourcesJar(type: Jar) {
 
 //生成Javadoc文档
 task javadoc(type: Javadoc) {
-    source = android.sourceSets.main.java.srcDirs
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    // todo 文档比较严格，不用生成文档
+//    source = android.sourceSets.main.java.srcDirs
+//    classpath += project.files(configurations.compile.files, android.getBootClasspath().join(File.pathSeparator))
 }
 
 //文档打包成jar

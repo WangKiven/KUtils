@@ -1,7 +1,6 @@
 package com.kiven.kutils.tools;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageInfo;
@@ -12,10 +11,12 @@ import android.media.MediaScannerConnection.OnScanCompletedListener;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.os.Handler;
 import android.util.DisplayMetrics;
 
+import com.kiven.kutils.callBack.Consumer;
 import com.kiven.kutils.logHelper.KLog;
+
+import org.xutils.x;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -228,42 +229,40 @@ public class KUtil {
 
 	/**
 	 * 通知相册更新图片
-	 * 
-	 * @param path
-	 * @param hasAlter
-	 *            跟新成功是否提示
+	 *
+	 * @param callBack
+	 *            跟新成功是否提示, 0:失败，1：成功，2：保存中
 	 */
-	public static void addPicture(String path, final boolean hasAlter) {
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+	public static void addPicture(String path, final Consumer<Integer> callBack) {
+		/*if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {*/
 			MediaScannerConnection.scanFile(KContext.getInstance(), new String[] { path }, new String[] { "image/*" },
 					new OnScanCompletedListener() {
 
 						@Override
 						public void onScanCompleted(String path, Uri uri) {
-							if (hasAlter) {
-								savedHandler.sendEmptyMessage(1);
+							if (callBack != null) {
+								x.task().post(new Runnable() {
+									@Override
+									public void run() {
+										callBack.callBack(1);
+									}
+								});
 							}
 						}
 
 					});
-			if (hasAlter) {
-//				UIHelper.ToastMessage(KContext.getInstance(), "保存中......");
+			if (callBack != null) {
+				callBack.callBack(2);
 			}
-		} else {
+		/*} else {
 			KContext.getInstance()
 					.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(new File(path))));
 
-			if (hasAlter) {
-//				UIHelper.ToastMessage(AppContext.getInstance(), "保存完成");
+			if (callBack != null) {
+				callBack.callBack(1);
 			}
-		}
+		}*/
 	}
-
-	static Handler savedHandler = new Handler() {
-		public void handleMessage(android.os.Message msg) {
-//			UIHelper.ToastMessage(KContext.getInstance(), "保存完成");
-		}
-	};
 
 	/**
 	 * 删除文件或文件夹

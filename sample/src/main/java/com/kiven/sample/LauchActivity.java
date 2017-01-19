@@ -8,14 +8,17 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.v4.content.FileProvider;
 import android.telephony.TelephonyManager;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.kiven.kutils.activityHelper.activity.KRoboActivity;
+import com.kiven.kutils.callBack.Consumer;
 import com.kiven.kutils.file.KFile;
 import com.kiven.kutils.logHelper.KLog;
 import com.kiven.kutils.tools.KAlertDialogHelper;
@@ -28,14 +31,18 @@ import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import dalvik.system.PathClassLoader;
 import roboguice.RoboGuice;
 
 public class LauchActivity extends KRoboActivity {
+
+    private static final String FILEPROVIDER_AUTHORITY = "com.kiven.sample.fileprovider";
+    private static final String IMAGE_DIR = "KUtilSample" + File.separator + "testImage";
+    String cameraPath = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +92,31 @@ public class LauchActivity extends KRoboActivity {
                             intent.addCategory(Intent.CATEGORY_OPENABLE);
                             intent.setType("image/jpeg");
                             startActivityForResult(intent, 345);
+                        }
+                    }
+                });
+                break;
+            case R.id.item_take_camera:
+                String permissions[] = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
+                String permissionInfos[] = {"存储空间", "相机"};
+                KGranting.requestPermissions(this, 345, permissions, permissionInfos, new KGranting.GrantingCallBack() {
+                    @Override
+                    public void onGrantSuccess(boolean isSuccess) {
+                        if (isSuccess) {
+                            File dir = new File(Environment.getExternalStorageDirectory(), IMAGE_DIR);
+                            if (!dir.exists()) {
+                                dir.mkdirs();
+                            }
+                            File file = new File(dir, System.currentTimeMillis() + ".jpg");
+                            cameraPath = file.getAbsolutePath();
+
+                            Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            if (Build.VERSION.SDK_INT < 24) {
+                                camera.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+                            } else {
+                                camera.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(getBaseContext(), FILEPROVIDER_AUTHORITY, file));
+                            }
+                            startActivityForResult(camera, 346);
                         }
                     }
                 });
@@ -140,21 +172,34 @@ public class LauchActivity extends KRoboActivity {
                 e.printStackTrace();
             }
 
-            Dialog dialog = new Dialog(this) {
-                @Override
-                protected void onCreate(Bundle savedInstanceState) {
-                    super.onCreate(savedInstanceState);
-                    ImageView imageView = new ImageView(getContext());
-                    setContentView(imageView);
-                    x.image().bind(imageView, path);
-
-                    setTitle("已选图片");
-                }
-            };
-            dialog.show();
-
-
+            showImage(path);
         }
+
+        if (requestCode == 346) {
+            showImage(cameraPath);
+            KUtil.addPicture(cameraPath, new Consumer<Integer>() {
+                @Override
+                public void callBack(Integer param) {
+                    KLog.i("param = " + param);
+                    Toast.makeText(getBaseContext(), "save " + param, Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+    }
+
+    protected void showImage(final String imagePath) {
+        Dialog dialog = new Dialog(this) {
+            @Override
+            protected void onCreate(Bundle savedInstanceState) {
+                super.onCreate(savedInstanceState);
+                ImageView imageView = new ImageView(getContext());
+                setContentView(imageView);
+                x.image().bind(imageView, imagePath);
+
+                setTitle("已选图片");
+            }
+        };
+        dialog.show();
     }
 
     private void requestNet() {

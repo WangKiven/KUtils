@@ -74,6 +74,14 @@
             app:item_title="上传图片"/>
 
         <com.kiven.kutils.widget.KNormalItemView
+            android:id="@+id/item_take_camera"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:onClick="onClick"
+            app:item_title="拍照"/>
+
+        <com.kiven.kutils.widget.KNormalItemView
             android:id="@+id/item_path"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -7,6 +7,8 @@ import android.os.storage.StorageManager;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
+import com.kiven.kutils.tools.KString;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.lang.reflect.Method;
@@ -29,7 +31,7 @@ public class KFile {
     private static String getTimeTag() {
         long currTime = System.currentTimeMillis();
         if (currTime == frontTime) {
-            timeCount ++;
+            timeCount++;
             return String.format("%d_%d", currTime, timeCount);
         } else {
             frontTime = currTime;
@@ -46,6 +48,7 @@ public class KFile {
 
     /**
      * 创建文件
+     *
      * @param directory 在此目录下创建文件
      */
     public static File createFile(@NonNull File directory) {
@@ -116,19 +119,19 @@ public class KFile {
 
     // TODO -----------------文件判断-----------------
 
-    public enum FileType{
-        UNKNOWN,JPG,PNG,GIF
+    public enum FileType {
+        UNKNOWN, JPG, PNG, GIF
     }
 
     /**
      * 获取文件类型
      * 参考文档：
-     *      android、java中判断图片文件的格式：http://blog.csdn.net/kehengqun1/article/details/49252549
-     *      通过文件头标识判断图片格式：http://zjf30366.blog.163.com/blog/static/41116458201042194542973/
-     *      gif 格式图片详细解析：http://blog.csdn.net/wzy198852/article/details/17266507
-     *      JPG文件结构分析：http://blog.csdn.net/hnllei/article/details/6972858
+     * android、java中判断图片文件的格式：http://blog.csdn.net/kehengqun1/article/details/49252549
+     * 通过文件头标识判断图片格式：http://zjf30366.blog.163.com/blog/static/41116458201042194542973/
+     * gif 格式图片详细解析：http://blog.csdn.net/wzy198852/article/details/17266507
+     * JPG文件结构分析：http://blog.csdn.net/hnllei/article/details/6972858
      */
-    public FileType checkFileType(@NonNull File file) {
+    public static FileType checkFileType(@NonNull File file) {
         FileType fileType = FileType.UNKNOWN;
         try {
             FileInputStream inputStream = new FileInputStream(file);
@@ -142,7 +145,7 @@ public class KFile {
                 if (flags[2] == 255 && flags[3] == 217) {
                     fileType = FileType.JPG;
                 }
-            } else if (flags[0] == 71 && flags[1] == 73){// GIF
+            } else if (flags[0] == 71 && flags[1] == 73) {// GIF
                 flags[2] = inputStream.read();
                 flags[3] = inputStream.read();
                 inputStream.skip(inputStream.available() - 1);
@@ -167,5 +170,32 @@ public class KFile {
             e.printStackTrace();
         }
         return fileType;
+    }
+
+    /**
+     * 获取或创建文件后缀名
+     */
+    public static String getPrefix(String path) {
+        if (KString.isBlank(path)) {
+            return "";
+        }
+        File file = new File(path);
+        String fileName = file.getName();
+        if (fileName.contains(".")) {
+            return fileName.substring(fileName.lastIndexOf(".") + 1);
+        } else {
+            FileType fileType = checkFileType(file);
+            switch (fileType) {
+                case GIF:
+                    return "gif";
+                case JPG:
+                    return "jpg";
+                case PNG:
+                    return "png";
+                case UNKNOWN:
+                default:
+                        return "";
+            }
+        }
     }
 }

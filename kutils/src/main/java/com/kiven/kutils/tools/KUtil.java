@@ -11,6 +11,7 @@ import android.media.MediaScannerConnection.OnScanCompletedListener;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 
 import com.kiven.kutils.callBack.Consumer;
@@ -21,6 +22,7 @@ import org.xutils.x;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -235,7 +237,15 @@ public class KUtil {
 	 */
 	public static void addPicture(String path, final Consumer<Integer> callBack) {
 		/*if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {*/
-			MediaScannerConnection.scanFile(KContext.getInstance(), new String[] { path }, new String[] { "image/*" },
+
+		try {
+			MediaStore.Images.Media.insertImage(KContext.getInstance().getContentResolver(),
+                    path, new File(path).getName(), null);
+		} catch (FileNotFoundException e) {
+			KLog.e(e);
+		}
+
+		MediaScannerConnection.scanFile(KContext.getInstance(), new String[] { path }, new String[] { "image/*" },
 					new OnScanCompletedListener() {
 
 						@Override

@@ -7,22 +7,15 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.media.MediaScannerConnection;
-import android.media.MediaScannerConnection.OnScanCompletedListener;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 
-import com.kiven.kutils.callBack.Consumer;
 import com.kiven.kutils.logHelper.KLog;
-
-import org.xutils.x;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -235,43 +228,9 @@ public class KUtil {
 	 * @param callBack
 	 *            跟新成功是否提示, 0:失败，1：成功，2：保存中
 	 */
-	public static void addPicture(String path, final Consumer<Integer> callBack) {
-		/*if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {*/
-
-		try {
-			MediaStore.Images.Media.insertImage(KContext.getInstance().getContentResolver(),
-                    path, new File(path).getName(), null);
-		} catch (FileNotFoundException e) {
-			KLog.e(e);
-		}
-
+	public static void addPicture(String path, MediaScannerConnection.OnScanCompletedListener callBack) {
 		MediaScannerConnection.scanFile(KContext.getInstance(), new String[] { path }, new String[] { "image/*" },
-					new OnScanCompletedListener() {
-
-						@Override
-						public void onScanCompleted(String path, Uri uri) {
-							if (callBack != null) {
-								x.task().post(new Runnable() {
-									@Override
-									public void run() {
-										callBack.callBack(1);
-									}
-								});
-							}
-						}
-
-					});
-			if (callBack != null) {
-				callBack.callBack(2);
-			}
-		/*} else {
-			KContext.getInstance()
-					.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(new File(path))));
-
-			if (callBack != null) {
-				callBack.callBack(1);
-			}
-		}*/
+				callBack);
 	}
 
 	/**

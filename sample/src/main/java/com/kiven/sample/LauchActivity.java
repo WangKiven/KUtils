@@ -3,7 +3,12 @@ package com.kiven.sample;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,6 +16,8 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.FileProvider;
 import android.telephony.TelephonyManager;
 import android.view.View;
@@ -22,6 +29,7 @@ import com.kiven.kutils.callBack.Consumer;
 import com.kiven.kutils.file.KFile;
 import com.kiven.kutils.logHelper.KLog;
 import com.kiven.kutils.tools.KAlertDialogHelper;
+import com.kiven.kutils.tools.KContext;
 import com.kiven.kutils.tools.KGranting;
 import com.kiven.kutils.tools.KPath;
 import com.kiven.kutils.tools.KUtil;
@@ -43,6 +51,7 @@ public class LauchActivity extends KRoboActivity {
     private static final String FILEPROVIDER_AUTHORITY = "com.kiven.sample.fileprovider";
     private static final String IMAGE_DIR = "KUtilSample" + File.separator + "testImage";
     String cameraPath = null;
+    String cropPath = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -176,14 +185,106 @@ public class LauchActivity extends KRoboActivity {
         }
 
         if (requestCode == 346) {
-            showImage(cameraPath);
+            /*showImage(cameraPath);
             KUtil.addPicture(cameraPath, new Consumer<Integer>() {
                 @Override
                 public void callBack(Integer param) {
                     KLog.i("param = " + param);
                     Toast.makeText(getBaseContext(), "save " + param, Toast.LENGTH_LONG).show();
                 }
+            });*/
+
+            /*KUtil.addPicture(cameraPath, new Consumer<Integer>() {
+                @Override
+                public void callBack(Integer param) {
+                    KLog.i("param = " + param);
+                    Toast.makeText(getBaseContext(), "save " + param, Toast.LENGTH_LONG).show();
+                    cropImage(cameraPath);
+                }
+            });*/
+
+            /*MediaScannerConnection.scanFile(KContext.getInstance(), new String[] { cameraPath }, new String[] { "image*//*" },
+                    new MediaScannerConnection.OnScanCompletedListener() {
+
+                        @Override
+                        public void onScanCompleted(String path, Uri uri) {
+                            cropImage(cameraPath);
+                        }
+
+                    });*/
+            KUtil.addPicture(cameraPath, new MediaScannerConnection.OnScanCompletedListener() {
+                @Override
+                public void onScanCompleted(String path, Uri uri) {
+                    cropImage(cameraPath);
+                }
             });
+        }
+
+        if (requestCode == 347) {
+            showImage(cropPath);
+        }
+    }
+
+    private void cropImage(String cameraPath) {
+        File dir = new File(Environment.getExternalStorageDirectory(), IMAGE_DIR);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        File file = new File(dir, System.currentTimeMillis() + ".jpg");
+        cropPath = file.getAbsolutePath();
+
+        Intent in = new Intent("com.android.camera.action.CROP");
+
+        in.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        // 需要裁减的图片格式
+        if (Build.VERSION.SDK_INT >= 24) {
+            in.setDataAndType(getImageContentUri(this, new File(cameraPath)), "image/*");
+        } else {
+            in.setDataAndType(Uri.fromFile(new File(cameraPath)), "image/*");
+        }
+        // 允许裁减
+        in.putExtra("crop", "true");
+        // 剪裁后ImageView显时图片的宽
+        in.putExtra("outputX", 200);
+        // 剪裁后ImageView显时图片的高
+        in.putExtra("outputY", 200);
+        // 设置剪裁框的宽高比例
+        in.putExtra("aspectX", 1);
+        in.putExtra("aspectY", 1);
+        in.putExtra("return-data", false);
+        in.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
+                Uri.fromFile(new File(cropPath)));
+        in.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+        in.putExtra("noFaceDetection", true);
+
+        startActivityForResult(in, 347);
+    }
+
+    /**
+     *
+     */
+    public static Uri getImageContentUri(Context context, File imageFile) {
+        String filePath = imageFile.getAbsolutePath();
+        Cursor cursor = context.getContentResolver().query(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                new String[] { MediaStore.Images.Media._ID },
+                MediaStore.Images.Media.DATA + "=? ",
+                new String[] { filePath }, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            int id = cursor.getInt(cursor
+                    .getColumnIndex(MediaStore.MediaColumns._ID));
+            Uri baseUri = Uri.parse("content://media/external/images/media");
+            return Uri.withAppendedPath(baseUri, "" + id);
+        } else {
+            if (imageFile.exists()) {
+                ContentValues values = new ContentValues();
+                values.put(MediaStore.Images.Media.DATA, filePath);
+                return context.getContentResolver().insert(
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+            } else {
+                return null;
+            }
         }
     }
 

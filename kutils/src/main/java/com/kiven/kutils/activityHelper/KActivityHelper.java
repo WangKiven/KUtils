@@ -58,9 +58,13 @@ public class KActivityHelper {
 
     private Intent getIntent(Context context) {
         Intent tIntent = getIntent();
-        tIntent.setComponent(new ComponentName(context, KRoboHelperActivity.class));
+        tIntent.setComponent(new ComponentName(context, getActivityClas()));
         tIntent.putExtra("BaseActivityHelper", putStack(this));
         return tIntent;
+    }
+
+    protected Class getActivityClas() {
+        return KRoboHelperActivity.class;
     }
 
     public void addFlags(int flags) {
@@ -108,6 +112,10 @@ public class KActivityHelper {
     }
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+        return true;
+    }
+
+    public boolean onBackPressed() {
         return true;
     }
 

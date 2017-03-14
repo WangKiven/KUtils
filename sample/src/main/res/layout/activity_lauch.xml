@@ -97,6 +97,36 @@
             android:onClick="onClick"
             app:item_title="widget"/>
 
+        <com.kiven.kutils.widget.KNormalItemView
+            android:id="@+id/item_data_binding"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:onClick="onClick"
+            app:item_title="Data Binding"/>
+
+        <com.kiven.kutils.widget.KNormalItemView
+            android:id="@+id/item_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:onClick="onClick"
+            app:item_title="RecyclerView 自定义"/>
+
+        <com.kiven.kutils.widget.KNormalItemView
+            android:id="@+id/item_flyco_dialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:onClick="onClick"
+            app:item_title="FlycoDialog"/>
+
+        <EditText
+            android:id="@+id/et_auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lines="1"/>
+
         <com.kiven.kutils.widget.UIGridView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
@@ -224,6 +254,11 @@
 
 
         </RelativeLayout>
+
+        <android.support.v7.widget.ListViewCompat
+            android:id="@+id/listView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>

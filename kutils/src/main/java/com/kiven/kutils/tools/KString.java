@@ -85,6 +85,10 @@ public class KString {
         return dateFormater.get().format(new Date());
     }
 
+    public static String formatDate(long date) {
+        return dateFormater.get().format(new Date(date));
+    }
+
 
     private final static ThreadLocal<SimpleDateFormat> dateFormater = new ThreadLocal<SimpleDateFormat>() {
         @Override

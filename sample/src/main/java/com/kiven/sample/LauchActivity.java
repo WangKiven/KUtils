@@ -8,31 +8,43 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Process;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.FileProvider;
+import android.support.v4.util.Pair;
+import android.support.v7.app.AlertDialog;
 import android.telephony.TelephonyManager;
+import android.transition.Slide;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.flyco.dialog.widget.popup.base.BaseBubblePopup;
+import com.flyco.dialog.widget.popup.base.BasePopup;
 import com.kiven.kutils.activityHelper.activity.KRoboActivity;
-import com.kiven.kutils.callBack.Consumer;
 import com.kiven.kutils.file.KFile;
 import com.kiven.kutils.logHelper.KLog;
 import com.kiven.kutils.tools.KAlertDialogHelper;
-import com.kiven.kutils.tools.KContext;
 import com.kiven.kutils.tools.KGranting;
 import com.kiven.kutils.tools.KPath;
 import com.kiven.kutils.tools.KUtil;
+import com.kiven.kutils.widget.KNormalItemView;
 import com.kiven.sample.floatView.ActivityHFloatView;
 
 import org.xutils.common.Callback;
@@ -44,7 +56,9 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import me.grantland.widget.AutofitHelper;
 import roboguice.RoboGuice;
+import roboguice.inject.InjectView;
 
 public class LauchActivity extends KRoboActivity {
 
@@ -53,12 +67,33 @@ public class LauchActivity extends KRoboActivity {
     String cameraPath = null;
     String cropPath = null;
 
+    @InjectView(R.id.et_auto)
+    private EditText et_auto;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lauch);
         RoboGuice.setUseAnnotationDatabases(false);
         KUtil.printDeviceInfo();
+
+        setupWindowAnimations();
+
+        AutofitHelper.create(et_auto);
+
+        ListView listView = (ListView) findViewById(R.id.listView);
+        listView.setAdapter(new MyAdapter());
+    }
+
+    private void setupWindowAnimations() {
+        // Re-enter transition is executed when returning to this activity
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            Slide slideTransition = new Slide();
+            slideTransition.setSlideEdge(Gravity.LEFT);
+            slideTransition.setDuration(500);
+            getWindow().setReenterTransition(slideTransition);
+            getWindow().setExitTransition(slideTransition);
+        }
     }
 
     public void onClick(View view) {
@@ -146,14 +181,54 @@ public class LauchActivity extends KRoboActivity {
                 });
                 break;
             case R.id.item_widget:
-                KAlertDialogHelper.Show1BDialog(this, "在系统widget中去选择要显示的widget");
+                KAlertDialogHelper.Show1BDialog(this, "在系统widget中去选择要显示的widget", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        /*ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+                        manager.killBackgroundProcesses(getPackageName());*/
 
+                        KLog.i("a = " + a);
+                        KLog.i("b = " + b);
+
+                        /*Intent intent = getBaseContext().getPackageManager()
+                                .getLaunchIntentForPackage(getBaseContext().getPackageName());
+                        PendingIntent restartIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
+                        AlarmManager mgr = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+                        mgr.set(AlarmManager.RTC, System.currentTimeMillis(), restartIntent); // 1秒钟后重启应用*/
+
+                        a = "66666";
+                        b = 7777;
+
+                        Process.killProcess(Process.myPid());
+                    }
+                });
+                break;
+            case R.id.item_data_binding:
+//                startActivity(new Intent(this, ActivityDataBinding.class));
+                KNormalItemView itemView = (KNormalItemView) view;
+                ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, new Pair(itemView.textViewName, "text_transition_name"));
+                ActivityCompat.startActivity(this, new Intent(this, ActivityDataBinding.class), optionsCompat.toBundle());
+
+                break;
+
+            case R.id.item_recycler_view:
+                new ActivityCustomRecyclerView().startActivity(this);
+                break;
+            case R.id.item_flyco_dialog:
+                TextView textView = new TextView(this);
+                textView.setText("Hello World!");
+                Dialog dialog = new AlertDialog.Builder(this, R.style.Dialog_Nobackground)
+                        .setView(textView).create();
+                dialog.show();
                 break;
             default:
                 new ActivityHTestBase().startActivity(this);
                 break;
         }
     }
+
+    public static String a;
+    public static int b;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -267,9 +342,9 @@ public class LauchActivity extends KRoboActivity {
         String filePath = imageFile.getAbsolutePath();
         Cursor cursor = context.getContentResolver().query(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                new String[] { MediaStore.Images.Media._ID },
+                new String[]{MediaStore.Images.Media._ID},
                 MediaStore.Images.Media.DATA + "=? ",
-                new String[] { filePath }, null);
+                new String[]{filePath}, null);
 
         if (cursor != null && cursor.moveToFirst()) {
             int id = cursor.getInt(cursor
@@ -330,5 +405,39 @@ public class LauchActivity extends KRoboActivity {
                 KLog.i("onFinished");
             }
         });
+    }
+
+    class MyAdapter extends BaseAdapter {
+
+        @Override
+        public int getCount() {
+            return 55;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return "item " + position;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            TextView textView;
+            if (convertView == null) {
+                textView = new TextView(LauchActivity.this);
+                textView.setPadding(20, 20, 20, 20);
+                textView.setBackgroundColor(Color.YELLOW);
+                convertView = textView;
+            } else {
+                textView = (TextView) convertView;
+            }
+
+            textView.setText((String) getItem(position));
+            return convertView;
+        }
     }
 }

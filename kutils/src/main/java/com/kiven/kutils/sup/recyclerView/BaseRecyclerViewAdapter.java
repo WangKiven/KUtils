@@ -13,10 +13,10 @@ public abstract class BaseRecyclerViewAdapter<T extends BaseRecyclerViewHolder, 
     /**
      * 行点击事件
      */
-    private OnItemClickListener itemClickListener;
+    private OnItemClickListener<T> itemClickListener;
     protected List<H> mList;
 
-    public BaseRecyclerViewAdapter(List<H> list, OnItemClickListener itemClickListener) {
+    public BaseRecyclerViewAdapter(List<H> list, OnItemClickListener<T> itemClickListener) {
         mList = list;
         this.itemClickListener = itemClickListener;
     }

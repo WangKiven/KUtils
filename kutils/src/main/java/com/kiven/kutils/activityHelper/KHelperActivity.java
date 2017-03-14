@@ -172,6 +172,17 @@ public class KHelperActivity extends AppCompatActivity {
     }
 
 	@Override
+	public void onBackPressed() {
+		if (helper == null) {
+			super.onBackPressed();
+		} else {
+			if (helper.onBackPressed()) {
+				super.onBackPressed();
+			}
+		}
+	}
+
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		if (helper == null) {
 			return false;

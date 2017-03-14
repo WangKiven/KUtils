@@ -164,6 +164,9 @@ public class KContext extends Application {
                 .getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager
                 .getRunningAppProcesses();
+        if (appProcesses == null) {
+            return false;
+        }
         for (ActivityManager.RunningAppProcessInfo appProcess : appProcesses) {
             if (appProcess.processName.equals(context.getPackageName())) {
                 /*Log.i(context.getPackageName(), "此appimportace ="

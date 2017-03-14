@@ -47,7 +47,7 @@ public class KShowLog extends KActivityHelper implements AdapterView.OnItemClick
 		Log.i("ULog_default", log);
 		Toast.makeText(mActivity, "copied: " + position, Toast.LENGTH_SHORT).show();
 
-		if(log.startsWith("http://")){
+		if(log.startsWith("http://") || log.startsWith("https://")){
 			try {
 				new KShowLogDetail(log).startActivity(mActivity);
 			} catch (Exception e) {
@@ -99,6 +99,7 @@ public class KShowLog extends KActivityHelper implements AdapterView.OnItemClick
 				textView.setPadding(30, 30, 30, 30);
 				textView.setTextColor(Color.BLACK);
 				textView.setBackgroundColor(Color.WHITE);
+				textView.setMaxLines(5);
 				convertView = textView;
 			}else {
 				textView = (TextView) convertView;

@@ -8,10 +8,14 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
+ * 数据集处理类
  * Created by kiven on 2017/3/14.
  */
 
 public class CollectionUtil {
+    /**
+     * 将List按字母分组
+     */
     public static <T> Map<String, List<T>> groupFirshChar(List<T> list, Function<T, String> function) {
         Map<String, List<T>> map = new TreeMap<>();
         for (T item : list) {

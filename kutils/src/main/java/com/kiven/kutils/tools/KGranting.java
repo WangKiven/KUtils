@@ -2,7 +2,10 @@ package com.kiven.kutils.tools;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -75,18 +78,25 @@ public class KGranting {
                 message = message + " 等功能";
             }
 
-            message = message + ", 请在设置中设置相关权限.";
+            message = message + ", 请在设置'权限'中打开相关权限.";
 
             new AlertDialog.Builder(mActivity)
                     .setMessage(message)
-                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    .setPositiveButton("前去设置", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            ActivityCompat.requestPermissions(mActivity, waitGrant,
-                                    requestCode);
+                            /*ActivityCompat.requestPermissions(mActivity, waitGrant,
+                                    requestCode);*/
+                            if (callBack != null) {
+                                callBack.onGrantSuccess(false);
+                            }
+                            granting = null;
+                            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                            intent.setData(Uri.fromParts("package", mActivity.getPackageName(), null));
+                            mActivity.startActivity(intent);
                         }
                     })
-                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    .setNegativeButton("确定", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             if (callBack != null) {

@@ -70,33 +70,34 @@ public class KGranting {
 
         // TODO 请求授权
         if (grantName.size() > 0) {
-            String message = "你需要授权访问 " + grantName.get(0);
+            String message = "请授权访问 " + grantName.get(0);
             if (grantName.size() > 1) {
                 for (int i = 1; i < grantName.size(); i++) {
                     message = message + ", " + grantName.get(i);
                 }
-                message = message + " 等功能";
+                message = message + " 等权限";
             }
 
-            message = message + ", 请在设置'权限'中打开相关权限.";
+//            message = message + ", 请在设置'权限'中打开相关权限.";
 
             new AlertDialog.Builder(mActivity)
                     .setMessage(message)
-                    .setPositiveButton("前去设置", new DialogInterface.OnClickListener() {
+                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            /*ActivityCompat.requestPermissions(mActivity, waitGrant,
-                                    requestCode);*/
-                            if (callBack != null) {
+                            ActivityCompat.requestPermissions(mActivity, waitGrant,
+                                    requestCode);
+                            /*if (callBack != null) {
                                 callBack.onGrantSuccess(false);
                             }
-                            granting = null;
                             Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                             intent.setData(Uri.fromParts("package", mActivity.getPackageName(), null));
                             mActivity.startActivity(intent);
+
+                            granting = null;*/
                         }
                     })
-                    .setNegativeButton("确定", new DialogInterface.OnClickListener() {
+                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             if (callBack != null) {
@@ -141,6 +142,7 @@ public class KGranting {
             granting = new KGranting(activity, requestCode, tGrant, tGrantName, callBack);
             granting.startCheck();
         } else {
+            granting = null;
             if (KLog.isDebug()) {
                 Toast.makeText(activity, "授权请求失败", Toast.LENGTH_SHORT).show();
             }
@@ -156,11 +158,44 @@ public class KGranting {
     /**
      * 处理授权结果
      */
-    public static void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (granting != null && granting.callBack != null) {
-            granting.callBack.onGrantSuccess(granting.checkResult(grantResults));
-        }
+    public static void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull final int[] grantResults) {
+        if (granting != null) {
+//            granting.callBack.onGrantSuccess(granting.checkResult(grantResults));
 
-        granting = null;
+            if (granting.checkResult(grantResults)) {
+                if (granting.callBack != null)
+                    granting.callBack.onGrantSuccess(true);
+            } else {
+                String message = "您未全部授权相关权限，您可以在设置中打开相关权限。";
+
+                new AlertDialog.Builder(granting.mActivity)
+                        .setMessage(message)
+                        .setPositiveButton("前去设置", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (granting.callBack != null)
+                                    granting.callBack.onGrantSuccess(false);
+                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                intent.setData(Uri.fromParts("package", granting.mActivity.getPackageName(), null));
+                                granting.mActivity.startActivity(intent);
+
+                                granting = null;
+                            }
+                        })
+                        .setNegativeButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                if (granting.callBack != null)
+                                    granting.callBack.onGrantSuccess(false);
+                                granting = null;
+                            }
+                        })
+                        .setCancelable(false)
+                        .create()
+                        .show();
+            }
+        } else {
+            granting = null;
+        }
     }
 }

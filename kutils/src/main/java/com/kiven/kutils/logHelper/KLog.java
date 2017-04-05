@@ -18,6 +18,7 @@ public class KLog {
 	private static boolean showAtLine = true;
 	
 	private static LinkedList<String> logs;
+	private static LinkedList<String> positions;
 
 	private static boolean isDebug = true;
 
@@ -36,10 +37,33 @@ public class KLog {
 	private static void addLog(String log){
 		if (logs == null) {
 			logs = new LinkedList<String>();
+			positions = new LinkedList<>();
 		}else if (logs.size() > 500) {
 			logs.removeLast();
+			positions.removeLast();
 		}
 		logs.addFirst(log);
+
+
+		StackTraceElement[] sts = Thread.currentThread().getStackTrace();
+		String po = "";
+		if (sts != null) {
+			int i = 0;
+			for (StackTraceElement st : sts) {
+				i ++;
+				if (i > 10) {
+					break;
+				}
+				if (i == 1) {
+					po += (st.getClassName() + "." + st.getMethodName() + "("
+							+ st.getFileName() + ":" + st.getLineNumber() + ")");
+				} else {
+					po += (", " + st.getClassName() + "." + st.getMethodName() + "("
+							+ st.getFileName() + ":" + st.getLineNumber() + ")");
+				}
+			}
+		}
+		positions.addFirst(po);
 	}
 	
 	public static LinkedList<String> getLogs(){
@@ -48,6 +72,13 @@ public class KLog {
 		}
 		
 		return logs;
+	}
+
+	public static LinkedList<String> getPositions() {
+		if (positions == null) {
+			positions = new LinkedList<>();
+		}
+		return positions;
 	}
 
 	/**

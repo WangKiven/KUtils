@@ -35,15 +35,18 @@ public class KLog {
 	 * @param log log
 	 */
 	private static void addLog(String log){
+
 		if (logs == null) {
 			logs = new LinkedList<String>();
 			positions = new LinkedList<>();
-		}else if (logs.size() > 500) {
-			logs.removeLast();
-			positions.removeLast();
 		}
-		logs.addFirst(log);
-
+		synchronized (logs) {
+			if (logs.size() > 500) {
+				logs.removeLast();
+				positions.removeLast();
+			}
+			logs.addFirst(log);
+		}
 
 		StackTraceElement[] sts = Thread.currentThread().getStackTrace();
 		String po = "";

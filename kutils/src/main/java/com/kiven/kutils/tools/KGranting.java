@@ -165,6 +165,7 @@ public class KGranting {
             if (granting.checkResult(grantResults)) {
                 if (granting.callBack != null)
                     granting.callBack.onGrantSuccess(true);
+                granting = null;
             } else {
                 String message = "您未全部授权相关权限，您可以在设置中打开相关权限。";
 

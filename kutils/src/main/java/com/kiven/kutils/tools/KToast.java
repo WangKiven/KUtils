@@ -27,10 +27,10 @@ public class KToast {
         Context context = KContext.getInstance();
         if (context != null) {
 
-            if (KContext.getInstance().isOnForeground()) {
+            /*if (KContext.getInstance().isOnForeground()) {
                 // TODO app在后台，不弹出提示
                 return;
-            }
+            }*/
 
             ToastMessage(context, msg, time);
         }

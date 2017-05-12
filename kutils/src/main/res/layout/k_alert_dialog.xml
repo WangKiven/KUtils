@@ -28,6 +28,7 @@
         android:id="@+id/tv_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:padding="10dp"
         android:textColor="#999999"
         tools:text="到底做什么呢?"/>

@@ -86,34 +86,40 @@ public class KNormalItemView extends LinearLayout{
                 }
             }
 
-            Drawable drawableLeft = typedArray.getDrawable(R.styleable.KNormalItemView_item_drawableLeft);
-            if (drawableLeft != null) {
-                textViewName.setCompoundDrawablesWithIntrinsicBounds(drawableLeft, null, null, null);
+            if (textViewName != null) {
+                Drawable drawableLeft = typedArray.getDrawable(R.styleable.KNormalItemView_item_drawableLeft);
+                if (drawableLeft != null) {
+                    textViewName.setCompoundDrawablesWithIntrinsicBounds(drawableLeft, null, null, null);
+                }
+
+                if (typedArray.getBoolean(R.styleable.KNormalItemView_item_title_bold, false)) {
+                    textViewName.setTypeface(textViewName.getTypeface(), Typeface.BOLD);
+                }
+
+                textViewName.setText(typedArray.getText(R.styleable.KNormalItemView_item_title));
+                if (typedArray.hasValue(R.styleable.KNormalItemView_item_title_color)) {
+                    textViewName.setTextColor(typedArray.getColor(R.styleable.KNormalItemView_item_title_color, Color.BLACK));
+                }
             }
 
-            if (typedArray.getBoolean(R.styleable.KNormalItemView_item_title_bold, false)) {
-                textViewName.setTypeface(textViewName.getTypeface(), Typeface.BOLD);
+            if (textViewInfo != null) {
+                textViewInfo.setText(typedArray.getText(R.styleable.KNormalItemView_item_detail));
+                if (typedArray.hasValue(R.styleable.KNormalItemView_item_detail_color)) {
+                    textViewInfo.setTextColor(typedArray.getColor(R.styleable.KNormalItemView_item_detail_color, Color.BLACK));
+                }
+
+                textViewInfo.setHint(typedArray.getText(R.styleable.KNormalItemView_item_detail_hint));
+                if (typedArray.hasValue(R.styleable.KNormalItemView_item_detail_show)) {
+                    boolean show = typedArray.getBoolean(R.styleable.KNormalItemView_item_detail_show, true);
+                    showArrow(show);
+                }
+
+                if (typedArray.hasValue(R.styleable.KNormalItemView_item_detail_arrow)) {
+                    textViewInfo.setCompoundDrawablesWithIntrinsicBounds(null, null, typedArray.getDrawable(R.styleable.KNormalItemView_item_detail_arrow), null);
+                }
             }
 
-            textViewName.setText(typedArray.getText(R.styleable.KNormalItemView_item_title));
-            if (typedArray.hasValue(R.styleable.KNormalItemView_item_title_color)) {
-                textViewName.setTextColor(typedArray.getColor(R.styleable.KNormalItemView_item_title_color, Color.BLACK));
-            }
-
-            textViewInfo.setText(typedArray.getText(R.styleable.KNormalItemView_item_detail));
-            if (typedArray.hasValue(R.styleable.KNormalItemView_item_detail_color)) {
-                textViewInfo.setTextColor(typedArray.getColor(R.styleable.KNormalItemView_item_detail_color, Color.BLACK));
-            }
-
-            textViewInfo.setHint(typedArray.getText(R.styleable.KNormalItemView_item_detail_hint));
-            if (typedArray.hasValue(R.styleable.KNormalItemView_item_detail_show)) {
-                boolean show = typedArray.getBoolean(R.styleable.KNormalItemView_item_detail_show, true);
-                showArrow(show);
-            }
-
-            if (typedArray.hasValue(R.styleable.KNormalItemView_item_detail_arrow)) {
-                textViewInfo.setCompoundDrawablesWithIntrinsicBounds(null, null, typedArray.getDrawable(R.styleable.KNormalItemView_item_detail_arrow), null);
-            }
+            typedArray.recycle();
         }
     }
 

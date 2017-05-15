@@ -103,6 +103,11 @@ public class KShowLogDetail extends KActivityHelper implements AdapterView.OnIte
 
 		listView.setOnItemClickListener(this);
 	}
+
+	@Override
+	protected Class getActivityClas() {
+		return KHelperActivity.class;
+	}
 	
 	private void sortOList(){
 		if (oList != null) {

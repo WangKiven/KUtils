@@ -1,7 +1,9 @@
 package com.kiven.kutils.logHelper;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,14 +23,19 @@ import com.kiven.kutils.tools.KString;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class KShowLog extends KActivityHelper implements AdapterView.OnItemClickListener {
 
 	ListView listView;
+	private ArrayList<String> positions;
 
 	@Override
 	public void onCreate(KHelperActivity activity, Bundle savedInstanceState) {
 		super.onCreate(activity, savedInstanceState);
+
+
+		positions = new ArrayList<String>(KLog.getPositions());
 
 		listView = new ListView(activity);
 		listView.setDividerHeight(5);
@@ -40,9 +47,14 @@ public class KShowLog extends KActivityHelper implements AdapterView.OnItemClick
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+	protected Class getActivityClas() {
+		return KHelperActivity.class;
+	}
 
-		String log = parent.getItemAtPosition(position).toString();
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+
+		/*String log = parent.getItemAtPosition(position).toString();
 		KString.setClipText(mActivity, log);
 		Log.i("ULog_default", log);
 		Toast.makeText(mActivity, "copied: " + position, Toast.LENGTH_SHORT).show();
@@ -64,7 +76,64 @@ public class KShowLog extends KActivityHelper implements AdapterView.OnItemClick
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		}*/
+
+		final String log = String.valueOf(parent.getItemAtPosition(position));
+		String pos = positions.get(position);
+
+		final String[] poss = Pattern.compile(",").split(pos);
+
+		String slog = log + "\n";
+		for (String pp : poss) {
+			slog += ("\n" + pp);
 		}
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
+		builder.setMessage(slog);
+		builder.setPositiveButton("复制", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				KString.setClipText(mActivity, log);
+				Toast.makeText(mActivity, "copied: " + position, Toast.LENGTH_SHORT).show();
+			}
+		});
+		builder.setNegativeButton("打印", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				Log.i("ULog_default", log);
+				for (String pp : poss) {
+					Log.i("ULog_default", pp);
+				}
+			}
+		});
+		builder.setNeutralButton("解析", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				if(log.startsWith("http://") || log.startsWith("https://")){
+					try {
+						new KShowLogDetail(log).startActivity(mActivity);
+					} catch (Exception e) {
+						KLog.e(e);
+						Toast.makeText(mActivity, "解析网址失败", Toast.LENGTH_SHORT).show();
+					}
+				}else {
+					try {
+						/*JsonReader jsonReader = new JsonReader(new StringReader(log));
+						jsonReader.setLenient(true);*/
+						JsonElement jsonElement = new JsonParser().parse(log.trim());
+						if (jsonElement.isJsonArray()) {
+							new KShowLogDetail(new Gson().fromJson(jsonElement, List.class)).startActivity(mActivity);
+						} else if (jsonElement.isJsonObject()) {
+							new KShowLogDetail(new Gson().fromJson(jsonElement, Map.class)).startActivity(mActivity);
+						}
+					} catch (Exception e) {
+						KLog.e(e);
+						Toast.makeText(mActivity, "解析json失败", Toast.LENGTH_SHORT).show();
+					}
+				}
+			}
+		});
+		builder.create().show();
 	}
 
 	class MyAdapter extends BaseAdapter{

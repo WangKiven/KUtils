@@ -1,14 +1,17 @@
 package com.kiven.kutils.tools;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.support.v4.content.FileProvider;
 import android.util.DisplayMetrics;
 
 import com.kiven.kutils.logHelper.KLog;
@@ -273,9 +276,39 @@ public class KUtil {
 	}
 
 	/**
+	 * 安装apk
+	 *
+	 */
+	private static void installApk(Context context, Uri uri) {
+		Intent mIntent = new Intent(Intent.ACTION_VIEW);
+		mIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		mIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+		mIntent.setDataAndType(uri, "application/vnd.android.package-archive");
+		context.startActivity(mIntent);
+	}
+
+	/**
+	 * 安装apk
+	 * @param path			文件路径
+	 * @param authority		android 7.0 共享文件请求权限的 authority，需要配置manifests文件
+	 */
+	public static void installApk(Context context, String path, String authority) {
+		installApk(context, new File(path), authority);
+	}
+
+	public static void installApk(Context context, File file, String authority) {
+		Uri apkUri;
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+			apkUri = Uri.fromFile(file);
+		} else {
+			apkUri = FileProvider.getUriForFile(context, authority, file);
+		}
+		installApk(context, apkUri);
+	}
+
+	/**
 	 * SharedPreferences
-	 * 
-	 * @return
 	 */
 	public static SharedPreferences getSharedPreferences() {
 		return KContext.getInstance().getSharedPreferences("KContext.ACCOUNT_CONFIG", Context.MODE_PRIVATE);

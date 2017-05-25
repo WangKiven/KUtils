@@ -211,6 +211,12 @@ public class KString {
         }
         return true;
     }
+    /**
+     * 判断给定字符串是否空白串。 空白串是指由空格、制表符、回车符、换行符组成的字符串 若input为null或空字符串，返回nullResult
+     */
+    public static String checkBlank(String input, String nullResult) {
+        return isBlank(input)? nullResult: input;
+    }
 
     /**
      * 判断字符串是否相等

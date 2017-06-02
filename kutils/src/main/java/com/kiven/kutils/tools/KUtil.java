@@ -1,5 +1,6 @@
 package com.kiven.kutils.tools;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -28,30 +29,53 @@ import java.io.InputStreamReader;
  * Created by Kiven on 2014/12/24.
  */
 public class KUtil {
+
+	private static Application app;
+	public static void setApp(Application app) {
+		KUtil.app = app;
+	}
+
 	/**
 	 * 像素转化
-	 *
-	 * @param context
-	 * @param dipValue
-	 * @return
 	 */
+	@Deprecated
 	public static int dip2px(Context context, float dipValue) {
 		final float scale = context.getResources().getDisplayMetrics().density;
 		return (int) (dipValue * scale + 0.5f);
 	}
-
+	@Deprecated
 	public static int px2dip(Context context, float pxValue) {
 		final float scale = context.getResources().getDisplayMetrics().density;
 		return (int) (pxValue / scale + 0.5f);
 	}
-
+	@Deprecated
 	public static int px2sp(Context context, float pxValue) {
 		final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
 		return (int) (pxValue / fontScale + 0.5f);
 	}
-
+	@Deprecated
 	public static int sp2px(Context context, float spValue) {
 		final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
+		return (int) (spValue * fontScale + 0.5f);
+	}
+
+	public static int dip2px(float dipValue) {
+		final float scale = app.getResources().getDisplayMetrics().density;
+		return (int) (dipValue * scale + 0.5f);
+	}
+
+	public static int px2dip(float pxValue) {
+		final float scale = app.getResources().getDisplayMetrics().density;
+		return (int) (pxValue / scale + 0.5f);
+	}
+
+	public static int px2sp(float pxValue) {
+		final float fontScale = app.getResources().getDisplayMetrics().scaledDensity;
+		return (int) (pxValue / fontScale + 0.5f);
+	}
+
+	public static int sp2px(float spValue) {
+		final float fontScale = app.getResources().getDisplayMetrics().scaledDensity;
 		return (int) (spValue * fontScale + 0.5f);
 	}
 

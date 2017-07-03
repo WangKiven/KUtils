@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '25.0.3'
+    buildToolsVersion "25.0.3"
 
     defaultConfig {
         minSdkVersion 9
@@ -19,11 +19,11 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:25.2.0'
+    compile "com.android.support:appcompat-v7:${parent.ext.libraryVersion}"
     provided 'org.roboguice:roboguice:3.0.1'
 //    provided 'org.roboguice:roboblender:3.0.1'
-    provided 'com.android.support:recyclerview-v7:25.2.0'
-    provided 'com.google.code.gson:gson:2.7'
+    provided "com.android.support:recyclerview-v7:${parent.ext.libraryVersion}"
+    provided 'com.google.code.gson:gson:2.8.+'
     provided project(':xutils')
 }
 //apply from: 'jcenerUpload.gradle'

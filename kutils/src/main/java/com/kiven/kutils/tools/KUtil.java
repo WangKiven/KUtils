@@ -334,6 +334,38 @@ public class KUtil {
     }
 
     /**
+     * 卸载apk
+     */
+    private static void unInstallApk(Context context, Uri uri) {
+        Intent mIntent = new Intent(Intent.ACTION_DELETE, uri);
+        /*mIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        mIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        mIntent.setDataAndType(uri, "application/vnd.android.package-archive");*/
+        context.startActivity(mIntent);
+    }
+
+    /**
+     * 卸载apk
+     *
+     * @param path      文件路径
+     * @param authority android 7.0 共享文件请求权限的 authority，需要配置manifests文件
+     */
+    public static void unInstallApk(Context context, String path, String authority) {
+        unInstallApk(context, new File(path), authority);
+    }
+
+    public static void unInstallApk(Context context, File file, String authority) {
+        Uri apkUri;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            apkUri = Uri.fromFile(file);
+        } else {
+            apkUri = FileProvider.getUriForFile(context, authority, file);
+        }
+        unInstallApk(context, apkUri);
+    }
+
+    /**
      * 静默安装apk
      * http://blog.csdn.net/u013598111/article/details/50240249
      *

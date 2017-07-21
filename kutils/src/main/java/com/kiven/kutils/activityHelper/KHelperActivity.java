@@ -15,196 +15,200 @@ import java.lang.reflect.Constructor;
 
 public class KHelperActivity extends AppCompatActivity {
 
-	private KActivityHelper helper;
+    private KActivityHelper helper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-		getHelper(savedInstanceState);
+        getHelper(savedInstanceState);
         super.onCreate(savedInstanceState);
 
-        if (helper == null){
+        if (helper == null) {
             finish();
-        }else {
+        } else {
             helper.onCreate(this, savedInstanceState);
         }
 
-		KContext.getInstance().onActivityCreate(this);
+        KContext.getInstance().onActivityCreate(this);
     }
 
-	@SuppressWarnings({ "rawtypes" })
-	protected KActivityHelper getHelper(Bundle savedInstanceState) {
-    	if (helper == null) {//此判断是为了防止子类已设置helper的值
+    @SuppressWarnings({"rawtypes"})
+    protected KActivityHelper getHelper(Bundle savedInstanceState) {
+        if (helper == null) {//此判断是为了防止子类已设置helper的值
             if (savedInstanceState == null) {
                 helper = (KActivityHelper) KActivityHelper.getStackValue(getIntent().getStringExtra("BaseActivityHelper"));
-    		} else {
-    			try {
-    				Constructor[] constructors = Class.forName(savedInstanceState.getString("helper_name")).getConstructors();
-    				if (constructors != null && constructors.length > 0) {
-    					Constructor constructor = constructors[0];
-    					Class[] types = constructor.getParameterTypes();
-    					if (types != null && types.length > 0) {
-							Object[] parameters = new Object[types.length];
-							for(int i = 0; i < types.length; i++){
-								parameters[i] = getDefaultValue(types[i]);
-							}
-							helper = (KActivityHelper) constructor.newInstance(parameters);
-						}else {
-							helper = (KActivityHelper) constructor.newInstance();
-						}
-					}
-    				
-    			} catch (Exception e) {
-    				KLog.e(e);
-    			}
-    		}
-		}
-    	return helper;
-	}
-    
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-	private Object getDefaultValue(Class class1){
-    	if (class1.isAssignableFrom(int.class) || class1.isAssignableFrom(Integer.class)
-    			|| class1.isAssignableFrom(float.class) || class1.isAssignableFrom(Float.class)
-    			|| class1.isAssignableFrom(double.class) || class1.isAssignableFrom(Double.class)) {
-			return 0;
-		}else if (class1.isAssignableFrom(boolean.class) || class1.isAssignableFrom(Boolean.class)) {
-			return false;
-		}
-    	
-    	return null;
-    }
-    
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-    	// TODO Auto-generated method stub
-    	super.onSaveInstanceState(outState);
-    	if (helper != null) {
-        	outState.putString("helper_name", helper.getClass().getName());
-        	helper.onSaveInstanceState(outState);
-		}
-    }
-    
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-    	// TODO Auto-generated method stub
-    	super.onRestoreInstanceState(savedInstanceState);
-    	if (helper != null) {
-        	helper.onRestoreInstanceState(savedInstanceState);
-		}
+            } else {
+                try {
+                    Constructor[] constructors = Class.forName(savedInstanceState.getString("helper_name")).getConstructors();
+                    if (constructors != null && constructors.length > 0) {
+                        Constructor constructor = constructors[0];
+                        Class[] types = constructor.getParameterTypes();
+                        if (types != null && types.length > 0) {
+                            Object[] parameters = new Object[types.length];
+                            for (int i = 0; i < types.length; i++) {
+                                parameters[i] = getDefaultValue(types[i]);
+                            }
+                            helper = (KActivityHelper) constructor.newInstance(parameters);
+                        } else {
+                            helper = (KActivityHelper) constructor.newInstance();
+                        }
+                    }
+
+                } catch (Exception e) {
+                    KLog.e(e);
+                }
+            }
+        }
+        return helper;
     }
 
-    public void onClick(View view){
-    	if (helper != null) {
+    /**
+     * 根据参数类型获取默认值
+     */
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private Object getDefaultValue(Class class1) {
+        if (class1.isAssignableFrom(int.class) || class1.isAssignableFrom(Integer.class)
+                || class1.isAssignableFrom(float.class) || class1.isAssignableFrom(Float.class)
+                || class1.isAssignableFrom(double.class) || class1.isAssignableFrom(Double.class)) {
+            return 0;
+        } else if (class1.isAssignableFrom(boolean.class) || class1.isAssignableFrom(Boolean.class)) {
+            return false;
+        }
+
+        return null;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        // TODO Auto-generated method stub
+        super.onSaveInstanceState(outState);
+        if (helper != null) {
+            outState.putString("helper_name", helper.getClass().getName());
+            helper.onSaveInstanceState(outState);
+        }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        // TODO Auto-generated method stub
+        super.onRestoreInstanceState(savedInstanceState);
+        if (helper != null) {
+            helper.onRestoreInstanceState(savedInstanceState);
+        }
+    }
+
+    public void onClick(View view) {
+        if (helper != null) {
             helper.onClick(view);
-		}
+        }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-		KContext.getInstance().onActivityStart(this);
-    	if (helper != null) {
+        KContext.getInstance().onActivityStart(this);
+        if (helper != null) {
             helper.onStart();
-		}
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-		KContext.getInstance().onActivityResume(this);
-    	if (helper != null) {
+        KContext.getInstance().onActivityResume(this);
+        if (helper != null) {
             helper.onResume();
-		}
+        }
     }
 
     @Override
     protected void onPause() {
-		KContext.getInstance().onActivityPause(this);
-    	if (helper != null) {
+        KContext.getInstance().onActivityPause(this);
+        if (helper != null) {
             helper.onPause();
-		}
+        }
         super.onPause();
     }
 
-	@Override
-	public void finish() {
-		super.finish();
+    @Override
+    public void finish() {
+        super.finish();
 
-		KContext.getInstance().onActivityFinish(this);
-	}
+        KContext.getInstance().onActivityFinish(this);
+    }
 
-	@Override
+    @Override
     protected void onStop() {
-    	if (helper != null) {
+        if (helper != null) {
             helper.onStop();
-		}
-		super.onStop();
+        }
+        super.onStop();
 
-		KContext.getInstance().onActivityStop(this);
+        KContext.getInstance().onActivityStop(this);
     }
 
     @Override
     protected void onDestroy() {
-    	if (helper != null) {
+        if (helper != null) {
             helper.onDestroy();
-		}
+        }
         KActivityHelper.removeStack(getIntent().getStringExtra("BaseActivityHelper"));//将helper移除
-		super.onDestroy();
-		KContext.getInstance().onActivityDestory(this);
+        super.onDestroy();
+        KContext.getInstance().onActivityDestory(this);
     }
-    
+
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
-    	super.onWindowFocusChanged(hasFocus);
-    	if (helper != null) {
+        super.onWindowFocusChanged(hasFocus);
+        if (helper != null) {
             helper.onWindowFocusChanged(hasFocus);
-		}
+        }
     }
-    
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-    	if (helper == null) {
-    		return onKeyDown(keyCode, event);
-    	}else {
-        	boolean b = super.onKeyDown(keyCode, event);
-        	return b && helper.onKeyDown(keyCode, event);
-		}
+        if (helper == null) {
+            return onKeyDown(keyCode, event);
+        } else {
+            boolean b = super.onKeyDown(keyCode, event);
+            return b && helper.onKeyDown(keyCode, event);
+        }
     }
 
-	@Override
-	public void onBackPressed() {
-		if (helper == null) {
-			super.onBackPressed();
-		} else {
-			if (helper.onBackPressed()) {
-				super.onBackPressed();
-			}
-		}
-	}
+    @Override
+    public void onBackPressed() {
+        if (helper == null) {
+            super.onBackPressed();
+        } else {
+            if (helper.onBackPressed()) {
+                super.onBackPressed();
+            }
+        }
+    }
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		if (helper == null) {
-			return false;
-		} else {
-			return helper.onCreateOptionsMenu(menu);
-		}
-	}
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (helper == null) {
+            return false;
+        } else {
+            return helper.onCreateOptionsMenu(menu);
+        }
+    }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		if (helper == null) {
-			return false;
-		} else {
-			return helper.onOptionsItemSelected(item);
-		}
-	}
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (helper == null) {
+            return false;
+        } else {
+            return helper.onOptionsItemSelected(item);
+        }
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (helper != null) {
             helper.onActivityResult(requestCode, resultCode, data);
-		}
+        }
     }
 }

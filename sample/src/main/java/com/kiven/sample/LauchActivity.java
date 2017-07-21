@@ -1,6 +1,7 @@
 package com.kiven.sample;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.ContentValues;
@@ -40,6 +41,7 @@ import android.widget.Toast;
 
 import com.flyco.dialog.widget.popup.base.BaseBubblePopup;
 import com.flyco.dialog.widget.popup.base.BasePopup;
+import com.kiven.kutils.activityHelper.KFragmentActivity;
 import com.kiven.kutils.activityHelper.activity.KRoboActivity;
 import com.kiven.kutils.file.KFile;
 import com.kiven.kutils.logHelper.KLog;
@@ -101,11 +103,17 @@ public class LauchActivity extends KRoboActivity {
 
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.item_fragment_proxy:
+                Intent fproxyIntent = new Intent(this, KFragmentActivity.class);
+                fproxyIntent.putExtra("fragment_name", FragmentApple.class.getName());
+                startActivity(fproxyIntent);
+                break;
             case R.id.item_setings:
                 startActivity(new Intent(Settings.ACTION_SETTINGS));
                 break;
             case R.id.item_phone:
                 KGranting.requestPermissions(this, 101, Manifest.permission.CALL_PHONE, "拨号", new KGranting.GrantingCallBack() {
+                    @SuppressLint("MissingPermission")
                     @Override
                     public void onGrantSuccess(boolean isSuccess) {
                         String phoneno = "17012347428";

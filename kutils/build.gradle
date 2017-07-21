@@ -20,9 +20,10 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile "com.android.support:appcompat-v7:${parent.ext.libraryVersion}"
+    provided "com.android.support:recyclerview-v7:${parent.ext.libraryVersion}"
+
     provided 'org.roboguice:roboguice:3.0.1'
 //    provided 'org.roboguice:roboblender:3.0.1'
-    provided "com.android.support:recyclerview-v7:${parent.ext.libraryVersion}"
     provided 'com.google.code.gson:gson:2.8.+'
     provided project(':xutils')
 }

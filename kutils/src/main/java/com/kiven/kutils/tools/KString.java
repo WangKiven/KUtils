@@ -234,6 +234,17 @@ public class KString {
     }
 
     /**
+     * s1是否包含s2
+     */
+    public static boolean contains(String s1, String s2) {
+        if (s1 == null) {
+            return s2 == null;
+        } else {
+            return s1.contains(s2);
+        }
+    }
+
+    /**
      * 字符串转整数
      */
     public static int toInt(String str, int defValue) {

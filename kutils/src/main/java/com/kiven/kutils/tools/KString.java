@@ -470,6 +470,14 @@ public class KString {
         decimal = decimal.divide(new BigDecimal(10000));
         return formaterFloat(decimal);
     }
+    /**
+     * 格式化金额 "23450" -> 2.35
+     */
+    public static String formaterWan(String value) {
+        BigDecimal decimal = new BigDecimal(value);
+        decimal = decimal.divide(new BigDecimal(10000));
+        return formaterFloat(decimal);
+    }
 
     /**
      * 简化的万单位转化为个位 2.78 —> 27800

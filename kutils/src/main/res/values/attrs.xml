@@ -36,4 +36,11 @@
     <declare-styleable name="UIGridView">
         <attr name="gv_dividWith" format="dimension"/>
     </declare-styleable>
+
+    <declare-styleable name="NumberEditText">
+        <attr name="min_value" format="string"/>
+        <attr name="max_value" format="string"/>
+        <attr name="decimal_length" format="integer"/>
+        <attr name="int_length" format="integer"/>
+    </declare-styleable>
 </resources>

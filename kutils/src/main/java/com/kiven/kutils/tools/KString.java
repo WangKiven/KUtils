@@ -106,7 +106,6 @@ public class KString {
 
     /**
      * 以友好的方式显示时间
-     *
      */
     public static String friendly_time(String sdate) {
         Date time = toDate(sdate);
@@ -185,7 +184,6 @@ public class KString {
     }
 
 
-
     /**
      * 判断给定字符串是否空白串。 空白串是指由空格、制表符、回车符、换行符组成的字符串 若输入字符串为null或空字符串，返回true
      *
@@ -211,15 +209,17 @@ public class KString {
         }
         return true;
     }
+
     /**
      * 判断给定字符串是否空白串。 空白串是指由空格、制表符、回车符、换行符组成的字符串 若input为null或空字符串，返回nullResult
      */
     public static String checkBlank(String input, String nullResult) {
-        return isBlank(input)? nullResult: input;
+        return isBlank(input) ? nullResult : input;
     }
 
     /**
      * 判断字符串是否相等
+     *
      * @deprecated use {@link android.text.TextUtils#equals(CharSequence, CharSequence)}
      */
     @Deprecated
@@ -411,10 +411,8 @@ public class KString {
 
     /**
      * 字符串转int
-     *
-     * @param s
-     * @return
      */
+    @Deprecated
     public static int fromIntString(String s) {
         int value = 0;
 
@@ -449,19 +447,20 @@ public class KString {
     }
 
     private static DecimalFormat formater = null;
+
     private static void initDecimalFormat() {
         if (formater == null) {
             //			formater = new DecimalFormat("0.00");
-            formater = new DecimalFormat("#.##");
-            //	        formater.setMaximumFractionDigits(2);
-            formater.setGroupingSize(0);
-            //	        formater.setRoundingMode(RoundingMode.FLOOR);
+            formater = new DecimalFormat("#.##");//按固定格式进行输出:"00.000" "##.###",按百分比进行输出:"##.##%"
+            //	        formater.setMaximumFractionDigits(2);//设置小数点后最大位数为2
+            formater.setGroupingSize(0);//利用逗号进行分组时每个分组的大小,这里不分组
+//            formater.setGroupingUsed(false);//当为false时上述设置的分组大小无效，为true时才能进行分组
+            //	        formater.setRoundingMode(RoundingMode.FLOOR);// http://blog.csdn.net/alanzyy/article/details/8465098
         }
     }
 
     /**
      * 11.2000  ->  11.2, 11.230 -> 11.23, 11.236 -> 11.23
-     *
      */
     public static String formaterFloat(double value) {
         initDecimalFormat();
@@ -481,6 +480,7 @@ public class KString {
         decimal = decimal.divide(new BigDecimal(10000));
         return formaterFloat(decimal);
     }
+
     /**
      * 格式化金额 "23450" -> 2.35
      */
@@ -520,6 +520,7 @@ public class KString {
     /**
      * int字符串解析
      */
+    @Deprecated
     public static int parseInt(String intStr) {
         try {
             return Integer.parseInt(intStr);

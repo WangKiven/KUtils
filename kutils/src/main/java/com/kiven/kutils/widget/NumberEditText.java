@@ -10,11 +10,14 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.widget.TextView;
 
 import com.kiven.kutils.R;
 import com.kiven.kutils.tools.KString;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.Arrays;
 
 /**
@@ -101,6 +104,34 @@ public class NumberEditText extends AppCompatEditText implements InputFilter {
         }
     }
 
+    DecimalFormat formater = null;
+
+    @Override
+    public void setText(CharSequence text, BufferType type) {
+        if (text == null || text.length() == 0) {
+            super.setText(text, type);
+        } else {
+            BigDecimal decimal;
+            try {
+                decimal = new BigDecimal(text.toString());
+            } catch (Exception e) {
+                e.printStackTrace();
+                return;
+            }
+
+            if (formater == null) {
+                formater = new DecimalFormat("#.##");
+                formater.setGroupingUsed(false);//当为false时上述设置的分组大小无效，为true时才能进行分组
+                formater.setRoundingMode(RoundingMode.HALF_UP);// 四舍五入
+            }
+
+            String fs = formater.format(decimal);
+            if (isOk(fs)) {
+                super.setText(fs, type);
+            }
+        }
+    }
+
     public void setMaxValue(String maxValue) {
         this.maxValue = new BigDecimal(maxValue);
     }
@@ -139,7 +170,7 @@ public class NumberEditText extends AppCompatEditText implements InputFilter {
                 }
             }
 
-            BigDecimal nowValue = null;
+            BigDecimal nowValue;
             try {
                 nowValue = new BigDecimal(ls);
             } catch (Exception e) {
@@ -168,5 +199,44 @@ public class NumberEditText extends AppCompatEditText implements InputFilter {
             }*/
         }
         return null;
+    }
+
+    /**
+     * 输入是否正确
+     */
+    public boolean isOk() {
+        return isOk(getText().toString());
+    }
+
+
+    private boolean isOk(String ls) {
+        int dot = ls.indexOf('.');
+        if (dot > -1) {
+            if ((intLength > -1 && dot > intLength) || (decimalLength > -1 && ls.length() - dot - 1 > decimalLength)) {
+                return false;
+            }
+        } else {
+            if (intLength > -1 && ls.length() > intLength) {
+                return false;
+            }
+        }
+
+        BigDecimal nowValue;
+        try {
+            nowValue = new BigDecimal(ls);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        if (maxValue != null && (nowValue.compareTo(maxValue) == 1)) {
+            return false;
+        }
+
+        if (minValue != null && nowValue.compareTo(minValue) == -1) {
+            return false;
+        }
+
+        return true;
     }
 }

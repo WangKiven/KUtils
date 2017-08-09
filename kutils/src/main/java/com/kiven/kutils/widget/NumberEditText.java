@@ -3,22 +3,16 @@ package com.kiven.kutils.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.v7.widget.AppCompatEditText;
-import android.text.Editable;
 import android.text.InputFilter;
-import android.text.InputType;
 import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.AttributeSet;
-import android.widget.TextView;
 
 import com.kiven.kutils.R;
-import com.kiven.kutils.tools.KString;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.util.Arrays;
 
 /**
  * Created by kiven on 2017/8/7.

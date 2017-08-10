@@ -53,7 +53,7 @@ public class UIGridView extends ViewGroup {
     }
 
     private void init(Context context) {
-        if (isInEditMode()) {
+        if (isInEditMode() && getChildCount() == 0) {
             setAdapter(new UIGridViewAdapter(context));
         }
     }
@@ -232,6 +232,24 @@ public class UIGridView extends ViewGroup {
     @Override
     public ViewGroup.LayoutParams generateLayoutParams(AttributeSet attrs) {
         return new ViewGroup.MarginLayoutParams(getContext(), attrs);
+    }
+
+    @Override
+    protected LayoutParams generateDefaultLayoutParams() {
+        return new MarginLayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+    }
+
+    @Override
+    protected LayoutParams generateLayoutParams(LayoutParams p) {
+        if (p == null) {
+            return generateDefaultLayoutParams();
+        }
+
+        if (p instanceof MarginLayoutParams) {
+            return p;
+        } else {
+            return new MarginLayoutParams(p);
+        }
     }
 
     public static class UIGridViewAdapter implements View.OnClickListener {

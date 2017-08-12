@@ -2,6 +2,7 @@ package com.kiven.kutils.activityHelper;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -10,6 +11,7 @@ import android.view.View;
 
 import com.kiven.kutils.logHelper.KLog;
 import com.kiven.kutils.tools.KContext;
+import com.kiven.kutils.tools.KGranting;
 
 import java.lang.reflect.Constructor;
 
@@ -210,5 +212,11 @@ public class KHelperActivity extends AppCompatActivity {
         if (helper != null) {
             helper.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        KGranting.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 }

@@ -250,7 +250,7 @@ public class KString {
     public static int toInt(String str, int defValue) {
         if (str != null && str.length() > 0) {
             try {
-                return Integer.parseInt(str);
+                return new BigDecimal(str).setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
             } catch (Exception e) {
                 KLog.e(e);
             }

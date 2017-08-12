@@ -24,7 +24,7 @@ dependencies {
 
     provided 'org.roboguice:roboguice:3.0.1'
 //    provided 'org.roboguice:roboblender:3.0.1'
-    provided 'com.google.code.gson:gson:2.8.+'
+    provided 'com.google.code.gson:gson:2.8.1'
     provided project(':xutils')
 }
 //apply from: 'jcenerUpload.gradle'

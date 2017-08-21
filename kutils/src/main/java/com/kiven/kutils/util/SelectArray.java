@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 选中数组
+ * ArrayList优化，添加选中功能
  * Created by kiven on 2017/8/21.
  */
 

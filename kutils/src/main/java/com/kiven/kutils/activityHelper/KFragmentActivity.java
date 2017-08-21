@@ -16,7 +16,7 @@ import java.lang.reflect.Constructor;
 import java.util.List;
 
 /**
- * fragment代理Activity。
+ * fragment代理Activity配置。
  * Created by kiven on 2017/7/21.
  */
 

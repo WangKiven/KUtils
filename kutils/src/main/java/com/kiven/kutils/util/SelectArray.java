@@ -88,6 +88,18 @@ public class SelectArray<T> extends ArrayList<SelectObj<T>> {
 
         return array;
     }
+    // 获取所有选项
+    public @NonNull
+    SelectArray<T> getAllSel2() {
+        SelectArray<T> array = new SelectArray<T>();
+        for (SelectObj<T> obj : this) {
+            if (obj.isChecked) {
+                array.add(obj);
+            }
+        }
+
+        return array;
+    }
 
     // 获取单选项或第一个被选中项
     public SelectObj<T> getFirstSel() {

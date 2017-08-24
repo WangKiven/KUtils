@@ -78,11 +78,11 @@ public class SelectArray<T> extends ArrayList<SelectObj<T>> {
 
     // 获取所有选项
     public @NonNull
-    SelectArray<T> getAllSel() {
-        SelectArray<T> array = new SelectArray<T>();
+    ArrayList<T> getAllSel() {
+        ArrayList<T> array = new ArrayList<T>();
         for (SelectObj<T> obj : this) {
             if (obj.isChecked) {
-                array.add(obj);
+                array.add(obj.t);
             }
         }
 

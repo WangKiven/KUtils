@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Xml;
 
+import com.kiven.kutils.callBack.Function;
 import com.kiven.kutils.logHelper.KLog;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -26,6 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
@@ -530,13 +532,14 @@ public class KString {
         }
     }
 
+    /*@Deprecated
     public static String favorableMoney(int money) {
         if (money > 0) {
             return "加" + money + "元";
         } else {
             return "优惠" + Math.abs(money) + "元";
         }
-    }
+    }*/
 
     /**
      * xml 解析
@@ -639,5 +642,67 @@ public class KString {
         }
         Pattern pattern = Pattern.compile("^[A-Za-z0-9]+$");
         return pattern.matcher(vehicleFrameNO).matches();
+    }
+
+    /**
+     * 格式化数组
+     * @param function 用于提取对象的字符串，默认使用toString
+     */
+    public static <T> String formateWithComma(List<T> objs, Function<T, String> function) {
+        if (objs == null || objs.size() == 0) {
+            return "";
+        }
+        // 如果function=null，则调用对象的toString()
+        if (function == null) {
+            function = new Function<T, String>() {
+                @Override
+                public String callBack(T param) {
+                    return param.toString();
+                }
+            };
+        }
+
+        StringBuilder builder = new StringBuilder(function.callBack(objs.get(0)));
+        if (objs.size() > 1) {
+            for (int i = 1; i < objs.size(); i++) {
+                builder.append(",");
+                builder.append(function.callBack(objs.get(i)));
+            }
+        }
+        return new String(builder);
+    }
+    /**
+     * 格式化数组
+     * @param function 用于提取对象的字符串，默认使用toString
+     */
+    public static <T> String formateWithComma(T[] objs, Function<T, String> function) {
+        if (objs == null || objs.length == 0) {
+            return "";
+        }
+        // 如果function=null，则调用对象的toString()
+        if (function == null) {
+            function = new Function<T, String>() {
+                @Override
+                public String callBack(T param) {
+                    return param.toString();
+                }
+            };
+        }
+
+        StringBuilder builder = new StringBuilder(function.callBack(objs[0]));
+        if (objs.length > 1) {
+            for (int i = 1; i < objs.length; i++) {
+                builder.append(",");
+                builder.append(function.callBack(objs[i]));
+            }
+        }
+        return new String(builder);
+    }
+    /**
+     * 格式化数组
+     * @param function 用于提取对象的字符串，默认使用toString
+     */
+    public static <T> String formateWithComma(Function<T, String> function, T... objs) {
+        return formateWithComma(objs, function);
     }
 }

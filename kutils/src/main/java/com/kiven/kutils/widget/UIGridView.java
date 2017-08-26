@@ -326,6 +326,10 @@ public class UIGridView extends ViewGroup {
 
             mGridView.removeAllViews();
 
+            Context context = mGridView.getContext();
+            if (context == null) {
+                return;
+            }
             for (int i = 0; i < getGridViewItemCount(); i++) {
 
                 View itemView = getItemView(mGridView.getContext(), i < itemVies.size()? itemVies.remove(i): null, mGridView, i);

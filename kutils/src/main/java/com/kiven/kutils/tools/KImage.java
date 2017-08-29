@@ -2,6 +2,7 @@ package com.kiven.kutils.tools;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
@@ -311,6 +312,20 @@ public class KImage {
 			return context.getColor(rId);
 		} else {
 			return context.getResources().getColor(rId);
+		}
+	}
+
+	/**
+	 * 获取颜色2
+	 * @param context
+	 * @param rId
+	 * @return
+	 */
+	public static ColorStateList getColorStateList(Context context, @ColorRes int rId) {
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+			return context.getColorStateList(rId);
+		} else {
+			return context.getResources().getColorStateList(rId);
 		}
 	}
 

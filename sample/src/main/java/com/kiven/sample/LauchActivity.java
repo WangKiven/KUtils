@@ -29,6 +29,7 @@ import android.telephony.TelephonyManager;
 import android.transition.Scene;
 import android.transition.Slide;
 import android.transition.TransitionManager;
+import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -103,6 +104,9 @@ public class LauchActivity extends KRoboActivity {
 
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.item_load_activity:
+                new AHLoadActivityTest().startActivity(this);
+                break;
             case R.id.item_fragment_proxy:
                 Intent fproxyIntent = new Intent(this, KFragmentActivity.class);
                 fproxyIntent.putExtra("fragment_name", FragmentApple.class.getName());

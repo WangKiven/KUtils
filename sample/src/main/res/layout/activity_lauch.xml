@@ -34,6 +34,14 @@
         </android.support.v7.widget.Toolbar>
 
         <com.kiven.kutils.widget.KNormalItemView
+            android:id="@+id/item_load_activity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:onClick="onClick"
+            app:item_title="load activity"/>
+
+        <com.kiven.kutils.widget.KNormalItemView
             android:id="@+id/item_fragment_proxy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

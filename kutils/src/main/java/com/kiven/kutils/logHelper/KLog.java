@@ -188,4 +188,31 @@ public class KLog {
 			}
 		}
 	}
+
+	/**
+	 * 打印位置
+	 */
+	public static void printStack() {
+		if (isDebug()){
+			StackTraceElement[] sts = Thread.currentThread().getStackTrace();
+			StringBuilder po = new StringBuilder();
+			if (sts != null) {
+				int i = 0;
+				for (StackTraceElement st : sts) {
+					i ++;
+					if (i > 10) {
+						break;
+					}
+					if (i == 1) {
+						po.append(st.getClassName() + "." + st.getMethodName() + "("
+								+ st.getFileName() + ":" + st.getLineNumber() + ")");
+					} else {
+						po.append("\n" + st.getClassName() + "." + st.getMethodName() + "("
+								+ st.getFileName() + ":" + st.getLineNumber() + ")");
+					}
+				}
+			}
+			Log.i("ULog_default", new String(po));
+		}
+	}
 }

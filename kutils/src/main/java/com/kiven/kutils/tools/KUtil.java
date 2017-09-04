@@ -15,7 +15,6 @@ import android.os.Environment;
 import android.support.v4.content.FileProvider;
 import android.util.DisplayMetrics;
 
-import com.kiven.kutils.file.KFile;
 import com.kiven.kutils.logHelper.KLog;
 
 import java.io.BufferedReader;
@@ -24,6 +23,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.Properties;
+import java.util.Set;
 
 /**
  * Created by Kiven on 2014/12/24.
@@ -193,8 +195,27 @@ public class KUtil {
      * 打印设备信息
      */
     public static void printDeviceInfo() {
-        KLog.i("Product Model: " + Build.MODEL + "," + Build.VERSION.SDK_INT + ","
+        StringBuilder builder = new StringBuilder();
+        builder.append("屏幕密度（0.75 / 1.0 / 1.5）:").append(getScreenDensity(app)).append("\n屏幕密度DPI（120 / 160 / 240）:")
+                .append(getScreenDensityDpi(app)).append("\n屏幕宽高:").append(getScreenWith(app)).append("\n屏幕高度:").append(getScreenHeight(app));
+        builder.append("\nProduct Model: " + Build.BRAND + "," + Build.MODEL + "," + Build.VERSION.SDK_INT + ","
                 + Build.VERSION.RELEASE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder.append("\ncpu_abis = ").append(Arrays.toString(Build.SUPPORTED_ABIS));
+        } else {
+            builder.append("\ncpu_abis = ").append(Build.CPU_ABI).append(", ").append(Build.CPU_ABI2);
+        }
+
+        Properties properties = System.getProperties();
+        Set<String> set = System.getProperties().stringPropertyNames(); //获取java虚拟机和系统的信息。
+
+        builder.append("\n>>>>>>>>>>system properties");
+        for (String name : set) {
+            builder.append("\n").append(name).append(":\t").append(properties.getProperty(name));
+        }
+
+        KLog.i(new String(builder));
     }
 
     /**

@@ -87,9 +87,6 @@ public class KUtil {
 
     /**
      * 屏幕宽高
-     *
-     * @param context
-     * @return
      */
     public static int getScreenWith(Context context) {
         DisplayMetrics metric = context.getResources().getDisplayMetrics();
@@ -103,9 +100,6 @@ public class KUtil {
 
     /**
      * 屏幕密度（0.75 / 1.0 / 1.5）
-     *
-     * @param context
-     * @return
      */
     public static float getScreenDensity(Context context) {
         DisplayMetrics metric = context.getResources().getDisplayMetrics();
@@ -114,9 +108,6 @@ public class KUtil {
 
     /**
      * 屏幕密度DPI（120 / 160 / 240）
-     *
-     * @param context
-     * @return
      */
     public static int getScreenDensityDpi(Context context) {
         DisplayMetrics metric = context.getResources().getDisplayMetrics();
@@ -125,8 +116,6 @@ public class KUtil {
 
     /**
      * 获取版本号
-     *
-     * @return
      */
     public static String getVersion() {
         Context context = KContext.getInstance();
@@ -158,8 +147,6 @@ public class KUtil {
 
     /**
      * 获取自己组合的UUID
-     *
-     * @return
      */
     public static String getUUID() {
         if (uuId == null) {
@@ -197,9 +184,9 @@ public class KUtil {
     public static void printDeviceInfo() {
         StringBuilder builder = new StringBuilder();
         builder.append("屏幕密度（0.75 / 1.0 / 1.5）:").append(getScreenDensity(app)).append("\n屏幕密度DPI（120 / 160 / 240）:")
-                .append(getScreenDensityDpi(app)).append("\n屏幕宽高:").append(getScreenWith(app)).append("\n屏幕高度:").append(getScreenHeight(app));
-        builder.append("\nProduct Model: " + Build.BRAND + "," + Build.MODEL + "," + Build.VERSION.SDK_INT + ","
-                + Build.VERSION.RELEASE);
+                .append(getScreenDensityDpi(app)).append("\n屏幕宽度(px):").append(getScreenWith(app)).append("\n屏幕高度(px):").append(getScreenHeight(app));
+        builder.append("\nProduct Model: ").append(Build.BRAND).append(",").append(Build.MODEL).append(",")
+                .append(Build.VERSION.SDK_INT).append(",").append(Build.VERSION.RELEASE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             builder.append("\ncpu_abis = ").append(Arrays.toString(Build.SUPPORTED_ABIS));

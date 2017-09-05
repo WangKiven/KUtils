@@ -19,6 +19,10 @@ public class KHelperActivity extends AppCompatActivity {
 
     private KActivityHelper helper;
 
+    public KActivityHelper getHelper() {
+        return helper;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 

@@ -28,7 +28,7 @@ public class UIGridView extends ViewGroup {
      * 水平单元格间距
      */
     private int dividWith = 0;
-    private UIGridViewAdapter gridViewAdapter;
+    private Adapter gridViewAdapter;
 
     public UIGridView(Context context) {
         super(context);
@@ -75,7 +75,7 @@ public class UIGridView extends ViewGroup {
         dividWith = width;
     }
 
-    public void setAdapter(UIGridViewAdapter gridViewAdapter) {
+    public void setAdapter(Adapter gridViewAdapter) {
         this.gridViewAdapter = gridViewAdapter;
         gridViewAdapter.bindGridView(this);
 
@@ -236,7 +236,7 @@ public class UIGridView extends ViewGroup {
 
     @Override
     protected LayoutParams generateDefaultLayoutParams() {
-        return new MarginLayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        return new MarginLayoutParams(MarginLayoutParams.WRAP_CONTENT, MarginLayoutParams.WRAP_CONTENT);
     }
 
     @Override
@@ -252,7 +252,7 @@ public class UIGridView extends ViewGroup {
         }
     }
 
-    public static class UIGridViewAdapter implements View.OnClickListener {
+    private static class Adapter implements View.OnClickListener {
 
         //childView间的间距
 //        protected int childMargin;
@@ -266,10 +266,6 @@ public class UIGridView extends ViewGroup {
         protected boolean isSingleCol = false;
 
         private UIGridView mGridView;
-
-        public UIGridViewAdapter(Context context) {
-            setChildMargin(KUtil.dip2px(context, 5));
-        }
 
         public void setChildMargin(int childMargin) {
             childMarginLeft = childMargin;
@@ -346,6 +342,17 @@ public class UIGridView extends ViewGroup {
 
                 }
             }
+        }
+    }
+
+    public static class BaseAdapter extends Adapter {
+    }
+
+    @Deprecated
+    public static class UIGridViewAdapter extends Adapter {
+
+        public UIGridViewAdapter(Context context) {
+            setChildMargin(KUtil.dip2px(context, 5));
         }
     }
 }

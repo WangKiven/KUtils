@@ -26,6 +26,7 @@ import android.support.v4.content.FileProvider;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AlertDialog;
 import android.telephony.TelephonyManager;
+import android.text.Html;
 import android.transition.Scene;
 import android.transition.Slide;
 import android.transition.TransitionManager;
@@ -55,6 +56,7 @@ import com.kiven.sample.floatView.ActivityHFloatView;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
+import org.xutils.image.ImageOptions;
 import org.xutils.x;
 
 import java.io.File;
@@ -73,8 +75,12 @@ public class LauchActivity extends KRoboActivity {
     String cameraPath = null;
     String cropPath = null;
 
+    @InjectView(R.id.iv_test)
+    private ImageView iv_test;
     @InjectView(R.id.et_auto)
     private EditText et_auto;
+    @InjectView(R.id.textView2)
+    private TextView textView2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +95,26 @@ public class LauchActivity extends KRoboActivity {
 
         ListView listView = (ListView) findViewById(R.id.listView);
         listView.setAdapter(new MyAdapter());
+
+
+        iv_test.setOnClickListener(new View.OnClickListener() {
+            int count = 0;
+
+            @Override
+            public void onClick(View v) {
+                String url = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1505299100227&di=1a1e1d7867714e8a5750119e20d62c93&imgtype=0&src=http%3A%2F%2Fpic2016.ytqmx.com%3A82%2F2015%2F1116%2F19%2F10.jpg%2521190.jpg";
+                String url2 = "http://file5.gucn.com/file2/ShopLogoFile/20120413/Gucn_20120413327888131819Logo.jpg";
+                ImageOptions options = new ImageOptions.Builder()
+                        .setCircular(true)
+                        .setAutoRotate(true).setFadeIn(true).build();
+                x.image().bind(iv_test, count % 2 == 0 ? url : url2, options);
+                count++;
+            }
+        });
+
+        textView2.setText(Html.fromHtml(getString(R.string.text_test, 5, 9)));
+//        textView2.setText(Html.fromHtml("<font color='#23ade4' size='26'>5</font>条即将被批量报价，总共消耗宝豆<font color='#23ade4'>6</font>"
+//                , Html.FROM_HTML_MODE_COMPACT));
     }
 
     private void setupWindowAnimations() {

@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.kiven.kutils.logHelper.KLog;
 import com.kiven.kutils.tools.KContext;
+import com.kiven.kutils.tools.KUtil;
 
 /**
  *
@@ -23,5 +24,6 @@ public class AppContext extends KContext {
     protected void init() {
         super.init();
         KLog.i("AppContext init");
+        KUtil.setApp(this);
     }
 }

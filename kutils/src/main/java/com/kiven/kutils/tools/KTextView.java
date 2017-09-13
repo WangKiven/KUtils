@@ -2,6 +2,7 @@ package com.kiven.kutils.tools;
 
 import android.content.Context;
 import android.graphics.Paint;
+import android.os.Build;
 import android.text.Html;
 import android.text.TextPaint;
 import android.view.View;
@@ -152,6 +153,19 @@ public class KTextView {
 
     public static boolean checkInt(TextView textView, int min) {
         return checkInt(textView, min, Integer.MAX_VALUE);
+    }
+
+    public static void setText(TextView textView, CharSequence text) {
+        if (KString.isBlank(text)) {
+            textView.setText("");
+            return;
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            textView.setText(Html.fromHtml(text.toString(), Html.FROM_HTML_OPTION_USE_CSS_COLORS));
+        } else {
+            textView.setText(Html.fromHtml(text.toString()));
+        }
     }
 
     /**

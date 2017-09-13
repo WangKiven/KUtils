@@ -189,7 +189,7 @@ public class KString {
     /**
      * 判断给定字符串是否空白串。 空白串是指由空格、制表符、回车符、换行符组成的字符串 若输入字符串为null或空字符串，返回true
      *
-     * @deprecated {@link #isBlank(String)}
+     * @deprecated {@link #isBlank(CharSequence)}
      */
     @Deprecated
     public static boolean isEmpty(String input) {
@@ -199,7 +199,7 @@ public class KString {
     /**
      * 判断给定字符串是否空白串。 空白串是指由空格、制表符、回车符、换行符组成的字符串 若输入字符串为null或空字符串，返回true
      */
-    public static boolean isBlank(String input) {
+    public static boolean isBlank(CharSequence input) {
         if (input == null || "".equals(input))
             return true;
 

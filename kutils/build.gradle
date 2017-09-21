@@ -17,6 +17,16 @@ android {
     }
 }
 
+group = 'com.kiven.kutils'
+version = '0.1'
+uploadArchives {
+    repositories {
+        flatDir {
+            name 'pcLocal'
+            dir "$parent.rootDir/maven/aars"
+        }
+    }
+}
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile "com.android.support:appcompat-v7:${parent.ext.libraryVersion}"

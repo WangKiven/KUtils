@@ -39,4 +39,5 @@ test/
 *.trace
 *.li
 captures/
+maven/
 # rocoofix/

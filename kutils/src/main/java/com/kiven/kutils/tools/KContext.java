@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.kiven.kutils.activityHelper.KActivityHelper;
 import com.kiven.kutils.logHelper.KLog;
 
 import org.xutils.x;
@@ -250,5 +252,32 @@ public class KContext extends Application {
         if (listener != null && activityOnChangeStatusListeners.contains(listener)) {
             activityOnChangeStatusListeners.remove(listener);
         }
+    }
+
+    // TODO------------ 启动关闭activity -------------------
+    /**
+     * 关闭所有activity
+     */
+    public void closeAllActivity() {
+        for (ActivityInfo a : activities) {
+            a.activity.finish();
+        }
+    }
+    /**
+     * 下沉启动activity。关闭所有activity，启动新的activity
+     */
+    public void startSinkActivity(Class aClass) {
+        closeAllActivity();
+        startActivity(new Intent(this, aClass));
+    }
+    /**
+     * 下沉启动activity。关闭所有activity，启动新的activity
+     */
+    public void startSinkActivity(KActivityHelper helper) {
+        closeAllActivity();
+
+        // 不加这句可能会蹦
+        helper.getIntent().addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+        helper.startActivity(this);
     }
 }

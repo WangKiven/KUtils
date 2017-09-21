@@ -6,6 +6,7 @@ import android.widget.Button;
 
 import com.kiven.kutils.activityHelper.KHelperActivity;
 import com.kiven.kutils.custom.BaseHelper;
+import com.kiven.sample.floatView.ActivityHFloatView;
 
 import roboguice.inject.InjectView;
 
@@ -31,6 +32,8 @@ public class ActivityHTestBase extends BaseHelper {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.button1:
+
+                /*AppContext.getInstance().startSinkActivity(new ActivityHFloatView());*/
                 break;
             case R.id.button2:
 //                TransitionManager.beginDelayedTransition((ViewGroup) findViewById(R.id.root), new Slide(Gravity.LEFT));

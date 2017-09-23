@@ -17,8 +17,8 @@ android {
     }
 }
 
-group = 'com.kiven.kutils'
-version = '0.1'
+/*group = 'com.kiven.kutils'
+version = '0.1'*/
 uploadArchives {
     repositories {
         flatDir {
@@ -37,5 +37,5 @@ dependencies {
     provided 'com.google.code.gson:gson:2.8.1'
     provided project(':xutils')
 }
-//apply from: 'jcenerUpload.gradle'
+apply from: 'jcenerUpload.gradle'
 //apply(from('mavenpush.gradle'))

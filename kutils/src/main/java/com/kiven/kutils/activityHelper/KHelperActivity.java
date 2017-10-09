@@ -85,6 +85,14 @@ public class KHelperActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (helper != null) {
+            helper.onNewIntent(intent);
+        }
+    }
+
+    @Override
     protected void onSaveInstanceState(Bundle outState) {
         // TODO Auto-generated method stub
         super.onSaveInstanceState(outState);

@@ -7,12 +7,14 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import java.io.Serializable;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -67,14 +69,42 @@ public class KActivityHelper {
         return KRoboHelperActivity.class;
     }
 
-    public void addFlags(int flags) {
+    public KActivityHelper addFlags(int flags) {
         getIntent().addFlags(flags);
+        return this;
+    }
+
+    public KActivityHelper putExtra(String key, Object value) {
+        if (value instanceof Boolean) {
+            getIntent().putExtra(key, (boolean) value);
+        } else if (value instanceof String) {
+            getIntent().putExtra(key, (String) value);
+        } else if (value instanceof Integer) {
+            getIntent().putExtra(key, (int) value);
+        } else if (value instanceof Float) {
+            getIntent().putExtra(key, (float) value);
+        } else if (value instanceof Double) {
+            getIntent().putExtra(key, (double) value);
+        } else if (value instanceof Parcelable) {
+            getIntent().putExtra(key, (Parcelable) value);
+        } else if (value instanceof Serializable) {
+            getIntent().putExtra(key, (Serializable) value);
+        }
+        return this;
+    }
+    public KActivityHelper putExtra(String key, byte[] value) {
+        getIntent().putExtra(key, value);
+        return this;
     }
     //--------------------------------------------
 
     public void onCreate(KHelperActivity activity, Bundle savedInstanceState) {
         mActivity = activity;
         mIntent = activity.getIntent();
+    }
+
+    public void onNewIntent(Intent intent) {
+
     }
 
     public void onSaveInstanceState(Bundle outState) {

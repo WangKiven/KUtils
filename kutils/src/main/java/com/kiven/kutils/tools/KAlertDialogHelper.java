@@ -39,13 +39,15 @@ public class KAlertDialogHelper {
 
     // TODO 双按钮
 
-    public static void Show2BDialog(Context context, String title, String message, String cancelTitle, String okTitle, View.OnClickListener cancelListener, View.OnClickListener okListener) {
+    public static AlertDialogBuilder Show2BDialog(Context context, String title, String message, String cancelTitle, String okTitle, View.OnClickListener cancelListener, View.OnClickListener okListener) {
         AlertDialogBuilder builder = new AlertDialogBuilder(context);
         builder.setTitle(title);
         builder.setMessage(message);
         builder.setCancleBtn(cancelTitle, 0, cancelListener);
         builder.setOkBtn(okTitle, 0, okListener);
         builder.show();
+
+        return builder;
     }
 
     public static void Show2BDialog(Context context, String title, String message, String cancelTitle, String okTitle, View.OnClickListener okListener) {

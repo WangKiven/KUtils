@@ -71,6 +71,10 @@ public class AlertDialogBuilder {
         });
     }
 
+    public void setCancelable(boolean flag) {
+        dialog.setCancelable(flag);
+    }
+
     public void setTitle(String text) {
         TextView tv_title = (TextView) findViewById(R.id.tv_title);
         tv_title.setText(text);

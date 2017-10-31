@@ -66,8 +66,8 @@ public class BaseActivity extends KActivity {
                 break;
             }
         }
-        v_conver = findViewById(R.id.v_conver);
-        v_btn = findViewById(R.id.v_btn);
+        v_conver = getDelegate().findViewById(R.id.v_conver);
+        v_btn = getDelegate().findViewById(R.id.v_btn);
 
 
 

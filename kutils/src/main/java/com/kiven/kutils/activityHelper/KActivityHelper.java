@@ -8,6 +8,7 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -172,8 +173,8 @@ public class KActivityHelper {
     protected void setContentView(View view) {
         mActivity.setContentView(view);
     }
-    public View findViewById(int rId) {
-        return mActivity.findViewById(rId);
+    public <T extends View> T findViewById(@IdRes int rId) {
+        return (T) mActivity.getDelegate().findViewById(rId);
     }
 
     /**

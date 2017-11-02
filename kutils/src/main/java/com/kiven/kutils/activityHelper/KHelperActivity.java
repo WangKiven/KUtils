@@ -229,6 +229,8 @@ public class KHelperActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        KGranting.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (helper != null) {
+            helper.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
     }
 }

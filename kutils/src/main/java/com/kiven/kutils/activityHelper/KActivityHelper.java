@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -156,6 +157,11 @@ public class KActivityHelper {
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+    }
+
+
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        
     }
 
     protected final void setResult(int resultCode) {

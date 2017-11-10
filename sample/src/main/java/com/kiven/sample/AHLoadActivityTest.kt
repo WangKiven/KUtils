@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.View
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
+import kotlinx.android.synthetic.main.activity_lauch.view.*
+import org.jetbrains.anko.image
 
 /**
  * Created by kiven on 2017/8/28.
@@ -14,5 +16,6 @@ public class AHLoadActivityTest: KActivityHelper() {
         setContentView(R.layout.activity_lauch)
 
         var ui:View = findViewById(R.id.item_load_activity)
+        ui.iv_test.image
     }
 }

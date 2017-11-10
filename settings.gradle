@@ -1,4 +1,4 @@
-include ':kutils', ':sample'
+include ':kutils', ':sample', ':sample6'
 
 include ':xutils'
 project(':xutils').projectDir = new File('../xUtils3/xutils')

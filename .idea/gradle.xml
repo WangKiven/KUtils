@@ -5,12 +5,13 @@
       <GradleProjectSettings>
         <option name="distributionType" value="LOCAL" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleHome" value="$USER_HOME$/Library/Android/gradlezip/gradle-3.5" />
+        <option name="gradleHome" value="C:\Program Files\Android\Android Studio\gradle\gradle-4.1" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/kutils" />
             <option value="$PROJECT_DIR$/sample" />
+            <option value="$PROJECT_DIR$/sample6" />
             <option value="$PROJECT_DIR$/../xUtils3/xutils" />
           </set>
         </option>

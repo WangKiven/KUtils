@@ -2,4 +2,15 @@
     <string name="app_name">KUSample</string>
 
     <string name="text_test"><![CDATA[<font color="#23ade4" size="36">%1$d</font>条即将被批量报价，总共消耗宝豆<font color="#23ade4">%2$d</font>]]></string>
+    <array name="resource_where">
+        <item>系统文件</item>
+        <item>app文件</item>
+    </array>
+    <array name="resours_type">
+        <item>drawable</item>
+        <item>mipmap</item>
+        <item>图像</item>
+        <item>string</item>
+        <item>color</item>
+    </array>
 </resources>

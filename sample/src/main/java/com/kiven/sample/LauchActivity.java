@@ -15,7 +15,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.PersistableBundle;
 import android.os.Process;
 import android.provider.MediaStore;
 import android.provider.Settings;
@@ -27,10 +26,7 @@ import android.support.v4.util.Pair;
 import android.support.v7.app.AlertDialog;
 import android.telephony.TelephonyManager;
 import android.text.Html;
-import android.transition.Scene;
 import android.transition.Slide;
-import android.transition.TransitionManager;
-import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,11 +37,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.flyco.dialog.widget.popup.base.BaseBubblePopup;
-import com.flyco.dialog.widget.popup.base.BasePopup;
 import com.kiven.kutils.activityHelper.KFragmentActivity;
 import com.kiven.kutils.activityHelper.activity.KRoboActivity;
 import com.kiven.kutils.file.KFile;
+import com.kiven.kutils.logHelper.ACheckRes;
 import com.kiven.kutils.logHelper.KLog;
 import com.kiven.kutils.tools.KAlertDialogHelper;
 import com.kiven.kutils.tools.KGranting;
@@ -113,8 +108,6 @@ public class LauchActivity extends KRoboActivity {
         });
 
         textView2.setText(Html.fromHtml(getString(R.string.text_test, 5, 9)));
-//        textView2.setText(Html.fromHtml("<font color='#23ade4' size='26'>5</font>条即将被批量报价，总共消耗宝豆<font color='#23ade4'>6</font>"
-//                , Html.FROM_HTML_MODE_COMPACT));
     }
 
     private void setupWindowAnimations() {
@@ -131,7 +124,8 @@ public class LauchActivity extends KRoboActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.item_load_activity:
-                new AHLoadActivityTest().startActivity(this);
+                new AHCheckRes().startActivity(this);
+//                new ACheckRes().startActivity(this);
                 break;
             case R.id.item_fragment_proxy:
                 Intent fproxyIntent = new Intent(this, KFragmentActivity.class);

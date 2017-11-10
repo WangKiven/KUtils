@@ -44,6 +44,8 @@ public class KShowLog extends KActivityHelper implements AdapterView.OnItemClick
 		setContentView(listView);
 
 		listView.setOnItemClickListener(this);
+
+		new ACheckRes().startActivity(activity);
 	}
 
 	@Override
@@ -53,30 +55,6 @@ public class KShowLog extends KActivityHelper implements AdapterView.OnItemClick
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-
-		/*String log = parent.getItemAtPosition(position).toString();
-		KString.setClipText(mActivity, log);
-		Log.i("ULog_default", log);
-		Toast.makeText(mActivity, "copied: " + position, Toast.LENGTH_SHORT).show();
-
-		if(log.startsWith("http://") || log.startsWith("https://")){
-			try {
-				new KShowLogDetail(log).startActivity(mActivity);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}else {
-			try {
-				JsonElement jsonElement = new JsonParser().parse(log.trim());
-				if (jsonElement.isJsonArray()) {
-					new KShowLogDetail(new Gson().fromJson(jsonElement, List.class)).startActivity(mActivity);
-				}else if (jsonElement.isJsonObject()) {
-					new KShowLogDetail(new Gson().fromJson(jsonElement, Map.class)).startActivity(mActivity);
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}*/
 
 		final String log = String.valueOf(parent.getItemAtPosition(position));
 		String pos = positions.get(position);

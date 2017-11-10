@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:onClick="onClick"
-            app:item_title="load activity"/>
+            app:item_title="显示系统资源"/>
 
         <com.kiven.kutils.widget.KNormalItemView
             android:id="@+id/item_fragment_proxy"

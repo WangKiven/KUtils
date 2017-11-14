@@ -1,13 +1,11 @@
 <resources>
     <array name="k_resource_where">
-        <item>系统文件</item>
         <item>app文件</item>
+        <item>系统文件</item>
     </array>
     <array name="k_resours_type">
-        <item>drawable</item>
         <item>mipmap</item>
-        <item>图像</item>
-        <item>string</item>
+        <item>drawable</item>
         <item>color</item>
     </array>
 </resources>

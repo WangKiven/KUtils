@@ -1,5 +1,6 @@
 package com.kiven.sample
 
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.widget.AppCompatSpinner
 import android.support.v7.widget.GridLayoutManager
@@ -13,7 +14,9 @@ import android.widget.TextView
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.tools.KUtil
+import kotlinx.android.synthetic.main.ah_check_res.view.*
 import kotlinx.android.synthetic.main.item_res.view.*
+import org.jetbrains.anko.backgroundColor
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import org.jetbrains.anko.sdk25.coroutines.onItemSelectedListener
 import java.lang.reflect.Field
@@ -26,14 +29,18 @@ class AHCheckRes : KActivityHelper() {
     var dclass: Class<*> = android.R.drawable::class.java
     var types = dclass.fields
 
-    var resWhere = 0
-    var resType = 0
+    private var resWhere = 0
+    private var resType = 0
 
     private val resAdapter = ResAdapter()
 
     override fun onCreate(activity: KHelperActivity?, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
         setContentView(R.layout.ah_check_res)
+
+        val ui = findViewById<View>(R.id.ll_root)
+        ui.toolbar.backgroundColor = Color.BLACK
+
         val toolBar: Toolbar = findViewById(R.id.toolbar)
         mActivity.setSupportActionBar(toolBar)
         val actionBar = mActivity.supportActionBar
@@ -68,7 +75,7 @@ class AHCheckRes : KActivityHelper() {
             }
         }
 
-        findViewById<TextView>(R.id.tv_bd).onClick {
+        findViewById<TextView?>(R.id.tv_bd)?.onClick {
 
         }
     }

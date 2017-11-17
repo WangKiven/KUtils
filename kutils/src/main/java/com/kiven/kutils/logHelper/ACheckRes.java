@@ -122,7 +122,7 @@ public class ACheckRes extends KActivityHelper {
             }
         });
     }
-    MyTask task;
+    private MyTask task;
     private void onChange() {
         if (task != null) {
             task.cancel(true);

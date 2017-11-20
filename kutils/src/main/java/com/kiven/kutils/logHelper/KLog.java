@@ -17,8 +17,8 @@ public class KLog {
 
 	private static boolean showAtLine = true;
 	
-	private static LinkedList<String> logs;
-	private static LinkedList<String> positions;
+	private static final LinkedList<String> logs = new LinkedList<String>();
+	private static final LinkedList<String> positions = new LinkedList<>();
 
 	private static boolean isDebug = true;
 
@@ -34,12 +34,7 @@ public class KLog {
 	 * 日志记录操作
 	 * @param log log
 	 */
-	protected static void addLog(String log){
-
-		if (logs == null) {
-			logs = new LinkedList<String>();
-			positions = new LinkedList<>();
-		}
+	private static void addLog(String log){
 		synchronized (logs) {
 			if (logs.size() > 500) {
 				logs.removeLast();
@@ -70,17 +65,10 @@ public class KLog {
 	}
 	
 	public static LinkedList<String> getLogs(){
-		if (logs == null) {
-			logs = new LinkedList<String>();
-		}
-		
 		return logs;
 	}
 
 	public static LinkedList<String> getPositions() {
-		if (positions == null) {
-			positions = new LinkedList<>();
-		}
 		return positions;
 	}
 

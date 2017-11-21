@@ -34,7 +34,7 @@ public class KLog {
 	 * 日志记录操作
 	 * @param log log
 	 */
-	private static void addLog(String log){
+	protected static void addLog(String log){
 		synchronized (logs) {
 			if (logs.size() > 500) {
 				logs.removeLast();

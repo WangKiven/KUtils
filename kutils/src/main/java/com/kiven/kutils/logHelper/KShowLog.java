@@ -28,6 +28,7 @@ import com.kiven.kutils.R;
 import com.kiven.kutils.activityHelper.KActivityHelper;
 import com.kiven.kutils.activityHelper.KHelperActivity;
 import com.kiven.kutils.tools.KString;
+import com.kiven.kutils.tools.KUtil;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -46,6 +47,12 @@ public class KShowLog extends KActivityHelper implements AdapterView.OnItemClick
     public void onCreate(KHelperActivity activity, Bundle savedInstanceState) {
         super.onCreate(activity, savedInstanceState);
         setContentView(R.layout.k_show_log);
+
+        if (KUtil.getSharedPreferencesIntValue("kutil_log_res_preferences", 0) == 1) {
+            new ACheckRes().startActivity(mActivity);
+            finish();
+            return;
+        }
         initBackToolbar(R.id.toolbar);
         listView = findViewById(R.id.listView);
 
@@ -99,7 +106,9 @@ public class KShowLog extends KActivityHelper implements AdapterView.OnItemClick
         super.onOptionsItemSelected(item);
         int i = item.getItemId();
         if (i == R.id.res) {
+            KUtil.putSharedPreferencesIntValue("kutil_log_res_preferences", 1);
             new ACheckRes().startActivity(mActivity);
+            finish();
         }
         return true;
     }

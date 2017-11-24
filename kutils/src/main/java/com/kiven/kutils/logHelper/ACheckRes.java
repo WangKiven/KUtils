@@ -64,15 +64,31 @@ public class ACheckRes extends KActivityHelper {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        menu.add("查看日志");
+        menu.add(0, Menu.FIRST + 1, 0, "查看日志");
+        menu.add(0, Menu.FIRST + 2, 0, "改变背景");
         return true;
     }
 
+    int count = 0;
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-//        if (item.getItemId() == Menu.FIRST) {
-            new KShowLog().startActivity(mActivity);
-//        }
+        switch (item.getItemId()) {
+            case Menu.FIRST + 1:
+                KUtil.putSharedPreferencesIntValue("kutil_log_res_preferences", 0);
+                new KShowLog().startActivity(mActivity);
+                finish();
+                break;
+            case Menu.FIRST + 2:
+                count++;
+                if (count % 2 == 1) {
+                    itemBg = Color.parseColor("#ffffff");
+                } else {
+                    itemBg = Color.parseColor("#888888");
+                }
+                resAdapter.notifyDataSetChanged();
+                break;
+        }
         return true;
     }
 
@@ -85,12 +101,20 @@ public class ACheckRes extends KActivityHelper {
 
         recyclerView = findViewById(R.id.recyclerView);
         {
-//            recyclerView.setLayoutManager(new GridLayoutManager(mActivity, KUtil.getScreenWith(mActivity) / KUtil.dip2px(50f)));
-            FlexboxLayoutManager layoutManager = new FlexboxLayoutManager(mActivity);
-            layoutManager.setFlexDirection(FlexDirection.ROW);
-            layoutManager.setJustifyContent(JustifyContent.CENTER);
-            recyclerView.setLayoutManager(layoutManager);
+            try {
+                Class.forName("Lcom/google/android/flexbox/FlexboxLayoutManager");
+
+                FlexboxLayoutManager layoutManager = new FlexboxLayoutManager(mActivity);
+                layoutManager.setFlexDirection(FlexDirection.ROW);
+                layoutManager.setJustifyContent(JustifyContent.CENTER);
+                recyclerView.setLayoutManager(layoutManager);
+
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+                recyclerView.setLayoutManager(new GridLayoutManager(mActivity, KUtil.getScreenWith(mActivity) / KUtil.dip2px(50f)));
+            }
         }
+
         recyclerView.setAdapter(resAdapter);
 
         resWhere = KUtil.getSharedPreferencesIntValue(resWhereKey, 0);
@@ -107,7 +131,8 @@ public class ACheckRes extends KActivityHelper {
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
         });
 
         AppCompatSpinner spinner_type = findViewById(R.id.spinner_type);
@@ -124,21 +149,10 @@ public class ACheckRes extends KActivityHelper {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-        findViewById(R.id.tv_bd).setOnClickListener(new View.OnClickListener() {
-            int count = 0;
-            @Override
-            public void onClick(View v) {
-                count ++;
-                if (count % 2 == 1) {
-                    itemBg = Color.parseColor("#ffffff");
-                } else {
-                    itemBg = Color.parseColor("#888888");
-                }
-                resAdapter.notifyDataSetChanged();
-            }
-        });
     }
+
     private MyTask task;
+
     private void onChange() {
         if (task != null) {
             task.cancel(true);
@@ -153,6 +167,7 @@ public class ACheckRes extends KActivityHelper {
         TextView tv_num;
 
         Field field;
+
         Holder(View itemView) {
             super(itemView);
             imageView = (ImageView) itemView.findViewById(R.id.imageView);

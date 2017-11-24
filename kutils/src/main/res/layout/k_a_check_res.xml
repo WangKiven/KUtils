@@ -21,13 +21,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:entries="@array/k_resours_type" />
-
-        <TextView
-            android:id="@+id/tv_bd"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:text="设置背景"/>
     </android.support.v7.widget.Toolbar>
 
     <android.support.v7.widget.RecyclerView

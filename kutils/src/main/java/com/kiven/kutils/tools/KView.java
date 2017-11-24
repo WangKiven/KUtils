@@ -3,9 +3,15 @@ package com.kiven.kutils.tools;
 import android.annotation.SuppressLint;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
+import android.widget.Toolbar;
+
+import com.kiven.kutils.R;
+import com.kiven.kutils.activityHelper.KActivityHelper;
 
 public class KView {
 	/**
@@ -76,4 +82,14 @@ public class KView {
 		LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view.getLayoutParams();
 		params.weight = weight;
 	}
+
+	/**
+	 * actionbar添加默认返回按钮
+	 */
+    public static void initBackActionBar(@NonNull ActionBar actionBar) {
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.setDisplayShowHomeEnabled(true);
+		actionBar.setHomeButtonEnabled(true);
+		actionBar.setDisplayShowTitleEnabled(false);
+    }
 }

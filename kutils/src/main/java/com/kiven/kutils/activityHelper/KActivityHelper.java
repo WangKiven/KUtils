@@ -11,10 +11,15 @@ import android.os.Parcelable;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import com.kiven.kutils.R;
+import com.kiven.kutils.tools.KView;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -107,6 +112,28 @@ public class KActivityHelper {
 
     public void onNewIntent(Intent intent) {
 
+    }
+
+    /**
+     * 给toobar添加返回按钮
+     */
+    protected void initBackToolbar(@IdRes int toolBarId) {
+        Toolbar toolBar = findViewById(toolBarId);
+        if (toolBar == null) {
+            return;
+        }
+        mActivity.setSupportActionBar(toolBar);
+        ActionBar actionBar = mActivity.getSupportActionBar();
+        if (actionBar != null) {
+            KView.initBackActionBar(actionBar);
+
+            toolBar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+        }
     }
 
     public void onSaveInstanceState(Bundle outState) {

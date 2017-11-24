@@ -16,9 +16,8 @@ public class KLog {
 	private static KLog myLog;
 
 	private static boolean showAtLine = true;
-	
-	private static final LinkedList<String> logs = new LinkedList<String>();
-	private static final LinkedList<String> positions = new LinkedList<>();
+
+	private static final LinkedList<KLogInfo> logs = new LinkedList<KLogInfo>();
 
 	private static boolean isDebug = true;
 
@@ -35,41 +34,37 @@ public class KLog {
 	 * @param log log
 	 */
 	protected static void addLog(String log){
+
 		synchronized (logs) {
 			if (logs.size() > 500) {
 				logs.removeLast();
-				positions.removeLast();
+				logs.removeLast();
 			}
-			logs.addFirst(log);
-		}
 
-		StackTraceElement[] sts = Thread.currentThread().getStackTrace();
-		String po = "";
-		if (sts != null) {
-			int i = 0;
-			for (StackTraceElement st : sts) {
-				i ++;
-				if (i > 10) {
-					break;
-				}
-				if (i == 1) {
-					po += (st.getClassName() + "." + st.getMethodName() + "("
-							+ st.getFileName() + ":" + st.getLineNumber() + ")");
-				} else {
-					po += (", " + st.getClassName() + "." + st.getMethodName() + "("
-							+ st.getFileName() + ":" + st.getLineNumber() + ")");
+			StackTraceElement[] sts = Thread.currentThread().getStackTrace();
+			String po = "";
+			if (sts != null) {
+				int i = 0;
+				for (StackTraceElement st : sts) {
+					i ++;
+					if (i > 10) {
+						break;
+					}
+					if (i == 1) {
+						po += (st.getClassName() + "." + st.getMethodName() + "("
+								+ st.getFileName() + ":" + st.getLineNumber() + ")");
+					} else {
+						po += (", " + st.getClassName() + "." + st.getMethodName() + "("
+								+ st.getFileName() + ":" + st.getLineNumber() + ")");
+					}
 				}
 			}
+			logs.addFirst(new KLogInfo(po, log));
 		}
-		positions.addFirst(po);
 	}
-	
-	public static LinkedList<String> getLogs(){
+
+	public static LinkedList<KLogInfo> getLogs(){
 		return logs;
-	}
-
-	public static LinkedList<String> getPositions() {
-		return positions;
 	}
 
 	/**

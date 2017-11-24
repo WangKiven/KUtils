@@ -17,6 +17,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.kiven.kutils.activityHelper.KActivityHelper;
 import com.kiven.kutils.activityHelper.KHelperActivity;
+import com.kiven.kutils.tools.KString;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -137,6 +138,7 @@ public class KShowLogDetail extends KActivityHelper implements AdapterView.OnIte
 				}
 			} catch (Exception e) {
 				KLog.e(e);
+				KLog.i((String) tObject);
 			}
 		}
 	}
@@ -177,10 +179,10 @@ public class KShowLogDetail extends KActivityHelper implements AdapterView.OnIte
 			}
 //			textView.setText(position + "：" + getItem(position).toString());
 			if (mType == 0) {
-				textView.setText(position + "：" + KShowLogDetail.this.mList.get(position));
+				textView.setText(KString.fromHtml(position + "：" + KShowLogDetail.this.mList.get(position)));
 			} else {
 				MyObject object = oList.get(position);
-				textView.setText(position + "_" + object.key + "：" + object.value);
+				textView.setText(KString.fromHtml(position + "_" + object.key + "：" + object.value));
 			}
 			return convertView;
 		}

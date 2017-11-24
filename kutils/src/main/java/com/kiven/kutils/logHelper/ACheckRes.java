@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.NinePatchDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.os.AsyncTask;
@@ -16,6 +18,8 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -23,6 +27,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.flexbox.FlexDirection;
+import com.google.android.flexbox.FlexboxLayout;
+import com.google.android.flexbox.FlexboxLayoutManager;
+import com.google.android.flexbox.JustifyContent;
 import com.kiven.kutils.R;
 import com.kiven.kutils.activityHelper.KActivityHelper;
 import com.kiven.kutils.activityHelper.KHelperActivity;
@@ -31,6 +39,8 @@ import com.kiven.kutils.tools.KImage;
 import com.kiven.kutils.tools.KUtil;
 
 import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.Comparator;
 
 /**
  * 图片资源查看
@@ -49,32 +59,38 @@ public class ACheckRes extends KActivityHelper {
     private RecyclerView recyclerView;
     private ResAdapter resAdapter = new ResAdapter();
 
-    private int itemBg = Color.parseColor("#ffffff");
+    private int itemBg = Color.parseColor("#888888");
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        menu.add("查看日志");
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+//        if (item.getItemId() == Menu.FIRST) {
+            new KShowLog().startActivity(mActivity);
+//        }
+        return true;
+    }
 
     @Override
     public void onCreate(KHelperActivity activity, Bundle savedInstanceState) {
         super.onCreate(activity, savedInstanceState);
         setContentView(R.layout.k_a_check_res);
 
-        Toolbar toolBar = findViewById(R.id.toolbar);
-        mActivity.setSupportActionBar(toolBar);
-        ActionBar actionBar = mActivity.getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setDisplayShowHomeEnabled(true);
-            actionBar.setHomeButtonEnabled(true);
-            actionBar.setDisplayShowTitleEnabled(false);
-
-            toolBar.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    finish();
-                }
-            });
-        }
+        initBackToolbar(R.id.toolbar);
 
         recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new GridLayoutManager(mActivity, KUtil.getScreenWith(mActivity) / KUtil.dip2px(50f)));
+        {
+//            recyclerView.setLayoutManager(new GridLayoutManager(mActivity, KUtil.getScreenWith(mActivity) / KUtil.dip2px(50f)));
+            FlexboxLayoutManager layoutManager = new FlexboxLayoutManager(mActivity);
+            layoutManager.setFlexDirection(FlexDirection.ROW);
+            layoutManager.setJustifyContent(JustifyContent.CENTER);
+            recyclerView.setLayoutManager(layoutManager);
+        }
         recyclerView.setAdapter(resAdapter);
 
         resWhere = KUtil.getSharedPreferencesIntValue(resWhereKey, 0);
@@ -114,9 +130,9 @@ public class ACheckRes extends KActivityHelper {
             public void onClick(View v) {
                 count ++;
                 if (count % 2 == 1) {
-                    itemBg = Color.parseColor("#888888");
-                } else {
                     itemBg = Color.parseColor("#ffffff");
+                } else {
+                    itemBg = Color.parseColor("#888888");
                 }
                 resAdapter.notifyDataSetChanged();
             }
@@ -145,6 +161,7 @@ public class ACheckRes extends KActivityHelper {
 
             itemView.setOnClickListener(this);
             imageView.setOnClickListener(this);
+            tv_num.setOnClickListener(this);
         }
 
         @SuppressLint("SetTextI18n")
@@ -153,19 +170,20 @@ public class ACheckRes extends KActivityHelper {
 
             field = types[position];
             try {
-                Drawable drawable = getDrawable(field.getInt(dclass));
-                setDrawable(drawable);
-                if (drawable == null) {
-                    tv_num.setText(position + "");
+                if (resType == 2) {
+                    tv_num.setText(position + " " + field.getName());
+                    tv_num.setTextColor(KImage.getColor(mActivity, field.getInt(dclass)));
+                    setDrawable(null);
                 } else {
-                    if (resType == 2) {
-                        tv_num.setText(position + " " + field.getName());
-                    } else {
-                        tv_num.setText(position + " " + drawable.getClass().getSimpleName().replace("Drawable", ""));
-                    }
+                    Drawable drawable = getDrawable(field.getInt(dclass));
+                    setDrawable(drawable);
+
+                    tv_num.setText(position + " " + drawable.getClass().getSimpleName().replace("Drawable", ""));
                 }
+
             } catch (Exception e) {
                 tv_num.setText(position + "");
+                setDrawable(null);
             }
         }
 
@@ -174,7 +192,8 @@ public class ACheckRes extends KActivityHelper {
                 imageView.setImageDrawable(null);
                 KImage.setBackgroundDrawable(imageView, null);
             } else {
-                if (drawable instanceof ColorDrawable || drawable instanceof StateListDrawable || drawable instanceof NinePatchDrawable) {
+                if (drawable instanceof ColorDrawable || drawable instanceof StateListDrawable || drawable instanceof NinePatchDrawable
+                        || drawable instanceof GradientDrawable || drawable instanceof LayerDrawable) {
                     imageView.setImageDrawable(null);
                     KImage.setBackgroundDrawable(imageView, drawable);
                 } else {
@@ -190,19 +209,23 @@ public class ACheckRes extends KActivityHelper {
                 KLog.i("fieldName = " + field.getName());
 
                 try {
-                    Drawable drawable = getDrawable(field.getInt(dclass));
-                    KLog.i("draClass = " + drawable.getClass().getName());
+                    if (resType == 2) {
+                        tv_num.setSelected(!tv_num.isSelected());
+                    } else {
+                        Drawable drawable = getDrawable(field.getInt(dclass));
+                        KLog.i("draClass = " + drawable.getClass().getName());
 
-                    View view = LayoutInflater.from(mActivity).inflate(R.layout.k_item_res, null);
-                    Holder childHolder = new Holder(view);
+                        View view = LayoutInflater.from(mActivity).inflate(R.layout.k_item_res, null);
+                        Holder childHolder = new Holder(view);
 
-                    childHolder.imageView.setMaxHeight(Integer.MAX_VALUE);
+                        childHolder.imageView.setMaxHeight(Integer.MAX_VALUE);
 
-                    childHolder.itemView.setBackgroundColor(itemBg);
-                    childHolder.setDrawable(drawable);
-                    childHolder.tv_num.setText(field.getName() + "\n" + drawable.getClass().getName());
+                        childHolder.itemView.setBackgroundColor(itemBg);
+                        childHolder.setDrawable(drawable);
+                        childHolder.tv_num.setText(field.getName() + "\n" + drawable.getClass().getName());
 
-                    new AlertDialog.Builder(mActivity).setView(view).show();
+                        new AlertDialog.Builder(mActivity).setView(view).show();
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

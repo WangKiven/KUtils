@@ -1,5 +1,6 @@
 package com.kiven.kutils.tools;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,6 +17,8 @@ import com.kiven.kutils.logHelper.KLog;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * 权限管理
@@ -153,6 +156,37 @@ public class KGranting {
      */
     public static void requestPermissions(@NonNull Activity activity, int requestCode, @NonNull String tGrant, @NonNull String tGrantName, GrantingCallBack callBack) {
         requestPermissions(activity, requestCode, new String[]{tGrant}, new String[]{tGrantName}, callBack);
+    }
+
+
+
+    public static final String STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+    public static final String BLUETOOTH = Manifest.permission.BLUETOOTH;
+    public static final String CAMERA = Manifest.permission.CAMERA;
+    public static final String PHONE = Manifest.permission.CALL_PHONE;
+    /**
+     * 请求多个授权, 不需描述。
+     * 描述不全面，如需跟多权限，需在此添加
+     */
+    public static void requestPermissions(@NonNull Activity activity, int requestCode, @NonNull String[] tGrant, GrantingCallBack callBack) {
+        Map<String, String> grants = new TreeMap<>();
+        grants.put(STORAGE, "内存");
+        grants.put(BLUETOOTH, "蓝牙");
+        grants.put(CAMERA, "相机");
+        grants.put(PHONE, "拨号");
+
+        String[] tGrantName = new String[tGrant.length];
+        for (int i = 0; i < tGrant.length; i++) {
+            tGrantName[i] = grants.get(tGrant[i]);
+        }
+        requestPermissions(activity, requestCode, tGrant, tGrantName, callBack);
+    }
+    /**
+     * 请求单个授权, 不需描述
+     * 描述不全面，如需跟多权限，需在{@link #requestPermissions(Activity, int, String[], GrantingCallBack)}添加
+     */
+    public static void requestPermissions(@NonNull Activity activity, int requestCode, @NonNull String tGrant, GrantingCallBack callBack) {
+        requestPermissions(activity, requestCode, new String[]{tGrant}, callBack);
     }
 
     /**

@@ -41,7 +41,11 @@ public class KShowLog extends KActivityHelper implements AdapterView.OnItemClick
     private ListView listView;
 
     private MyAdapter myAdapter;
-    List<KLogInfo> mData;
+    private List<KLogInfo> mData;
+    /**
+     * 高亮显示匹配结果
+     */
+    private boolean showSearch = true;
 
     @Override
     public void onCreate(KHelperActivity activity, Bundle savedInstanceState) {
@@ -53,13 +57,15 @@ public class KShowLog extends KActivityHelper implements AdapterView.OnItemClick
             finish();
             return;
         }
+        showSearch = KUtil.getSharedPreferencesBooleanValue("kutil_log_show_search", true);
+
         initBackToolbar(R.id.toolbar);
         listView = findViewById(R.id.listView);
 
         mData = new ArrayList<KLogInfo>(KLog.getLogs());
 
         listView.setDividerHeight(5);
-        listView.setAdapter(myAdapter = new MyAdapter(mActivity, mData));
+        listView.setAdapter(myAdapter = new MyAdapter(mActivity, mData, showSearch));
 
         listView.setOnItemClickListener(this);
     }
@@ -67,12 +73,13 @@ public class KShowLog extends KActivityHelper implements AdapterView.OnItemClick
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         mActivity.getMenuInflater().inflate(R.menu.show_log, menu);
+        menu.add(0, Menu.FIRST + 1000, 0, "高亮结果");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             MenuItem searchItem = menu.findItem(R.id.search);
             SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                String searchText = "";
+
                 @Override
                 public boolean onQueryTextSubmit(String query) {
                     return false;
@@ -84,21 +91,36 @@ public class KShowLog extends KActivityHelper implements AdapterView.OnItemClick
                         return true;
                     }
                     if (KString.isBlank(newText)) {
-                        myAdapter.changeData(mData);
+                        myAdapter.changeData(mData, showSearch);
                     } else {
-                        LinkedList<KLogInfo> searchs = new LinkedList<KLogInfo>();
-                        for (KLogInfo logInfo : mData) {
-                            if (logInfo.log != null && logInfo.log.contains(newText)) {
-                                searchs.add(new KLogInfo(logInfo.codePosition, logInfo.log.replace(newText, "<font color='red'>" + newText + "</font>")));
-                            }
-                        }
-                        myAdapter.changeData(searchs);
+                        searchText = newText;
+                        search();
                     }
                     return true;
                 }
             });
         }
         return true;
+    }
+
+    String searchText;
+    private void search() {
+        if (searchText == null || searchText.length() == 0) {
+            myAdapter.changeData(mData, showSearch);
+            return;
+        }
+
+        LinkedList<KLogInfo> searchs = new LinkedList<KLogInfo>();
+        for (KLogInfo logInfo : mData) {
+            if (logInfo.log != null && logInfo.log.contains(searchText)) {
+                if (showSearch) {
+                    searchs.add(new KLogInfo(logInfo.codePosition, logInfo.log.replace(searchText, "<font color='red'>" + searchText + "</font>")));
+                } else {
+                    searchs.add(logInfo);
+                }
+            }
+        }
+        myAdapter.changeData(searchs, showSearch);
     }
 
     @Override
@@ -109,6 +131,10 @@ public class KShowLog extends KActivityHelper implements AdapterView.OnItemClick
             KUtil.putSharedPreferencesIntValue("kutil_log_res_preferences", 1);
             new ACheckRes().startActivity(mActivity);
             finish();
+        } else if (i == Menu.FIRST + 1000) {
+            showSearch = !showSearch;
+            KUtil.putSharedPreferencesBooleanValue("kutil_log_show_search", showSearch);
+            search();
         }
         return true;
     }
@@ -143,6 +169,7 @@ public class KShowLog extends KActivityHelper implements AdapterView.OnItemClick
         builder.setNegativeButton("打印", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                Log.i("ULog_default", "logLength = " + (log == null? 0:log.length()));
                 Log.i("ULog_default", log);
                 for (String pp : poss) {
                     Log.i("ULog_default", pp);
@@ -162,7 +189,7 @@ public class KShowLog extends KActivityHelper implements AdapterView.OnItemClick
                 } else {
                     try {
                         /*JsonReader jsonReader = new JsonReader(new StringReader(log));
-						jsonReader.setLenient(true);*/
+                        jsonReader.setLenient(true);*/
                         JsonElement jsonElement = new JsonParser().parse(log.trim());
                         if (jsonElement.isJsonArray()) {
                             new KShowLogDetail(new Gson().fromJson(jsonElement, List.class)).startActivity(mActivity);
@@ -182,10 +209,12 @@ public class KShowLog extends KActivityHelper implements AdapterView.OnItemClick
     static class MyAdapter extends BaseAdapter {
         Activity mActivity;
         List<KLogInfo> searchData;
+        boolean showSearch;
 
-        public MyAdapter(Activity activity, List<KLogInfo> searchData) {
+        public MyAdapter(Activity activity, List<KLogInfo> searchData, boolean showSearch) {
             this.searchData = searchData;
             mActivity = activity;
+            this.showSearch = showSearch;
         }
 
         @Override
@@ -222,8 +251,12 @@ public class KShowLog extends KActivityHelper implements AdapterView.OnItemClick
             return convertView;
         }
 
-        void changeData(List<KLogInfo> mData) {
+        void changeData(List<KLogInfo> mData, boolean showSearch) {
+            if (this.searchData == mData) {
+                return;
+            }
             this.searchData = mData;
+            this.showSearch = showSearch;
             notifyDataSetChanged();
         }
     }

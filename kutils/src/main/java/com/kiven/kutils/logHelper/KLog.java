@@ -13,189 +13,198 @@ import java.util.LinkedList;
 @Deprecated
 public class KLog {
 
-	private static KLog myLog;
+    private static KLog myLog;
 
-	private static boolean showAtLine = true;
+    private static boolean showAtLine = true;
 
-	private static final LinkedList<KLogInfo> logs = new LinkedList<KLogInfo>();
+    private static final LinkedList<KLogInfo> logs = new LinkedList<KLogInfo>();
 
-	private static boolean isDebug = true;
+    private static boolean isDebug = true;
 
-	public static boolean isDebug() {
-		return isDebug;
-	}
+    public static boolean isDebug() {
+        return isDebug;
+    }
 
-	public static void setDebug(boolean isDebug) {
-		KLog.isDebug = isDebug;
-	}
+    public static void setDebug(boolean isDebug) {
+        KLog.isDebug = isDebug;
+    }
 
-	/**
-	 * 日志记录操作
-	 * @param log log
-	 */
-	protected static void addLog(String log){
+    /**
+     * 日志记录操作
+     *
+     * @param log log
+     */
+    protected static void addLog(String log) {
 
-		synchronized (logs) {
-			if (logs.size() > 200) {
-				logs.removeLast();
-				logs.removeLast();
-			}
+        synchronized (logs) {
+            if (logs.size() > 200) {
+                logs.removeLast();
+                logs.removeLast();
+            }
 
-			StackTraceElement[] sts = Thread.currentThread().getStackTrace();
-			String po = "";
-			if (sts != null) {
-				int i = 0;
-				for (StackTraceElement st : sts) {
-					i ++;
-					if (i > 10) {
-						break;
-					}
-					if (i == 1) {
-						po += (st.getClassName() + "." + st.getMethodName() + "("
-								+ st.getFileName() + ":" + st.getLineNumber() + ")");
-					} else {
-						po += (", " + st.getClassName() + "." + st.getMethodName() + "("
-								+ st.getFileName() + ":" + st.getLineNumber() + ")");
-					}
-				}
-			}
-			logs.addFirst(new KLogInfo(po, log));
-		}
-	}
+            StackTraceElement[] sts = Thread.currentThread().getStackTrace();
+            String po = "";
+            if (sts != null) {
+                int i = 0;
+                for (StackTraceElement st : sts) {
+                    i++;
+                    if (i > 10) {
+                        break;
+                    }
+                    if (i == 1) {
+                        po += (st.getClassName() + "." + st.getMethodName() + "("
+                                + st.getFileName() + ":" + st.getLineNumber() + ")");
+                    } else {
+                        po += (", " + st.getClassName() + "." + st.getMethodName() + "("
+                                + st.getFileName() + ":" + st.getLineNumber() + ")");
+                    }
+                }
+            }
+            logs.addFirst(new KLogInfo(po, log));
+        }
+    }
 
-	public static LinkedList<KLogInfo> getLogs(){
-		return logs;
-	}
+    public static LinkedList<KLogInfo> getLogs() {
+        return logs;
+    }
 
-	/**
-	 * 单例ULog
-	 * @return 获取到的单例
-	 */
-	public static KLog getInstans() {
+    /**
+     * 单例ULog
+     *
+     * @return 获取到的单例
+     */
+    public static KLog getInstans() {
 
-		if (myLog != null) {
+        if (myLog != null) {
 
-			return myLog;
-		} else {
+            return myLog;
+        } else {
 
-			myLog = new KLog();
+            myLog = new KLog();
 
-		}
+        }
 
-		return myLog;
+        return myLog;
 
-	}
-	/**
-	 * 是否显示在哪一行
-	 * @param b 是否显示
-	 */
-	public static void setShowAtLine(boolean b) {
-		showAtLine = b;
-	}
+    }
 
-	/**
-	 * 获取代码位置
-	 * @return 代码位置
-	 */
-	public static String findLog() {
+    /**
+     * 是否显示在哪一行
+     *
+     * @param b 是否显示
+     */
+    public static void setShowAtLine(boolean b) {
+        showAtLine = b;
+    }
 
-		if (!showAtLine) {
-			return "";
-		}
+    /**
+     * 获取代码位置
+     *
+     * @return 代码位置
+     */
+    public static String findLog() {
 
-		StackTraceElement[] sts = Thread.currentThread().getStackTrace();
-		if (sts == null) {
-			return null;
-		}
-		for (StackTraceElement st : sts) {
-			if (st.isNativeMethod()) {
+        if (!showAtLine) {
+            return "";
+        }
 
-				continue;
-			}
-			if (st.getClassName().equals(Thread.class.getName())) {
+        StackTraceElement[] sts = Thread.currentThread().getStackTrace();
+        if (sts == null) {
+            return null;
+        }
+        for (StackTraceElement st : sts) {
+            if (st.isNativeMethod()) {
 
-				continue;
-			}
-			if (st.getClassName().endsWith(getInstans().getClass().getName())) {
+                continue;
+            }
+            if (st.getClassName().equals(Thread.class.getName())) {
 
-				continue;
-			}
-			return " at " + st.getClassName() + "." + st.getMethodName() + "("
-			+ st.getFileName() + ":" + st.getLineNumber() + ")";
-		}
-		return "";
+                continue;
+            }
+            if (st.getClassName().endsWith(getInstans().getClass().getName())) {
 
-	}
+                continue;
+            }
+            return " at " + st.getClassName() + "." + st.getMethodName() + "("
+                    + st.getFileName() + ":" + st.getLineNumber() + ")";
+        }
+        return "";
 
-	public static void d(String debugInfo){
-		if (isDebug()){
-			Log.d("ULog_default", debugInfo + findLog());
-			addLog(debugInfo);
-		}
-	}
-	public static void e(String errorInfo){
-		if (isDebug()){
-			Log.e("ULog_default", errorInfo + findLog());
-			addLog(errorInfo);
-		}
-	}
-	public static void v(String msg){
-		if (isDebug()){
-			Log.v("ULog_default", msg + findLog());
-			addLog(msg);
-		}
-	}
-	public static void i(String msg){
-		if (isDebug()){
-			Log.i("ULog_default", msg + findLog());
-			addLog(msg);
-		}
-	}
-	public static void w(String msg){
-		if (isDebug()){
-			Log.w("ULog_default", msg + findLog());
-			addLog(msg);
-		}
-	}
+    }
 
-	//打印异常
-	public static void e (Exception e){
-		if (isDebug()) {
-			try {
-				StringWriter sw = new StringWriter();
-				PrintWriter pw = new PrintWriter(sw);
-				e.printStackTrace(pw);
-				e("\r\n" + sw.toString() + "\r\n");
-			} catch (Exception e2) {
-				e("fail getErrorInfoFromException");
-			}
-		}
-	}
+    public static void d(String debugInfo) {
+        if (isDebug()) {
+            Log.d("ULog_default", debugInfo + findLog());
+            addLog(debugInfo);
+        }
+    }
 
-	/**
-	 * 打印位置
-	 */
-	public static void printStack() {
-		if (isDebug()){
-			StackTraceElement[] sts = Thread.currentThread().getStackTrace();
-			StringBuilder po = new StringBuilder();
-			if (sts != null) {
-				int i = 0;
-				for (StackTraceElement st : sts) {
-					i ++;
-					if (i > 10) {
-						break;
-					}
-					if (i == 1) {
-						po.append(st.getClassName() + "." + st.getMethodName() + "("
-								+ st.getFileName() + ":" + st.getLineNumber() + ")");
-					} else {
-						po.append("\n" + st.getClassName() + "." + st.getMethodName() + "("
-								+ st.getFileName() + ":" + st.getLineNumber() + ")");
-					}
-				}
-			}
-			Log.i("ULog_default", new String(po));
-		}
-	}
+    public static void e(String errorInfo) {
+        if (isDebug()) {
+            Log.e("ULog_default", errorInfo + findLog());
+            addLog(errorInfo);
+        }
+    }
+
+    public static void v(String msg) {
+        if (isDebug()) {
+            Log.v("ULog_default", msg + findLog());
+            addLog(msg);
+        }
+    }
+
+    public static void i(String msg) {
+        if (isDebug()) {
+            Log.i("ULog_default", msg + findLog());
+            addLog(msg);
+        }
+    }
+
+    public static void w(String msg) {
+        if (isDebug()) {
+            Log.w("ULog_default", msg + findLog());
+            addLog(msg);
+        }
+    }
+
+    //打印异常
+    public static void e(Exception e) {
+        if (isDebug()) {
+            try {
+                StringWriter sw = new StringWriter();
+                PrintWriter pw = new PrintWriter(sw);
+                e.printStackTrace(pw);
+                e("\r\n" + sw.toString() + "\r\n");
+            } catch (Exception e2) {
+                e("fail getErrorInfoFromException");
+            }
+        }
+    }
+
+    /**
+     * 打印位置
+     */
+    public static void printStack() {
+        if (isDebug()) {
+            StackTraceElement[] sts = Thread.currentThread().getStackTrace();
+            StringBuilder po = new StringBuilder();
+            if (sts != null) {
+                int i = 0;
+                for (StackTraceElement st : sts) {
+                    i++;
+                    if (i > 10) {
+                        break;
+                    }
+                    if (i == 1) {
+                        po.append(st.getClassName() + "." + st.getMethodName() + "("
+                                + st.getFileName() + ":" + st.getLineNumber() + ")");
+                    } else {
+                        po.append("\n" + st.getClassName() + "." + st.getMethodName() + "("
+                                + st.getFileName() + ":" + st.getLineNumber() + ")");
+                    }
+                }
+            }
+            Log.i("ULog_default", new String(po));
+        }
+    }
 }

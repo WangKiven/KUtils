@@ -168,7 +168,7 @@ public class KLog {
     }
 
     //打印异常
-    public static void e(Exception e) {
+    public static void e(Throwable e) {
         if (isDebug()) {
             try {
                 StringWriter sw = new StringWriter();

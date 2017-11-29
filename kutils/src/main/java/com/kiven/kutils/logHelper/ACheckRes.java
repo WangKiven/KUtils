@@ -11,12 +11,10 @@ import android.graphics.drawable.StateListDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,11 +22,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.flexbox.FlexDirection;
-import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
 import com.kiven.kutils.R;
@@ -39,8 +35,6 @@ import com.kiven.kutils.tools.KImage;
 import com.kiven.kutils.tools.KUtil;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.Comparator;
 
 /**
  * 图片资源查看
@@ -102,7 +96,7 @@ public class ACheckRes extends KActivityHelper {
         recyclerView = findViewById(R.id.recyclerView);
         {
             try {
-                Class.forName("Lcom/google/android/flexbox/FlexboxLayoutManager");
+                Class.forName("com.google.android.flexbox.FlexboxLayoutManager");
 
                 FlexboxLayoutManager layoutManager = new FlexboxLayoutManager(mActivity);
                 layoutManager.setFlexDirection(FlexDirection.ROW);

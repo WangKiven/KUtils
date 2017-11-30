@@ -479,4 +479,14 @@ public class KUtil {
         editor.putBoolean(key, value);
         editor.commit();
     }
+
+    public static long getSharedPreferencesLongValue(String key, long defaultValue) {
+        return getSharedPreferences().getLong(key, defaultValue);
+    }
+
+    public static void putSharedPreferencesLongValue(String key, long value) {
+        Editor editor = getSharedPreferences().edit();
+        editor.putLong(key, value);
+        editor.commit();
+    }
 }

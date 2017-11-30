@@ -21,6 +21,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
@@ -387,6 +388,28 @@ public class KString {
             buf.append(Integer.toHexString(a));
         }
         return buf.toString();
+    }
+
+    /**
+     * md5Hex
+     * @param data
+     * @return
+     * @throws NoSuchAlgorithmException
+     */
+    public static String md5Hex(String data) throws NoSuchAlgorithmException {
+        MessageDigest md = MessageDigest.getInstance("MD5");
+        byte[] bits = md.digest(data.getBytes(Charset.forName("UTF-8")));
+        char[] toDigits = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+        int l = bits.length;
+        char[] out = new char[l << 1];
+        int i = 0;
+
+        for(int var5 = 0; i < l; ++i) {
+            out[var5++] = toDigits[(240 & bits[i]) >>> 4];
+            out[var5++] = toDigits[15 & bits[i]];
+        }
+
+        return new String(out);
     }
 
     /**

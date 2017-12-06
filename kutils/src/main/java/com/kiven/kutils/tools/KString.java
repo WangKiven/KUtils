@@ -6,6 +6,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.res.XmlResourceParser;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -731,11 +732,23 @@ public class KString {
         return formateWithComma(objs, function);
     }
 
+    /**
+     * html处理
+     */
     public static Spanned fromHtml(String source) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             return Html.fromHtml(source, Html.FROM_HTML_MODE_LEGACY);
         } else {
             return Html.fromHtml(source);
         }
+    }
+
+    /**
+     * 比较两个实数
+     */
+    public static int compareNumber(@NonNull String num1, @NonNull String num2) {
+        BigDecimal decimal1 = new BigDecimal(num1);
+        BigDecimal decimal2 = new BigDecimal(num2);
+        return decimal1.compareTo(decimal2);
     }
 }

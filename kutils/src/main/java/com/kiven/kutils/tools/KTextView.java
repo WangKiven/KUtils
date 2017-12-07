@@ -3,6 +3,7 @@ package com.kiven.kutils.tools;
 import android.content.Context;
 import android.graphics.Paint;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.text.Html;
 import android.text.TextPaint;
 import android.view.View;
@@ -155,7 +156,7 @@ public class KTextView {
         return checkInt(textView, min, Integer.MAX_VALUE);
     }
 
-    public static void setText(TextView textView, CharSequence text) {
+    public static void setHtmlText(TextView textView, CharSequence text) {
         if (KString.isBlank(text)) {
             textView.setText("");
             return;
@@ -166,6 +167,17 @@ public class KTextView {
         } else {
             textView.setText(Html.fromHtml(text.toString()));
         }
+    }
+
+    /**
+     * 显示身份证
+     *
+     * 身份证号可能位数 16 18 19
+     * 16 19位每4位一组
+     * 18位每3位一组
+     */
+    public static void setBankCode(@NonNull TextView textView, @NonNull String bankCardNo, boolean hide) {
+        textView.setText(KString.formatBankCode(bankCardNo, hide));
     }
 
     /**

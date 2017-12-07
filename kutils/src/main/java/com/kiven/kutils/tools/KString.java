@@ -12,6 +12,7 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Xml;
+import android.widget.TextView;
 
 import com.kiven.kutils.callBack.Function;
 import com.kiven.kutils.logHelper.KLog;
@@ -757,5 +758,31 @@ public class KString {
         BigDecimal decimal1 = new BigDecimal(num1);
         BigDecimal decimal2 = new BigDecimal(num2);
         return decimal1.compareTo(decimal2);
+    }
+
+    /**
+     * 格式化银行卡号
+     *
+     * 身份证号可能位数 16 18 19
+     * 16 19位每4位一组
+     * 18位每3位一组
+     */
+    public static StringBuilder formatBankCode(@NonNull String bankCardNo, boolean hide) {
+        int length = bankCardNo.length();
+        int groupLength = length==18? 3:4;
+
+        int groupCount = ((length - 1)/groupLength) + 1;
+
+        StringBuilder sb = new StringBuilder(bankCardNo.substring(0, groupLength));
+        for (int i=1;i < groupCount - 1;i++) {
+            if (groupLength == 3) {
+                sb.append(" ").append(hide ? "***" : bankCardNo.substring(i * 3, i * 3 + 3));
+            } else {
+                sb.append(" ").append(hide ? "****" : bankCardNo.substring(i * 4, i * 4 + 4));
+            }
+        }
+        sb.append(" ").append(bankCardNo.substring((groupCount - 1) * groupLength, length));
+
+        return sb;
     }
 }

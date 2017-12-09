@@ -489,6 +489,21 @@ public class KString {
     }
 
     /**
+     * 创建BigDecimal
+     */
+    public static BigDecimal newDecimal(String num) {
+        if (num == null || num.length() == 0) {
+            return new BigDecimal(0);
+        }
+        try {
+            return new BigDecimal(num);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new BigDecimal(0);
+        }
+    }
+
+    /**
      * 11.2000  ->  11.2, 11.230 -> 11.23, 11.236 -> 11.23
      */
     public static String formaterFloat(double value) {
@@ -496,7 +511,16 @@ public class KString {
         return formater.format(value);
     }
 
+    /**
+     * 过时，建议使用以下方法
+     * {@link #formaterReal(BigDecimal)}
+     */
+    @Deprecated
     public static String formaterFloat(BigDecimal value) {
+        return formaterReal(value);
+    }
+
+    public static String formaterReal(BigDecimal value) {
         initDecimalFormat();
         return formater.format(value);
     }
@@ -507,7 +531,7 @@ public class KString {
     public static String formaterWan(int value) {
         BigDecimal decimal = new BigDecimal(value);
         decimal = decimal.divide(new BigDecimal(10000));
-        return formaterFloat(decimal);
+        return formaterReal(decimal);
     }
 
     /**
@@ -516,7 +540,7 @@ public class KString {
     public static String formaterWan(String value) {
         BigDecimal decimal = new BigDecimal(value);
         decimal = decimal.divide(new BigDecimal(10000));
-        return formaterFloat(decimal);
+        return formaterReal(decimal);
     }
 
     /**

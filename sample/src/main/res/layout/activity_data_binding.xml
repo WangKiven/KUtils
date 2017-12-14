@@ -4,6 +4,10 @@
         <variable
             name="boo"
             type="boolean"/>
+
+        <variable
+            name="user"
+            type="com.kiven.sample.entity.EntityUser" />
     </data>
 
     <LinearLayout
@@ -39,6 +43,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text='@{boo ? "is true": "is false"}'/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text='@{user.toString()}'/>
 
     </LinearLayout>
 </layout>

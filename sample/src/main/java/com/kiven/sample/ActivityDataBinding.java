@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.kiven.sample.entity.EntityUser;
+
 /**
  *
  * Created by kiven on 2017/2/13.
@@ -22,9 +24,10 @@ public class ActivityDataBinding extends AppCompatActivity implements View.OnCli
 
         dataBindingMode = DataBindingUtil.setContentView(this, R.layout.activity_data_binding);
         dataBindingMode.setBoo(false);
+        dataBindingMode.setUser(new EntityUser(2, "kiven", 14));
 
 //        setTitle("Data Binding");
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);

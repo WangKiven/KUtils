@@ -205,7 +205,7 @@ public class LauchActivity extends KRoboActivity {
                     @Override
                     public void onGrantSuccess(boolean isSuccess) {
                         if (isSuccess) {
-                            KLog.i("" + KFile.createFile("tmp", ".img", getDir(Environment.DIRECTORY_PICTURES, 2)).getAbsolutePath());
+                            KLog.i("" + KFile.createFile("tmp", ".img", getDir(Environment.DIRECTORY_PICTURES, Context.MODE_PRIVATE)).getAbsolutePath());
                             KLog.i("" + KFile.createFile("tmp", ".img", getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)).getAbsolutePath());
                             KLog.i("" + KFile.createFile("tmp", ".img", getDatabasePath("db")).getAbsolutePath());
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

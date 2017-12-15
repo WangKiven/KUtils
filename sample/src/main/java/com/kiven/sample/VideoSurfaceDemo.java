@@ -16,7 +16,7 @@ import com.kiven.kutils.activityHelper.KHelperActivity;
 import java.io.IOException;
 
 /**
- *
+ * mp4播放
  * Created by kiven on 2016/10/31.
  */
 

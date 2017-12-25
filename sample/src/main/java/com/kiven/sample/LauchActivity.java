@@ -40,7 +40,6 @@ import android.widget.Toast;
 import com.kiven.kutils.activityHelper.KFragmentActivity;
 import com.kiven.kutils.activityHelper.activity.KRoboActivity;
 import com.kiven.kutils.file.KFile;
-import com.kiven.kutils.logHelper.ACheckRes;
 import com.kiven.kutils.logHelper.KLog;
 import com.kiven.kutils.tools.KAlertDialogHelper;
 import com.kiven.kutils.tools.KGranting;

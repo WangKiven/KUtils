@@ -1,5 +1,6 @@
 package com.kiven.kutils.activityHelper;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,7 +12,6 @@ import android.view.View;
 
 import com.kiven.kutils.logHelper.KLog;
 import com.kiven.kutils.tools.KContext;
-import com.kiven.kutils.tools.KGranting;
 
 import java.lang.reflect.Constructor;
 
@@ -40,6 +40,9 @@ public class KHelperActivity extends AppCompatActivity {
 
     @SuppressWarnings({"rawtypes"})
     protected KActivityHelper getHelper(Bundle savedInstanceState) {
+        // 使用ViewModel 确保Helper不会多个同时存在
+        KHelperModel model = ViewModelProviders.of(this).get(KHelperModel.class);
+        helper = model.helper;
         if (helper == null) {//此判断是为了防止子类已设置helper的值
             if (savedInstanceState == null) {
                 helper = (KActivityHelper) KActivityHelper.getStackValue(getIntent().getStringExtra("BaseActivityHelper"));
@@ -64,6 +67,8 @@ public class KHelperActivity extends AppCompatActivity {
                     KLog.e(e);
                 }
             }
+
+            model.helper = helper;
         }
         return helper;
     }

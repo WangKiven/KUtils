@@ -23,7 +23,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="hello1"/>
+                android:text="hello1"
+                android:background="#123421"
+                android:autoSizeTextType="uniform"
+                android:paddingHorizontal="10dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -142,6 +145,14 @@
             android:clickable="true"
             android:onClick="onClick"
             app:item_title="FlycoDialog"/>
+
+        <com.kiven.kutils.widget.KNormalItemView
+            android:id="@+id/item_volley"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:onClick="onClick"
+            app:item_title="volley"/>
 
         <EditText
             android:id="@+id/et_auto"

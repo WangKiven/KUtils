@@ -27,6 +27,7 @@ import android.support.v7.app.AlertDialog;
 import android.telephony.TelephonyManager;
 import android.text.Html;
 import android.transition.Slide;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.kiven.kutils.activityHelper.KFragmentActivity;
 import com.kiven.kutils.activityHelper.activity.KRoboActivity;
 import com.kiven.kutils.file.KFile;
@@ -57,6 +64,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DateFormat;
+import java.util.Date;
 
 import me.grantland.widget.AutofitHelper;
 import roboguice.RoboGuice;
@@ -255,10 +264,38 @@ public class LauchActivity extends KRoboActivity {
                         .setView(textView).create();
                 dialog.show();
                 break;
+
+            case R.id.item_volley:
+                // https://developer.android.google.cn/training/volley/simple.html
+                // https://github.com/google/volley
+                volley("https://github.com/google/volley");
+                volley("http://blog.csdn.net/linmiansheng/article/details/21646753");
+                break;
             default:
                 new ActivityHTestBase().startActivity(this);
                 break;
         }
+    }
+
+    RequestQueue queue;
+
+    private void volley(final String http) {
+        if (queue == null) {
+            queue = Volley.newRequestQueue(this);
+        }
+        StringRequest request = new StringRequest(Request.Method.GET, http, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                Log.i("ULog_default", http + DateFormat.getTimeInstance().format(new Date()));
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i("ULog_default", http + DateFormat.getTimeInstance().format(new Date()));
+            }
+        });
+        queue.add(request);
     }
 
     public static String a;

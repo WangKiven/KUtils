@@ -32,7 +32,7 @@ dependencies {
     compile "com.android.support:appcompat-v7:${parent.ext.libraryVersion}"
     provided "com.android.support:recyclerview-v7:${parent.ext.libraryVersion}"
 
-    provided 'org.roboguice:roboguice:3.0.1'
+//    provided 'org.roboguice:roboguice:3.0.1'
 //    provided 'org.roboguice:roboblender:3.0.1'
     provided 'com.google.code.gson:gson:2.8.2'
     provided 'com.google.android:flexbox:0.3.0'

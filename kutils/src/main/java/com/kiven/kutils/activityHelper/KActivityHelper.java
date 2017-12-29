@@ -18,7 +18,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.kiven.kutils.R;
 import com.kiven.kutils.tools.KView;
 
 import java.io.Serializable;
@@ -73,7 +72,7 @@ public class KActivityHelper {
     }
 
     protected Class getActivityClas() {
-        return KRoboHelperActivity.class;
+        return KHelperActivity.class;
     }
 
     public KActivityHelper addFlags(int flags) {
@@ -99,6 +98,7 @@ public class KActivityHelper {
         }
         return this;
     }
+
     public KActivityHelper putExtra(String key, byte[] value) {
         getIntent().putExtra(key, value);
         return this;
@@ -163,9 +163,13 @@ public class KActivityHelper {
 
     }
 
-    public boolean onCreateOptionsMenu(Menu menu){ return  false;}
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return false;
+    }
 
-    public boolean onOptionsItemSelected(MenuItem item){ return false;}
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return false;
+    }
 
     public void onWindowFocusChanged(boolean hasFocus) {
     }
@@ -188,7 +192,7 @@ public class KActivityHelper {
 
 
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        
+
     }
 
     protected final void setResult(int resultCode) {
@@ -206,6 +210,7 @@ public class KActivityHelper {
     protected void setContentView(View view) {
         mActivity.setContentView(view);
     }
+
     public <T extends View> T findViewById(@IdRes int rId) {
         return (T) mActivity.getDelegate().findViewById(rId);
     }

@@ -1,6 +1,7 @@
 package com.kiven.kutils.tools;
 
 import android.app.Application;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,6 +14,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.support.v4.content.FileProvider;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 
 import com.kiven.kutils.logHelper.KLog;
@@ -342,15 +344,37 @@ public class KUtil {
     }
 
     /**
-     * 卸载apk
+     * 启动APP
+     *
+     * @param pkg 包名
+     * @param cls 启动界面activity名称
      */
-    private static void unInstallApk(Context context, Uri uri) {
-        Intent mIntent = new Intent(Intent.ACTION_DELETE, uri);
-        /*mIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        mIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+    public static void startApp(Context context, String pkg, String cls) {
+        Intent intent = new Intent();
+        intent.setComponent(new ComponentName(pkg, cls));
+        // TODO 不加这个,yy启动不了。yy可能检测过任务堆栈的
+        intent.setFlags(Intent.FLAG_ACTIVITY_TASK_ON_HOME | Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+    }
 
-        mIntent.setDataAndType(uri, "application/vnd.android.package-archive");*/
-        context.startActivity(mIntent);
+    /**
+     * 根据包名启动APP
+     * @return 是否启动成功
+     */
+    public static boolean startApp(Context context, String packageName) {
+        try {
+            Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(packageName);
+            if (launchIntent != null) {
+                context.startActivity(launchIntent);
+                return true;
+            }
+        } catch (Exception e) {
+            KLog.e(e);
+        }
+
+        // 未检测到应用
+//        KAlertDialogHelper.Show1BDialog(this, "未检测到应用");
+        return false;
     }
 
     /**
@@ -371,6 +395,26 @@ public class KUtil {
             apkUri = FileProvider.getUriForFile(context, authority, file);
         }
         unInstallApk(context, apkUri);
+    }
+
+    /**
+     * 卸载apk
+     */
+    public static void unInstallApk(Context context, Uri uri) {
+        Intent mIntent = new Intent(Intent.ACTION_DELETE, uri);
+        /*mIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        mIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        mIntent.setDataAndType(uri, "application/vnd.android.package-archive");*/
+        context.startActivity(mIntent);
+    }
+
+    /**
+     * 卸载apk
+     * @param packageName 包名
+     */
+    public static void unInstallApk(Context context, String packageName) {
+        unInstallApk(context, Uri.fromParts("package", packageName, null));
     }
 
     /**

@@ -50,7 +50,7 @@ public class KGranting {
                     }
                 }
             }
-            i ++;
+            i++;
         }
 
         // 将待授权list转化为待授权数组
@@ -151,6 +151,7 @@ public class KGranting {
             }
         }
     }
+
     /**
      * 请求单个授权
      */
@@ -159,11 +160,11 @@ public class KGranting {
     }
 
 
-
     public static final String STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE;
     public static final String BLUETOOTH = Manifest.permission.BLUETOOTH;
     public static final String CAMERA = Manifest.permission.CAMERA;
     public static final String PHONE = Manifest.permission.CALL_PHONE;
+
     /**
      * 请求多个授权, 不需描述。
      * 描述不全面，如需跟多权限，需在此添加
@@ -181,6 +182,7 @@ public class KGranting {
         }
         requestPermissions(activity, requestCode, tGrant, tGrantName, callBack);
     }
+
     /**
      * 请求单个授权, 不需描述
      * 描述不全面，如需跟多权限，需在{@link #requestPermissions(Activity, int, String[], GrantingCallBack)}添加

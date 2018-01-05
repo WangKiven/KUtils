@@ -233,7 +233,7 @@ public class KUtil {
      */
     public static String getAppFileFolderPath(String packageName) {
         File folder = new File(Environment.getExternalStorageDirectory() + "/" + packageName);
-        folder.mkdir();
+        folder.mkdirs();
         return folder.getAbsolutePath();
         // return folder;
     }

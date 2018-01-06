@@ -6,16 +6,11 @@ import android.widget.Button;
 
 import com.kiven.kutils.activityHelper.KHelperActivity;
 import com.kiven.kutils.custom.BaseHelper;
-import com.kiven.sample.floatView.ActivityHFloatView;
-
-import roboguice.inject.InjectView;
 
 /**
- *
  * Created by kiven on 16/5/6.
  */
 public class ActivityHTestBase extends BaseHelper {
-    @InjectView(R.id.button1) private Button button;
 
     @Override
     public void onCreate(KHelperActivity activity, Bundle savedInstanceState) {
@@ -23,6 +18,7 @@ public class ActivityHTestBase extends BaseHelper {
 
         setContentView(R.layout.activity_lauch);
 
+        Button button = findViewById(R.id.button1);
         button.setText("RoboHelper Test");
     }
 
@@ -38,7 +34,7 @@ public class ActivityHTestBase extends BaseHelper {
             case R.id.button2:
 //                TransitionManager.beginDelayedTransition((ViewGroup) findViewById(R.id.root), new Slide(Gravity.LEFT));
                 visible = !visible;
-                findViewById(R.id.button1).setVisibility(visible? View.VISIBLE: View.GONE);
+                findViewById(R.id.button1).setVisibility(visible ? View.VISIBLE : View.GONE);
                 break;
         }
     }

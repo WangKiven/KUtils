@@ -186,8 +186,8 @@ public class KTextView {
     public static void hideKeyBoard(Context context, View... mEditTexts) {
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm.isActive()) {
-            for (View editText : mEditTexts) {
-                imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+            for (View view : mEditTexts) {
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
         }
     }

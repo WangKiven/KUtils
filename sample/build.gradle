@@ -54,7 +54,7 @@ dependencies {
 
     compile 'me.grantland:autofittextview:0.2.1'
     //    compile 'com.kiven.kutils:kutils:1.0.0'
-    compile 'org.roboguice:roboguice:3.0.1'
+//    compile 'org.roboguice:roboguice:3.0.1'
 //    compile 'org.roboguice:roboblender:3.0.1'
     compile 'com.google.code.gson:gson:2.8.2'
     compile('com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:0.10.3@aar') {

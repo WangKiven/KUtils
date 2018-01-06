@@ -45,7 +45,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.kiven.kutils.activityHelper.KFragmentActivity;
-import com.kiven.kutils.activityHelper.activity.KRoboActivity;
+import com.kiven.kutils.activityHelper.activity.KXUtilActivity;
 import com.kiven.kutils.file.KFile;
 import com.kiven.kutils.logHelper.KLog;
 import com.kiven.kutils.tools.KAlertDialogHelper;
@@ -58,6 +58,8 @@ import com.kiven.sample.floatView.ActivityHFloatView;
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.image.ImageOptions;
+import org.xutils.view.annotation.ContentView;
+import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
 import java.io.File;
@@ -68,28 +70,25 @@ import java.text.DateFormat;
 import java.util.Date;
 
 import me.grantland.widget.AutofitHelper;
-import roboguice.RoboGuice;
-import roboguice.inject.InjectView;
 
-public class LauchActivity extends KRoboActivity {
+@ContentView(R.layout.activity_lauch)
+public class LauchActivity extends KXUtilActivity {
 
     private static final String FILEPROVIDER_AUTHORITY = "com.kiven.sample.fileprovider";
     private static final String IMAGE_DIR = "KUtilSample" + File.separator + "testImage";
     String cameraPath = null;
     String cropPath = null;
 
-    @InjectView(R.id.iv_test)
+    @ViewInject(R.id.iv_test)
     private ImageView iv_test;
-    @InjectView(R.id.et_auto)
+    @ViewInject(R.id.et_auto)
     private EditText et_auto;
-    @InjectView(R.id.textView2)
+    @ViewInject(R.id.textView2)
     private TextView textView2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lauch);
-        RoboGuice.setUseAnnotationDatabases(false);
         KUtil.printDeviceInfo();
 
         setupWindowAnimations();

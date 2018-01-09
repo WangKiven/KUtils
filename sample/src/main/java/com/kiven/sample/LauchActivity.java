@@ -4,6 +4,8 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
+import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.Observer;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -15,10 +17,13 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.os.Process;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.FileProvider;
@@ -46,12 +51,14 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.kiven.kutils.activityHelper.KFragmentActivity;
 import com.kiven.kutils.activityHelper.activity.KXUtilActivity;
+import com.kiven.kutils.callBack.CallBack;
 import com.kiven.kutils.file.KFile;
 import com.kiven.kutils.logHelper.KLog;
 import com.kiven.kutils.tools.KAlertDialogHelper;
 import com.kiven.kutils.tools.KGranting;
 import com.kiven.kutils.tools.KPath;
 import com.kiven.kutils.tools.KUtil;
+import com.kiven.kutils.tools.KView;
 import com.kiven.kutils.widget.KNormalItemView;
 import com.kiven.sample.floatView.ActivityHFloatView;
 
@@ -130,6 +137,21 @@ public class LauchActivity extends KXUtilActivity {
 
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.item_live_data:
+                Handler handler = new Handler(new Handler.Callback() {
+                    @Override
+                    public boolean handleMessage(Message msg) {
+                        KView.runUI(LauchActivity.this, new CallBack() {
+                            @Override
+                            public void callBack() {
+                                KAlertDialogHelper.Show1BDialog(LauchActivity.this, "LiveData 行不行？");
+                            }
+                        });
+                        return true;
+                    }
+                });
+                handler.sendEmptyMessageDelayed(0, 5000);
+                break;
             case R.id.item_load_activity:
                 new AHCheckRes().startActivity(this);
 //                new ACheckRes().startActivity(this);

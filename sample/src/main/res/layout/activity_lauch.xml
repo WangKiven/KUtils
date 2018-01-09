@@ -36,6 +36,14 @@
 
         </android.support.v7.widget.Toolbar>
 
+        <com.kiven.kutils.widget.KNormalItemView
+            android:id="@+id/item_live_data"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:onClick="onClick"
+            app:item_title="liveData控制界面展示"/>
+
         <ImageView
             android:id="@+id/iv_test"
             android:layout_width="50dp"

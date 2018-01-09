@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.kiven.kutils.callBack.CallBack;
 import com.kiven.kutils.tools.KView;
 
 import java.io.Serializable;
@@ -104,6 +105,16 @@ public class KActivityHelper {
         return this;
     }
     //--------------------------------------------
+
+    /**
+     * 在UI线程上运行。
+     * 如果owner（activity或fragment）在前台，则运行callBack。
+     * 如果owner（activity或fragment）在后台，则等待owner进入前台再运行callBack。
+     * 如果owner（activity或fragment）已经退出，则不会运行callBack。
+     */
+    protected void runUI(CallBack callBack) {
+        KView.runUI(mActivity, callBack);
+    }
 
     public void onCreate(KHelperActivity activity, Bundle savedInstanceState) {
         mActivity = activity;

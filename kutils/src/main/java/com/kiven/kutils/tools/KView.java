@@ -1,9 +1,13 @@
 package com.kiven.kutils.tools;
 
 import android.annotation.SuppressLint;
+import android.arch.lifecycle.LifecycleOwner;
+import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.Observer;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -12,6 +16,7 @@ import android.widget.Toolbar;
 
 import com.kiven.kutils.R;
 import com.kiven.kutils.activityHelper.KActivityHelper;
+import com.kiven.kutils.callBack.CallBack;
 
 public class KView {
 	/**
@@ -92,4 +97,21 @@ public class KView {
 		actionBar.setHomeButtonEnabled(true);
 		actionBar.setDisplayShowTitleEnabled(false);
     }
+
+	/**
+	 * 在UI线程上运行。
+	 * 如果owner（activity或fragment）在前台，则运行callBack。
+	 * 如果owner（activity或fragment）在后台，则等待owner进入前台再运行callBack。
+	 * 如果owner（activity或fragment）已经退出，则不会运行callBack。
+	 */
+	public static void runUI(@NonNull LifecycleOwner owner, final CallBack callBack) {
+		MutableLiveData<Boolean> data = new MutableLiveData<Boolean>();
+		data.observe(owner, new Observer<Boolean>() {
+			@Override
+			public void onChanged(@Nullable Boolean o) {
+				callBack.callBack();
+			}
+		});
+		data.setValue(true);
+	}
 }

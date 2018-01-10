@@ -141,6 +141,7 @@ public class LauchActivity extends KXUtilActivity {
                 Handler handler = new Handler(new Handler.Callback() {
                     @Override
                     public boolean handleMessage(Message msg) {
+
                         KView.runUI(LauchActivity.this, new CallBack() {
                             @Override
                             public void callBack() {

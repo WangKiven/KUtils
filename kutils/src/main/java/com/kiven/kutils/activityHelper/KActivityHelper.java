@@ -108,6 +108,7 @@ public class KActivityHelper {
 
     /**
      * 在UI线程上运行。
+     * 最好再数据处理完成后，再用该方法进行UI的显示
      * 如果owner（activity或fragment）在前台，则运行callBack。
      * 如果owner（activity或fragment）在后台，则等待owner进入前台再运行callBack。
      * 如果owner（activity或fragment）已经退出，则不会运行callBack。

@@ -105,7 +105,7 @@ public class KView {
      * 如果owner（activity或fragment）在后台，则等待owner进入前台再运行callBack。
      * 如果owner（activity或fragment）已经退出，则不会运行callBack。
      */
-    public static synchronized void runUI(@NonNull final LifecycleOwner owner, final CallBack callBack) {
+    public static synchronized void runUI(@NonNull final LifecycleOwner owner, @NonNull final CallBack callBack) {
         data.observe(owner, new Observer<Integer>() {
             @Override
             public void onChanged(@Nullable Integer o) {

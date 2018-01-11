@@ -16,6 +16,7 @@ import android.os.Environment;
 import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.widget.TextView;
 
 import com.kiven.kutils.logHelper.KLog;
 
@@ -143,6 +144,21 @@ public class KUtil {
             e.printStackTrace();
         }
         return -1;
+    }
+
+    /**
+     * 是否是模拟器
+     * @return
+     */
+    public static boolean isAVD() {
+        /*String serial;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            serial = Build.getSerial();
+        } else {
+            serial = Build.SERIAL;
+        }
+        return TextUtils.equals(serial, "unknown");*/
+        return false;
     }
 
     private static String uuId = null;

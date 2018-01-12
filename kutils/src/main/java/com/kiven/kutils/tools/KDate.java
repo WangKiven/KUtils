@@ -29,6 +29,10 @@ public class KDate {
         return new SimpleDateFormat("yyyy-MM-dd").parse(ds);
     }
 
+    public static Date parse(String ds, String pattern) throws ParseException {
+        return new SimpleDateFormat(pattern).parse(ds);
+    }
+
     /**
      * 获取字符串中的时间
      */
@@ -41,6 +45,30 @@ public class KDate {
         if (matcher.find()) {
             try {
                 return parse(text.substring(matcher.start(), matcher.end()));
+            } catch (ParseException e) {
+                KLog.e(e);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 获取字符串中的时间
+     * @param patterns 格式化的时间，如：yyyy-MM-dd，yyyy年MM月dd号
+     */
+    public static Date findDate(String text, String patterns) {
+        if (TextUtils.isEmpty(text)) {
+            return null;
+        }
+        if (TextUtils.isEmpty(patterns)) {
+            return findDate(text);
+        }
+
+        Pattern pattern = Pattern.compile(patterns.replaceAll("y|M|d", "\\\\d"));
+        Matcher matcher = pattern.matcher(text);
+        if (matcher.find()) {
+            try {
+                return parse(text.substring(matcher.start(), matcher.end()), patterns);
             } catch (ParseException e) {
                 KLog.e(e);
             }

@@ -114,7 +114,7 @@ public class KString {
     /**
      * 以友好的方式显示时间
      */
-    public static String friendly_time(String sdate) {
+    public static String friendlyTime(String sdate) {
         Date time = toDate(sdate);
         if (time == null) {
             return "Unknown";
@@ -782,6 +782,22 @@ public class KString {
         BigDecimal decimal1 = new BigDecimal(num1);
         BigDecimal decimal2 = new BigDecimal(num2);
         return decimal1.compareTo(decimal2);
+    }
+
+    /**
+     * 获取text中适配正则表达式（patterns）的第一个子串
+     */
+    public static String substring(String text, String patterns) {
+        if (TextUtils.isEmpty(text) || TextUtils.isEmpty(patterns)) {
+            return null;
+        }
+
+        Pattern pattern = Pattern.compile(patterns);
+        Matcher matcher = pattern.matcher(text);
+        if (matcher.find()) {
+            return text.substring(matcher.start(), matcher.end());
+        }
+        return null;
     }
 
     /**

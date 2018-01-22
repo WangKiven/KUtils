@@ -34,6 +34,7 @@ import android.text.Html;
 import android.transition.Slide;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -124,6 +125,16 @@ public class LauchActivity extends KXUtilActivity {
         textView2.setText(Html.fromHtml(getString(R.string.text_test, 5, 9)));
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return super.onTouchEvent(event);
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        return super.dispatchTouchEvent(ev);
+    }
+
     private void setupWindowAnimations() {
         // Re-enter transition is executed when returning to this activity
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
@@ -137,6 +148,9 @@ public class LauchActivity extends KXUtilActivity {
 
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.item_opengl:
+
+                break;
             case R.id.item_live_data:
                 Handler handler = new Handler(new Handler.Callback() {
                     @Override

@@ -65,8 +65,8 @@ public class RulingSeekbar extends View {
         curValueTextSize = sp(13);
         barNodeTextSize = sp(12);
 
-        min = 60;
-        max = 99;
+        min = 0;
+        max = 100;
         /*addNode(60, 0, true);
         addNode(70, 2, true);
         addNode(77, 1, true);
@@ -81,15 +81,18 @@ public class RulingSeekbar extends View {
         this.min = min;
         this.max = max;
 
+        if (onChange != null) {
+            onChange.onProgressChanged(this, position2Value(binX), false);
+        }
         invalidate();
     }
 
-    public int getValue() {
+    public int getProgress() {
         return position2Value(binX);
     }
 
-    public void setValue(int value) {
-        binX = value2Position(value);
+    public void setProgress(int progress) {
+        binX = value2Position(progress);
         invalidate();
     }
 

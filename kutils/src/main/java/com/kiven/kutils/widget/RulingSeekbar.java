@@ -35,6 +35,7 @@ public class RulingSeekbar extends View {
     private int max;
 
     private OnChangeListener onChange;
+    private Formater formater;
 
     private final List<Node> nodes = new ArrayList<>();
 
@@ -98,6 +99,10 @@ public class RulingSeekbar extends View {
 
     public void setOnChangeListener(OnChangeListener change) {
         this.onChange = change;
+    }
+
+    public void setFormater(Formater formater) {
+        this.formater = formater;
     }
 
     private float value2Position(int value) {
@@ -289,7 +294,7 @@ public class RulingSeekbar extends View {
         // 绘制当前值
         paint.setColor(curValueColor);
         paint.setTextSize(curValueTextSize);
-        String text = "" + position2Value(binX);
+        String text = getShow(position2Value(binX));
         float textWidth = paint.measureText(text);
         float px = binX - textWidth / 2;
         if (px < 0) {
@@ -298,6 +303,14 @@ public class RulingSeekbar extends View {
             px = canvasWidth - textWidth;
         }
         canvas.drawText(text, px, canvasHeight / 2 - binRadius - 6 * dpScale, paint);
+    }
+
+    protected String getShow(int value) {
+        if (formater == null)
+            return "" + value;
+        else {
+            return formater.formatCurValue(value);
+        }
     }
 
     public void addNode(int node, int type, boolean showText) {
@@ -338,5 +351,9 @@ public class RulingSeekbar extends View {
         void onStartTrackingTouch(@NonNull RulingSeekbar seekBar);
 
         void onStopTrackingTouch(@NonNull RulingSeekbar seekBar);
+    }
+
+    public interface Formater {
+        String formatCurValue(int value);
     }
 }

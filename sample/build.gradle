@@ -48,6 +48,7 @@ dependencies {
     compile "com.android.support:appcompat-v7:${parent.ext.libraryVersion}"
     compile "com.android.support:design:${parent.ext.libraryVersion}"
     compile "com.android.support:recyclerview-v7:${parent.ext.libraryVersion}"
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
 
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     compile "org.jetbrains.anko:anko:$anko_version"

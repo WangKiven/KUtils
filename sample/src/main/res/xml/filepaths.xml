@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <paths>
-    <external-path
+    <!--<external-path
         name="image"
-        path="KUtilSample/testImage"/>
+        path="KUtilSample/testImage"/>-->
+    <external-path path="." name="kutilsample_external_file" />
+    <files-path path="." name="kutilsample_files" />
 </paths>

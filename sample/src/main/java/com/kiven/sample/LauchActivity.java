@@ -4,15 +4,16 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.Observer;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.media.MediaMetadataRetriever;
 import android.media.MediaScannerConnection;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,7 +24,6 @@ import android.os.Process;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.FileProvider;
@@ -62,9 +62,9 @@ import com.kiven.kutils.tools.KUtil;
 import com.kiven.kutils.tools.KView;
 import com.kiven.kutils.widget.KNormalItemView;
 import com.kiven.sample.floatView.ActivityHFloatView;
+import com.kiven.sample.media.AHMediaList;
+import com.kiven.sample.media.VideoSurfaceDemo;
 
-import org.xutils.common.Callback;
-import org.xutils.http.RequestParams;
 import org.xutils.image.ImageOptions;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
@@ -76,6 +76,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 import me.grantland.widget.AutofitHelper;
 
@@ -200,49 +201,11 @@ public class LauchActivity extends KXUtilActivity {
                     }
                 });
                 break;
-            case R.id.item_mp4:
-                new VideoSurfaceDemo().startActivity(this);
+            case R.id.item_media:
+                new AHMediaList().startActivity(this);
                 break;
             case R.id.item_float:
                 new ActivityHFloatView().startActivity(this);
-                break;
-            case R.id.item_upload_image:
-                KGranting.requestPermissions(this, 345, Manifest.permission.READ_EXTERNAL_STORAGE, "存储空间", new KGranting.GrantingCallBack() {
-                    @Override
-                    public void onGrantSuccess(boolean isSuccess) {
-                        if (isSuccess) {
-                            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);//4.4及以上最好使用 ACTION_OPEN_DOCUMENT
-                            intent.addCategory(Intent.CATEGORY_OPENABLE);
-                            intent.setType("image/jpeg");
-                            startActivityForResult(intent, 345);
-                        }
-                    }
-                });
-                break;
-            case R.id.item_take_camera:
-                String permissions[] = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
-                String permissionInfos[] = {"存储空间", "相机"};
-                KGranting.requestPermissions(this, 345, permissions, permissionInfos, new KGranting.GrantingCallBack() {
-                    @Override
-                    public void onGrantSuccess(boolean isSuccess) {
-                        if (isSuccess) {
-                            File dir = new File(Environment.getExternalStorageDirectory(), IMAGE_DIR);
-                            if (!dir.exists()) {
-                                dir.mkdirs();
-                            }
-                            File file = new File(dir, System.currentTimeMillis() + ".jpg");
-                            cameraPath = file.getAbsolutePath();
-
-                            Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                            if (Build.VERSION.SDK_INT < 24) {
-                                camera.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
-                            } else {
-                                camera.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(getBaseContext(), FILEPROVIDER_AUTHORITY, file));
-                            }
-                            startActivityForResult(camera, 346);
-                        }
-                    }
-                });
                 break;
             case R.id.item_path:
                 KGranting.requestPermissions(this, 345, Manifest.permission.WRITE_EXTERNAL_STORAGE, "存储空间", new KGranting.GrantingCallBack() {
@@ -354,119 +317,19 @@ public class LauchActivity extends KXUtilActivity {
             final String path = KPath.getPath(this, data.getData());
             KLog.i(path);
 
-            try {
-                URL url = new URL("http://www.baidu.com");
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("GET");
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            showImage(path);
-        }
-
-        if (requestCode == 346) {
-            /*showImage(cameraPath);
-            KUtil.addPicture(cameraPath, new Consumer<Integer>() {
-                @Override
-                public void callBack(Integer param) {
-                    KLog.i("param = " + param);
-                    Toast.makeText(getBaseContext(), "save " + param, Toast.LENGTH_LONG).show();
+            if (path.endsWith(".mp4")) {
+                MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+                try {
+                    retriever.setDataSource(path, new HashMap<String, String>());
+                    Bitmap bmp = retriever.getFrameAtTime(1);
+                    ImageView iv_test = findViewById(R.id.iv_test);
+                    iv_test.setImageDrawable(new BitmapDrawable(bmp));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    KLog.e(e);
                 }
-            });*/
-
-            /*KUtil.addPicture(cameraPath, new Consumer<Integer>() {
-                @Override
-                public void callBack(Integer param) {
-                    KLog.i("param = " + param);
-                    Toast.makeText(getBaseContext(), "save " + param, Toast.LENGTH_LONG).show();
-                    cropImage(cameraPath);
-                }
-            });*/
-
-            /*MediaScannerConnection.scanFile(KContext.getInstance(), new String[] { cameraPath }, new String[] { "image*//*" },
-                    new MediaScannerConnection.OnScanCompletedListener() {
-
-                        @Override
-                        public void onScanCompleted(String path, Uri uri) {
-                            cropImage(cameraPath);
-                        }
-
-                    });*/
-            KUtil.addPicture(cameraPath, new MediaScannerConnection.OnScanCompletedListener() {
-                @Override
-                public void onScanCompleted(String path, Uri uri) {
-                    cropImage(cameraPath);
-                }
-            });
-        }
-
-        if (requestCode == 347) {
-            showImage(cropPath);
-        }
-    }
-
-    private void cropImage(String cameraPath) {
-        File dir = new File(Environment.getExternalStorageDirectory(), IMAGE_DIR);
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-        File file = new File(dir, System.currentTimeMillis() + ".jpg");
-        cropPath = file.getAbsolutePath();
-
-        Intent in = new Intent("com.android.camera.action.CROP");
-
-        in.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        // 需要裁减的图片格式
-        if (Build.VERSION.SDK_INT >= 24) {
-            in.setDataAndType(getImageContentUri(this, new File(cameraPath)), "image/*");
-        } else {
-            in.setDataAndType(Uri.fromFile(new File(cameraPath)), "image/*");
-        }
-        // 允许裁减
-        in.putExtra("crop", "true");
-        // 剪裁后ImageView显时图片的宽
-        in.putExtra("outputX", 200);
-        // 剪裁后ImageView显时图片的高
-        in.putExtra("outputY", 200);
-        // 设置剪裁框的宽高比例
-        in.putExtra("aspectX", 1);
-        in.putExtra("aspectY", 1);
-        in.putExtra("return-data", false);
-        in.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
-                Uri.fromFile(new File(cropPath)));
-        in.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
-        in.putExtra("noFaceDetection", true);
-
-        startActivityForResult(in, 347);
-    }
-
-    /**
-     *
-     */
-    public static Uri getImageContentUri(Context context, File imageFile) {
-        String filePath = imageFile.getAbsolutePath();
-        Cursor cursor = context.getContentResolver().query(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                new String[]{MediaStore.Images.Media._ID},
-                MediaStore.Images.Media.DATA + "=? ",
-                new String[]{filePath}, null);
-
-        if (cursor != null && cursor.moveToFirst()) {
-            int id = cursor.getInt(cursor
-                    .getColumnIndex(MediaStore.MediaColumns._ID));
-            Uri baseUri = Uri.parse("content://media/external/images/media");
-            return Uri.withAppendedPath(baseUri, "" + id);
-        } else {
-            if (imageFile.exists()) {
-                ContentValues values = new ContentValues();
-                values.put(MediaStore.Images.Media.DATA, filePath);
-                return context.getContentResolver().insert(
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-            } else {
-                return null;
-            }
+            } else
+                showImage(path);
         }
     }
 
@@ -477,41 +340,16 @@ public class LauchActivity extends KXUtilActivity {
                 super.onCreate(savedInstanceState);
                 ImageView imageView = new ImageView(getContext());
                 setContentView(imageView);
-                x.image().bind(imageView, imagePath);
+                if (imagePath.endsWith(".mp4")) {
+                    Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(imagePath, MediaStore.Video.Thumbnails.MINI_KIND);
+                    imageView.setImageBitmap(bitmap);
+                } else
+                    x.image().bind(imageView, imagePath);
 
                 setTitle("已选图片");
             }
         };
         dialog.show();
-    }
-
-    private void requestNet() {
-        RequestParams params = new RequestParams("http://192.168.0.113:8080/index.jsp");//http://localhost:8080/greeting?name=Kiven
-//            params.addBodyParameter("file", new File(path));
-//            params.addBodyParameter("name", KString.nowDateStr());
-        x.http().post(params, new Callback.CommonCallback<String>() {
-
-            @Override
-            public void onSuccess(String result) {
-                KLog.i("success: " + result);
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-                KLog.i("onError");
-                KLog.e(new Exception(ex));
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-                KLog.i("onCancelled");
-            }
-
-            @Override
-            public void onFinished() {
-                KLog.i("onFinished");
-            }
-        });
     }
 
     class MyAdapter extends BaseAdapter {

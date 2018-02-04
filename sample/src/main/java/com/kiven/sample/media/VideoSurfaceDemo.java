@@ -1,4 +1,4 @@
-package com.kiven.sample;
+package com.kiven.sample.media;
 
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 
 import com.kiven.kutils.activityHelper.KActivityHelper;
 import com.kiven.kutils.activityHelper.KHelperActivity;
+import com.kiven.sample.R;
 
 import java.io.IOException;
 

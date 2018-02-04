@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.kiven.kutils.widget.KNormalItemView
+            android:id="@+id/item_mp4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:onClick="onClick"
+            app:item_title="mp4 播放" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="选择视频或图片" />
+
+        <com.kiven.kutils.widget.KNormalItemView
+            android:id="@+id/item_open_image_picker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:onClick="onClick"
+            app:item_title="调用系统相册选择图片" />
+
+        <com.kiven.kutils.widget.KNormalItemView
+            android:id="@+id/item_open_vidio_picker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:onClick="onClick"
+            app:item_title="调用系统相册选择视频" />
+
+        <com.kiven.kutils.widget.KNormalItemView
+            android:id="@+id/item_open_content_picker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:onClick="onClick"
+            app:item_title="调用文件系统选择视频或图片" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="调用相机" />
+
+
+        <com.kiven.kutils.widget.KNormalItemView
+            android:id="@+id/item_camera_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:onClick="onClick"
+            app:item_title="拍照片（指定文件名）" />
+
+        <com.kiven.kutils.widget.KNormalItemView
+            android:id="@+id/item_camera_video"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:onClick="onClick"
+            app:item_title="拍视频（不指定文件名）" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="媒体文件处理" />
+
+        <com.kiven.kutils.widget.KNormalItemView
+            android:id="@+id/item_crop_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:onClick="onClick"
+            app:item_title="剪切图片" />
+
+    </LinearLayout>
+
+</android.support.v4.widget.NestedScrollView>

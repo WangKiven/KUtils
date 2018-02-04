@@ -29,7 +29,6 @@
         <activity android:name=".ActivityDataBinding"/>
 
         <activity android:name="com.kiven.kutils.activityHelper.KHelperActivity" />
-        <activity android:name="com.kiven.kutils.activityHelper.KRoboHelperActivity" />
         <service android:name=".floatView.ServiceFloat" />
         <activity android:name="com.kiven.kutils.activityHelper.KFragmentActivity" />
 

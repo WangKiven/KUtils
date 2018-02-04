@@ -95,12 +95,12 @@
             app:item_title="拨号"/>
 
         <com.kiven.kutils.widget.KNormalItemView
-            android:id="@+id/item_mp4"
+            android:id="@+id/item_media"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
             android:onClick="onClick"
-            app:item_title="mp4 播放"/>
+            app:item_title="媒体文件处理"/>
 
         <com.kiven.kutils.widget.KNormalItemView
             android:id="@+id/item_float"
@@ -109,22 +109,6 @@
             android:clickable="true"
             android:onClick="onClick"
             app:item_title="悬浮框"/>
-
-        <com.kiven.kutils.widget.KNormalItemView
-            android:id="@+id/item_upload_image"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:onClick="onClick"
-            app:item_title="上传图片"/>
-
-        <com.kiven.kutils.widget.KNormalItemView
-            android:id="@+id/item_take_camera"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:onClick="onClick"
-            app:item_title="拍照"/>
 
         <com.kiven.kutils.widget.KNormalItemView
             android:id="@+id/item_path"

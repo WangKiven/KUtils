@@ -76,7 +76,7 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:onClick="onClick"
-            app:item_title="fragment代理activity"/>
+            app:item_title="fragment代理activity, Animator"/>
 
         <com.kiven.kutils.widget.KNormalItemView
             android:id="@+id/item_setings"

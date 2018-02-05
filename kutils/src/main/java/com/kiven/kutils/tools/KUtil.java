@@ -289,6 +289,11 @@ public class KUtil {
                 callBack);
     }
 
+    public static void addVideo(String path, MediaScannerConnection.OnScanCompletedListener callBack) {
+        MediaScannerConnection.scanFile(KContext.getInstance(), new String[]{path}, new String[]{"video/*"},
+                callBack);
+    }
+
     /**
      * 删除文件或文件夹
      *

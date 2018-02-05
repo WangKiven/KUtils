@@ -84,6 +84,15 @@
             android:onClick="onClick"
             app:item_title="剪切图片" />
 
+        <com.kiven.kutils.widget.KNormalItemView
+            android:id="@+id/item_video_thumb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:onClick="onClick"
+            app:item_title="视频缩略图" />
+
+
     </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>

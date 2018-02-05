@@ -9,26 +9,21 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.media.MediaMetadataRetriever
+import android.media.ThumbnailUtils
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentActivity
 import android.support.v4.content.FileProvider
 import android.view.View
 import android.widget.ImageView
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
-import com.kiven.kutils.tools.KAlertDialogHelper
-import com.kiven.kutils.tools.KGranting
-import com.kiven.kutils.tools.KPath
-import com.kiven.kutils.tools.KToast
+import com.kiven.kutils.tools.*
 import com.kiven.sample.R
 import java.io.File
-import java.util.*
 
 /**
  *
@@ -80,9 +75,12 @@ open class AHMediaList : KActivityHelper() {
                 }
                 mActivity.startActivityForResult(camera, 346)
             }
-            R.id.item_camera_video -> mActivity.startActivityForResult(Intent(MediaStore.ACTION_VIDEO_CAPTURE), 347)
+            R.id.item_camera_video -> mActivity.startActivityForResult(Intent(MediaStore.ACTION_VIDEO_CAPTURE),
+                    347)
             R.id.item_crop_image -> mActivity.startActivityForResult(
                     Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI), 348)
+            R.id.item_video_thumb -> mActivity.startActivityForResult(
+                    Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI), 350)
         }
     }
 
@@ -110,29 +108,35 @@ open class AHMediaList : KActivityHelper() {
                 KLog.i(path)
 
                 if (path.endsWith(".mp4")) {
-                    /*val bitmap = ThumbnailUtils.createVideoThumbnail(path, MediaStore.Video.Thumbnails.MINI_KIND)
-                    showImage(bitmap)*/
-                    try {
-                        val retriever = MediaMetadataRetriever()
-                        retriever.setDataSource(path, HashMap())
-                        val bmp = retriever.getFrameAtTime(0)
-                        if (bmp == null) {
-                            KToast.ToastMessage("获取视频文件缩略图失败")
-                        } else {
-                            showImage(bmp)
-                        }
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                        KLog.e(e)
-                    }
 
+                    val video = VideoSurfaceDemo()
+                    video.putExtra("mp4Path", path)
+                    video.startActivity(mActivity)
                 } else
                     showImage(path)
             }
-            346 -> showImage(cameraPath)
+            346 -> {
+                showImage(cameraPath)
+                KUtil.addPicture(cameraPath, {_,_ ->
+                })
+            }
             347 -> KAlertDialogHelper.Show1BDialog(mActivity, data?.data?.path ?: "路径获取失败")
             348 -> cropImage(KPath.getPath(mActivity, data?.data))
             349 -> showImage(cropPath)
+            350 -> {
+                /*val retriever = MediaMetadataRetriever()
+                retriever.setDataSource(mActivity, data?.data)
+                val bmp = retriever.frameAtTime
+                retriever.release()*/
+
+                val path = KPath.getPath(mActivity, data?.data)
+                val bmp = ThumbnailUtils.createVideoThumbnail(path, MediaStore.Video.Thumbnails.MINI_KIND)
+                if (bmp == null) {
+                    KToast.ToastMessage("获取视频文件缩略图失败")
+                } else {
+                    showImage(bmp)
+                }
+            }
         }
     }
 

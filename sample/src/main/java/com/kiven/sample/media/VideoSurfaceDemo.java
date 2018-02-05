@@ -52,7 +52,10 @@ public class VideoSurfaceDemo extends KActivityHelper implements SurfaceHolder.C
         //        String dataPath = Environment.getExternalStorageDirectory().getPath() + "/Test_Movie.m4v";
         try {
             //            player.setDataSource(dataPath);
-            player.setDataSource(mActivity, Uri.parse("android.resource://" + mActivity.getPackageName() + "/" + R.raw.h));
+            if (getIntent().hasExtra("mp4Path")) {
+                player.setDataSource(getIntent().getStringExtra("mp4Path"));
+            } else
+                player.setDataSource(mActivity, Uri.parse("android.resource://" + mActivity.getPackageName() + "/" + R.raw.h));
             Log.v("Next:::", "surfaceDestroyed called");
         } catch (IllegalArgumentException e) {
             e.printStackTrace();

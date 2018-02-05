@@ -85,8 +85,6 @@ public class LauchActivity extends KXUtilActivity {
 
     private static final String FILEPROVIDER_AUTHORITY = "com.kiven.sample.fileprovider";
     private static final String IMAGE_DIR = "KUtilSample" + File.separator + "testImage";
-    String cameraPath = null;
-    String cropPath = null;
 
     @ViewInject(R.id.iv_test)
     private ImageView iv_test;

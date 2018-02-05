@@ -3,6 +3,14 @@
     <!--<external-path
         name="image"
         path="KUtilSample/testImage"/>-->
-    <external-path path="." name="kutilsample_external_file" />
-    <files-path path="." name="kutilsample_files" />
+    <!--<external-path path="." name="kutilsample_external_file" />
+    <files-path path="." name="kutilsample_files" />-->
+
+
+    <!--<root-path name="root" path="" />-->
+    <files-path name="files" path="." />
+    <cache-path name="cache" path="." />
+    <external-path name="external" path="." />
+    <external-files-path name="externalDir" path="KUtilSampleFile" />
+    <external-cache-path name="externalCache" path="KUtilSampleCache" />
 </paths>

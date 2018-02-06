@@ -90,14 +90,6 @@ public class KGranting {
                         public void onClick(DialogInterface dialog, int which) {
                             ActivityCompat.requestPermissions(mActivity, waitGrant,
                                     requestCode);
-                            /*if (callBack != null) {
-                                callBack.onGrantSuccess(false);
-                            }
-                            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                            intent.setData(Uri.fromParts("package", mActivity.getPackageName(), null));
-                            mActivity.startActivity(intent);
-
-                            granting = null;*/
                         }
                     })
                     .setNegativeButton("取消", new DialogInterface.OnClickListener() {

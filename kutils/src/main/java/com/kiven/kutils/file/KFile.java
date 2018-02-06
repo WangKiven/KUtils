@@ -196,12 +196,14 @@ public class KFile {
                     return "png";
                 case UNKNOWN:
                 default:
-                        return "";
+                    return "";
             }
         }
     }
+
     /**
      * Get the Mime Type from a File
+     *
      * @param fileName 文件名
      * @return 返回MIME类型
      * thx https://www.oschina.net/question/571282_223549
@@ -214,12 +216,13 @@ public class KFile {
 
     /**
      * 根据文件后缀名判断 文件是否是视频文件
+     *
      * @param fileName 文件名
      * @return 是否是视频文件
      */
-    public static boolean isVedioFile(String fileName){
+    public static boolean isVedioFile(String fileName) {
         String mimeType = getMimeType(fileName);
-        if (!TextUtils.isEmpty(fileName)&&mimeType.contains("video/")){
+        if (!TextUtils.isEmpty(fileName) && mimeType.contains("video/")) {
             return true;
         }
         return false;

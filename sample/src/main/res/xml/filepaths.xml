@@ -11,6 +11,6 @@
     <files-path name="files" path="." />
     <cache-path name="cache" path="." />
     <external-path name="external" path="." />
-    <external-files-path name="externalDir" path="KUtilSampleFile" />
-    <external-cache-path name="externalCache" path="KUtilSampleCache" />
+    <external-files-path name="external_files" path="KUtilSampleFile" />
+    <external-cache-path name="external_cache" path="KUtilSampleCache" />
 </paths>

@@ -9,9 +9,8 @@ import android.widget.LinearLayout;
 
 import com.kiven.kutils.R;
 import com.kiven.kutils.activityHelper.KActivityDebugHelper;
-import com.kiven.kutils.activityHelper.KActivityHelper;
-import com.kiven.kutils.logHelper.KShowLog;
 import com.kiven.kutils.logHelper.KLog;
+import com.kiven.kutils.logHelper.KShowLog;
 import com.kiven.kutils.tools.KImage;
 import com.kiven.kutils.tools.KView;
 

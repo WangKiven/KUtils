@@ -4,15 +4,12 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaMetadataRetriever;
-import android.media.MediaScannerConnection;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
@@ -26,7 +23,6 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.content.FileProvider;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AlertDialog;
 import android.telephony.TelephonyManager;
@@ -63,7 +59,6 @@ import com.kiven.kutils.tools.KView;
 import com.kiven.kutils.widget.KNormalItemView;
 import com.kiven.sample.floatView.ActivityHFloatView;
 import com.kiven.sample.media.AHMediaList;
-import com.kiven.sample.media.VideoSurfaceDemo;
 
 import org.xutils.image.ImageOptions;
 import org.xutils.view.annotation.ContentView;
@@ -71,9 +66,6 @@ import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -84,7 +76,7 @@ import me.grantland.widget.AutofitHelper;
 public class LauchActivity extends KXUtilActivity {
 
     private static final String FILEPROVIDER_AUTHORITY = "com.kiven.sample.fileprovider";
-    private static final String IMAGE_DIR = "KUtilSample" + File.separator + "testImage";
+    private static final String IMAGE_DIR = "KUtilSampleFile" + File.separator + "testImage";
 
     @ViewInject(R.id.iv_test)
     private ImageView iv_test;
@@ -101,9 +93,6 @@ public class LauchActivity extends KXUtilActivity {
         setupWindowAnimations();
 
         AutofitHelper.create(et_auto);
-
-        ListView listView = (ListView) findViewById(R.id.listView);
-        listView.setAdapter(new MyAdapter());
 
 
         iv_test.setOnClickListener(new View.OnClickListener() {
@@ -268,6 +257,9 @@ public class LauchActivity extends KXUtilActivity {
                 volley("https://github.com/google/volley");
                 volley("http://blog.csdn.net/linmiansheng/article/details/21646753");
                 break;
+            case R.id.item_helper_test:
+                new ActivityHTestBase().startActivity(this);
+                break;
             default:
                 new ActivityHTestBase().startActivity(this);
                 break;
@@ -348,39 +340,5 @@ public class LauchActivity extends KXUtilActivity {
             }
         };
         dialog.show();
-    }
-
-    class MyAdapter extends BaseAdapter {
-
-        @Override
-        public int getCount() {
-            return 55;
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return "item " + position;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            TextView textView;
-            if (convertView == null) {
-                textView = new TextView(LauchActivity.this);
-                textView.setPadding(20, 20, 20, 20);
-                textView.setBackgroundColor(Color.YELLOW);
-                convertView = textView;
-            } else {
-                textView = (TextView) convertView;
-            }
-
-            textView.setText((String) getItem(position));
-            return convertView;
-        }
     }
 }

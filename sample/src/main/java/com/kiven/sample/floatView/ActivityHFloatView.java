@@ -12,9 +12,9 @@ import com.kiven.sample.R;
 
 /**
  * 悬浮框
- *
+ * <p>
  * 学习文档：TODO http://blog.csdn.net/stevenhu_223/article/details/8504058
- *
+ * <p>
  * Created by kiven on 2016/10/31.
  */
 
@@ -58,6 +58,7 @@ public class ActivityHFloatView extends KActivityHelper {
     }
 
     boolean isShow = false;
+
     public void startAppOutFloat() {
         Intent intent = new Intent(mActivity, ServiceFloat.class);
         if (isShow) {

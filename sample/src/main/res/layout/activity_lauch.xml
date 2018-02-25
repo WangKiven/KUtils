@@ -158,6 +158,14 @@
             android:onClick="onClick"
             app:item_title="volley"/>
 
+        <com.kiven.kutils.widget.KNormalItemView
+            android:id="@+id/item_helper_test"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:onClick="onClick"
+            app:item_title="helper test"/>
+
         <EditText
             android:id="@+id/et_auto"
             android:layout_width="match_parent"
@@ -178,32 +186,10 @@
             android:paddingTop="@dimen/activity_vertical_margin"
             tools:context="com.kiven.sample.LauchActivity">
 
-            <Button
-                android:id="@+id/button1"
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:onClick="onClick"
-                android:text="For BaseActivityHelper"/>
-
-            <Button
-                android:id="@+id/button2"
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/button1"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
-                android:onClick="onClick"
-                android:text="For "/>
-
             <android.support.v7.widget.LinearLayoutCompat
                 android:id="@+id/linearLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/button2"
                 android:layout_marginTop="10dp"
                 android:orientation="vertical">
 
@@ -257,7 +243,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_below="@id/button2"
                 android:layout_marginTop="10dp"
                 android:orientation="vertical">
 
@@ -288,14 +273,7 @@
                     android:text="中华人民共和国万岁"/>
 
             </LinearLayout>
-
-
         </RelativeLayout>
-
-        <android.support.v7.widget.ListViewCompat
-            android:id="@+id/listView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
     </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>

@@ -9,6 +9,7 @@ import com.kiven.kutils.activityHelper.KHelperActivity;
 import com.kiven.kutils.custom.BaseHelper;
 
 /**
+ *
  * Created by kiven on 16/5/6.
  */
 public class ActivityHTestBase extends BaseHelper {

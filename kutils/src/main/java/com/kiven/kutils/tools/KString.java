@@ -665,7 +665,7 @@ public class KString {
      * <p>虚拟运营商：170</p>
      * @return 是否是电话号码
      */
-    public static boolean checkIsPhoneNumber(String num) {
+    public static boolean checkIsPhoneNumber(CharSequence num) {
         if (TextUtils.isEmpty(num)) {
             return false;
         }

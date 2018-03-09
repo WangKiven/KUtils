@@ -53,7 +53,6 @@ class AHCheckRes : KActivityHelper() {
             toolBar.setNavigationOnClickListener { finish() }
         }
 
-
         val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = GridLayoutManager(mActivity, KUtil.getScreenWith(mActivity) / KUtil.dip2px(50f))
         recyclerView.adapter = resAdapter

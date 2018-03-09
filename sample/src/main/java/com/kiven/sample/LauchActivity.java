@@ -136,6 +136,9 @@ public class LauchActivity extends KXUtilActivity {
 
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.item_cpu:
+                new AHCPUMemory().startActivity(this);
+                break;
             case R.id.item_opengl:
 
                 break;

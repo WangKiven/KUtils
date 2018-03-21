@@ -51,6 +51,7 @@ open class AHMediaList : KActivityHelper() {
         super.onClick(view)
         when (view?.id) {
             R.id.item_mp4 -> VideoSurfaceDemo().startActivity(mActivity)
+            R.id.item_gif -> AHGif().startActivity(mActivity)
             R.id.item_open_image_picker -> mActivity.startActivityForResult(
                     Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI), 345)
             R.id.item_open_vidio_picker -> mActivity.startActivityForResult(

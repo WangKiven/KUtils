@@ -70,6 +70,7 @@ dependencies {
     compile project(':xutils')
 
     compile 'com.android.volley:volley:1.1.0'
+    compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.11'
 }
 // 打印过时api调用信息
 /*

@@ -17,6 +17,14 @@
             android:onClick="onClick"
             app:item_title="mp4 播放" />
 
+        <com.kiven.kutils.widget.KNormalItemView
+            android:id="@+id/item_gif"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:onClick="onClick"
+            app:item_title="gif 播放" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

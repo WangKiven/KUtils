@@ -68,6 +68,12 @@ public class KView {
         view.setVisibility(isShow ? View.VISIBLE : View.GONE);
     }
 
+    public static void setVisibility(boolean isShow, View... views) {
+        if (views != null && views.length > 0)
+            for (View view : views)
+                view.setVisibility(isShow ? View.VISIBLE : View.GONE);
+    }
+
     /**
      * 旋转，需api>=11才能实现旋转
      */

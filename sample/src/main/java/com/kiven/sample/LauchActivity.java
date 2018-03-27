@@ -58,6 +58,7 @@ import com.kiven.kutils.tools.KUtil;
 import com.kiven.kutils.tools.KView;
 import com.kiven.kutils.widget.KNormalItemView;
 import com.kiven.sample.floatView.ActivityHFloatView;
+import com.kiven.sample.libs.AHLibs;
 import com.kiven.sample.media.AHMediaList;
 
 import org.xutils.image.ImageOptions;
@@ -136,6 +137,9 @@ public class LauchActivity extends KXUtilActivity {
 
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.item_libs:
+                new AHLibs().startActivity(this);
+                break;
             case R.id.item_cpu:
                 new AHCPUMemory().startActivity(this);
                 break;

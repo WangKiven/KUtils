@@ -41,6 +41,15 @@
             android:layout_height="60dp" />
 
         <com.kiven.kutils.widget.KNormalItemView
+            android:id="@+id/item_libs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:onClick="onClick"
+            app:item_title="Libraries"/>
+
+
+        <com.kiven.kutils.widget.KNormalItemView
             android:id="@+id/item_cpu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

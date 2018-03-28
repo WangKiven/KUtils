@@ -29,18 +29,18 @@ uploadArchives {
 }
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile "com.android.support:appcompat-v7:${parent.ext.libraryVersion}"
-    provided "com.android.support:recyclerview-v7:${parent.ext.libraryVersion}"
+    implementation "com.android.support:appcompat-v7:${parent.ext.libraryVersion}"
+    compileOnly "com.android.support:recyclerview-v7:${parent.ext.libraryVersion}"
 
     // ViewModel and LiveData
-    implementation "android.arch.lifecycle:extensions:1.0.0"
-    annotationProcessor "android.arch.lifecycle:compiler:1.0.0"
+    compileOnly "android.arch.lifecycle:extensions:1.0.0"
+//    annotationProcessor "android.arch.lifecycle:compiler:1.0.0"
 
 //    provided 'org.roboguice:roboguice:3.0.1'
 //    provided 'org.roboguice:roboblender:3.0.1'
-    provided 'com.google.code.gson:gson:2.8.2'
-    provided 'com.google.android:flexbox:0.3.0'
-    provided project(':xutils')
+    compileOnly 'com.google.code.gson:gson:2.8.2'
+    compileOnly 'com.google.android:flexbox:0.3.0'
+    compileOnly project(':xutils')
 }
 apply from: 'jcenerUpload.gradle'
 //apply(from('mavenpush.gradle'))

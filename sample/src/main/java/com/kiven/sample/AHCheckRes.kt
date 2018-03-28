@@ -34,7 +34,7 @@ class AHCheckRes : KActivityHelper() {
 
     private val resAdapter = ResAdapter()
 
-    override fun onCreate(activity: KHelperActivity?, savedInstanceState: Bundle?) {
+    override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
         setContentView(R.layout.ah_check_res)
 
@@ -111,7 +111,7 @@ class AHCheckRes : KActivityHelper() {
     }
 
     inner class ResAdapter : RecyclerView.Adapter<Holder>() {
-        override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): Holder {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
             return Holder(LayoutInflater.from(mActivity).inflate(R.layout.item_res, parent, false))
         }
 

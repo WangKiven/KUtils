@@ -24,7 +24,7 @@ class AHCPUMemory : KActivityHelper() {
         return@Callback true
     })
 
-    override fun onCreate(activity: KHelperActivity?, savedInstanceState: Bundle?) {
+    override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
         setContentView(R.layout.ah_cpu_memory)
 

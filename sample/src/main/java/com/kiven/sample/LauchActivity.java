@@ -137,6 +137,9 @@ public class LauchActivity extends KXUtilActivity {
 
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.btn_small_action:
+                new AHSmallAction().startActivity(this);
+                break;
             case R.id.item_libs:
                 new AHLibs().startActivity(this);
                 break;

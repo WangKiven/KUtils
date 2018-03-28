@@ -33,7 +33,7 @@ open class AHMediaList : KActivityHelper() {
     private val FILEPROVIDER_AUTHORITY = "com.kiven.sample.fileprovider"
     private val IMAGE_DIR = "KUtilSampleFile" + File.separator + "testImage"
 
-    override fun onCreate(activity: KHelperActivity?, savedInstanceState: Bundle?) {
+    override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
         setContentView(R.layout.ah_media_list)
 

@@ -6,8 +6,9 @@
 
     <com.google.android.flexbox.FlexboxLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:flexWrap="wrap">
+        android:layout_height="match_parent"
+        app:flexWrap="wrap"
+        app:alignContent="flex_start">
 
         <TextView
             android:layout_width="match_parent"

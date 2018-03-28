@@ -117,7 +117,7 @@ public class KActivityHelper {
         KView.runUI(mActivity, callBack);
     }
 
-    public void onCreate(KHelperActivity activity, Bundle savedInstanceState) {
+    public void onCreate(@NonNull KHelperActivity activity, Bundle savedInstanceState) {
         mActivity = activity;
         mIntent = activity.getIntent();
     }

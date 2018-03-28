@@ -16,7 +16,7 @@ import java.net.NetworkInterface
  * Created by wangk on 2018/3/27.
  */
 class AHLibs : KActivityHelper() {
-    override fun onCreate(activity: KHelperActivity?, savedInstanceState: Bundle?) {
+    override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
         setContentView(R.layout.ah_libs)
 
@@ -29,7 +29,7 @@ class AHLibs : KActivityHelper() {
         when (view?.id) {
             R.id.btn_aa_get -> {
                 val server = AsyncHttpServer()
-                server.websocket("/live") { webSocket, request ->
+                server.websocket("/live", "my-protocal") { webSocket, request ->
                     webSocket.setClosedCallback {
                         if (it == null) {
                             KToast.ToastMessage("websocket close")
@@ -42,11 +42,14 @@ class AHLibs : KActivityHelper() {
                         KToast.ToastMessage("接收到推送：$it")
                     }
                 }
-                server.listen(5000)
+                server.listen(5001)
             }
             R.id.btn_aa_send -> {
-                AsyncHttpClient.getDefaultInstance().websocket("", "my-protocal") { ex, webSocket ->
-                    webSocket.send("Hello World")
+                AsyncHttpClient.getDefaultInstance().websocket(getIPAddress() + ":5001/live", "my-protocal") { ex, webSocket ->
+                    if (ex == null) {
+                        webSocket.send("Hello World")
+                    } else
+                        KLog.e(ex)
                 }
 
             }

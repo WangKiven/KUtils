@@ -3,6 +3,9 @@ package com.kiven.sample
 import android.app.ActivityManager
 import android.content.Context
 import android.os.Bundle
+import android.support.animation.DynamicAnimation
+import android.support.animation.SpringAnimation
+import android.support.animation.SpringForce
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -14,6 +17,7 @@ import com.jaredrummler.android.processes.AndroidProcesses
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
+import com.kiven.sample.anim.AHAnim
 
 /**
  * Created by wangk on 2018/3/28.
@@ -27,14 +31,14 @@ class AHSmallAction : KActivityHelper() {
 
         setContentView(flexboxLayout)
 
-        val addTitle = fun (text:String){
+        val addTitle = fun(text: String) {
             val tv = TextView(activity)
             tv.text = text
             tv.layoutParams = ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.MATCH_PARENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT)
             flexboxLayout.addView(tv)
         }
 
-        val addView = fun(text:String, click:View.OnClickListener) {
+        val addView = fun(text: String, click: View.OnClickListener) {
             val btn = Button(activity)
             btn.text = text
             btn.setOnClickListener(click)
@@ -67,10 +71,13 @@ class AHSmallAction : KActivityHelper() {
             method.invoke(am, "com.jeeinc.save.worry")*/
         })
         // TODO: 2018/3/28 ----------------------------------------------------------
-        addTitle("qita")
+        addTitle("其他")
 
-        addView("杀死一个进程杀死一个进程杀死一个进程", View.OnClickListener {  })
-        addView("杀死一个进程杀死一个进程杀死一个进程", View.OnClickListener {  })
-        addView("杀死一个进程杀死一个进程杀死一个进程", View.OnClickListener {  })
+        // https://developer.android.google.cn/guide/topics/graphics/spring-animation.html
+        addView("Animations", View.OnClickListener {
+            AHAnim().startActivity(mActivity)
+        })
+        addView("杀死一个进程杀死一个进程杀死一个进程", View.OnClickListener { })
+        addView("杀死一个进程杀死一个进程杀死一个进程", View.OnClickListener { })
     }
 }

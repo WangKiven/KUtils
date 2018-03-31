@@ -3,6 +3,7 @@
     package="com.kiven.sample">
 
     <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.SET_WALLPAPER" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
@@ -33,6 +34,18 @@
 
         <activity android:name="com.kiven.kutils.activityHelper.KHelperActivity" />
         <service android:name=".floatView.ServiceFloat" />
+        <service
+            android:name=".service.LiveWallpaper"
+            android:icon="@mipmap/ic_launcher"
+            android:enabled="true"
+            android:label="KPaper"
+            android:permission="android.permission.BIND_WALLPAPE">
+            <intent-filter>
+                <action android:name="android.service.wallpaper.WallpaperService"/>
+            </intent-filter>
+            <meta-data android:name="android.service.wallpaper" android:resource="@xml/my_wallpaper"/>
+        </service>
+
         <activity android:name="com.kiven.kutils.activityHelper.KFragmentActivity" />
 
         <provider

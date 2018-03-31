@@ -1,7 +1,12 @@
 package com.kiven.sample
 
 import android.app.ActivityManager
+import android.app.WallpaperManager
 import android.content.Context
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.os.Build
 import android.os.Bundle
 import android.support.animation.DynamicAnimation
 import android.support.animation.SpringAnimation
@@ -18,6 +23,7 @@ import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.sample.anim.AHAnim
+import com.kiven.sample.service.LiveWallpaper
 
 /**
  * Created by wangk on 2018/3/28.
@@ -70,6 +76,25 @@ class AHSmallAction : KActivityHelper() {
             /*val method = am::class.java.getMethod("forceStopPackage", String::class.java)
             method.invoke(am, "com.jeeinc.save.worry")*/
         })
+        // TODO: 2018/3/31 ----------------------------------------------------------
+        addTitle("壁纸锁屏")
+        addView("静态壁纸锁屏", View.OnClickListener {
+            val wallPaperManager = WallpaperManager.getInstance(mActivity)
+
+            // FLAG_LOCK 设置锁屏，FLAG_SYSTEM 设置壁纸
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                wallPaperManager.setResource(R.mipmap.fish, WallpaperManager.FLAG_LOCK)
+            } else {
+                // 7.0以下，似乎只能设置壁纸。7.0及之后，这个方法似乎同时设置壁纸和锁屏
+                wallPaperManager.setResource(R.mipmap.fish)
+            }
+        })
+
+        addView("动态壁纸", View.OnClickListener {
+            val intent = Intent(mActivity, LiveWallpaper::class.java)
+            mActivity.startService(intent)
+        })
+
         // TODO: 2018/3/28 ----------------------------------------------------------
         addTitle("其他")
 
@@ -77,7 +102,6 @@ class AHSmallAction : KActivityHelper() {
         addView("Animations", View.OnClickListener {
             AHAnim().startActivity(mActivity)
         })
-        addView("杀死一个进程杀死一个进程杀死一个进程", View.OnClickListener { })
         addView("杀死一个进程杀死一个进程杀死一个进程", View.OnClickListener { })
     }
 }

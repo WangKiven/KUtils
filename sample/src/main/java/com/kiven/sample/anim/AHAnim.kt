@@ -1,7 +1,9 @@
 package com.kiven.sample.anim
 
+import android.graphics.drawable.AnimatedVectorDrawable
 import android.os.Bundle
 import android.support.animation.DynamicAnimation
+import android.support.animation.FlingAnimation
 import android.support.animation.SpringAnimation
 import android.support.animation.SpringForce
 import android.util.TypedValue
@@ -30,11 +32,12 @@ class AHAnim : KActivityHelper() {
             flexboxLayout.addView(tv)
         }
 
-        val addView = fun(text: String, click: View.OnClickListener) {
+        val addView = fun(text: String, click: View.OnClickListener?):Button {
             val btn = Button(activity)
             btn.text = text
             btn.setOnClickListener(click)
             flexboxLayout.addView(btn)
+            return btn
         }
 
         // TODO: 2018/3/30 ----------------------------------------------------------
@@ -59,6 +62,26 @@ class AHAnim : KActivityHelper() {
             SpringAnimation(iv_2, SpringAnimation.TRANSLATION_X, -100f).setStartValue(0f).start()
             anim2.start()
             anim1.start()
+        })
+
+        addView("Fling(滑动) Animation", View.OnClickListener {
+            val fling = FlingAnimation(iv_1, FlingAnimation.TRANSLATION_Y)
+            fling.setStartVelocity(300f)// 初始速度
+                    .setMinValue(0f)// translationY 最小值
+                    .setMaxValue(500f)// translationY 最大值
+                    .setFriction(0.2f)// 摩擦系数
+                    .setMinimumVisibleChange(FlingAnimation.MIN_VISIBLE_CHANGE_SCALE)// 设置最小可见变化, 越小检索效果越明显
+                    .start()
+        })
+
+        // TODO: 2018/3/31 ----------------------------------------------------------
+
+        addTitle("Animate Drawable Graphics")
+        // 文档：https://developer.android.google.cn/guide/topics/graphics/drawable-animation.html
+
+        addView("贞动画", null).isEnabled = false
+        addView("AnimatedVectorDrawable", View.OnClickListener {
+
         })
     }
 }

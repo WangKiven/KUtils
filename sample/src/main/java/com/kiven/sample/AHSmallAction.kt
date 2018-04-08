@@ -77,6 +77,8 @@ class AHSmallAction : KActivityHelper() {
             method.invoke(am, "com.jeeinc.save.worry")*/
         })
         // TODO: 2018/3/31 ----------------------------------------------------------
+        // Android锁屏实现与总结: https://www.jianshu.com/p/6c3a6b0f145e
+
         addTitle("壁纸锁屏")
         addView("静态壁纸锁屏", View.OnClickListener {
             val wallPaperManager = WallpaperManager.getInstance(mActivity)

@@ -3,6 +3,7 @@
 
     <string name="text_test"><![CDATA[<font color="#23ade4" size="36">%1$d</font>条即将被批量报价，总共消耗宝豆<font color="#23ade4">%2$d</font>]]></string>
     <string name="paper_name">KPaper</string>
+    <string name="paper_name2">KPaper2</string>
     <array name="resource_where">
         <item>系统文件</item>
         <item>app文件</item>

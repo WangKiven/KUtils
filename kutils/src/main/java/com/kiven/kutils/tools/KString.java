@@ -4,9 +4,11 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.res.XmlResourceParser;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -773,6 +775,9 @@ public class KString {
         } else {
             return Html.fromHtml(source);
         }
+    }
+    public static Spanned fromHtml(Context context, @StringRes int sourceId) {
+        return fromHtml(context.getString(sourceId));
     }
 
     /**

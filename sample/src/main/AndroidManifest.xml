@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.CALL_PHONE"/>
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
+    <uses-permission android:name="android.permission.BIND_WALLPAPER" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
@@ -13,6 +14,7 @@
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES"/>
     <uses-permission android:name="android.permission.FORCE_BACK"
         tools:ignore="ProtectedPermissions" />
+    <uses-feature android:name="android.software.live_wallpaper" />
 
     <application
         android:name=".AppContext"
@@ -39,6 +41,17 @@
             android:icon="@mipmap/ic_launcher"
             android:enabled="true"
             android:label="@string/paper_name"
+            android:permission="android.permission.BIND_WALLPAPE">
+            <intent-filter>
+                <action android:name="android.service.wallpaper.WallpaperService"/>
+            </intent-filter>
+            <meta-data android:name="android.service.wallpaper" android:resource="@xml/my_wallpaper"/>
+        </service>
+        <service
+            android:name=".service.LiveWallpaper2"
+            android:icon="@mipmap/ic_launcher"
+            android:enabled="true"
+            android:label="@string/paper_name2"
             android:permission="android.permission.BIND_WALLPAPE">
             <intent-filter>
                 <action android:name="android.service.wallpaper.WallpaperService"/>

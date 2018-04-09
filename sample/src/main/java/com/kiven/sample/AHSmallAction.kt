@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.support.animation.DynamicAnimation
 import android.support.animation.SpringAnimation
 import android.support.animation.SpringForce
+import android.support.design.widget.Snackbar
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -22,8 +23,10 @@ import com.jaredrummler.android.processes.AndroidProcesses
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
+import com.kiven.kutils.tools.KGranting
 import com.kiven.sample.anim.AHAnim
 import com.kiven.sample.service.LiveWallpaper
+import com.kiven.sample.service.LiveWallpaper2
 import com.kiven.sample.util.WallpaperUtil
 
 /**
@@ -87,16 +90,20 @@ class AHSmallAction : KActivityHelper() {
             // FLAG_LOCK 设置锁屏，FLAG_SYSTEM 设置壁纸
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 wallPaperManager.setResource(R.mipmap.fish, WallpaperManager.FLAG_LOCK)
+                Snackbar.make(flexboxLayout, "设置锁屏", Snackbar.LENGTH_LONG).show()
             } else {
                 // 7.0以下，似乎只能设置壁纸。7.0及之后，这个方法似乎同时设置壁纸和锁屏
                 wallPaperManager.setResource(R.mipmap.fish)
+                Snackbar.make(flexboxLayout, "设置壁纸和锁屏", Snackbar.LENGTH_LONG).show()
             }
         })
 
+        // 没有系统权限，用不了
         addView("动态壁纸", View.OnClickListener {
-//            val intent = Intent(mActivity, LiveWallpaper::class.java)
-//            mActivity.startService(intent)
-            WallpaperUtil.setLiveWallpaper(mActivity, 322)
+            Snackbar.make(flexboxLayout, "没有系统权限，用不了", Snackbar.LENGTH_LONG).show()
+            val intent = Intent(mActivity, LiveWallpaper2::class.java)
+            mActivity.startService(intent)
+//            WallpaperUtil.setLiveWallpaper(mActivity, 322)
         })
 
         // TODO: 2018/3/28 ----------------------------------------------------------
@@ -107,5 +114,10 @@ class AHSmallAction : KActivityHelper() {
             AHAnim().startActivity(mActivity)
         })
         addView("杀死一个进程杀死一个进程杀死一个进程", View.OnClickListener { })
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        KGranting.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 }

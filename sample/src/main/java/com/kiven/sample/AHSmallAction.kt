@@ -24,6 +24,7 @@ import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.sample.anim.AHAnim
 import com.kiven.sample.service.LiveWallpaper
+import com.kiven.sample.util.WallpaperUtil
 
 /**
  * Created by wangk on 2018/3/28.
@@ -93,8 +94,9 @@ class AHSmallAction : KActivityHelper() {
         })
 
         addView("动态壁纸", View.OnClickListener {
-            val intent = Intent(mActivity, LiveWallpaper::class.java)
-            mActivity.startService(intent)
+//            val intent = Intent(mActivity, LiveWallpaper::class.java)
+//            mActivity.startService(intent)
+            WallpaperUtil.setLiveWallpaper(mActivity, 322)
         })
 
         // TODO: 2018/3/28 ----------------------------------------------------------

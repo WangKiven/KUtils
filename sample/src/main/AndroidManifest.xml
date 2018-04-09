@@ -38,7 +38,7 @@
             android:name=".service.LiveWallpaper"
             android:icon="@mipmap/ic_launcher"
             android:enabled="true"
-            android:label="KPaper"
+            android:label="@string/paper_name"
             android:permission="android.permission.BIND_WALLPAPE">
             <intent-filter>
                 <action android:name="android.service.wallpaper.WallpaperService"/>

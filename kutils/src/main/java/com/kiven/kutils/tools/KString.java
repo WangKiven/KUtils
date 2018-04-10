@@ -779,6 +779,9 @@ public class KString {
     public static Spanned fromHtml(Context context, @StringRes int sourceId) {
         return fromHtml(context.getString(sourceId));
     }
+    public static Spanned fromHtml(@StringRes int sourceId) {
+        return fromHtml(KContext.getInstance().getString(sourceId));
+    }
 
     /**
      * 比较两个实数

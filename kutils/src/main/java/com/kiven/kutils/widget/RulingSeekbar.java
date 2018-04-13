@@ -136,6 +136,9 @@ public class RulingSeekbar extends View {
                 if (Math.abs(binX - event.getX()) > barHeigth * 3) {
                     return false;
                 }
+                // 阻止父控件获得触摸操作，拦截触摸事件，防止与ViewPager等控件发生手势冲突
+                getParent().requestDisallowInterceptTouchEvent(true);
+
                 firstPostionX = event.getX();
                 startPosion = binX;
 

@@ -110,7 +110,7 @@ class AHSmallAction : KActivityHelper() {
         addTitle("其他")
 
         // https://developer.android.google.cn/guide/topics/graphics/spring-animation.html
-        addView("Animations", View.OnClickListener {
+        addView("动画", View.OnClickListener {
             AHAnim().startActivity(mActivity)
         })
         addView("杀死一个进程杀死一个进程杀死一个进程", View.OnClickListener { })

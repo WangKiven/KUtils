@@ -83,16 +83,24 @@ public class RulingSeekbar extends View {
         this.max = max;
 
         if (onChange != null) {
-            onChange.onProgressChanged(this, position2Value(binX), false);
+            progress = position2Value(binX);
+            onChange.onProgressChanged(this, progress, false);
         }
         invalidate();
     }
 
+    /**
+     * 当前进度
+     */
+    private int progress = 0;
+
     public int getProgress() {
-        return position2Value(binX);
+//        return position2Value(binX);
+        return progress;
     }
 
     public void setProgress(int progress) {
+        this.progress = progress;
         binX = value2Position(progress);
         invalidate();
     }
@@ -156,7 +164,8 @@ public class RulingSeekbar extends View {
                 }
                 invalidate();
                 if (onChange != null) {
-                    onChange.onProgressChanged(this, position2Value(binX), true);
+                    progress = position2Value(binX);
+                    onChange.onProgressChanged(this, progress, true);
                 }
                 break;
             case MotionEvent.ACTION_CANCEL:
@@ -191,6 +200,7 @@ public class RulingSeekbar extends View {
         barNodeRadius = barHeigth * 0.9f;
 
         // 当前值的位置
+        binX = value2Position(progress);
         if (binX < barLeft) {
             binX = barLeft;
         } else if (binX > barRight) {
@@ -297,7 +307,7 @@ public class RulingSeekbar extends View {
         // 绘制当前值
         paint.setColor(curValueColor);
         paint.setTextSize(curValueTextSize);
-        String text = getShow(position2Value(binX));
+        String text = getShow(progress);
         float textWidth = paint.measureText(text);
         float px = binX - textWidth / 2;
         if (px < 0) {

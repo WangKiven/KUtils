@@ -72,7 +72,7 @@ public class RulingSeekbar extends View {
         addNode(70, 2, true);
         addNode(77, 1, true);
         addNode(85, 1, false);
-        addNode(90, 2, true);*/
+        addNode(90, 2, true); */
     }
 
     public void setScale(int min, int max) {

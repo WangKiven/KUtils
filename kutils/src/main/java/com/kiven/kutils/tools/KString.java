@@ -833,4 +833,22 @@ public class KString {
 
         return sb;
     }
+
+    /**
+     * 空格补齐字符串,注：两个空格占一个字位
+     * @param a 补齐到多少位
+     */
+    public static String polishing(String s, int a) {
+        if (a < 1) return "";
+
+        StringBuilder sb = new StringBuilder(a);
+        for (int i=0; i<a;i++) {
+            if (i < s.length()) {
+                sb.append(s.charAt(i));
+            } else {
+                sb.append("  ");
+            }
+        }
+        return sb.toString();
+    }
 }

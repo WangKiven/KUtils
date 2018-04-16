@@ -30,6 +30,10 @@ public abstract class BaseRecyclerViewAdapter<T extends BaseRecyclerViewHolder, 
     public BaseRecyclerViewAdapter() {
     }
 
+    public void setOnItemClickListener( OnItemClickListener<T> itemClickListener){
+        this.itemClickListener = itemClickListener;
+    }
+
     @Override
     public final T onCreateViewHolder(ViewGroup parent, int viewType) {
 

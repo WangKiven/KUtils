@@ -150,6 +150,12 @@ public class KGranting {
     public static void requestPermissions(@NonNull Activity activity, int requestCode, @NonNull String tGrant, @NonNull String tGrantName, GrantingCallBack callBack) {
         requestPermissions(activity, requestCode, new String[]{tGrant}, new String[]{tGrantName}, callBack);
     }
+    private static boolean isShowCustomTip=false;
+
+    public static void requestPermissionsCustomTip(@NonNull Activity activity, int requestCode, @NonNull String tGrant, @NonNull String tGrantName, boolean isShow,GrantingCallBack callBack) {
+        isShowCustomTip=isShow;
+        requestPermissions(activity, requestCode, new String[]{tGrant}, new String[]{tGrantName}, callBack);
+    }
 
 
     public static final String STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE;
@@ -195,33 +201,37 @@ public class KGranting {
                     granting.callBack.onGrantSuccess(true);
                 granting = null;
             } else {
-                String message = "您未全部授权相关权限，您可以在设置中打开相关权限。";
+                if (isShowCustomTip){
+                    granting.callBack.onGrantSuccess(false);
+                }else {
+                    String message = "您未全部授权相关权限，您可以在设置中打开相关权限。";
 
-                new AlertDialog.Builder(granting.mActivity)
-                        .setMessage(message)
-                        .setPositiveButton("前去设置", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                if (granting.callBack != null)
-                                    granting.callBack.onGrantSuccess(false);
-                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                intent.setData(Uri.fromParts("package", granting.mActivity.getPackageName(), null));
-                                granting.mActivity.startActivity(intent);
+                    new AlertDialog.Builder(granting.mActivity)
+                            .setMessage(message)
+                            .setPositiveButton("前去设置", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if (granting.callBack != null)
+                                        granting.callBack.onGrantSuccess(false);
+                                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                    intent.setData(Uri.fromParts("package", granting.mActivity.getPackageName(), null));
+                                    granting.mActivity.startActivity(intent);
 
-                                granting = null;
-                            }
-                        })
-                        .setNegativeButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                if (granting.callBack != null)
-                                    granting.callBack.onGrantSuccess(false);
-                                granting = null;
-                            }
-                        })
-                        .setCancelable(false)
-                        .create()
-                        .show();
+                                    granting = null;
+                                }
+                            })
+                            .setNegativeButton("确定", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    if (granting.callBack != null)
+                                        granting.callBack.onGrantSuccess(false);
+                                    granting = null;
+                                }
+                            })
+                            .setCancelable(false)
+                            .create()
+                            .show();
+                }
             }
         } else {
             granting = null;

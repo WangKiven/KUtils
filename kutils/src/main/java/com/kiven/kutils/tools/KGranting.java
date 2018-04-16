@@ -31,9 +31,16 @@ public class KGranting {
     private List<String> grantName;// 授权名称
     private GrantingCallBack callBack;
 
+    // 是否显示权限申请失败提示
+    private boolean isShowErrorTip = true;
+
     private KGranting(@NonNull Activity activity, int requestCode, @NonNull String[] tGrant, @NonNull String[] tGrantName, GrantingCallBack callBack) {
+        this(activity, requestCode, tGrant, tGrantName, true, callBack);
+    }
+    private KGranting(@NonNull Activity activity, int requestCode, @NonNull String[] tGrant, @NonNull String[] tGrantName, boolean isShowErrorTip, GrantingCallBack callBack) {
         mActivity = activity;
         this.requestCode = requestCode;
+        this.isShowErrorTip = isShowErrorTip;
         this.callBack = callBack;
 
         // 获取待授权list, 已授权的权限就不再重新请求授权
@@ -132,9 +139,9 @@ public class KGranting {
     /**
      * 请求多个授权
      */
-    public static void requestPermissions(@NonNull Activity activity, int requestCode, @NonNull String[] tGrant, @NonNull String[] tGrantName, GrantingCallBack callBack) {
+    public static void requestPermissions(@NonNull Activity activity, int requestCode, @NonNull String[] tGrant, @NonNull String[] tGrantName, boolean isShowErrorTip, GrantingCallBack callBack) {
         if (granting == null) {
-            granting = new KGranting(activity, requestCode, tGrant, tGrantName, callBack);
+            granting = new KGranting(activity, requestCode, tGrant, tGrantName, isShowErrorTip, callBack);
             granting.startCheck();
         } else {
             granting = null;
@@ -143,17 +150,14 @@ public class KGranting {
             }
         }
     }
+    public static void requestPermissions(@NonNull Activity activity, int requestCode, @NonNull String[] tGrant, @NonNull String[] tGrantName, GrantingCallBack callBack) {
+        requestPermissions(activity, requestCode, tGrant, tGrantName, true, callBack);
+    }
 
     /**
      * 请求单个授权
      */
     public static void requestPermissions(@NonNull Activity activity, int requestCode, @NonNull String tGrant, @NonNull String tGrantName, GrantingCallBack callBack) {
-        requestPermissions(activity, requestCode, new String[]{tGrant}, new String[]{tGrantName}, callBack);
-    }
-    private static boolean isShowCustomTip=false;
-
-    public static void requestPermissionsCustomTip(@NonNull Activity activity, int requestCode, @NonNull String tGrant, @NonNull String tGrantName, boolean isShow,GrantingCallBack callBack) {
-        isShowCustomTip=isShow;
         requestPermissions(activity, requestCode, new String[]{tGrant}, new String[]{tGrantName}, callBack);
     }
 
@@ -201,9 +205,9 @@ public class KGranting {
                     granting.callBack.onGrantSuccess(true);
                 granting = null;
             } else {
-                if (isShowCustomTip){
+                if (!granting.isShowErrorTip) {
                     granting.callBack.onGrantSuccess(false);
-                }else {
+                } else {
                     String message = "您未全部授权相关权限，您可以在设置中打开相关权限。";
 
                     new AlertDialog.Builder(granting.mActivity)

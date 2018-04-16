@@ -207,6 +207,7 @@ public class KGranting {
             } else {
                 if (!granting.isShowErrorTip) {
                     granting.callBack.onGrantSuccess(false);
+                    granting = null;
                 } else {
                     String message = "您未全部授权相关权限，您可以在设置中打开相关权限。";
 

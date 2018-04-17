@@ -3,32 +3,69 @@
     android:name="robot"
     android:width="24dp"
     android:height="24dp"
-    android:viewportHeight="48.0"
-    android:viewportWidth="48.0"
     android:alpha="0.6"
-    android:autoMirrored="true">
+    android:autoMirrored="true"
+    android:viewportHeight="24.0"
+    android:viewportWidth="24.0">
     <path
         android:name="robot_bg"
-        android:fillColor="#981234"
-        android:fillAlpha="0.7"
+        android:pathData="M0,0 L24,0 24,24 0,24 z"
         android:strokeColor="#f5eb23"
-        android:strokeWidth="0.2"
-        android:pathData="M0,0 L24,0 24,24 0,24 z" />
-    <path
-        android:fillColor="#4d8f67"
-        android:name="robot_path"
-        android:pathData="M6,18c0,0.55 0.45,1 1,1h1v3.5c0,0.83 0.67,1.5 1.5,1.5s1.5,-0.67 1.5,-1.5L11,19h2v3.5c0,0.83 0.67,1.5 1.5,1.5s1.5,-0.67 1.5,-1.5L16,19h1c0.55,0 1,-0.45 1,-1L18,8L6,8v10zM3.5,8C2.67,8 2,8.67 2,9.5v7c0,0.83 0.67,1.5 1.5,1.5S5,17.33 5,16.5v-7C5,8.67 4.33,8 3.5,8zM20.5,8c-0.83,0 -1.5,0.67 -1.5,1.5v7c0,0.83 0.67,1.5 1.5,1.5s1.5,-0.67 1.5,-1.5v-7c0,-0.83 -0.67,-1.5 -1.5,-1.5zM15.53,2.16l1.3,-1.3c0.2,-0.2 0.2,-0.51 0,-0.71 -0.2,-0.2 -0.51,-0.2 -0.71,0l-1.48,1.48C13.85,1.23 12.95,1 12,1c-0.96,0 -1.86,0.23 -2.66,0.63L7.85,0.15c-0.2,-0.2 -0.51,-0.2 -0.71,0 -0.2,0.2 -0.2,0.51 0,0.71l1.31,1.31C6.97,3.26 6,5.01 6,7h12c0,-1.99 -0.97,-3.75 -2.47,-4.84zM10,5L9,5L9,4h1v1zM15,5h-1L14,4h1v1z" >
+        android:strokeWidth="0.2">
         <aapt:attr name="android:fillColor">
             <gradient
                 android:endColor="#009944"
+                android:endX="12"
+                android:endY="16"
                 android:startColor="#b9b202"
-                android:startX="50"
-                android:endX="50"
-                android:startY="1"
-                android:endY="99"
+                android:startX="12"
+                android:startY="8"
                 android:type="linear">
+                <item
+                    android:color="#b99b5b"
+                    android:offset="0.1" />
+                <item
+                    android:color="#39bdcc"
+                    android:offset="0.5" />
+                <item
+                    android:color="#9b3e00"
+                    android:offset="1" />
             </gradient>
         </aapt:attr>
     </path>
+
+    <group
+        android:name="robot_group"
+        android:pivotX="12"
+        android:pivotY="12"
+        android:rotation="0">
+        <path
+            android:name="robot_path"
+            android:pathData="M6,18c0,0.55 0.45,1 1,1h1v3.5c0,0.83 0.67,1.5 1.5,1.5s1.5,-0.67 1.5,-1.5L11,19h2v3.5c0,0.83 0.67,1.5 1.5,1.5s1.5,-0.67 1.5,-1.5L16,19h1c0.55,0 1,-0.45 1,-1L18,8L6,8v10zM3.5,8C2.67,8 2,8.67 2,9.5v7c0,0.83 0.67,1.5 1.5,1.5S5,17.33 5,16.5v-7C5,8.67 4.33,8 3.5,8zM20.5,8c-0.83,0 -1.5,0.67 -1.5,1.5v7c0,0.83 0.67,1.5 1.5,1.5s1.5,-0.67 1.5,-1.5v-7c0,-0.83 -0.67,-1.5 -1.5,-1.5zM15.53,2.16l1.3,-1.3c0.2,-0.2 0.2,-0.51 0,-0.71 -0.2,-0.2 -0.51,-0.2 -0.71,0l-1.48,1.48C13.85,1.23 12.95,1 12,1c-0.96,0 -1.86,0.23 -2.66,0.63L7.85,0.15c-0.2,-0.2 -0.51,-0.2 -0.71,0 -0.2,0.2 -0.2,0.51 0,0.71l1.31,1.31C6.97,3.26 6,5.01 6,7h12c0,-1.99 -0.97,-3.75 -2.47,-4.84zM10,5L9,5L9,4h1v1zM15,5h-1L14,4h1v1z">
+            <aapt:attr name="android:fillColor">
+                <gradient
+                    android:centerX="24"
+                    android:centerY="24"
+                    android:type="sweep">
+                    <item
+                        android:color="#f70000"
+                        android:offset="0.0" />
+                    <item
+                        android:color="#1a06f5"
+                        android:offset="0.25" />
+                    <item
+                        android:color="#c108f9"
+                        android:offset="0.5" />
+                    <item
+                        android:color="#009944"
+                        android:offset="0.75" />
+                    <item
+                        android:color="#f70000"
+                        android:offset="1.0" />
+                </gradient>
+            </aapt:attr>
+        </path>
+
+    </group>
 
 </vector>

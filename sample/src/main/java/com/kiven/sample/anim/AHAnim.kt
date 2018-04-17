@@ -2,7 +2,6 @@ package com.kiven.sample.anim
 
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.os.Bundle
-import android.support.animation.DynamicAnimation
 import android.support.animation.FlingAnimation
 import android.support.animation.SpringAnimation
 import android.support.animation.SpringForce
@@ -32,9 +31,10 @@ class AHAnim : KActivityHelper() {
             flexboxLayout.addView(tv)
         }
 
-        val addView = fun(text: String, click: View.OnClickListener?):Button {
+        val addView = fun(text: String, click: View.OnClickListener?): Button {
             val btn = Button(activity)
             btn.text = text
+            btn.text
             btn.setOnClickListener(click)
             flexboxLayout.addView(btn)
             return btn
@@ -79,8 +79,54 @@ class AHAnim : KActivityHelper() {
         addTitle("Animate Drawable Graphics")
         // 文档：https://developer.android.google.cn/guide/topics/graphics/drawable-animation.html
 
-        addView("贞动画", null).isEnabled = false
-        addView("AnimatedVectorDrawable", View.OnClickListener {
+        addView("贞动画", null).isEnabled = false// animation-list
+        addView("vectorAnim_move", View.OnClickListener {
+            (iv_1.drawable as AnimatedVectorDrawable).start()
+        })
+        addView("vectorAnim_draw_path", View.OnClickListener {
+            iv_2.setImageResource(R.drawable.anim_draw_path)
+            (iv_2.drawable as AnimatedVectorDrawable).start()
+        })
+        addView("vectorAnim_path_to_path", View.OnClickListener {
+            iv_2.setImageResource(R.drawable.anim_path_to_path)
+            (iv_2.drawable as AnimatedVectorDrawable).start()
+        })
+        addView("vectorAnim_selector", object : View.OnClickListener {
+            var i = 0
+            override fun onClick(v: View) {
+                when (i % 3) {
+                /*0-> iv_2.setImageResource(R.drawable.anim_selector)
+                1 -> iv_2.setImageState(intArrayOf(android.R.attr.state_checked), true)
+                2 -> iv_2.setImageState(intArrayOf(), true)*/
+                    0 -> iv_2.setImageResource(R.drawable.anim_selector)
+                    1 -> iv_2.isEnabled = false
+                    2 -> iv_2.isEnabled = true
+                }
+                i++
+            }
+        })
+        // TODO: 2018/4/17 ----------------------------------------------------------
+        addTitle("Auto Animate Layout Updates, 默认添加删除view动画, xml添加：android:animateLayoutChanges=\"true\"")
+
+        addView("to do", object :View.OnClickListener {
+            var btn:Button? = null
+            override fun onClick(v: View?) {
+                if (btn == null) {
+                    btn = addView("new button", null)
+                } else {
+                    flexboxLayout.removeView(btn)
+                    btn = null
+                }
+            }
+
+        })
+
+        addView("change text", object :View.OnClickListener {
+            var i = 0
+            override fun onClick(v: View?) {
+                (v as Button).text = "change text $i"
+                i++
+            }
 
         })
     }

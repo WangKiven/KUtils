@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/state_on"
+        android:state_enabled="true">
+        <shape android:shape="rectangle">
+            <corners android:radius="5dp" />
+            <solid android:color="#345234" />
+        </shape>
+    </item>
+    <item
+        android:id="@+id/state_off"
+        android:state_enabled="false">
+        <shape android:shape="rectangle">
+            <corners android:radius="5dp" />
+            <solid android:color="#98907a" />
+        </shape>
+    </item>
+    <transition
+        android:fromId="@id/state_on"
+        android:toId="@id/state_off">
+        <animation-list>
+            <item android:duration="30">
+                <shape android:shape="rectangle">
+                    <corners android:radius="5dp" />
+                    <solid android:color="#665234" />
+                </shape>
+            </item>
+            <item android:duration="30">
+                <shape android:shape="rectangle">
+                    <corners android:radius="15dp" />
+                    <solid android:color="#985234" />
+                </shape>
+            </item>
+            <item android:duration="30">
+                <shape android:shape="rectangle">
+                    <corners android:radius="20dp" />
+                    <solid android:color="#987534" />
+                </shape>
+            </item>
+            <item android:duration="30">
+                <shape android:shape="rectangle">
+                    <corners android:radius="15dp" />
+                    <solid android:color="#989034" />
+                </shape>
+            </item>
+            <item android:duration="30">
+                <shape android:shape="rectangle">
+                    <corners android:radius="5dp" />
+                    <solid android:color="#989058" />
+                </shape>
+            </item>
+            <item android:duration="30">
+                <shape android:shape="rectangle">
+                    <corners android:radius="5dp" />
+                    <solid android:color="#98907a" />
+                </shape>
+            </item>
+        </animation-list>
+    </transition>
+    <transition
+        android:fromId="@id/state_off"
+        android:toId="@id/state_on">
+        <animation-list>
+            <item android:duration="30">
+                <shape android:shape="rectangle">
+                    <corners android:radius="5dp" />
+                    <solid android:color="#98907a" />
+                </shape>
+            </item>
+            <item android:duration="30">
+                <shape android:shape="rectangle">
+                    <corners android:radius="5dp" />
+                    <solid android:color="#989058" />
+                </shape>
+            </item>
+            <item android:duration="30">
+                <shape android:shape="rectangle">
+                    <corners android:radius="15dp" />
+                    <solid android:color="#989034" />
+                </shape>
+            </item>
+            <item android:duration="30">
+                <shape android:shape="rectangle">
+                    <corners android:radius="20dp" />
+                    <solid android:color="#987534" />
+                </shape>
+            </item>
+            <item android:duration="30">
+                <shape android:shape="rectangle">
+                    <corners android:radius="15dp" />
+                    <solid android:color="#985234" />
+                </shape>
+            </item>
+            <item android:duration="30">
+                <shape android:shape="rectangle">
+                    <corners android:radius="5dp" />
+                    <solid android:color="#665234" />
+                </shape>
+            </item>
+        </animation-list>
+    </transition>
+</animated-selector>

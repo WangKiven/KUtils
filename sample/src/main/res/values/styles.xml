@@ -17,6 +17,9 @@
 
         <!--<item name="android:colorButtonNormal">#57dfa2</item>-->
         <item name="android:shadowColor">#dae676</item>
+
+        <!-- Button 取消强制大写 -->
+        <item name="android:textAllCaps">false</item>
     </style>
 
     <style name="Dialog.Nobackground" parent="AlertDialog.AppCompat.Light">

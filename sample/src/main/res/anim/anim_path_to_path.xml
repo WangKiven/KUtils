@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <objectAnimator xmlns:android="http://schemas.android.com/apk/res/android"
+        android:duration="1000"
+        android:repeatMode="reverse"
+        android:repeatCount="10000"
+        android:propertyName="pathData"
+        android:valueType="pathType"
+        android:valueFrom="M0,0 L24,0 24,24 0,24 z"
+        android:valueTo="M0,0 L24,0 12,24 12,24 z" />
+</set>

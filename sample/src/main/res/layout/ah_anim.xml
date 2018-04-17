@@ -1,26 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
+
     <com.google.android.flexbox.FlexboxLayout
         android:id="@+id/flex"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:flexWrap="wrap"
-        app:alignContent="flex_start"/>
+        android:animateLayoutChanges="true"
+        app:alignContent="flex_start"
+        app:flexWrap="wrap" />
 
-    <ImageView
+    <android.support.v7.widget.AppCompatImageView
         android:id="@+id/iv_1"
-        android:layout_width="wrap_content"
-        android:src="@drawable/ic_loading_rotate"
-        android:layout_height="wrap_content" />
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:srcCompat="@drawable/anim_robot"
+        android:scaleType="fitXY" />
 
     <ImageView
         android:id="@+id/iv_2"
-        android:layout_width="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:src="@drawable/ic_loading_rotate"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_height="wrap_content" />
+        android:scaleType="fitXY"/>
 
 </android.support.constraint.ConstraintLayout>

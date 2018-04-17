@@ -1,0 +1,6 @@
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/img_anim_1">
+    <target
+        android:animation="@anim/anim_move_down_500"
+        android:name="robot_group"/>
+</animated-vector>

@@ -166,3 +166,6 @@ public static final int *;
 -keep class com.tencent.open.PKDialog {*;}
 -keep class com.tencent.open.PKDialog$*
 -keep class com.tencent.open.PKDialog$* {*;}
+
+# 讯飞
+-keep class com.iflytek.**{*;}

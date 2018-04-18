@@ -1,6 +1,8 @@
 package com.kiven.sample
 
 import android.content.Context
+import com.iflytek.cloud.SpeechConstant
+import com.iflytek.cloud.SpeechUtility
 
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KContext

@@ -29,6 +29,7 @@ uploadArchives {
 }
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+
     implementation "com.android.support:appcompat-v7:${parent.ext.libraryVersion}"
     compileOnly "com.android.support:recyclerview-v7:${parent.ext.libraryVersion}"
 

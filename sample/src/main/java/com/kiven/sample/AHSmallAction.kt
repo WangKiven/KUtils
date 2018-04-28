@@ -8,7 +8,6 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.Snackbar
-import android.text.TextUtils
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -22,7 +21,6 @@ import com.jaredrummler.android.processes.AndroidProcesses
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
-import com.kiven.kutils.tools.KAlertDialogHelper
 import com.kiven.kutils.tools.KGranting
 import com.kiven.sample.anim.AHAnim
 import com.kiven.sample.service.LiveWallpaper2
@@ -135,7 +133,7 @@ class AHSmallAction : KActivityHelper() {
      * 初始讯飞
      * http://doc.xfyun.cn/msc_android/%E9%A2%84%E5%A4%87%E5%B7%A5%E4%BD%9C.html
      */
-    private fun getXunfei():SpeechRecognizer {
+    private fun getXunfei(): SpeechRecognizer {
         SpeechUtility.createUtility(mActivity, SpeechConstant.APPID + "=5a15147f")
 
         val mAsr = SpeechRecognizer.createRecognizer(mActivity, { code ->
@@ -153,13 +151,13 @@ class AHSmallAction : KActivityHelper() {
         mAsr.setParameter(SpeechConstant.ENGINE_TYPE, SpeechConstant.TYPE_CLOUD)
         mAsr.setParameter(SpeechConstant.TEXT_ENCODING, "utf-8")
 
-        val dia = RecognizerDialog(mActivity, {code ->
+        /*val dia = RecognizerDialog(mActivity, { code ->
             KLog.i("SpeechRecognizer init() code = $code")
             if (code != ErrorCode.SUCCESS) {
                 showTip("初始化失败,错误码：$code")
             }
         })
-        dia.show()
+        dia.show()*/
 
         return mAsr
     }
@@ -229,6 +227,7 @@ class AHSmallAction : KActivityHelper() {
     private fun printTransResult(results: RecognizerResult) {
         KLog.d("结果t：${results.resultString}")
     }
+
     private fun printResult(results: RecognizerResult) {
         KLog.d("结果：${results.resultString}")
     }

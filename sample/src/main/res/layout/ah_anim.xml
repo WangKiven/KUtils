@@ -4,27 +4,32 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.google.android.flexbox.FlexboxLayout
-        android:id="@+id/flex"
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:animateLayoutChanges="true"
-        app:alignContent="flex_start"
-        app:flexWrap="wrap" />
+        android:layout_height="match_parent">
+
+        <com.google.android.flexbox.FlexboxLayout
+            android:id="@+id/flex"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            app:alignContent="flex_start"
+            app:flexWrap="wrap" />
+    </android.support.v4.widget.NestedScrollView>
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/iv_1"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        app:srcCompat="@drawable/anim_robot"
-        android:scaleType="fitXY" />
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/anim_robot" />
 
     <ImageView
         android:id="@+id/iv_2"
         android:layout_width="60dp"
         android:layout_height="60dp"
+        android:scaleType="fitXY"
         android:src="@drawable/ic_loading_rotate"
-        app:layout_constraintRight_toRightOf="parent"
-        android:scaleType="fitXY"/>
+        app:layout_constraintRight_toRightOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

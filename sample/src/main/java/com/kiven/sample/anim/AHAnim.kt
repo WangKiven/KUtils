@@ -1,13 +1,19 @@
 package com.kiven.sample.anim
 
+import android.animation.*
+import android.graphics.Color
 import android.graphics.drawable.AnimatedVectorDrawable
+import android.os.Build
 import android.os.Bundle
 import android.support.animation.FlingAnimation
 import android.support.animation.SpringAnimation
 import android.support.animation.SpringForce
+import android.support.design.widget.Snackbar
 import android.util.TypedValue
 import android.view.View
+import android.view.ViewAnimationUtils
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -80,17 +86,20 @@ class AHAnim : KActivityHelper() {
         // 文档：https://developer.android.google.cn/guide/topics/graphics/drawable-animation.html
 
         addView("贞动画", null).isEnabled = false// animation-list
-        addView("vectorAnim_move", View.OnClickListener {
-            (iv_1.drawable as AnimatedVectorDrawable).start()
-        })
-        addView("vectorAnim_draw_path", View.OnClickListener {
-            iv_2.setImageResource(R.drawable.anim_draw_path)
-            (iv_2.drawable as AnimatedVectorDrawable).start()
-        })
-        addView("vectorAnim_path_to_path", View.OnClickListener {
-            iv_2.setImageResource(R.drawable.anim_path_to_path)
-            (iv_2.drawable as AnimatedVectorDrawable).start()
-        })
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            addView("vectorAnim_move", View.OnClickListener {
+                (iv_1.drawable as AnimatedVectorDrawable).start()
+            })
+            addView("vectorAnim_draw_path", View.OnClickListener {
+                iv_2.setImageResource(R.drawable.anim_draw_path)
+                (iv_2.drawable as AnimatedVectorDrawable).start()
+            })
+            addView("vectorAnim_path_to_path", View.OnClickListener {
+                iv_2.setImageResource(R.drawable.anim_path_to_path)
+                (iv_2.drawable as AnimatedVectorDrawable).start()
+            })
+        }
         addView("vectorAnim_selector", object : View.OnClickListener {
             var i = 0
             override fun onClick(v: View) {
@@ -108,8 +117,8 @@ class AHAnim : KActivityHelper() {
         // TODO: 2018/4/17 ----------------------------------------------------------
         addTitle("Auto Animate Layout Updates, 默认添加删除view动画, xml添加：android:animateLayoutChanges=\"true\"")
 
-        addView("to do", object :View.OnClickListener {
-            var btn:Button? = null
+        addView("to do", object : View.OnClickListener {
+            var btn: Button? = null
             override fun onClick(v: View?) {
                 if (btn == null) {
                     btn = addView("new button", null)
@@ -118,10 +127,9 @@ class AHAnim : KActivityHelper() {
                     btn = null
                 }
             }
-
         })
 
-        addView("change text", object :View.OnClickListener {
+        addView("change text", object : View.OnClickListener {
             var i = 0
             override fun onClick(v: View?) {
                 (v as Button).text = "change text $i"
@@ -129,5 +137,130 @@ class AHAnim : KActivityHelper() {
             }
 
         })
+
+        // TODO: 2018/4/26 ----------------------------------------------------------
+        addTitle("属性动画（ValueAnimator，ObjectAnimator，AnimatorSet）")
+        // doc 简单理解: https://blog.csdn.net/harvic880925/article/details/50525521
+        // doc ObjectAnimator使用: https://blog.csdn.net/feiduclear_up/article/details/45915377
+        addView("ValueAnimator.ofInt", View.OnClickListener {
+            val animator = ValueAnimator.ofInt(0, 100)
+            animator.addUpdateListener {
+                val value = it.animatedValue as Int
+                iv_2.layout(value, value, value + 200, value + 200)
+            }
+            animator.start()
+        })
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            addView("ValueAnimator.ofArgb", View.OnClickListener { cv ->
+                val animator = ValueAnimator.ofArgb(Color.YELLOW, Color.parseColor("#789876"), Color.DKGRAY)
+                animator.duration = 2500
+                animator.addUpdateListener {
+                    val value = it.animatedValue as Int
+                    (cv as Button).setTextColor(value)
+                }
+                animator.start()
+            })
+        }
+        addView("ArgbEvaluator", View.OnClickListener { cv ->
+            val animator = ValueAnimator.ofInt(Color.parseColor("#ffff00ff"),
+                    Color.parseColor("#78ab34"), Color.parseColor("#980d34"))
+            animator.duration = 2500
+            animator.setEvaluator(ArgbEvaluator())// 没有这行，会出现闪动效果
+            animator.addUpdateListener {
+                val value = it.animatedValue as Int
+                (cv as Button).setTextColor(value)
+            }
+            animator.start()
+        })
+        addView("ValueAnimator.ofObject", View.OnClickListener { cv ->
+            class RunObj(val a: Int, val b: Int)
+            class RunType : TypeEvaluator<RunObj> {
+                override fun evaluate(fraction: Float, startValue: RunObj, endValue: RunObj): RunObj {
+                    val a = startValue.a + (endValue.a - startValue.a) * fraction
+                    val b = startValue.b + (endValue.b - startValue.b) * fraction
+                    return RunObj(a.toInt(), b.toInt())
+                }
+            }
+
+            val animator = ValueAnimator.ofObject(RunType(), RunObj(0, 0), RunObj(100, 700))
+            animator.duration = 2500
+            animator.addUpdateListener {
+                val value = it.animatedValue as RunObj
+                iv_1.x = value.a.toFloat()
+                iv_1.y = value.b.toFloat()
+            }
+            animator.start()
+        })
+        addView("ObjectAnimator.ofFloat", View.OnClickListener { cv ->
+            val animator = ObjectAnimator.ofFloat(cv, "alpha", 1.0f, 0.3f, 1.0f)
+            animator.duration = 2500
+            animator.start()
+        })
+        addView("组合属性动画", View.OnClickListener { cv ->
+            val animator = ObjectAnimator.ofFloat(cv, "alpha", 1.0f, 0.0f, 1.0f)
+            val ani2 = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                ObjectAnimator.ofArgb(cv, "textColor", Color.DKGRAY, Color.CYAN, Color.YELLOW)
+            } else {
+                ObjectAnimator.ofFloat(cv, "textScaleX", 1f, 1.2f, 0.7f, 1f)
+            }
+
+            val set = AnimatorSet()
+            set.play(animator).with(ani2)
+            set.duration = 2500
+            set.start()
+        })
+        addView("插值器(Interpolator)", View.OnClickListener { cv ->
+            val animator = ObjectAnimator.ofFloat(iv_1, "y", 0f, 300f)
+            animator.interpolator = AccelerateDecelerateInterpolator()
+            animator.duration = 1000
+            animator.start()
+        })
+
+        // TODO: 2018/4/26 ----------------------------------------------------------
+        addTitle("属性动画2（PropertyValuesHolder, ViewPropertyAnimator）")
+        addView("Keyframe", View.OnClickListener { cv ->
+            val kf1 = Keyframe.ofFloat(0f, 1.0f)
+            val kf2 = Keyframe.ofFloat(0.3f, 0.4f)
+            val kf3 = Keyframe.ofFloat(0.6f, 0.1f)
+            val kf4 = Keyframe.ofFloat(0.8f, 0.8f)
+            val kf5 = Keyframe.ofFloat(1f, 1f)
+            val animator = ObjectAnimator.ofPropertyValuesHolder(cv, PropertyValuesHolder.ofKeyframe("alpha", kf1, kf2, kf3, kf4, kf5))
+            animator.duration = 2500
+            animator.start()
+        })
+        addView("ViewPropertyAnimator", View.OnClickListener { cv ->
+            val animator = cv.animate()
+            animator.alpha(if (cv.alpha < 1f) 1f else 0.5f)
+            animator.duration = 2500
+            animator.start()
+        })
+        // TODO: 2018/4/27 ----------------------------------------------------------
+        addTitle("揭露动画")
+        addView("hide", View.OnClickListener {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                val anim = ViewAnimationUtils.createCircularReveal(iv_2, 50, 50
+                        , Math.hypot(50.0, 50.0).toFloat(), 0f)
+                anim.addListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator?) {
+                        iv_2.visibility = View.GONE
+                    }
+                })
+                anim.start()
+            } else {
+                Snackbar.make(flexboxLayout, "api < 21", Snackbar.LENGTH_LONG).show()
+            }
+        })
+        addView("show", View.OnClickListener {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                val anim = ViewAnimationUtils.createCircularReveal(iv_2, 50, 50
+                        , 0f, Math.hypot(50.0, 50.0).toFloat())
+
+                iv_2.visibility = View.VISIBLE
+                anim.start()
+            } else {
+                Snackbar.make(flexboxLayout, "api < 21", Snackbar.LENGTH_LONG).show()
+            }
+        })
+
     }
 }

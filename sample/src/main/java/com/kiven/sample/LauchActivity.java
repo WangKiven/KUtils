@@ -7,7 +7,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaMetadataRetriever;
 import android.media.ThumbnailUtils;
@@ -32,11 +31,8 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,6 +54,7 @@ import com.kiven.kutils.tools.KUtil;
 import com.kiven.kutils.tools.KView;
 import com.kiven.kutils.widget.KNormalItemView;
 import com.kiven.sample.floatView.ActivityHFloatView;
+import com.kiven.sample.gl.AHGL;
 import com.kiven.sample.libs.AHLibs;
 import com.kiven.sample.media.AHMediaList;
 
@@ -147,7 +144,7 @@ public class LauchActivity extends KXUtilActivity {
                 new AHCPUMemory().startActivity(this);
                 break;
             case R.id.item_opengl:
-
+                new AHGL().startActivity(this);
                 break;
             case R.id.item_live_data:
                 Handler handler = new Handler(new Handler.Callback() {

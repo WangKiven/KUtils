@@ -9,12 +9,15 @@ import android.support.animation.FlingAnimation
 import android.support.animation.SpringAnimation
 import android.support.animation.SpringForce
 import android.support.design.widget.Snackbar
+import android.support.transition.*
 import android.util.TypedValue
 import android.view.View
+import android.view.View.OnClickListener
 import android.view.ViewAnimationUtils
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import com.google.android.flexbox.FlexboxLayout
@@ -37,7 +40,7 @@ class AHAnim : KActivityHelper() {
             flexboxLayout.addView(tv)
         }
 
-        val addView = fun(text: String, click: View.OnClickListener?): Button {
+        val addView = fun(text: String, click: OnClickListener?): Button {
             val btn = Button(activity)
             btn.text = text
             btn.text
@@ -50,7 +53,7 @@ class AHAnim : KActivityHelper() {
         addTitle("Physics-based motion")
 
         // https://developer.android.google.cn/guide/topics/graphics/spring-animation.html
-        addView("spring(弹簧) animation", View.OnClickListener {
+        addView("spring(弹簧) animation", OnClickListener {
             // dp -> px
             val ps = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 14f, resources.displayMetrics)
 
@@ -70,7 +73,7 @@ class AHAnim : KActivityHelper() {
             anim1.start()
         })
 
-        addView("Fling(滑动) Animation", View.OnClickListener {
+        addView("Fling(滑动) Animation", OnClickListener {
             val fling = FlingAnimation(iv_1, FlingAnimation.TRANSLATION_Y)
             fling.setStartVelocity(300f)// 初始速度
                     .setMinValue(0f)// translationY 最小值
@@ -88,19 +91,19 @@ class AHAnim : KActivityHelper() {
         addView("贞动画", null).isEnabled = false// animation-list
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            addView("vectorAnim_move", View.OnClickListener {
+            addView("vectorAnim_move", OnClickListener {
                 (iv_1.drawable as AnimatedVectorDrawable).start()
             })
-            addView("vectorAnim_draw_path", View.OnClickListener {
+            addView("vectorAnim_draw_path", OnClickListener {
                 iv_2.setImageResource(R.drawable.anim_draw_path)
                 (iv_2.drawable as AnimatedVectorDrawable).start()
             })
-            addView("vectorAnim_path_to_path", View.OnClickListener {
+            addView("vectorAnim_path_to_path", OnClickListener {
                 iv_2.setImageResource(R.drawable.anim_path_to_path)
                 (iv_2.drawable as AnimatedVectorDrawable).start()
             })
         }
-        addView("vectorAnim_selector", object : View.OnClickListener {
+        addView("vectorAnim_selector", object : OnClickListener {
             var i = 0
             override fun onClick(v: View) {
                 when (i % 3) {
@@ -117,7 +120,7 @@ class AHAnim : KActivityHelper() {
         // TODO: 2018/4/17 ----------------------------------------------------------
         addTitle("Auto Animate Layout Updates, 默认添加删除view动画, xml添加：android:animateLayoutChanges=\"true\"")
 
-        addView("to do", object : View.OnClickListener {
+        addView("to do", object : OnClickListener {
             var btn: Button? = null
             override fun onClick(v: View?) {
                 if (btn == null) {
@@ -129,7 +132,7 @@ class AHAnim : KActivityHelper() {
             }
         })
 
-        addView("change text", object : View.OnClickListener {
+        addView("change text", object : OnClickListener {
             var i = 0
             override fun onClick(v: View?) {
                 (v as Button).text = "change text $i"
@@ -142,7 +145,7 @@ class AHAnim : KActivityHelper() {
         addTitle("属性动画（ValueAnimator，ObjectAnimator，AnimatorSet）")
         // doc 简单理解: https://blog.csdn.net/harvic880925/article/details/50525521
         // doc ObjectAnimator使用: https://blog.csdn.net/feiduclear_up/article/details/45915377
-        addView("ValueAnimator.ofInt", View.OnClickListener {
+        addView("ValueAnimator.ofInt", OnClickListener {
             val animator = ValueAnimator.ofInt(0, 100)
             animator.addUpdateListener {
                 val value = it.animatedValue as Int
@@ -151,7 +154,7 @@ class AHAnim : KActivityHelper() {
             animator.start()
         })
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            addView("ValueAnimator.ofArgb", View.OnClickListener { cv ->
+            addView("ValueAnimator.ofArgb", OnClickListener { cv ->
                 val animator = ValueAnimator.ofArgb(Color.YELLOW, Color.parseColor("#789876"), Color.DKGRAY)
                 animator.duration = 2500
                 animator.addUpdateListener {
@@ -161,7 +164,7 @@ class AHAnim : KActivityHelper() {
                 animator.start()
             })
         }
-        addView("ArgbEvaluator", View.OnClickListener { cv ->
+        addView("ArgbEvaluator", OnClickListener { cv ->
             val animator = ValueAnimator.ofInt(Color.parseColor("#ffff00ff"),
                     Color.parseColor("#78ab34"), Color.parseColor("#980d34"))
             animator.duration = 2500
@@ -172,7 +175,7 @@ class AHAnim : KActivityHelper() {
             }
             animator.start()
         })
-        addView("ValueAnimator.ofObject", View.OnClickListener { cv ->
+        addView("ValueAnimator.ofObject", OnClickListener { cv ->
             class RunObj(val a: Int, val b: Int)
             class RunType : TypeEvaluator<RunObj> {
                 override fun evaluate(fraction: Float, startValue: RunObj, endValue: RunObj): RunObj {
@@ -191,12 +194,12 @@ class AHAnim : KActivityHelper() {
             }
             animator.start()
         })
-        addView("ObjectAnimator.ofFloat", View.OnClickListener { cv ->
+        addView("ObjectAnimator.ofFloat", OnClickListener { cv ->
             val animator = ObjectAnimator.ofFloat(cv, "alpha", 1.0f, 0.3f, 1.0f)
             animator.duration = 2500
             animator.start()
         })
-        addView("组合属性动画", View.OnClickListener { cv ->
+        addView("组合属性动画", OnClickListener { cv ->
             val animator = ObjectAnimator.ofFloat(cv, "alpha", 1.0f, 0.0f, 1.0f)
             val ani2 = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 ObjectAnimator.ofArgb(cv, "textColor", Color.DKGRAY, Color.CYAN, Color.YELLOW)
@@ -209,7 +212,7 @@ class AHAnim : KActivityHelper() {
             set.duration = 2500
             set.start()
         })
-        addView("插值器(Interpolator)", View.OnClickListener { cv ->
+        addView("插值器(Interpolator)", OnClickListener { cv ->
             val animator = ObjectAnimator.ofFloat(iv_1, "y", 0f, 300f)
             animator.interpolator = AccelerateDecelerateInterpolator()
             animator.duration = 1000
@@ -218,17 +221,17 @@ class AHAnim : KActivityHelper() {
 
         // TODO: 2018/4/26 ----------------------------------------------------------
         addTitle("属性动画2（PropertyValuesHolder, ViewPropertyAnimator）")
-        addView("Keyframe", View.OnClickListener { cv ->
+        addView("Keyframe", OnClickListener { cv ->
             val kf1 = Keyframe.ofFloat(0f, 1.0f)
             val kf2 = Keyframe.ofFloat(0.3f, 0.4f)
             val kf3 = Keyframe.ofFloat(0.6f, 0.1f)
             val kf4 = Keyframe.ofFloat(0.8f, 0.8f)
             val kf5 = Keyframe.ofFloat(1f, 1f)
-            val animator = ObjectAnimator.ofPropertyValuesHolder(cv, PropertyValuesHolder.ofKeyframe("alpha", kf1, kf2, kf3, kf4, kf5))
+            val animator = ObjectAnimator.ofPropertyValuesHolder(cv, PropertyValuesHolder.ofKeyframe(View.ALPHA, kf1, kf2, kf3, kf4, kf5))
             animator.duration = 2500
             animator.start()
         })
-        addView("ViewPropertyAnimator", View.OnClickListener { cv ->
+        addView("ViewPropertyAnimator", OnClickListener { cv ->
             val animator = cv.animate()
             animator.alpha(if (cv.alpha < 1f) 1f else 0.5f)
             animator.duration = 2500
@@ -236,7 +239,7 @@ class AHAnim : KActivityHelper() {
         })
         // TODO: 2018/4/27 ----------------------------------------------------------
         addTitle("揭露动画")
-        addView("hide", View.OnClickListener {
+        addView("hide", OnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 val anim = ViewAnimationUtils.createCircularReveal(iv_2, 50, 50
                         , Math.hypot(50.0, 50.0).toFloat(), 0f)
@@ -250,7 +253,7 @@ class AHAnim : KActivityHelper() {
                 Snackbar.make(flexboxLayout, "api < 21", Snackbar.LENGTH_LONG).show()
             }
         })
-        addView("show", View.OnClickListener {
+        addView("show", OnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 val anim = ViewAnimationUtils.createCircularReveal(iv_2, 50, 50
                         , 0f, Math.hypot(50.0, 50.0).toFloat())
@@ -261,6 +264,29 @@ class AHAnim : KActivityHelper() {
                 Snackbar.make(flexboxLayout, "api < 21", Snackbar.LENGTH_LONG).show()
             }
         })
+        // TODO: 2018/4/28 ----------------------------------------------------------
+        addTitle("布局切换动画（AutoTransition，Fade，Slide，Explode，ChangeBounds...）")
 
+        // https://developer.android.google.cn/training/transitions/
+        addView("start", object : OnClickListener {
+            var i = 0
+            override fun onClick(v: View?) {
+                val mSceneRoot = findViewById<FrameLayout>(R.id.fl_transition)
+                if (i % 2 == 0) {
+                    val startScene = Scene.getSceneForLayout(mSceneRoot, R.layout.ah_anim_area1, mActivity)
+                    TransitionManager.go(startScene, Explode())
+                } else {
+                    val endScene = Scene.getSceneForLayout(mSceneRoot, R.layout.ah_anim_area2, mActivity)
+//                    TransitionManager.go(endScene, AutoTransition())
+//                    TransitionManager.go(endScene)
+                    TransitionManager.go(endScene, Slide())
+                }
+                i++
+            }
+        })
+
+        addView("Activity动画", OnClickListener {
+            Snackbar.make(flexboxLayout, "查看链接：https://developer.android.google.cn/training/transitions/start-activity#java", Snackbar.LENGTH_LONG).show()
+        })
     }
 }

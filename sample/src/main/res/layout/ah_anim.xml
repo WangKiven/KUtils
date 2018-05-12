@@ -32,4 +32,11 @@
         android:src="@drawable/ic_loading_rotate"
         app:layout_constraintRight_toRightOf="parent" />
 
+
+    <FrameLayout
+        android:id="@+id/fl_transition"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:layout_constraintRight_toRightOf="parent" />
+
 </android.support.constraint.ConstraintLayout>

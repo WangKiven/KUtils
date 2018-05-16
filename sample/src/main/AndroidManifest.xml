@@ -60,7 +60,11 @@
         </activity>
         <activity android:name=".ActivityDataBinding"/>
 
-        <activity android:name="com.kiven.kutils.activityHelper.KHelperActivity" />
+        <activity android:name="com.kiven.kutils.activityHelper.KHelperActivity" >
+            <intent-filter>
+                <category android:name="guidebee.intent.category.opengl.SAMPLE_CODE"/>
+            </intent-filter>
+        </activity>
         <service android:name=".floatView.ServiceFloat" />
         <service
             android:name=".service.LiveWallpaper"

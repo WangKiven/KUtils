@@ -18,10 +18,11 @@ import javax.microedition.khronos.opengles.GL10
  * Created by wangk on 2018/5/12.
  */
 class AHGL : KActivityHelper() {
-    private val surfaceView: GLSurfaceView by lazy { CameraGLSurfaceView(mActivity) }
+    private lateinit var surfaceView: GLSurfaceView
 
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
+        surfaceView = CameraGLSurfaceView(mActivity)
         setContentView(surfaceView)
     }
 
@@ -45,7 +46,7 @@ class AHGL : KActivityHelper() {
             // 设置渲染的模式，
             // RENDERMODE_WHEN_DIRTY：只有在调用 requestRender() 在更新屏幕，
             // RENDERMODE_CONTINUOUSLY：连续不断的更新屏幕
-            renderMode = RENDERMODE_WHEN_DIRTY
+            renderMode = RENDERMODE_CONTINUOUSLY
         }
 
         // SurfaceTexture.OnFrameAvailableListener
@@ -71,16 +72,18 @@ class AHGL : KActivityHelper() {
         }
 
         override fun onSurfaceChanged(gl: GL10, width: Int, height: Int) {
-            // Sets the current view port to the new size.
+            // Sets the current view port to the new size. 定义显示视窗的大小和位置
             gl.glViewport(0, 0, width, height)
-            // Select the projection matrix
+            // Select the projection matrix, 设置当前 Matrix 模式为 Projection 投影矩阵
             gl.glMatrixMode(GL10.GL_PROJECTION)
             // Reset the projection matrix
             gl.glLoadIdentity()
+
             // Calculate the aspect ratio of the window
             GLU.gluPerspective(gl, 45.0f,
                     width.toFloat() / height.toFloat(),
                     0.1f, 100.0f)
+
             // Select the modelview matrix
             gl.glMatrixMode(GL10.GL_MODELVIEW)
             // Reset the modelview matrix
@@ -88,9 +91,10 @@ class AHGL : KActivityHelper() {
         }
 
         var vertexArray = floatArrayOf(
-                -0.8f, -0.4f * 1.732f, 0.0f,
-                0.8f, -0.4f * 1.732f, 0.0f,
-                0.0f, 0.4f * 1.732f, 0.0f)
+                -0.3f, -0.3f, 0.0f,
+                0.3f, -0.3f, 0.0f,
+                0.0f, 0.3f, 0.0f)
+        private var angle = 0f
 
         override fun onDrawFrame(gl: GL10) {
             gl.glClearColor(1.0f, 1.0f, 1.0f, 0.0f)
@@ -105,28 +109,32 @@ class AHGL : KActivityHelper() {
 
             gl.glPointSize(20f)
             gl.glLineWidth(4f)
-            gl.glLoadIdentity()
-            gl.glTranslatef(0f, 0f, -4f)
+            gl.glLoadIdentity()// 将当前矩阵回复最初的无变换的矩阵
+
+            gl.glRotatef(angle, 0f, 0.1f, 1f)// 旋转
+            gl.glTranslatef(0.3f, 0.3f, -20f)
 
             gl.glEnableClientState(GL10.GL_VERTEX_ARRAY)// 开启管道
 
-            gl.glColor4f(1.0f, 0.0f, 0.0f, 1.0f)
+            // 放入顶点
             gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertex)
+
+            // 顶点红色显示
+            gl.glColor4f(1.0f, 0.0f, 0.0f, 1.0f)
             gl.glDrawArrays(GL10.GL_POINTS, 0, 3)
-//            gl.glDisableClientState(GL10.GL_VERTEX_ARRAY)
 
-
+            // 顶点绿色连续
             gl.glColor4f(0.0f, 1.0f, 0.0f, 1.0f)
-//            gl.glEnableClientState(GL10.GL_VERTEX_ARRAY)
-//            gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertex)
             gl.glDrawArrays(GL10.GL_LINE_LOOP, 0, 3)
 
-
+            // 顶点组成蓝色三角形
             gl.glColor4f(0.0f, 0.0f, 1.0f, 0.1f)
             gl.glDrawArrays(GL10.GL_TRIANGLES, 0, 3)
 
 
             gl.glDisableClientState(GL10.GL_VERTEX_ARRAY)// 关闭管道
+
+            angle += 1f
 
         }
     }

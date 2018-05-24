@@ -67,18 +67,18 @@ class AHGL : KActivityHelper() {
         // GLSurfaceView.Renderer
         override fun onSurfaceCreated(gl: GL10, config: EGLConfig?) {
             // Set the background color to black ( rgba ).
-            gl.glClearColor(0.0f, 0.0f, 0.0f, 0.5f);
+            gl.glClearColor(0.0f, 0.0f, 0.0f, 0.5f)
             // Enable Smooth Shading, default not really needed.
-            gl.glShadeModel(GL10.GL_SMOOTH);
+            gl.glShadeModel(GL10.GL_SMOOTH)
             // Depth buffer setup.
-            gl.glClearDepthf(1.0f);
+            gl.glClearDepthf(1.0f)
             // Enables depth testing.
-            gl.glEnable(GL10.GL_DEPTH_TEST);
+            gl.glEnable(GL10.GL_DEPTH_TEST)
             // The type of depth testing to do.
-            gl.glDepthFunc(GL10.GL_LEQUAL);
+            gl.glDepthFunc(GL10.GL_LEQUAL)
             // Really nice perspective calculations.
             gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT,
-                    GL10.GL_NICEST);
+                    GL10.GL_NICEST)
         }
 
         override fun onSurfaceChanged(gl: GL10, width: Int, height: Int) {

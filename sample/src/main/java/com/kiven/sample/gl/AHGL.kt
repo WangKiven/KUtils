@@ -17,10 +17,13 @@ import java.nio.FloatBuffer
 import android.opengl.GLES10.glLoadIdentity
 import android.opengl.GLES10.glLightf
 import android.opengl.GLES10.glMaterialf
-
-
-
-
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
+import com.google.android.flexbox.AlignContent
+import com.google.android.flexbox.FlexWrap
+import com.google.android.flexbox.FlexboxLayout
 
 
 /**
@@ -32,18 +35,55 @@ class AHGL : KActivityHelper() {
 
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
-        surfaceView = CameraGLSurfaceView(mActivity)
-        setContentView(surfaceView)
+//        surfaceView = CameraGLSurfaceView(mActivity)
+//        setContentView(surfaceView)
+
+        val flexboxLayout = FlexboxLayout(activity)
+        flexboxLayout.flexWrap = FlexWrap.WRAP
+        flexboxLayout.alignContent = AlignContent.FLEX_START
+
+        setContentView(flexboxLayout)
+
+        val addTitle = fun(text: String) {
+            val tv = TextView(activity)
+            tv.text = text
+            tv.layoutParams = ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.MATCH_PARENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT)
+            flexboxLayout.addView(tv)
+        }
+
+        val addView = fun(text: String, click: View.OnClickListener) {
+            val btn = Button(activity)
+            btn.text = text
+            btn.setOnClickListener(click)
+            flexboxLayout.addView(btn)
+        }
+
+        addTitle("OpenGL sample")
+        addView("简单图形", View.OnClickListener {
+            AHGLSample().startActivity(mActivity)
+        })
+        addView("光照面", View.OnClickListener {
+            AHGLLightFace().startActivity(mActivity)
+        })
+        addView("光照球", View.OnClickListener {
+            AHGLLight().startActivity(mActivity)
+        })
+        addView("", View.OnClickListener {
+
+        })
+        addView("", View.OnClickListener {
+
+        })
     }
 
     override fun onResume() {
         super.onResume()
-        surfaceView.onResume()
+//        surfaceView.onResume()
     }
 
     override fun onPause() {
         super.onPause()
-        surfaceView.onPause()
+//        surfaceView.onPause()
     }
 
     class CameraGLSurfaceView(context: Context) : GLSurfaceView(context), GLSurfaceView.Renderer, SurfaceTexture.OnFrameAvailableListener {

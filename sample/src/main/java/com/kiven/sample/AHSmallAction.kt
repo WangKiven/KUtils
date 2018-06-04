@@ -1,6 +1,7 @@
 package com.kiven.sample
 
 import android.Manifest
+import android.app.Activity
 import android.app.ActivityManager
 import android.app.WallpaperManager
 import android.content.Context
@@ -21,9 +22,16 @@ import com.jaredrummler.android.processes.AndroidProcesses
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
+import com.kiven.kutils.tools.KAlertDialogHelper
 import com.kiven.kutils.tools.KGranting
 import com.kiven.sample.anim.AHAnim
 import com.kiven.sample.service.LiveWallpaper2
+import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.experimental.android.UI
+import org.jetbrains.anko.coroutines.experimental.Ref
+import org.jetbrains.anko.coroutines.experimental.asReference
+import org.jetbrains.anko.coroutines.experimental.bg
+import kotlin.coroutines.experimental.suspendCoroutine
 
 /**
  * Created by wangk on 2018/3/28.
@@ -119,6 +127,56 @@ class AHSmallAction : KActivityHelper() {
             })
         })
 
+        // TODO: 2018/6/4 ----------------------------------------------------------
+        addTitle("kotlin 特性")
+        addView("协程", View.OnClickListener {
+            launch(CommonPool){
+                delay(1000)
+                val data = doSomthing()
+                KLog.i("data = $data")
+
+                val dea = suspendCoroutine<Int> {
+                    Thread{
+                        Thread.sleep(1000)
+                        val cuth = Thread.currentThread()
+                        KLog.i("Threadid = ${cuth.id}, Threadname = ${cuth.name}")
+                        it.resume(7)
+                    }.start()
+                }
+                KLog.i("dea = $dea")
+                val cuth = Thread.currentThread()
+                KLog.i("id = ${cuth.id}, name = ${cuth.name}")
+            }
+
+            val ct = Thread.currentThread()
+            KLog.i("start -----------${ct.id}-------${ct.name}-----")
+        })
+
+        addView("anko Ref协程", View.OnClickListener {
+            val ref:Ref<AHSmallAction> = this.asReference()
+
+            // 进入协程
+            async(UI){
+                delay(2000)
+
+                // 启动ui线程
+                ref().showDialog("anko Ref协程")
+            }
+        })
+
+        addView("anko bg()协程", View.OnClickListener {
+            // 进入协程
+            async(UI){
+                val data:Deferred<String> = bg {
+                    Thread.sleep(2000)
+                    "anko bg()协程"
+                }
+
+                // 启动ui线程
+                showDialog(data.await())
+            }
+        })
+
         // TODO: 2018/3/28 ----------------------------------------------------------
         addTitle("其他")
 
@@ -127,6 +185,16 @@ class AHSmallAction : KActivityHelper() {
             AHAnim().startActivity(mActivity)
         })
         addView("杀死一个进程杀死一个进程杀死一个进程", View.OnClickListener { })
+    }
+
+    private suspend fun doSomthing():Int {
+        /*return async(CommonPool){
+            val data = 6
+            data
+        }.await()*/
+        return suspendCoroutine {
+            it.resume(6)
+        }
     }
 
     /**
@@ -170,6 +238,10 @@ class AHSmallAction : KActivityHelper() {
     private fun showTip(word: String) {
 //        KAlertDialogHelper.Show1BDialog(mActivity, word)
         KLog.d(word)
+    }
+
+    private fun showDialog(word: String) {
+        KAlertDialogHelper.Show1BDialog(mActivity, word)
     }
 
     val mTranslateEnable = false

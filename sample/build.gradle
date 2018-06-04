@@ -98,6 +98,11 @@ dependencies {
     // 获取设备正在运行的进程: https://github.com/jaredrummler/AndroidProcesses
     implementation 'com.jaredrummler:android-processes:1.1.1'
 }
+kotlin {
+    experimental {
+        coroutines "enable"
+    }
+}
 // 打印过时api调用信息
 /*
 allprojects {

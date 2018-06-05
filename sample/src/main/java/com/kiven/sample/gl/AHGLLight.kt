@@ -10,6 +10,7 @@ class AHGLLight:AHGLSuper() {
     private var angle = 0f
 
     override fun onDrawFrame(gl: GL10) {
+        super.onDrawFrame(gl)
         gl.glClearColor(1.0f, 1.0f, 1.0f, 0.0f)
         // Clears the screen and depth buffer.
         gl.glClear(GL10.GL_COLOR_BUFFER_BIT or GL10.GL_DEPTH_BUFFER_BIT)
@@ -39,7 +40,7 @@ class AHGLLight:AHGLSuper() {
         // 球，http://wiki.jikexueyuan.com/project/opengl-es-guide/sphere.html
             drawBoll(gl)
 
-        gl.glDisableClientState(GL10.GL_VERTEX_ARRAY)// 关闭管道
+//        gl.glDisableClientState(GL10.GL_VERTEX_ARRAY)// 关闭管道
 
         angle += 1f
 

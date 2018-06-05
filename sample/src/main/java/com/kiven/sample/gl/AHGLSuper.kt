@@ -28,22 +28,25 @@ open class AHGLSuper : KActivityHelper(), GLSurfaceView.Renderer {
 
         // Select the modelview matrix
         gl.glMatrixMode(GL10.GL_MODELVIEW)
-        // Reset the modelview matrix
+        // 重置当前的模型观察矩阵。
         gl.glLoadIdentity()
     }
 
     override fun onSurfaceCreated(gl: GL10, config: EGLConfig?) {
-        // Set the background color to black ( rgba ).
+        // 设置清除屏幕时所用的颜色，参数对应(红,绿,蓝,Alpha值)。色彩值的范围从0.0f到1.0f。0.0f代表最黑的情况，1.0f就是最亮的情况。
         gl.glClearColor(0.0f, 0.0f, 0.0f, 0.5f)
-        // Enable Smooth Shading, default not really needed.
+        // 启用smooth shading（阴影平滑）。阴影平滑通过多边形精细的混合色彩，并对外部光进行平滑
         gl.glShadeModel(GL10.GL_SMOOTH)
+
+        // 下面三行是关于depth buffer(深度缓存)的。将深度缓存设想为屏幕后面的层。深度缓存不断的对物体进入屏幕内部有多深进行跟踪。
         // Depth buffer setup.
         gl.glClearDepthf(1.0f)
         // Enables depth testing.
         gl.glEnable(GL10.GL_DEPTH_TEST)
         // The type of depth testing to do.
         gl.glDepthFunc(GL10.GL_LEQUAL)
-        // Really nice perspective calculations.
+
+        // 这里告诉OpenGL我们希望进行最好的透视修正。这会十分轻微的影响性能。但使得透视图看起来好一点。
         gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT,
                 GL10.GL_NICEST)
     }

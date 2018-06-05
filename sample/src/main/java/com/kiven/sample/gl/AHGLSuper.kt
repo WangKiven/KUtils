@@ -51,7 +51,7 @@ open class AHGLSuper : KActivityHelper(), GLSurfaceView.Renderer {
                 GL10.GL_NICEST)
     }
 
-    private lateinit var surfaceView: GLSurfaceView
+    protected lateinit var surfaceView: GLSurfaceView
 
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)

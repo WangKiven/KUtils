@@ -27,11 +27,12 @@ class AHGLSample : AHGLSuper() {
 
     override fun onDrawFrame(gl: GL10) {
         gl.glClearColor(1.0f, 1.0f, 1.0f, 0.0f)
-        // Clears the screen and depth buffer.
+        // 清除颜色缓存和深度缓存
         gl.glClear(GL10.GL_COLOR_BUFFER_BIT or GL10.GL_DEPTH_BUFFER_BIT)
 
         gl.glPointSize(20f)
         gl.glLineWidth(4f)
+
         gl.glLoadIdentity()// 将当前矩阵回复最初的无变换的矩阵
         gl.glTranslatef(0f, 0f, -4f)
         gl.glRotatef(angle, 0f, 1f, 0f)// 旋转
@@ -101,6 +102,5 @@ class AHGLSample : AHGLSuper() {
         gl.glDisableClientState(GL10.GL_VERTEX_ARRAY)// 关闭管道
 
         angle += 1f
-
     }
 }

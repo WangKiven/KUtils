@@ -2,6 +2,7 @@ package com.kiven.sample.gl
 
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
+import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
 class AHGLLightFace : AHGLSuper() {
@@ -33,11 +34,6 @@ class AHGLLightFace : AHGLSuper() {
         // Clears the screen and depth buffer.
         gl.glClear(GL10.GL_COLOR_BUFFER_BIT or GL10.GL_DEPTH_BUFFER_BIT)
 
-
-        gl.glLoadIdentity()// 将当前矩阵回复最初的无变换的矩阵
-        gl.glTranslatef(0f, 0f, -4f)
-
-
         gl.glLoadIdentity()// 将当前矩阵回复最初的无变换的矩阵
         gl.glTranslatef(0f, 0f, -4f)
         gl.glRotatef(angle, 0f, 1f, 1f)// 旋转
@@ -49,9 +45,21 @@ class AHGLLightFace : AHGLSuper() {
         gl.glCullFace(GL10.GL_BACK)// 明确指明“忽略“哪个面
 
         // 光源配置 , http://wiki.jikexueyuan.com/project/opengl-es-guide/set-lighting.html
-//            gl.glEnable(GL10.GL_LIGHTING)// 首先要开光源的总开关
-//            gl.glEnable(GL10.GL_LIGHT0)// 打开某个光源如0号光源
-//            gl.glLightf(GL10.GL_LIGHT0, GL10.GL_POSITION, 0.345f)
+        gl.glEnable(GL10.GL_LIGHTING)// 首先要开光源的总开关
+        gl.glEnable(GL10.GL_LIGHT0)// 打开某个光源如0号光源
+
+        gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_SPOT_DIRECTION, floatArrayOf(1f, 1f, -1f), 0)// 光照方向
+
+//        gl.glLightf(GL10.GL_LIGHT0, GL10.GL_POSITION, 0.345f)
+        // 设置颜色光，GL10.GL_AMBIENT：环境光，GL10.GL_DIFFUSE：散射光，GL_SPECULAR：反射光
+//        gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_SPECULAR, floatArrayOf(0.1f, 0.21f, 0.4f, 1f), 0)
+
+        // 设置材质：GL10.GL_AMBIENT：环境光，GL10.GL_DIFFUSE：散射光，GL_SPECULAR：反射光
+        gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_AMBIENT, floatArrayOf(0.5f, 0.21f, 0.4f, 1f), 0)
+        gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_DIFFUSE, floatArrayOf(0.7f, 0.3f, 0.4f, 1f), 0)
+        gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_SPECULAR, floatArrayOf(1f, 0.4f, 0.4f, 1f), 0)
+        // 高光反射区域，params[]数越大，高光区域越小，越暗
+        gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_SHININESS, floatArrayOf(10.5f), 0)
         // 材质配置
 //            gl.glMaterialf(GL10.GL_FRONT_AND_BACK, GL10.GL_SHININESS, 120f)
 
@@ -77,7 +85,7 @@ class AHGLLightFace : AHGLSuper() {
 
 
 
-        gl.glEnableClientState(GL10.GL_VERTEX_ARRAY)// 开启管道
+        gl.glEnableClientState(GL10.GL_VERTEX_ARRAY)// 开启管道, 启用顶点坐标数组
 
         // 放入顶点
         gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertex)
@@ -92,5 +100,25 @@ class AHGLLightFace : AHGLSuper() {
 
         angle += 1f
 
+    }
+
+    override fun onSurfaceChanged(gl: GL10, width: Int, height: Int) {
+        gl.glViewport(0, 0, width, height)
+        gl.glMatrixMode(GL10.GL_PROJECTION) // 设置为投影矩阵
+//        gl.glLoadIdentity() // 设置为单位矩阵
+        val ratio = width.toFloat() / height // 设置视口比例
+        gl.glFrustumf(-ratio, ratio, -1f, 1f, 1f, 10f) // 设置为透视投影
+
+        gl.glMatrixMode(GL10.GL_MODELVIEW)
+        // 设置为单位矩阵。
+        gl.glLoadIdentity()
+    }
+
+    override fun onSurfaceCreated(gl: GL10, config: EGLConfig?) {
+        gl.glDisable(GL10.GL_DITHER) // 关闭抗抖动
+        gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_FASTEST) // Hint模式
+
+        gl.glClearColor(1.0f, 1.0f, 1.0f, 0.0f)
+        gl.glEnable(GL10.GL_DEPTH_TEST) // 启用深度检测
     }
 }

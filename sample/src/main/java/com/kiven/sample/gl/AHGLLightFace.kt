@@ -2,6 +2,7 @@ package com.kiven.sample.gl
 
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
+import java.nio.FloatBuffer
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
@@ -14,7 +15,10 @@ class AHGLLightFace : AHGLSuper() {
             0f, 1f, 0f,
             1f, 0f, 0f)
     val normalArray = floatArrayOf(
-            
+            1f,0f,0f,
+            0f,0f,-1f,
+            0f,0f,-1f,
+            0f,0f,-1f
     )
     // 面的顶点颜色
     val colors = floatArrayOf(
@@ -39,7 +43,7 @@ class AHGLLightFace : AHGLSuper() {
 
         gl.glLoadIdentity()// 将当前矩阵回复最初的无变换的矩阵
         gl.glTranslatef(0f, 0f, -4f)
-        gl.glRotatef(angle, 0f, 1f, 1f)// 旋转
+//        gl.glRotatef(angle, 0f, 1f, 1f)// 旋转
 
 
         // 前面后面配置-似乎仅对面的绘制有用
@@ -51,11 +55,12 @@ class AHGLLightFace : AHGLSuper() {
         gl.glEnable(GL10.GL_LIGHTING)// 首先要开光源的总开关
         gl.glEnable(GL10.GL_LIGHT0)// 打开某个光源如0号光源
 
-        gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_SPOT_DIRECTION, floatArrayOf(1f, 1f, -1f), 0)// 光照方向
+        gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_SPOT_DIRECTION, floatArrayOf(0f, 0f, -1f), 0)// 光照方向
+        gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_POSITION, floatArrayOf(0f, 0f, 5f, 0f), 0)
 
 //        gl.glLightf(GL10.GL_LIGHT0, GL10.GL_POSITION, 0.345f)
         // 设置颜色光，GL10.GL_AMBIENT：环境光，GL10.GL_DIFFUSE：散射光，GL_SPECULAR：反射光
-//        gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_SPECULAR, floatArrayOf(0.1f, 0.21f, 0.4f, 1f), 0)
+        gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_SPECULAR, floatArrayOf(0.1f, 0.21f, 0.4f, 1f), 0)
 
         // 设置材质：GL10.GL_AMBIENT：环境光，GL10.GL_DIFFUSE：散射光，GL_SPECULAR：反射光
         gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_AMBIENT, floatArrayOf(0.5f, 0.21f, 0.4f, 1f), 0)
@@ -63,16 +68,14 @@ class AHGLLightFace : AHGLSuper() {
         gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_SPECULAR, floatArrayOf(1f, 0.4f, 0.4f, 1f), 0)
         // 高光反射区域，params[]数越大，高光区域越小，越暗
         gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_SHININESS, floatArrayOf(10.5f), 0)
-        // 材质配置
-//            gl.glMaterialf(GL10.GL_FRONT_AND_BACK, GL10.GL_SHININESS, 120f)
 
 
         // 顶点构造
         val vbb = ByteBuffer.allocateDirect(vertexArray.size * 4)
         vbb.order(ByteOrder.nativeOrder())
-        val vertex = vbb.asFloatBuffer()
-        vertex.put(vertexArray)
-        vertex.position(0)
+        val vertexBuffer = vbb.asFloatBuffer()
+        vertexBuffer.put(vertexArray)
+        vertexBuffer.position(0)
         // 颜色构造-颜色
         val cbb = ByteBuffer.allocateDirect(colors.size * 4)
         cbb.order(ByteOrder.nativeOrder())
@@ -85,14 +88,22 @@ class AHGLLightFace : AHGLSuper() {
         val indexBuffer = ibb.asShortBuffer()
         indexBuffer.put(indices)
         indexBuffer.position(0)
+        // 法线构造
+        val nbb = ByteBuffer.allocateDirect(normalArray.size * 4)
+        nbb.order(ByteOrder.nativeOrder())
+        val normalBuffer = nbb.asFloatBuffer()
+        normalBuffer.put(normalArray)
+        normalBuffer.position(0)
+
 
 
 
         gl.glEnableClientState(GL10.GL_VERTEX_ARRAY)// 开启管道, 启用顶点坐标数组
         gl.glEnableClientState(GL10.GL_NORMAL_ARRAY)
 
-        // 放入顶点
-        gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertex)
+        // 放入顶点 和 法线
+        gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer)
+        gl.glNormalPointer(GL10.GL_FIXED, 0, normalBuffer)
 
 
         // 面-自动渐变颜色

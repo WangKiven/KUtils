@@ -1,12 +1,13 @@
 package com.kiven.sample.gl
 
 import android.opengl.GLU
+import com.kiven.sample.gl.body.Ball
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.FloatBuffer
 import javax.microedition.khronos.opengles.GL10
 
-class AHGLLight:AHGLSuper() {
+class AHGLLight : AHGLSuper() {
     private var angle = 0f
 
     override fun onDrawFrame(gl: GL10) {
@@ -15,30 +16,16 @@ class AHGLLight:AHGLSuper() {
         // Clears the screen and depth buffer.
         gl.glClear(GL10.GL_COLOR_BUFFER_BIT or GL10.GL_DEPTH_BUFFER_BIT)
 
-        gl.glPointSize(20f)
-        gl.glLineWidth(4f)
-        gl.glLoadIdentity()// 将当前矩阵回复最初的无变换的矩阵
-        gl.glTranslatef(0f, 0f, -4f)
-        gl.glRotatef(angle, 0f, 1f, 0f)// 旋转
-//            gl.glTranslatef(0.3f, 0.3f, -15f)// 移动
+//        gl.glLoadIdentity()// 将当前矩阵回复最初的无变换的矩阵
+//        gl.glTranslatef(0f, 0f, -4f)
+//        gl.glRotatef(angle, 0f, 1f, 0f)// 旋转
 
-        // 前面后面配置-似乎仅对面的绘制有用
-        gl.glFrontFace(GL10.GL_CCW)// 设置逆时针方法为面的“前面”
-        gl.glEnable(GL10.GL_CULL_FACE)// 打开 忽略“后面”设置
-//            gl.glCullFace(GL10.GL_BACK)// 明确指明“忽略“哪个面
-
-        // 光源配置 , http://wiki.jikexueyuan.com/project/opengl-es-guide/set-lighting.html
-//            gl.glEnable(GL10.GL_LIGHTING)// 首先要开光源的总开关
-//            gl.glEnable(GL10.GL_LIGHT0)// 打开某个光源如0号光源
-//            gl.glLightf(GL10.GL_LIGHT0, GL10.GL_POSITION, 0.345f)
-        // 材质配置
-//            gl.glMaterialf(GL10.GL_FRONT_AND_BACK, GL10.GL_SHININESS, 120f)
-
-            initScene(gl)
-            drawScene(gl)
+        initScene(gl)
+        drawScene(gl)
 
         // 球，http://wiki.jikexueyuan.com/project/opengl-es-guide/sphere.html
-            drawBoll(gl)
+        drawBoll(gl)
+//        Ball(5).drawSelf(gl)
 
 //        gl.glDisableClientState(GL10.GL_VERTEX_ARRAY)// 关闭管道
 
@@ -62,7 +49,7 @@ class AHGLLight:AHGLSuper() {
         vbb = ByteBuffer.allocateDirect(v.size * v[0].size * 4)
         vbb.order(ByteOrder.nativeOrder())
         vBuf = vbb.asFloatBuffer()
-            gl.glEnableClientState(GL10.GL_VERTEX_ARRAY)
+        gl.glEnableClientState(GL10.GL_VERTEX_ARRAY)
         gl.glEnableClientState(GL10.GL_NORMAL_ARRAY)// 打开法线数组
 
 
@@ -104,8 +91,8 @@ class AHGLLight:AHGLSuper() {
         }
 
 
-            gl.glDisableClientState(GL10.GL_VERTEX_ARRAY)
         gl.glDisableClientState(GL10.GL_NORMAL_ARRAY)
+        gl.glDisableClientState(GL10.GL_VERTEX_ARRAY)
     }
 
 
@@ -162,6 +149,7 @@ class AHGLLight:AHGLSuper() {
         GLU.gluLookAt(gl, 0.0f, 4.0f, 4.0f, 0.0f, 0.0f, 0.0f,
                 0.0f, 1.0f, 0.0f)
     }
+
     private fun drawScene(gl: GL10) {
         val mat_amb = floatArrayOf(0.2f * 0.4f, 0.2f * 0.4f, 0.2f * 1.0f, 1.0f)
         val mat_diff = floatArrayOf(0.4f, 0.4f, 1.0f, 1.0f)

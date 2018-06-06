@@ -3,6 +3,9 @@ package com.kiven.sample.gl
 import android.opengl.GLSurfaceView
 import android.opengl.GLU
 import android.os.Bundle
+import android.view.DragEvent
+import android.view.MotionEvent
+import android.view.View
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import javax.microedition.khronos.egl.EGLConfig
@@ -53,9 +56,30 @@ open class AHGLSuper : KActivityHelper(), GLSurfaceView.Renderer {
 
     protected lateinit var surfaceView: GLSurfaceView
 
+    protected var dragx = 0f
+    protected var dragy = 0f
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
-        surfaceView = GLSurfaceView(mActivity)
+        surfaceView = object :GLSurfaceView(mActivity){
+            var startx = 0f
+            var starty = 0f
+            override fun onTouchEvent(event: MotionEvent): Boolean {
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        startx = event.x
+                        starty = event.y
+                    }
+                    else -> {
+                        dragx += event.x - startx
+                        dragy += event.y - starty
+
+                        startx = event.x
+                        starty = event.y
+                    }
+                }
+                return true
+            }
+        }
 
         // 设置OpenGl ES的版本为2.0，需在manifests配置gl版本。配置后，居然不能绘图
         // surfaceView.setEGLContextClientVersion(2)

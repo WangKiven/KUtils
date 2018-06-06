@@ -13,6 +13,9 @@ class AHGLLightFace : AHGLSuper() {
             0f, 0f, 0f,
             0f, 1f, 0f,
             1f, 0f, 0f)
+    val normalArray = floatArrayOf(
+            
+    )
     // 面的顶点颜色
     val colors = floatArrayOf(
             1f, 0f, 0f, 1f,
@@ -86,6 +89,7 @@ class AHGLLightFace : AHGLSuper() {
 
 
         gl.glEnableClientState(GL10.GL_VERTEX_ARRAY)// 开启管道, 启用顶点坐标数组
+        gl.glEnableClientState(GL10.GL_NORMAL_ARRAY)
 
         // 放入顶点
         gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertex)
@@ -93,9 +97,13 @@ class AHGLLightFace : AHGLSuper() {
 
         // 面-自动渐变颜色
         gl.glEnableClientState(GL10.GL_COLOR_ARRAY)
+
         gl.glColorPointer(4, GL10.GL_FLOAT, 0, colorBuffer)
         gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, indices.size, GL10.GL_UNSIGNED_SHORT, indexBuffer)
 
+        gl.glDisableClientState(GL10.GL_COLOR_ARRAY)
+
+        gl.glDisableClientState(GL10.GL_NORMAL_ARRAY)
         gl.glDisableClientState(GL10.GL_VERTEX_ARRAY)// 关闭管道
 
         angle += 1f

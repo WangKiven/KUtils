@@ -47,14 +47,20 @@ class AHGL : KActivityHelper() {
         addView("简单图形", View.OnClickListener {
             AHGLSample().startActivity(mActivity)
         })
-        addView("光照面", View.OnClickListener {
+        addView("光照面和自发光", View.OnClickListener {
             AHGLLightFace().startActivity(mActivity)
         })
         addView("光照球", View.OnClickListener {
             AHGLLight().startActivity(mActivity)
         })
-        addView("发光物体", View.OnClickListener {
+        addView("发光物体和纹理", View.OnClickListener {
             AHGLShine().startActivity(mActivity)
+        })
+        addView("光照和纹理", View.OnClickListener {
+            AHGLTexture().startActivity(mActivity)
+        })
+        addView("", View.OnClickListener {
+
         })
         addView("", View.OnClickListener {
 

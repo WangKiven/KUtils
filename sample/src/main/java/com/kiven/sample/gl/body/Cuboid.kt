@@ -17,17 +17,6 @@ open class Cuboid(center: Point, l: Float, w: Float, h: Float, a:Float = 0f) {
 
     init {
         // 顶点
-        /*val vertexArray = floatArrayOf(
-                center.x + 0.5f * l, center.y - 0.5f * w, center.z - 0.5f * h,
-                center.x + 0.5f * l, center.y + 0.5f * w, center.z - 0.5f * h,
-                center.x + 0.5f * l, center.y - 0.5f * w, center.z + 0.5f * h,
-                center.x - 0.5f * l, center.y - 0.5f * w, center.z - 0.5f * h,
-                center.x - 0.5f * l, center.y + 0.5f * w, center.z - 0.5f * h,
-                center.x - 0.5f * l, center.y - 0.5f * w, center.z + 0.5f * h,
-                center.x - 0.5f * l, center.y + 0.5f * w, center.z + 0.5f * h,
-                center.x + 0.5f * l, center.y + 0.5f * w, center.z + 0.5f * h
-        )*/
-
         val vertexArray = floatArrayOf(
                 center.x + 0.5f * l, center.y - 0.5f * w, center.z - 0.5f * h,
                 center.x + 0.5f * l, center.y + 0.5f * w, center.z - 0.5f * h,
@@ -38,7 +27,7 @@ open class Cuboid(center: Point, l: Float, w: Float, h: Float, a:Float = 0f) {
                 center.x - 0.5f * l, center.y + 0.5f * w, center.z + 0.5f * h,
                 center.x + 0.5f * l, center.y + 0.5f * w, center.z + 0.5f * h
         )
-        Matrix.rotateM(vertexArray, 0, a, 1f, 0f, 0f)
+//        Matrix.rotateM(vertexArray, 0, a, 1f, 0f, 0f)
 
 
         // 面 (前后左右上下)
@@ -82,5 +71,8 @@ open class Cuboid(center: Point, l: Float, w: Float, h: Float, a:Float = 0f) {
         gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertex)
         gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, indexCount, GL10.GL_UNSIGNED_SHORT, indexBuffer)
         gl.glNormalPointer(GL10.GL_FIXED, 0,vertex )
+
+//        gl.glNormal3f()
+//        gl.gldraw
     }
 }

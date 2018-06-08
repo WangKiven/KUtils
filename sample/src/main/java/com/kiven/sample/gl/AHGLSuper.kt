@@ -24,7 +24,8 @@ open class AHGLSuper : KActivityHelper(), GLSurfaceView.Renderer {
         // Reset the projection matrix
         gl.glLoadIdentity()
 
-        // Calculate the aspect ratio of the window
+        // 透视投影, https://blog.csdn.net/tyxkzzf/article/details/40921713
+        // fovy是眼睛上下睁开的幅度，角度值，值越小. aspect表示裁剪面的宽w高h比. zNear表示近裁剪面到眼睛的距离，zFar表示远裁剪面到眼睛的距离
         GLU.gluPerspective(gl, 45.0f,
                 width.toFloat() / height.toFloat(),
                 0.1f, 100.0f)

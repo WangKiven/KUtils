@@ -1,11 +1,13 @@
 package com.kiven.kutils.tools;
 
+import android.app.ActivityManager;
 import android.app.Application;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.pm.ConfigurationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -210,6 +212,12 @@ public class KUtil {
             builder.append("\ncpu_abis = ").append(Arrays.toString(Build.SUPPORTED_ABIS));
         } else {
             builder.append("\ncpu_abis = ").append(Build.CPU_ABI).append(", ").append(Build.CPU_ABI2);
+        }
+
+        ActivityManager am = (ActivityManager) app.getSystemService(Context.ACTIVITY_SERVICE);
+        if (am != null) {
+            ConfigurationInfo info = am.getDeviceConfigurationInfo();
+            builder.append(String.format("\ngles = %x", info.reqGlEsVersion));
         }
 
         Properties properties = System.getProperties();

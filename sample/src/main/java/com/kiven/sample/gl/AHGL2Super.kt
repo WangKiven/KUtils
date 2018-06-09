@@ -3,6 +3,7 @@ package com.kiven.sample.gl
 import android.opengl.GLES20
 import android.opengl.GLSurfaceView
 import android.opengl.GLU
+import android.opengl.Matrix
 import android.os.Bundle
 import android.view.MotionEvent
 import com.kiven.kutils.activityHelper.KActivityHelper
@@ -18,8 +19,8 @@ open class AHGL2Super : KActivityHelper(), GLSurfaceView.Renderer {
     override fun onSurfaceChanged(gl: GL10, width: Int, height: Int) {
         // Sets the current view port to the new size. 定义显示视窗的大小和位置
         GLES20.glViewport(0, 0, width, height)
-        //
-
+        //计算GLSurfaceView的宽高比
+        val ratio = width.toFloat() / height
 
 
         /*// Select the projection matrix, 设置当前 Matrix 模式为 Projection 投影矩阵
@@ -42,6 +43,9 @@ open class AHGL2Super : KActivityHelper(), GLSurfaceView.Renderer {
     override fun onSurfaceCreated(gl: GL10, config: EGLConfig?) {
         // 设置清除屏幕时所用的颜色，参数对应(红,绿,蓝,Alpha值)。色彩值的范围从0.0f到1.0f。0.0f代表最黑的情况，1.0f就是最亮的情况。
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.5f)
+        //打开深度检测
+        GLES20.glEnable(GLES20.GL_DEPTH_TEST)
+
         /*// 启用smooth shading（阴影平滑）。阴影平滑通过多边形精细的混合色彩，并对外部光进行平滑
         GLES20.glShadeModel(GL10.GL_SMOOTH)
 
@@ -89,6 +93,8 @@ open class AHGL2Super : KActivityHelper(), GLSurfaceView.Renderer {
 
                         startx = event.x
                         starty = event.y
+
+                        surfaceView.requestRender()
                     }
                 }
                 return true
@@ -96,14 +102,14 @@ open class AHGL2Super : KActivityHelper(), GLSurfaceView.Renderer {
         }
 
         // 设置OpenGl ES的版本为2.0，需在manifests配置gl版本。配置后，居然不能绘图
-        // surfaceView.setEGLContextClientVersion(2)
+        surfaceView.setEGLContextClientVersion(2)
         // 设置与当前GLSurfaceView绑定的Renderer
         surfaceView.setRenderer(this)
 
         // 设置渲染的模式，
         // RENDERMODE_WHEN_DIRTY：只有在调用 requestRender() 在更新屏幕，
         // RENDERMODE_CONTINUOUSLY：连续不断的更新屏幕
-        surfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
+        surfaceView.renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY
 
 
         setContentView(surfaceView)

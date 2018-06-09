@@ -68,6 +68,7 @@ class AHGL2Sample : AHGL2Super() {
         indexBuffer.position(0)
 
 
+        //初始化shader
         val vertexShader = loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode)
         val fragmentShader = loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode)
         mProgram = GLES20.glCreateProgram()
@@ -77,13 +78,13 @@ class AHGL2Sample : AHGL2Super() {
     }
 
     override fun onDrawFrame(gl: GL10) {
-        GLES20.glClearColor(0f, 0f, 0f, 0f)
+        GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT or GLES20.GL_COLOR_BUFFER_BIT)
 
         GLES20.glUseProgram(mProgram)
 
         val mPositionHandle = GLES20.glGetAttribLocation(mProgram, "vPosition")
-        GLES20.glEnableVertexAttribArray(mPositionHandle)
         GLES20.glVertexAttribPointer(mPositionHandle, 3, GLES20.GL_FLOAT, false, 3*4, vertexBuffer)
+        GLES20.glEnableVertexAttribArray(mPositionHandle)
 
         val mColorHandle = GLES20.glGetUniformLocation(mProgram, "vColor")
         GLES20.glUniform4fv(mColorHandle, 1, floatArrayOf(1f, 0f, 1f, 1f), 0)

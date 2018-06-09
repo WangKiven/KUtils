@@ -43,7 +43,7 @@ class AHGL : KActivityHelper() {
             flexboxLayout.addView(btn)
         }
 
-        addTitle("OpenGL sample")
+        addTitle("OpenGL 无版本要求")
         addView("简单图形", View.OnClickListener {
             AHGLSample().startActivity(mActivity)
         })
@@ -59,8 +59,10 @@ class AHGL : KActivityHelper() {
         addView("光照和纹理", View.OnClickListener {
             AHGLTexture().startActivity(mActivity)
         })
-        addView("", View.OnClickListener {
 
+        addTitle("OpenGL ES 2.0")
+        addView("简单图形", View.OnClickListener {
+            AHGL2Sample().startActivity(mActivity)
         })
         addView("", View.OnClickListener {
 

@@ -98,6 +98,7 @@ class AHGLTexture : AHGLSuper() {
         // 放入顶点 和 法线
         gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer)
         gl.glNormalPointer(GL10.GL_FIXED, 0, normalBuffer)
+//        gl.glNormal3x(0, 0, 1)
 
         // 纹理
         gl.glEnable(GL10.GL_TEXTURE_2D)
@@ -106,7 +107,6 @@ class AHGLTexture : AHGLSuper() {
         gl.glBindTexture(GL10.GL_TEXTURE_2D, textures[0])
 
 
-//        gl.glNormal3x(0, 0, -1)
         gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, vertexArray.size)
 
         gl.glDisable(GL10.GL_TEXTURE_2D)
@@ -125,9 +125,9 @@ class AHGLTexture : AHGLSuper() {
         // 将点光源设置成聚光灯，需要同时设置 GL_SPOT_DIRECTION,GL_SPOT_CUTOFF 等参数
         gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_SPOT_DIRECTION, floatArrayOf(0f, 0f, -1f), 0)// 光照方向
         // GL_SPOT_CUTOFF 参数设置聚光等发散角度（0到90度）
-        gl.glLightf(GL10.GL_LIGHT0, GL10.GL_SPOT_CUTOFF, 9.0f)
+        gl.glLightf(GL10.GL_LIGHT0, GL10.GL_SPOT_CUTOFF, 8.0f)
         // GL_SPOT_EXPONENT 给出了聚光灯光源汇聚光的程度，值越大，则聚光区域越小（聚光能力更强）。
-        gl.glLightf(GL10.GL_LIGHT0, GL10.GL_SPOT_EXPONENT, 50.0f)
+        gl.glLightf(GL10.GL_LIGHT0, GL10.GL_SPOT_EXPONENT, 10.0f)
 
 
 //        gl.glLightf(GL10.GL_LIGHT0, GL10.GL_POSITION, 0.345f)
@@ -145,6 +145,6 @@ class AHGLTexture : AHGLSuper() {
         // 高光反射区域，params[]数越大，高光区域越小，越暗
         gl.glMaterialf(GL10.GL_FRONT_AND_BACK, GL10.GL_SHININESS, 3.5f)
         // 材质自发光
-        gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_EMISSION, floatArrayOf(1f, 1f, 1f, 1f), 0)
+//        gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_EMISSION, floatArrayOf(0.7f, 0.5f, 0.1f, 0f), 0)
     }
 }

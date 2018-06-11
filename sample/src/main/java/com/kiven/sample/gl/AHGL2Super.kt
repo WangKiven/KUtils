@@ -5,6 +5,7 @@ import android.opengl.GLSurfaceView
 import android.opengl.GLU
 import android.opengl.Matrix
 import android.os.Bundle
+import android.util.Log
 import android.view.MotionEvent
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
@@ -42,7 +43,7 @@ open class AHGL2Super : KActivityHelper(), GLSurfaceView.Renderer {
 
     override fun onSurfaceCreated(gl: GL10, config: EGLConfig?) {
         // 设置清除屏幕时所用的颜色，参数对应(红,绿,蓝,Alpha值)。色彩值的范围从0.0f到1.0f。0.0f代表最黑的情况，1.0f就是最亮的情况。
-        GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.5f)
+        GLES20.glClearColor(1.0f, 1.0f, 1.0f, 0.5f)
         //打开深度检测
         GLES20.glEnable(GLES20.GL_DEPTH_TEST)
 
@@ -65,10 +66,26 @@ open class AHGL2Super : KActivityHelper(), GLSurfaceView.Renderer {
     /**
      * 编译OpenGLShading Language (GLSL)代码
      */
-    fun loadShader(type: Int, shaderCode: String):Int {
-        val shader = GLES20.glCreateShader(type)
-        GLES20.glShaderSource(shader, shaderCode)
-        GLES20.glCompileShader(shader)
+    fun loadShader(shaderType: Int, source: String):Int {
+        //创建一个新shader
+        var shader = GLES20.glCreateShader(shaderType)
+        //若创建成功则加载shader
+        if (shader != 0) {
+            //加载shader的源代码
+            GLES20.glShaderSource(shader, source)
+            //编译shader
+            GLES20.glCompileShader(shader)
+            //存放编译成功shader数量的数组
+            val compiled = IntArray(1)
+            //获取Shader的编译情况
+            GLES20.glGetShaderiv(shader, GLES20.GL_COMPILE_STATUS, compiled, 0)
+            if (compiled[0] == 0) {//若编译失败则显示错误日志并删除此shader
+                Log.e("ES20_ERROR", "Could not compile shader $shaderType:")
+                Log.e("ES20_ERROR", GLES20.glGetShaderInfoLog(shader))
+                GLES20.glDeleteShader(shader)
+                shader = 0
+            }
+        }
         return shader
     }
 
@@ -94,7 +111,7 @@ open class AHGL2Super : KActivityHelper(), GLSurfaceView.Renderer {
                         startx = event.x
                         starty = event.y
 
-                        surfaceView.requestRender()
+//                        surfaceView.requestRender()
                     }
                 }
                 return true
@@ -109,7 +126,7 @@ open class AHGL2Super : KActivityHelper(), GLSurfaceView.Renderer {
         // 设置渲染的模式，
         // RENDERMODE_WHEN_DIRTY：只有在调用 requestRender() 在更新屏幕，
         // RENDERMODE_CONTINUOUSLY：连续不断的更新屏幕
-        surfaceView.renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY
+        surfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
 
 
         setContentView(surfaceView)

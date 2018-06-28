@@ -26,6 +26,7 @@ import com.kiven.kutils.tools.KAlertDialogHelper
 import com.kiven.kutils.tools.KGranting
 import com.kiven.sample.anim.AHAnim
 import com.kiven.sample.service.LiveWallpaper2
+import com.kiven.sample.spss.AHSpssTemple
 import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.android.UI
 import org.jetbrains.anko.coroutines.experimental.Ref
@@ -184,7 +185,18 @@ class AHSmallAction : KActivityHelper() {
         addView("动画", View.OnClickListener {
             AHAnim().startActivity(mActivity)
         })
-        addView("杀死一个进程杀死一个进程杀死一个进程", View.OnClickListener { })
+        addView("统计分析", View.OnClickListener { AHSpssTemple().startActivity(mActivity) })
+        addView("文件管理方案", View.OnClickListener { AHFileManage().startActivity(mActivity) })
+        addView("", View.OnClickListener { })
+        addView("", View.OnClickListener { })
+        addView("", View.OnClickListener { })
+        addView("", View.OnClickListener { })
+        addView("", View.OnClickListener { })
+        addView("", View.OnClickListener { })
+        addView("", View.OnClickListener { })
+        addView("", View.OnClickListener { })
+        addView("", View.OnClickListener { })
+
     }
 
     private suspend fun doSomthing():Int {
@@ -204,13 +216,13 @@ class AHSmallAction : KActivityHelper() {
     private fun getXunfei(): SpeechRecognizer {
         SpeechUtility.createUtility(mActivity, SpeechConstant.APPID + "=5a15147f")
 
-        val mAsr = SpeechRecognizer.createRecognizer(mActivity, { code ->
+        val mAsr = SpeechRecognizer.createRecognizer(mActivity) { code ->
             KLog.i("SpeechRecognizer init() code = $code")
             if (code != ErrorCode.SUCCESS) {
                 showTip("初始化失败,错误码：$code")
             }
 
-        })
+        }
         // 设置引擎类型
         //设置语法ID和 SUBJECT 为空，以免因之前有语法调用而设置了此参数；或直接清空所有参数，具体可参考 DEMO 的示例。
         mAsr.setParameter(SpeechConstant.CLOUD_GRAMMAR, null)

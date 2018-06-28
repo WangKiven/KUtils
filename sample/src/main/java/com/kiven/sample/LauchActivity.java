@@ -209,6 +209,7 @@ public class LauchActivity extends KXUtilActivity {
                             KLog.i("" + KFile.createFile("tmp", ".img", getDir(Environment.DIRECTORY_PICTURES, Context.MODE_PRIVATE)).getAbsolutePath());
                             KLog.i("" + KFile.createFile("tmp", ".img", getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)).getAbsolutePath());
                             KLog.i("" + KFile.createFile("tmp", ".img", getDatabasePath("db")).getAbsolutePath());
+                            KLog.i("" + KFile.createFile("tmp", ".img", getCacheDir()).getAbsolutePath());
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                                 KLog.i("" + KFile.createFile("tmp", ".img", getDataDir()).getAbsolutePath());
                             }

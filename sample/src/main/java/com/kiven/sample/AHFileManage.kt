@@ -1,6 +1,9 @@
 package com.kiven.sample
 
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -12,6 +15,7 @@ import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.file.KFile
 import com.kiven.kutils.logHelper.KLog
+import com.kiven.kutils.tools.KString
 
 class AHFileManage : KActivityHelper() {
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
@@ -48,9 +52,24 @@ class AHFileManage : KActivityHelper() {
 
         addView("获取外部存储和sd卡路径", View.OnClickListener {
             appendLog(KFile.getStoragePaths(mActivity).contentToString())
+        })
 
-            val file = mActivity.cacheDir
-            file.lastModified()
+        addView("路径展示", View.OnClickListener {
+            appendLog("Context 获取")
+            appendLog("getDir：" + KFile.createFile("tmp", ".img", mActivity.getDir(Environment.DIRECTORY_PICTURES, Context.MODE_PRIVATE))!!.absolutePath)
+            appendLog("getExternalFilesDir：" + KFile.createFile("tmp", ".img", mActivity.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)!!)!!.absolutePath)
+            appendLog("getDatabasePath：" + KFile.createFile("tmp", ".img", mActivity.getDatabasePath("db"))!!.absolutePath)
+            appendLog("cacheDir：" + KFile.createFile("tmp", ".img", mActivity.cacheDir)!!.absolutePath)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                appendLog("dataDir：" + KFile.createFile("tmp", ".img", mActivity.dataDir)!!.absolutePath)
+            }
+            appendLog("\nEnvironment 获取")
+            appendLog("getRootDirectory：" + Environment.getRootDirectory().absolutePath)
+            appendLog("getDataDirectory：" + Environment.getDataDirectory().absolutePath)
+            appendLog("getDownloadCacheDirectory：" + Environment.getDownloadCacheDirectory().absolutePath)
+            appendLog("getExternalStorageDirectory：" + Environment.getExternalStorageDirectory().absolutePath)
+            appendLog("getExternalStoragePublicDirectory(DIRECTORY_PICTURES)：" + Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).absolutePath)
+            appendLog("getExternalStorageDirectory：" + Environment.getExternalStorageState())
         })
     }
 }

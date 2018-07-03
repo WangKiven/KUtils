@@ -45,10 +45,10 @@ public class AHFileManager extends KActivityHelper {
         initBackToolbar(R.id.toolbar);
 
 
-        modules.add(new LFile("内部", mActivity.getFilesDir().getParentFile()));
+        modules.add(new LFile("应用内部", mActivity.getFilesDir().getParentFile()));
         File cf = mActivity.getExternalCacheDir().getParentFile();
         if (cf != null) {
-            modules.add(new LFile("外部", cf));
+            modules.add(new LFile("应用外部", cf));
         }
         modules.add(new LFile("存储卡", Environment.getExternalStorageDirectory()));
 

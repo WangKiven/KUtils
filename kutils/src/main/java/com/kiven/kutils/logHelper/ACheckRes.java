@@ -60,6 +60,7 @@ public class ACheckRes extends KActivityHelper {
         super.onCreateOptionsMenu(menu);
         menu.add(0, Menu.FIRST + 1, 0, "查看日志");
         menu.add(0, Menu.FIRST + 2, 0, "改变背景");
+        menu.add(0, Menu.FIRST + 3, 1, "文件目录");
         return true;
     }
 
@@ -81,6 +82,9 @@ public class ACheckRes extends KActivityHelper {
                     itemBg = Color.parseColor("#888888");
                 }
                 resAdapter.notifyDataSetChanged();
+                break;
+            case Menu.FIRST + 3:
+                new AHFileManager().startActivity(mActivity);
                 break;
         }
         return true;

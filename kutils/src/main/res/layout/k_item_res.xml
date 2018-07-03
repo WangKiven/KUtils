@@ -8,11 +8,6 @@
     android:elevation="1dp"
     android:padding="2dp"
     android:orientation="vertical">
-    <TextView
-        android:id="@+id/tv_num"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="10dp"/>
 
     <ImageView
         android:id="@+id/imageView"
@@ -23,5 +18,11 @@
         android:minWidth="30dp"
         android:adjustViewBounds="true"
         android:scaleType="centerInside" />
+
+    <TextView
+        android:id="@+id/tv_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"/>
 
 </LinearLayout>

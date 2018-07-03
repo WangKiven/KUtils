@@ -56,6 +56,8 @@ class AHFileManage : KActivityHelper() {
 
         addView("路径展示", View.OnClickListener {
             appendLog("Context 获取")
+            appendLog("filesDir：" + mActivity.filesDir)
+            appendLog("fileList：" + mActivity.fileList().contentToString())
             appendLog("getDir：" + KFile.createFile("tmp", ".img", mActivity.getDir(Environment.DIRECTORY_PICTURES, Context.MODE_PRIVATE))!!.absolutePath)
             appendLog("getExternalFilesDir：" + KFile.createFile("tmp", ".img", mActivity.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)!!)!!.absolutePath)
             appendLog("getDatabasePath：" + KFile.createFile("tmp", ".img", mActivity.getDatabasePath("db"))!!.absolutePath)

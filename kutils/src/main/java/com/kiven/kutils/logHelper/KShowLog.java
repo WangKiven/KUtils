@@ -74,6 +74,7 @@ public class KShowLog extends KActivityHelper implements AdapterView.OnItemClick
     public boolean onCreateOptionsMenu(Menu menu) {
         mActivity.getMenuInflater().inflate(R.menu.show_log, menu);
         menu.add(0, Menu.FIRST + 1000, 0, "高亮结果");
+        menu.add(0, Menu.FIRST + 1001, 1, "文件目录");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             MenuItem searchItem = menu.findItem(R.id.search);
@@ -135,6 +136,8 @@ public class KShowLog extends KActivityHelper implements AdapterView.OnItemClick
             showSearch = !showSearch;
             KUtil.putSharedPreferencesBooleanValue("kutil_log_show_search", showSearch);
             search();
+        } else if (i == Menu.FIRST + 1001) {
+            new AHFileManager().startActivity(mActivity);
         }
         return true;
     }

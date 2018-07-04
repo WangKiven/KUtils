@@ -1,6 +1,8 @@
 package com.kiven.kutils.logHelper;
 
+import android.Manifest;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -18,7 +20,10 @@ import com.google.android.flexbox.JustifyContent;
 import com.kiven.kutils.R;
 import com.kiven.kutils.activityHelper.KActivityHelper;
 import com.kiven.kutils.activityHelper.KHelperActivity;
+import com.kiven.kutils.file.KFile;
+import com.kiven.kutils.tools.KGranting;
 import com.kiven.kutils.tools.KUtil;
+import com.kiven.kutils.tools.KView;
 import com.kiven.kutils.widget.UIGridView;
 
 import java.io.File;
@@ -44,12 +49,22 @@ public class AHFileManager extends KActivityHelper {
         setContentView(R.layout.k_ah_file_manager);
         initBackToolbar(R.id.toolbar);
 
+        KGranting.requestPermissions(mActivity, 345, Manifest.permission.WRITE_EXTERNAL_STORAGE, "存储空间", new KGranting.GrantingCallBack() {
+            @Override
+            public void onGrantSuccess(boolean isSuccess) {
+                if (isSuccess) {
+                    // 刷新列表
+                    childAdapter.notifyDataSetChanged();
+                }
+            }
+        });
 
         modules.add(new LFile("应用内部", mActivity.getFilesDir().getParentFile()));
         File cf = mActivity.getExternalCacheDir().getParentFile();
         if (cf != null) {
             modules.add(new LFile("应用外部", cf));
         }
+        modules.add(new LFile("根目录", new File("/")));
         modules.add(new LFile("存储卡", Environment.getExternalStorageDirectory()));
 
         UIGridView gridView = findViewById(R.id.uiGridView);
@@ -144,19 +159,23 @@ public class AHFileManager extends KActivityHelper {
 
     private class MyHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
+        ImageView iv_unread;
         TextView tv_num;
 
         MyHolder(View itemView) {
             super(itemView);
             imageView = (ImageView) itemView.findViewById(R.id.imageView);
+            iv_unread = itemView.findViewById(R.id.iv_unread);
             tv_num = (TextView) itemView.findViewById(R.id.tv_num);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (cFile.isDirectory()) {
-                        selDir.add(cFile);
-                        onSelectedDir();
+                        if (cFile.canRead()) {
+                            selDir.add(cFile);
+                            onSelectedDir();
+                        }
                     }
                 }
             });
@@ -172,6 +191,8 @@ public class AHFileManager extends KActivityHelper {
             } else {
                 imageView.setImageResource(android.R.drawable.ic_menu_gallery);
             }
+
+            KView.setVisibility(iv_unread, !file.canRead());
 
             tv_num.setText(file.name);
         }

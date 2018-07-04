@@ -14,10 +14,9 @@ import com.google.android.flexbox.FlexboxLayout
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.file.KFile
-import com.kiven.kutils.logHelper.KLog
-import com.kiven.kutils.tools.KString
+import com.kiven.kutils.logHelper.AHFileManager
 
-class AHFileManage : KActivityHelper() {
+class AHFileTemple : KActivityHelper() {
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
 
@@ -28,7 +27,7 @@ class AHFileManage : KActivityHelper() {
 
         setContentView(flexboxLayout)
 
-        val addTitle = fun(text: String):TextView {
+        val addTitle = fun(text: String): TextView {
             val tv = TextView(activity)
             tv.text = text
             tv.layoutParams = ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.MATCH_PARENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT)
@@ -73,5 +72,7 @@ class AHFileManage : KActivityHelper() {
             appendLog("getExternalStoragePublicDirectory(DIRECTORY_PICTURES)：" + Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).absolutePath)
             appendLog("getExternalStorageDirectory：" + Environment.getExternalStorageState())
         })
+
+        addView("浏览文件目录", View.OnClickListener { AHFileManager().startActivity(mActivity) })
     }
 }

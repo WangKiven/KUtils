@@ -1,7 +1,6 @@
 package com.kiven.sample
 
 import android.Manifest
-import android.app.Activity
 import android.app.ActivityManager
 import android.app.WallpaperManager
 import android.content.Context
@@ -17,7 +16,6 @@ import com.google.android.flexbox.AlignContent
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
 import com.iflytek.cloud.*
-import com.iflytek.cloud.ui.RecognizerDialog
 import com.jaredrummler.android.processes.AndroidProcesses
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
@@ -186,7 +184,7 @@ class AHSmallAction : KActivityHelper() {
             AHAnim().startActivity(mActivity)
         })
         addView("统计分析", View.OnClickListener { AHSpssTemple().startActivity(mActivity) })
-        addView("文件管理方案", View.OnClickListener { AHFileManage().startActivity(mActivity) })
+        addView("文件管理方案", View.OnClickListener { AHFileTemple().startActivity(mActivity) })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })

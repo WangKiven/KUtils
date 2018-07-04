@@ -25,6 +25,7 @@ import com.kiven.kutils.activityHelper.KHelperActivity;
 import com.kiven.kutils.file.KFile;
 import com.kiven.kutils.tools.KAlertDialogHelper;
 import com.kiven.kutils.tools.KGranting;
+import com.kiven.kutils.tools.KString;
 import com.kiven.kutils.tools.KUtil;
 import com.kiven.kutils.tools.KView;
 import com.kiven.kutils.widget.UIGridView;
@@ -196,7 +197,7 @@ public class AHFileManager extends KActivityHelper {
                         KAlertDialogHelper.Show2BDialog(mActivity, "是否删除文件？", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                cFile.delete();
+                                KUtil.deleteFile(cFile, true);
                                 onSelectedDir();
                             }
                         });
@@ -206,7 +207,7 @@ public class AHFileManager extends KActivityHelper {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    KLog.i("点击文件 = " + cFile.getAbsolutePath());
+                    KLog.i("点击文件 = " + cFile.getAbsolutePath() + "\n修改时间 = " + KString.formatDate(cFile.lastModified()));
 
                     if (cFile.canRead()) {
                         if (cFile.isDirectory()) {
@@ -233,7 +234,7 @@ public class AHFileManager extends KActivityHelper {
                                         .setPositiveButton("文档", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
-                                                if (cFile.length() / 1024 > 500) {
+                                                if (cFile.length() / 1024 > 100) {
                                                     KAlertDialogHelper.Show1BDialog(mActivity, "文件太大了，会卡！");
                                                 } else {
                                                     ScrollView scrollView = new ScrollView(mActivity);

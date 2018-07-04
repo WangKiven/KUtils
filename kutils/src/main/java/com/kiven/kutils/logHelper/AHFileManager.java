@@ -23,6 +23,7 @@ import com.kiven.kutils.R;
 import com.kiven.kutils.activityHelper.KActivityHelper;
 import com.kiven.kutils.activityHelper.KHelperActivity;
 import com.kiven.kutils.file.KFile;
+import com.kiven.kutils.tools.KAlertDialogHelper;
 import com.kiven.kutils.tools.KGranting;
 import com.kiven.kutils.tools.KUtil;
 import com.kiven.kutils.tools.KView;
@@ -184,19 +185,34 @@ public class AHFileManager extends KActivityHelper {
 
         MyHolder(View itemView) {
             super(itemView);
-            imageView = (ImageView) itemView.findViewById(R.id.imageView);
+            imageView = itemView.findViewById(R.id.imageView);
             iv_unread = itemView.findViewById(R.id.iv_unread);
-            tv_num = (TextView) itemView.findViewById(R.id.tv_num);
+            tv_num = itemView.findViewById(R.id.tv_num);
 
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if (cFile.canRead())
+                        KAlertDialogHelper.Show2BDialog(mActivity, "是否删除文件？", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                cFile.delete();
+                                onSelectedDir();
+                            }
+                        });
+                    return true;
+                }
+            });
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    KLog.i("点击文件 = " + cFile.getAbsolutePath());
+
                     if (cFile.canRead()) {
                         if (cFile.isDirectory()) {
                             selDir.add(cFile);
                             onSelectedDir();
                         } else {
-
                             if (KFile.checkFileType(cFile) != KFile.FileType.UNKNOWN) {
                                 showImage();
                             } else
@@ -217,17 +233,21 @@ public class AHFileManager extends KActivityHelper {
                                         .setPositiveButton("文档", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
-                                                ScrollView scrollView = new ScrollView(mActivity);
-                                                TextView tv = new TextView(mActivity);
-                                                scrollView.addView(tv);
+                                                if (cFile.length() / 1024 > 500) {
+                                                    KAlertDialogHelper.Show1BDialog(mActivity, "文件太大了，会卡！");
+                                                } else {
+                                                    ScrollView scrollView = new ScrollView(mActivity);
+                                                    TextView tv = new TextView(mActivity);
+                                                    scrollView.addView(tv);
 
-                                                try {
-                                                    tv.setText(KUtil.readFile(cFile.getAbsolutePath()));
-                                                } catch (IOException e) {
-                                                    KLog.e(e);
-                                                    tv.setText("文档读取异常：" + e.getMessage());
+                                                    try {
+                                                        tv.setText(KUtil.readFile(cFile.getAbsolutePath()));
+                                                    } catch (IOException e) {
+                                                        KLog.e(e);
+                                                        tv.setText("文档读取异常：" + e.getMessage());
+                                                    }
+                                                    new AlertDialog.Builder(mActivity).setView(scrollView).show();
                                                 }
-                                                new AlertDialog.Builder(mActivity).setView(scrollView).show();
                                             }
                                         })
                                         .show();

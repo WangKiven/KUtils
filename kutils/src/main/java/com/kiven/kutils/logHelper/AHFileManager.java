@@ -2,16 +2,18 @@ package com.kiven.kutils.logHelper;
 
 import android.Manifest;
 import android.content.Context;
-import android.os.Build;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.android.flexbox.FlexDirection;
@@ -26,7 +28,10 @@ import com.kiven.kutils.tools.KUtil;
 import com.kiven.kutils.tools.KView;
 import com.kiven.kutils.widget.UIGridView;
 
+import org.xutils.x;
+
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +47,12 @@ public class AHFileManager extends KActivityHelper {
     private final ArrayList<LFile> selDir = new ArrayList<>();
 
     private final MyAdapter childAdapter = new MyAdapter();
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        KGranting.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
 
     @Override
     public void onCreate(@NonNull KHelperActivity activity, Bundle savedInstanceState) {
@@ -64,8 +75,8 @@ public class AHFileManager extends KActivityHelper {
         if (cf != null) {
             modules.add(new LFile("应用外部", cf));
         }
-        modules.add(new LFile("根目录", new File("/")));
-        modules.add(new LFile("存储卡", Environment.getExternalStorageDirectory()));
+        modules.add(new LFile("系统根目录", new File("/")));
+        modules.add(new LFile("系统内部存储", Environment.getExternalStorageDirectory()));
 
         UIGridView gridView = findViewById(R.id.uiGridView);
         gridView.setAdapter(gridViewAdapter);
@@ -162,6 +173,15 @@ public class AHFileManager extends KActivityHelper {
         ImageView iv_unread;
         TextView tv_num;
 
+        void showImage() {
+            ImageView iv = new ImageView(mActivity);
+            iv.setAdjustViewBounds(true);
+            iv.setScaleType(ImageView.ScaleType.CENTER);
+            x.image().bind(iv, cFile.getAbsolutePath());
+
+            new AlertDialog.Builder(mActivity).setView(iv).show();
+        }
+
         MyHolder(View itemView) {
             super(itemView);
             imageView = (ImageView) itemView.findViewById(R.id.imageView);
@@ -171,10 +191,46 @@ public class AHFileManager extends KActivityHelper {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (cFile.isDirectory()) {
-                        if (cFile.canRead()) {
+                    if (cFile.canRead()) {
+                        if (cFile.isDirectory()) {
                             selDir.add(cFile);
                             onSelectedDir();
+                        } else {
+
+                            if (KFile.checkFileType(cFile) != KFile.FileType.UNKNOWN) {
+                                showImage();
+                            } else
+                                new AlertDialog.Builder(mActivity)
+                                        .setTitle("选择打开方式").setMessage("文件大小" + cFile.length() / 1024.0 + "k")
+                                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+
+                                            }
+                                        })
+                                        .setNeutralButton("图片", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                showImage();
+                                            }
+                                        })
+                                        .setPositiveButton("文档", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                ScrollView scrollView = new ScrollView(mActivity);
+                                                TextView tv = new TextView(mActivity);
+                                                scrollView.addView(tv);
+
+                                                try {
+                                                    tv.setText(KUtil.readFile(cFile.getAbsolutePath()));
+                                                } catch (IOException e) {
+                                                    KLog.e(e);
+                                                    tv.setText("文档读取异常：" + e.getMessage());
+                                                }
+                                                new AlertDialog.Builder(mActivity).setView(scrollView).show();
+                                            }
+                                        })
+                                        .show();
                         }
                     }
                 }
@@ -189,7 +245,10 @@ public class AHFileManager extends KActivityHelper {
             if (file.isDirectory()) {
                 imageView.setImageResource(android.R.drawable.ic_dialog_email);
             } else {
-                imageView.setImageResource(android.R.drawable.ic_menu_gallery);
+                if (KFile.checkFileType(cFile) != KFile.FileType.UNKNOWN) {
+                    x.image().bind(imageView, cFile.getAbsolutePath());
+                } else
+                    imageView.setImageResource(android.R.drawable.ic_menu_gallery);
             }
 
             KView.setVisibility(iv_unread, !file.canRead());

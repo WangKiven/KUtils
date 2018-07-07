@@ -185,7 +185,7 @@ class AHSmallAction : KActivityHelper() {
         })
         addView("统计分析", View.OnClickListener { AHSpssTemple().startActivity(mActivity) })
         addView("文件管理方案", View.OnClickListener { AHFileTemple().startActivity(mActivity) })
-        addView("", View.OnClickListener { })
+        addView("二维码", View.OnClickListener { AHQrCode().startActivity(mActivity) })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })

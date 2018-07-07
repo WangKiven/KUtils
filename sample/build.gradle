@@ -34,7 +34,7 @@ android {
                 res.srcDirs = ['res']
                 assets.srcDirs = ['assets']*/
             res.srcDirs = ['src/main/res', 'src/main/res/layout']
-            jniLibs.srcDirs = ['xunfeiLibs', 'libs']
+            jniLibs.srcDirs = ['xunfeiLibs', 'zxingLibs', 'libs']
         }
     }
     packagingOptions {
@@ -97,6 +97,11 @@ dependencies {
 
     // 获取设备正在运行的进程: https://github.com/jaredrummler/AndroidProcesses
     implementation 'com.jaredrummler:android-processes:1.1.1'
+
+    // 二维码
+//    implementation 'com.google.zxing:core:3.2.1'
+//    implementation 'com.journeyapps:zxing-android-embedded:3.3.0'
+    implementation 'cn.bingoogolapple:bga-qrcode-zxing:1.2.5'
 }
 kotlin {
     experimental {

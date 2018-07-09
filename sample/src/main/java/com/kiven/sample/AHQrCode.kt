@@ -2,6 +2,7 @@ package com.kiven.sample
 
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +18,10 @@ import com.google.zxing.common.BitMatrix
 import com.google.zxing.common.HybridBinarizer
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
+import com.kiven.kutils.logHelper.KLog
+import com.kiven.kutils.tools.KAlertDialogHelper
 import com.kiven.kutils.tools.KUtil
+import java.io.ByteArrayOutputStream
 import java.util.*
 
 class AHQrCode:KActivityHelper() {
@@ -64,7 +68,20 @@ class AHQrCode:KActivityHelper() {
             image.setImageBitmap(bitmap)
         })
         addView("识别图片 ", View.OnClickListener {
-//            val result = MultiFormatReader().decode(HybridBinarizer())
+            bitmap?.apply {
+                val pixels = IntArray(width * height)
+                getPixels(pixels, 0, width, 0, 0, width, height)
+
+
+                val textr = MultiFormatReader().decode(BinaryBitmap(HybridBinarizer(RGBLuminanceSource(
+                        width, height, pixels))))
+                if (textr != null) {
+                    KAlertDialogHelper.Show1BDialog(mActivity, textr.text)
+                } else {
+                    KAlertDialogHelper.Show1BDialog(mActivity, "呀！没解析出来额。。。")
+                }
+
+            }?:return@OnClickListener
         })
 
         addView("扫描", View.OnClickListener {
@@ -74,7 +91,7 @@ class AHQrCode:KActivityHelper() {
 
     @Throws(WriterException::class)
     private fun encodeAsBitmap(text: String): Bitmap? {
-        var hints: MutableMap<EncodeHintType, Any>? = null
+        var hints: EnumMap<EncodeHintType, Any>? = null
         val encoding = guessAppropriateEncoding(text)
         if (encoding != null) {
             hints = EnumMap(EncodeHintType::class.java)

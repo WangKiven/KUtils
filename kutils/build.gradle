@@ -41,7 +41,7 @@ dependencies {
 //    provided 'org.roboguice:roboblender:3.0.1'
     compileOnly 'com.google.code.gson:gson:2.8.2'
     compileOnly 'com.google.android:flexbox:0.3.0'
-    compileOnly project(':xutils')
+//    compileOnly project(':xutils')
 }
 apply from: 'jcenerUpload.gradle'
 //apply(from('mavenpush.gradle'))

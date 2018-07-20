@@ -9,19 +9,16 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.kiven.kutils.activityHelper.KActivityHelper;
-import com.kiven.kutils.logHelper.KLog;
-
-import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * Created by kiven on 16/5/6.
  */
 public class KContext extends Application {
     private static KContext mInstance;
+
     public static KContext getInstance() {
         return mInstance;
     }
@@ -36,8 +33,8 @@ public class KContext extends Application {
     }
 
     protected void init() {
-        x.Ext.init(this);
-        x.Ext.setDebug(KLog.isDebug());
+//        x.Ext.init(this);
+//        x.Ext.setDebug(KLog.isDebug());
     }
 
 
@@ -50,6 +47,7 @@ public class KContext extends Application {
     public enum ActivityStatus {
         UNKNOWN, CREATED, STARTED, RESUMED, PAUSED, FINISHING, STOPED, DESTORIED;
     }
+
     public class ActivityInfo {
         Activity activity;
         ActivityStatus status;
@@ -79,6 +77,7 @@ public class KContext extends Application {
 
         changeStatus(checkOrAdd(activity, ActivityStatus.CREATED));
     }
+
     public void onActivityStart(Activity activity) {
         if (activity == null) {
             return;
@@ -86,6 +85,7 @@ public class KContext extends Application {
 
         changeStatus(checkOrAdd(activity, ActivityStatus.STARTED));
     }
+
     public void onActivityResume(Activity activity) {
         if (activity == null) {
             return;
@@ -109,6 +109,7 @@ public class KContext extends Application {
 
         changeStatus(checkOrAdd(activity, ActivityStatus.PAUSED));
     }
+
     public void onActivityStop(Activity activity) {
         if (activity == null) {
             return;
@@ -116,6 +117,7 @@ public class KContext extends Application {
 
         changeStatus(checkOrAdd(activity, ActivityStatus.STOPED));
     }
+
     public void onActivityDestory(Activity activity) {
         if (activity == null) {
             return;
@@ -140,7 +142,6 @@ public class KContext extends Application {
     }
 
     /**
-     *
      * @param activity 是否是当前显示的activity
      */
     public boolean canShowDialog(Activity activity) {
@@ -156,6 +157,7 @@ public class KContext extends Application {
 
     /**
      * app是否在前台
+     *
      * @return
      */
     public boolean isOnForeground() {
@@ -196,6 +198,7 @@ public class KContext extends Application {
         a.status = status;
         return a;
     }
+
     private ActivityInfo checkOrAdd(@NonNull Activity activity) {
 
         for (ActivityInfo a : activities) {
@@ -230,6 +233,7 @@ public class KContext extends Application {
 
     private List<ActivityInfo> activities = new ArrayList<>();
     private List<ActivityOnChangeStatusListener> activityOnChangeStatusListeners = new ArrayList<>();
+
     private void changeStatus(ActivityInfo activityInfo) {
         for (ActivityOnChangeStatusListener listener : activityOnChangeStatusListeners) {
             listener.onChange(activityInfo);
@@ -255,6 +259,7 @@ public class KContext extends Application {
     }
 
     // TODO------------ 启动关闭activity -------------------
+
     /**
      * 关闭所有activity
      */
@@ -263,6 +268,7 @@ public class KContext extends Application {
             a.activity.finish();
         }
     }
+
     /**
      * 下沉启动activity。关闭所有activity，启动新的activity
      */
@@ -270,6 +276,7 @@ public class KContext extends Application {
         closeAllActivity();
         startActivity(new Intent(this, aClass));
     }
+
     /**
      * 下沉启动activity。关闭所有activity，启动新的activity
      */

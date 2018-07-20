@@ -4,6 +4,8 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Message;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +13,6 @@ import android.widget.ImageView;
 
 import com.kiven.kutils.R;
 import com.kiven.kutils.tools.KUtil;
-
-import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -303,9 +303,17 @@ public class UIGridView extends ViewGroup {
 
         }
 
+
+        final Handler ch = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message msg) {
+                addAllItemView();
+                return true;
+            }
+        });
         public void notifyDataSetChanged() {
             if (mGridView != null) {
-                x.task().run(new Runnable() {
+                /*x.task().run(new Runnable() {
                     @Override
                     public void run() {
                         x.task().post(new Runnable() {
@@ -315,7 +323,14 @@ public class UIGridView extends ViewGroup {
                             }
                         });
                     }
-                });
+                });*/
+
+                new Thread() {
+                    @Override
+                    public void run() {
+                        ch.sendEmptyMessage(0);
+                    }
+                }.start();
             }
         }
 

@@ -2,9 +2,12 @@ package com.kiven.kutils.logHelper;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.Html;
@@ -75,6 +78,7 @@ public class KShowLog extends KActivityHelper implements AdapterView.OnItemClick
         mActivity.getMenuInflater().inflate(R.menu.show_log, menu);
         menu.add(0, Menu.FIRST + 1000, 0, "高亮结果");
         menu.add(0, Menu.FIRST + 1001, 1, "文件目录");
+        menu.add(0, Menu.FIRST + 1002, 2, "查看应用相关");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             MenuItem searchItem = menu.findItem(R.id.search);
@@ -138,6 +142,10 @@ public class KShowLog extends KActivityHelper implements AdapterView.OnItemClick
             search();
         } else if (i == Menu.FIRST + 1001) {
             new AHFileManager().startActivity(mActivity);
+        } else if (i == Menu.FIRST + 1002) {
+            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            intent.setData(Uri.fromParts("package", mActivity.getPackageName(), null));
+            mActivity.startActivity(intent);
         }
         return true;
     }

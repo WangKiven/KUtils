@@ -41,8 +41,8 @@ public class KHelperActivity extends AppCompatActivity {
     @SuppressWarnings({"rawtypes"})
     protected KActivityHelper getHelper(Bundle savedInstanceState) {
         // 使用ViewModel 确保Helper不会多个同时存在
-        KHelperModel model = ViewModelProviders.of(this).get(KHelperModel.class);
-        helper = model.helper;
+//        KHelperModel model = ViewModelProviders.of(this).get(KHelperModel.class);
+//        helper = model.helper;
         if (helper == null) {//此判断是为了防止子类已设置helper的值
             if (savedInstanceState == null) {
                 helper = (KActivityHelper) KActivityHelper.getStackValue(getIntent().getStringExtra("BaseActivityHelper"));
@@ -68,7 +68,7 @@ public class KHelperActivity extends AppCompatActivity {
                 }
             }
 
-            model.helper = helper;
+//            model.helper = helper;
         }
         return helper;
     }

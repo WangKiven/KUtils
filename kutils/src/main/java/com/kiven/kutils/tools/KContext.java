@@ -37,6 +37,25 @@ public class KContext extends Application {
 //        x.Ext.setDebug(KLog.isDebug());
     }
 
+    /**
+     * 判断当前进程是否是主进程， 可用于防止多次调用 onCreate()
+     */
+    protected boolean isMainProcess() {
+        String packageName = getPackageName();
+
+        int pid = android.os.Process.myPid();
+        ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        if (activityManager != null)
+        for (ActivityManager.RunningAppProcessInfo appProcess : activityManager
+                .getRunningAppProcesses()) {
+
+            if (appProcess.pid == pid) {
+                return packageName.equals(appProcess.processName);
+            }
+        }
+
+        return true;
+    }
 
     // TODO-------------------------------
 

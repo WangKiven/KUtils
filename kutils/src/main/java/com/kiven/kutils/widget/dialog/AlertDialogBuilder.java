@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.StyleRes;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
@@ -76,8 +77,13 @@ public class AlertDialogBuilder {
     }
 
     public void setTitle(String text) {
-        TextView tv_title = (TextView) findViewById(R.id.tv_title);
-        tv_title.setText(text);
+        if (TextUtils.isEmpty(text)) {
+            TextView tv_title = (TextView) findViewById(R.id.tv_title);
+            tv_title.setVisibility(View.GONE);
+        } else {
+            TextView tv_title = (TextView) findViewById(R.id.tv_title);
+            tv_title.setText(text);
+        }
     }
 
     public void setMessage(String text) {

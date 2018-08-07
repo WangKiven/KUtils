@@ -46,7 +46,7 @@ public class FloatView {
 //        mWindowManager = (WindowManager) getApplication().getSystemService(getApplication().WINDOW_SERVICE);
         Log.i(TAG, "mWindowManager--->" + mWindowManager);
         //设置window type
-        wmParams.type = WindowManager.LayoutParams.TYPE_PHONE;
+        wmParams.type = WindowManager.LayoutParams.TYPE_PHONE;// TYPE_APPLICATION 才是activity内
         //设置图片格式，效果为背景透明
         wmParams.format = PixelFormat.RGBA_8888;
         //设置浮动窗口不可聚焦（实现操作除浮动窗口外的其他可见窗口的操作）

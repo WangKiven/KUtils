@@ -68,4 +68,12 @@ public class ActivityHFloatView extends KActivityHelper {
         }
         isShow = !isShow;
     }
+
+    @Override
+    public void onPause() {
+        if (activityFloatView != null && activityFloatView.isShow) {
+            activityFloatView.hideFloat();
+        }
+        super.onPause();
+    }
 }

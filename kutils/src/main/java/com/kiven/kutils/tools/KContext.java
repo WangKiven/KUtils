@@ -6,6 +6,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.kiven.kutils.activityHelper.KActivityHelper;
@@ -305,5 +306,14 @@ public class KContext extends Application {
         // 不加这句可能会蹦
         helper.getIntent().addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
         helper.startActivity(this);
+    }
+
+    @Nullable
+    public Activity getTopActivity() {
+        if (activities.size() > 0) {
+            return activities.get(activities.size() - 1).activity;
+        }
+
+        return null;
     }
 }

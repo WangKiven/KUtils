@@ -177,7 +177,7 @@ public class AHFileManager extends KActivityHelper {
         void showImage() {
             ImageView iv = new ImageView(mActivity);
             iv.setAdjustViewBounds(true);
-            iv.setScaleType(ImageView.ScaleType.CENTER);
+            iv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
 //            x.image().bind(iv, cFile.getAbsolutePath());
             iv.setImageBitmap(BitmapFactory.decodeFile(cFile.getAbsolutePath()));
 

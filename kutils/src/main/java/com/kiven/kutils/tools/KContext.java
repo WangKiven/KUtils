@@ -47,13 +47,13 @@ public class KContext extends Application {
         int pid = android.os.Process.myPid();
         ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         if (activityManager != null)
-        for (ActivityManager.RunningAppProcessInfo appProcess : activityManager
-                .getRunningAppProcesses()) {
+            for (ActivityManager.RunningAppProcessInfo appProcess : activityManager
+                    .getRunningAppProcesses()) {
 
-            if (appProcess.pid == pid) {
-                return packageName.equals(appProcess.processName);
+                if (appProcess.pid == pid) {
+                    return packageName.equals(appProcess.processName);
+                }
             }
-        }
 
         return true;
     }
@@ -311,7 +311,9 @@ public class KContext extends Application {
     @Nullable
     public Activity getTopActivity() {
         if (activities.size() > 0) {
-            return activities.get(activities.size() - 1).activity;
+            ActivityInfo activityInfo = activities.get(activities.size() - 1);
+            if (activityInfo.status == ActivityStatus.RESUMED)
+                return activityInfo.activity;
         }
 
         return null;

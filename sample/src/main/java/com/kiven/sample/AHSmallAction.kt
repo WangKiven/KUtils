@@ -5,6 +5,7 @@ import android.app.ActivityManager
 import android.app.WallpaperManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.Snackbar
@@ -22,9 +23,11 @@ import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KAlertDialogHelper
 import com.kiven.kutils.tools.KGranting
+import com.kiven.kutils.tools.KString
 import com.kiven.sample.anim.AHAnim
 import com.kiven.sample.service.LiveWallpaper2
 import com.kiven.sample.spss.AHSpssTemple
+import com.kiven.sample.util.EncryptUtils
 import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.android.UI
 import org.jetbrains.anko.coroutines.experimental.Ref
@@ -129,13 +132,13 @@ class AHSmallAction : KActivityHelper() {
         // TODO: 2018/6/4 ----------------------------------------------------------
         addTitle("kotlin 特性")
         addView("协程", View.OnClickListener {
-            launch(CommonPool){
+            launch(CommonPool) {
                 delay(1000)
                 val data = doSomthing()
                 KLog.i("data = $data")
 
                 val dea = suspendCoroutine<Int> {
-                    Thread{
+                    Thread {
                         Thread.sleep(1000)
                         val cuth = Thread.currentThread()
                         KLog.i("Threadid = ${cuth.id}, Threadname = ${cuth.name}")
@@ -152,10 +155,10 @@ class AHSmallAction : KActivityHelper() {
         })
 
         addView("anko Ref协程", View.OnClickListener {
-            val ref:Ref<AHSmallAction> = this.asReference()
+            val ref: Ref<AHSmallAction> = this.asReference()
 
             // 进入协程
-            async(UI){
+            async(UI) {
                 delay(2000)
 
                 // 启动ui线程
@@ -165,8 +168,8 @@ class AHSmallAction : KActivityHelper() {
 
         addView("anko bg()协程", View.OnClickListener {
             // 进入协程
-            async(UI){
-                val data:Deferred<String> = bg {
+            async(UI) {
+                val data: Deferred<String> = bg {
                     Thread.sleep(2000)
                     "anko bg()协程"
                 }
@@ -186,7 +189,36 @@ class AHSmallAction : KActivityHelper() {
         addView("统计分析", View.OnClickListener { AHSpssTemple().startActivity(mActivity) })
         addView("文件管理方案", View.OnClickListener { AHFileTemple().startActivity(mActivity) })
         addView("二维码", View.OnClickListener { AHQrCode().startActivity(mActivity) })
-        addView("", View.OnClickListener { })
+        // 微信要的签名信息是：将MD5中的字母消息后的字符串
+        addView("签名信息", View.OnClickListener {_ ->
+            val flag = if (Build.VERSION.SDK_INT >= 28) {
+                PackageManager.GET_SIGNING_CERTIFICATES
+            } else {
+                PackageManager.GET_SIGNATURES
+            }
+
+            val info = mActivity.packageManager.getPackageInfo(mActivity.packageName, flag)
+
+            val sign = if (Build.VERSION.SDK_INT >= 28) {
+                info.signingInfo.apkContentsSigners
+            } else
+                info.signatures
+
+            val ss = StringBuffer()
+            for (si in sign) {
+                val bytes = si.toByteArray()
+
+                val md5 = EncryptUtils.encryptMD5ToString(bytes)
+                val sha1 = EncryptUtils.encryptSHA1ToString(bytes)
+                val sha256 = EncryptUtils.encryptSHA256ToString(bytes)
+                ss.append("sign : \nmd5 = $md5 \nsha1 = $sha1 \nsha256 = $sha256")
+            }
+
+            KAlertDialogHelper.Show1BDialog(mActivity, String(ss)){
+                KString.setClipText(mActivity, String(ss))
+            }
+
+        })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
@@ -197,7 +229,7 @@ class AHSmallAction : KActivityHelper() {
 
     }
 
-    private suspend fun doSomthing():Int {
+    private suspend fun doSomthing(): Int {
         /*return async(CommonPool){
             val data = 6
             data

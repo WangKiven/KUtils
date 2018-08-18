@@ -80,6 +80,13 @@ public class KFile {
         return new File(directory, prefix + "-" + getTimeTag() + suffix);
     }
 
+    public static File createNameFile(@NonNull String fileName, @NonNull File directory) {
+        if ((!directory.exists()) && (!directory.mkdirs())) {
+            return null;
+        }
+        return new File(directory, fileName);
+    }
+
     /**
      * 获取外部存储和sd卡路径
      */

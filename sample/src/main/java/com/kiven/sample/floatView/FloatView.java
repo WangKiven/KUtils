@@ -1,5 +1,6 @@
 package com.kiven.sample.floatView;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.util.Log;
@@ -67,6 +68,7 @@ public class FloatView {
         wmParams.height = 80;*/
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void createFloatView() {
         LayoutInflater inflater = LayoutInflater.from(context);
         //获取浮动窗口视图所在布局

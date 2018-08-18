@@ -1,5 +1,6 @@
 package com.kiven.kutils.file;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.media.MediaScannerConnection;
@@ -264,6 +265,7 @@ public class KFile {
 
     /**
      * 保存后，如果想在图库中查看，需要通知图库刷新，调用方法：{@link com.kiven.kutils.tools.KUtil#addPicture(String, MediaScannerConnection.OnScanCompletedListener)}
+     * 或者使用方法将图片插入图库中：{@link MediaStore.Images.Media#insertImage(ContentResolver, String, String, String)}
      */
     public static boolean saveJpgBitmap(@NonNull Context context, @NonNull File file, @NonNull Bitmap bitmap) {
         if (file.exists()) {
@@ -289,15 +291,16 @@ public class KFile {
      * 保存图片到图库, 一般在手机存储卡根目录下Pictures文件内。
      * 保存后，可以直接打开相册查看。不用通知图库刷新
      */
-    public static boolean saveJpgBitmap(@NonNull Context context, @NonNull Bitmap bitmap, String title, String detail) {
+    public static String saveJpgBitmap(@NonNull Context context, @NonNull Bitmap bitmap, String title, String detail) {
+        String fileName = KString.isBlank(title) ? getTimeTag() : title;
         try {
             MediaStore.Images.Media.insertImage(context.getContentResolver(),
-                    bitmap, KString.isBlank(title) ? getTimeTag() : title, detail);
+                    bitmap, fileName, detail);
         } catch (Exception e) {
             KLog.e(e);
-            return false;
+            return null;
         }
 
-        return true;
+        return fileName;
     }
 }

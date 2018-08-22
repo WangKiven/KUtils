@@ -25,6 +25,7 @@ import com.kiven.kutils.tools.KAlertDialogHelper
 import com.kiven.kutils.tools.KGranting
 import com.kiven.kutils.tools.KString
 import com.kiven.sample.anim.AHAnim
+import com.kiven.sample.net.AHNetDemo
 import com.kiven.sample.service.LiveWallpaper2
 import com.kiven.sample.spss.AHSpssTemple
 import com.kiven.sample.util.EncryptUtils
@@ -219,7 +220,7 @@ class AHSmallAction : KActivityHelper() {
             }
 
         })
-        addView("", View.OnClickListener { })
+        addView("Net FrameWork", View.OnClickListener { AHNetDemo().startActivity(mActivity)})
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })

@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
+import android.widget.Toast;
 
 import com.kiven.kutils.logHelper.KLog;
 
@@ -29,6 +30,18 @@ public class KAppTool {
      * 安装apk
      */
     public static void installApk(Context context, Uri uri) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (!context.getPackageManager().canRequestPackageInstalls()) {
+                /*val URI = Uri.parse("package:$packageName")
+                app.startActivity(Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, URI))*/
+
+                // 1. 配置Manifest: <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+                // 2. 调用该方法处，检测权限。上边代码为打开权限设置界面
+                KToast.ToastMessage(context, "没有安装权限", Toast.LENGTH_LONG);
+                KLog.i("没有安装权限");
+                return;
+            }
+        }
         Intent mIntent = new Intent(Intent.ACTION_VIEW);
         mIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -146,6 +159,7 @@ public class KAppTool {
 
     /**
      * 根据包名启动APP
+     *
      * @return 是否启动成功
      */
     public static boolean startApp(@NonNull Context context, @NonNull String packageName) {
@@ -169,6 +183,7 @@ public class KAppTool {
 
     /**
      * 获取App信息
+     *
      * @return null表示未安装该App，PackageInfo.versionCode：版本号，versionName：版本名称
      */
     public static PackageInfo getAppInfo(@NonNull Context context, @NonNull String packageName) {
@@ -218,6 +233,7 @@ public class KAppTool {
 
     /**
      * 卸载apk
+     *
      * @param packageName 包名
      */
     public static void unInstallApk(@NonNull Context context, @NonNull String packageName) {

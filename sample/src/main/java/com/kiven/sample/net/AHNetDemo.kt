@@ -37,7 +37,7 @@ class AHNetDemo : KActivityDebugHelper() {
         // todo
 
         addTitle("其他")
-        addView("动画", View.OnClickListener {
+        addView("", View.OnClickListener {
         })
     }
 }

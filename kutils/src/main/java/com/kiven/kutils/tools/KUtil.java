@@ -203,8 +203,14 @@ public class KUtil {
      */
     public static void printDeviceInfo() {
         StringBuilder builder = new StringBuilder();
-        builder.append("屏幕密度（0.75 / 1.0 / 1.5）:").append(getScreenDensity(app)).append("\n屏幕密度DPI（120 / 160 / 240）:")
-                .append(getScreenDensityDpi(app)).append("\n屏幕宽度(px):").append(getScreenWith(app)).append("\n屏幕高度(px):").append(getScreenHeight(app));
+        builder.append("屏幕密度（0.75 / 1.0 / 1.5）:").append(getScreenDensity(app))
+                .append("\n屏幕密度DPI（120 / 160 / 240）:").append(getScreenDensityDpi(app)).append("  每英寸多少像素")
+                .append("\n屏幕宽度(px):").append(getScreenWith(app))
+                .append("\n屏幕高度(px):").append(getScreenHeight(app))
+                .append("\n屏幕宽度(dp):").append(getScreenWith(app)/getScreenDensity(app))
+                .append("\n屏幕高度(dp):").append(getScreenHeight(app)/getScreenDensity(app))
+                .append("\n屏幕宽度(英寸):").append(getScreenWith(app)*1f/getScreenDensityDpi(app))
+                .append("\n屏幕高度(英寸):").append(getScreenHeight(app)*1f/getScreenDensityDpi(app));
         builder.append("\nProduct Model: ").append(Build.BRAND).append(",").append(Build.MODEL).append(",")
                 .append(Build.VERSION.SDK_INT).append(",").append(Build.VERSION.RELEASE);
 

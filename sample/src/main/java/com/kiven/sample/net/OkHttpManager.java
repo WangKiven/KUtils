@@ -28,6 +28,7 @@ public class OkHttpManager implements HttpManager {
     public <T> Callback.Cancelable request(HttpMethod method, RequestParams entity, Callback.CommonCallback<T> callback) {
 
 
+        callback.onSu
 
         return new Callback.Cancelable() {
             @Override

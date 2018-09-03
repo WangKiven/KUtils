@@ -92,7 +92,8 @@ class AHDbDemo : KActivityDebugHelper() {
                 KLog.e(e)
             }
         })
-        addTitle("原生数据库")
+        // TODO: 18-9-3 --------------------------------------
+        addTitle("原生代码")
         addView("保存", View.OnClickListener {
             cDb.execSQL("INSERT INTO Boll(name,date) VALUES('lanboll', '今天')")
 

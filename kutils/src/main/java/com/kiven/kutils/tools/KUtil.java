@@ -355,6 +355,12 @@ public class KUtil {
         return KContext.getInstance().getSharedPreferences("KContext.ACCOUNT_CONFIG", Context.MODE_PRIVATE);
     }
 
+    public static void removeSharedPreferencesValue(String key) {
+        Editor editor = getSharedPreferences().edit();
+        editor.remove(key);
+        editor.apply();
+    }
+
     public static int getSharedPreferencesIntValue(String key, int defaultValue) {
         return getSharedPreferences().getInt(key, defaultValue);
     }

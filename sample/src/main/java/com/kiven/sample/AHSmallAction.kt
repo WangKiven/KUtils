@@ -24,6 +24,7 @@ import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KAlertDialogHelper
 import com.kiven.kutils.tools.KGranting
+import com.kiven.kutils.tools.KNetwork
 import com.kiven.kutils.tools.KString
 import com.kiven.sample.anim.AHAnim
 import com.kiven.sample.xutils.net.AHNetDemo
@@ -229,7 +230,17 @@ class AHSmallAction : KActivityDebugHelper() {
             }
 
         })
-        addView("", View.OnClickListener { })
+        addView("检测网络", View.OnClickListener {
+            val type = KNetwork.getNetworkType(mActivity)
+            val ts = when (type) {
+                0 -> {"没有网络"}
+                1 -> {"WIFI"}
+                2 -> {"WAP"}
+                3 -> {"MNET"}
+                else -> {"检测失败"}
+            }
+            KAlertDialogHelper.Show1BDialog(mActivity, "网络类型：$ts")
+        })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })

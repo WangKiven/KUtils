@@ -1,4 +1,4 @@
-package com.kiven.sample.net;
+package com.kiven.sample.xutils.net;
 
 import org.xutils.HttpManager;
 import org.xutils.common.Callback;

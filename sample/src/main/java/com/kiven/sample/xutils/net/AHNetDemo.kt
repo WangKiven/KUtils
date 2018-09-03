@@ -1,4 +1,4 @@
-package com.kiven.sample.net
+package com.kiven.sample.xutils.net
 
 import android.os.Bundle
 import android.view.View
@@ -10,6 +10,7 @@ import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
 import com.kiven.kutils.activityHelper.KActivityDebugHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
+import org.xutils.x
 
 class AHNetDemo : KActivityDebugHelper() {
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
@@ -35,9 +36,28 @@ class AHNetDemo : KActivityDebugHelper() {
         }
 
         // todo
+        addTitle("选择框架")
+        addView("xUtil默认", View.OnClickListener {
+            x.Ext.setHttpManager(null)
+        })
 
-        addTitle("其他")
+        addView("okhttp", View.OnClickListener {
+            x.Ext.setHttpManager(OkHttpManager())
+        })
+
+        // todo
+        addTitle("请求操作")
+        addView("普通请求", View.OnClickListener {
+
+        })
+        addView("上传文件", View.OnClickListener {
+
+        })
+        addView("下载文件", View.OnClickListener {
+
+        })
         addView("", View.OnClickListener {
+
         })
     }
 }

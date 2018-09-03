@@ -1,12 +1,10 @@
 package com.kiven.sample
 
 import android.content.Context
-import com.iflytek.cloud.SpeechConstant
-import com.iflytek.cloud.SpeechUtility
-
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KContext
 import com.kiven.kutils.tools.KUtil
+import org.xutils.x
 
 /**
  *
@@ -24,6 +22,7 @@ class AppContext : KContext() {
     override fun init() {
         super.init()
         KLog.i("AppContext init")
+        x.Ext.init(this)
         KUtil.setApp(this)
     }
 }

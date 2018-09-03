@@ -9,6 +9,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.support.v4.widget.NestedScrollView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -18,17 +19,18 @@ import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
 import com.iflytek.cloud.*
 import com.jaredrummler.android.processes.AndroidProcesses
-import com.kiven.kutils.activityHelper.KActivityHelper
+import com.kiven.kutils.activityHelper.KActivityDebugHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KAlertDialogHelper
 import com.kiven.kutils.tools.KGranting
 import com.kiven.kutils.tools.KString
 import com.kiven.sample.anim.AHAnim
-import com.kiven.sample.net.AHNetDemo
+import com.kiven.sample.xutils.net.AHNetDemo
 import com.kiven.sample.service.LiveWallpaper2
 import com.kiven.sample.spss.AHSpssTemple
 import com.kiven.sample.util.EncryptUtils
+import com.kiven.sample.xutils.db.AHDbDemo
 import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.android.UI
 import org.jetbrains.anko.coroutines.experimental.Ref
@@ -39,14 +41,16 @@ import kotlin.coroutines.experimental.suspendCoroutine
 /**
  * Created by wangk on 2018/3/28.
  */
-class AHSmallAction : KActivityHelper() {
+class AHSmallAction : KActivityDebugHelper() {
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
         val flexboxLayout = FlexboxLayout(activity)
         flexboxLayout.flexWrap = FlexWrap.WRAP
         flexboxLayout.alignContent = AlignContent.FLEX_START
 
-        setContentView(flexboxLayout)
+        val scroll = NestedScrollView(activity)
+        scroll.addView(flexboxLayout)
+        setContentView(scroll)
 
         val addTitle = fun(text: String) {
             val tv = TextView(activity)
@@ -180,6 +184,11 @@ class AHSmallAction : KActivityHelper() {
             }
         })
 
+        // todo
+        addTitle("xUtil")
+        addView("Net FrameWork", View.OnClickListener { AHNetDemo().startActivity(mActivity) })
+        addView("数据库", View.OnClickListener { AHDbDemo().startActivity(mActivity) })
+
         // TODO: 2018/3/28 ----------------------------------------------------------
         addTitle("其他")
 
@@ -191,7 +200,7 @@ class AHSmallAction : KActivityHelper() {
         addView("文件管理方案", View.OnClickListener { AHFileTemple().startActivity(mActivity) })
         addView("二维码", View.OnClickListener { AHQrCode().startActivity(mActivity) })
         // 微信要的签名信息是：将MD5中的字母消息后的字符串
-        addView("签名信息", View.OnClickListener {_ ->
+        addView("签名信息", View.OnClickListener { _ ->
             val flag = if (Build.VERSION.SDK_INT >= 28) {
                 PackageManager.GET_SIGNING_CERTIFICATES
             } else {
@@ -215,13 +224,11 @@ class AHSmallAction : KActivityHelper() {
                 ss.append("sign : \nmd5 = $md5 \nsha1 = $sha1 \nsha256 = $sha256")
             }
 
-            KAlertDialogHelper.Show1BDialog(mActivity, String(ss)){
+            KAlertDialogHelper.Show1BDialog(mActivity, String(ss)) {
                 KString.setClipText(mActivity, String(ss))
             }
 
         })
-        addView("Net FrameWork", View.OnClickListener { AHNetDemo().startActivity(mActivity)})
-        addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })

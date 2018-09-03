@@ -2,7 +2,6 @@ package com.kiven.sample.xutils.db
 
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.database.sqlite.SQLiteTransactionListener
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.widget.NestedScrollView
@@ -17,7 +16,6 @@ import com.kiven.kutils.activityHelper.KActivityDebugHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.sample.xutils.db.entity.User
-import org.jetbrains.anko.db.SqlType
 import org.jetbrains.anko.db.TEXT
 import org.jetbrains.anko.db.createTable
 import org.jetbrains.anko.db.select
@@ -64,7 +62,7 @@ class AHDbDemo : KActivityDebugHelper() {
                         }
                 })
 
-        val helper = object :SQLiteOpenHelper(mActivity, "ncustom.db", null, 1){
+        val helper = object : SQLiteOpenHelper(mActivity, "ncustom.db", null, 1) {
             override fun onCreate(db: SQLiteDatabase?) {
                 db?.createTable("Boll", true, Pair("name", TEXT), Pair("date", TEXT))
             }
@@ -100,12 +98,11 @@ class AHDbDemo : KActivityDebugHelper() {
         })
         addView("查询", View.OnClickListener {
             cDb.select("Boll"/*, "name", "date"*/).exec {
-                if (moveToFirst()){
+                if (moveToFirst()) {
                     do {
                         KLog.i("name = ${getString(0)}, date = ${getString(1)}")
-                    }while (moveToNext())
+                    } while (moveToNext())
                 }
-
             }
         })
         addView("删除所有表内容", View.OnClickListener {
@@ -119,18 +116,22 @@ class AHDbDemo : KActivityDebugHelper() {
                 KLog.i("colo = ${columnNames.contentToString()}")
                 if (moveToFirst()) {
                     do {
+
+                        // 打印数据类型，name是String,对应的int为FIELD_TYPE_STRING = 3
+                        KLog.i("name_type = ${getType(1)}")
+                        // 打印值
                         KLog.i("type = ${getString(0)}," +
                                 " name = ${getString(1)}," +
                                 " tbl_name = ${getString(2)}," +
                                 " rootpage = ${getString(3)}," +
                                 " sql = ${getString(4)}")
-                    }while (moveToNext())
+                    } while (moveToNext())
                 }
             }
         })
         addView("查询表结构", View.OnClickListener {
+            // 有的表可能没有数据，所以不能用getType（），获取数据类型。索性就只获取属性
             cDb.select("Boll").limit(0).exec {
-                KLog.i("count = $count")
                 KLog.i("colo = ${columnNames.contentToString()}")
             }
         })

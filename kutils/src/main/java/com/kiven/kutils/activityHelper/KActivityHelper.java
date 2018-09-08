@@ -131,6 +131,9 @@ public class KActivityHelper {
      */
     protected void initBackToolbar(@IdRes int toolBarId) {
         Toolbar toolBar = findViewById(toolBarId);
+        initBackToolbar(toolBar);
+    }
+    protected void initBackToolbar(Toolbar toolBar) {
         if (toolBar == null) {
             return;
         }

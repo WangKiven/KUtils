@@ -110,14 +110,18 @@ public class KActivity extends AppCompatActivity implements SensorEventListener 
             if (sens > 15) {
 //                KLog.i("showLog " + System.currentTimeMillis() + " " + event.timestamp);
                 /*new KShowLog().startActivity(this);*/
-                if (floatView == null) {
-                    floatView = new DebugView(this);
-                }
-                floatView.showFloat();
+                showDebugView();
 
                 showLogTime = System.currentTimeMillis();
             }
         }
+    }
+
+    protected void showDebugView() {
+        if (floatView == null) {
+            floatView = new DebugView(this);
+        }
+        floatView.showFloat();
     }
 
     @Override

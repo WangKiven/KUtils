@@ -9,6 +9,8 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
@@ -92,6 +94,17 @@ public class KView {
     public static void setWeight(View view, float weight) {
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view.getLayoutParams();
         params.weight = weight;
+    }
+
+
+    /**
+     * 滚动到指定位置
+     */
+    public static void scrollTo(@NonNull RecyclerView recyclerView, int position) {
+        RecyclerView.LayoutManager lm = recyclerView.getLayoutManager();
+        if (lm instanceof LinearLayoutManager) {
+            ((LinearLayoutManager) lm).scrollToPositionWithOffset(position, 0);
+        }
     }
 
     /**

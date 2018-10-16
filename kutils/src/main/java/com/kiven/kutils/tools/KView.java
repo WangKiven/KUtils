@@ -5,6 +5,7 @@ import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.graphics.drawable.Drawable;
+import android.net.http.SslError;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,6 +14,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.webkit.SslErrorHandler;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 
 import com.kiven.kutils.callBack.CallBack;
@@ -115,6 +120,53 @@ public class KView {
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
+    }
+
+    /**
+     * webview 基本配置
+     */
+    public static void initWebView(@NonNull WebView webView) {
+        WebSettings webSetting = webView.getSettings();
+        // 需要使用 file 协议
+        webSetting.setAllowFileAccess(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            webSetting.setAllowFileAccessFromFileURLs(false);
+            webSetting.setAllowUniversalAccessFromFileURLs(false);
+        }
+
+        // 禁止 file 协议加载 JavaScript
+        webSetting.setJavaScriptEnabled(true);
+        webSetting.setCacheMode(WebSettings.LOAD_NO_CACHE);
+        // 自适应屏幕
+        webSetting.setUseWideViewPort(true);
+        webSetting.setLoadWithOverviewMode(true);
+        // 不支持缩放(如果要支持缩放，html页面本身也要支持缩放：不能加user-scalable=no)
+        webSetting.setBuiltInZoomControls(true);
+        webSetting.setSupportZoom(true);
+        webSetting.setDisplayZoomControls(false);
+
+        /*webView.addJavascriptInterface(WebJsCall(), "android")*/
+        // 支持通过js打开新的窗口
+        webSetting.setJavaScriptCanOpenWindowsAutomatically(true);
+
+        webSetting.setBlockNetworkImage(false);
+        webSetting.setDomStorageEnabled(true);
+        webSetting.setDatabaseEnabled(true);
+        /*if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT)
+            webSetting.databasePath = applicationContext.cacheDir.absolutePath*/
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+            webSetting.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        }
+
+        // 接受所有证书（如 http, https 等，默认不接受http）。建议具体使用时具体设置
+        /*webView.setWebViewClient(new WebViewClient(){
+            @Override
+            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+                if (handler != null) {
+                    handler.proceed();
+                }
+            }
+        });*/
     }
 
     /**

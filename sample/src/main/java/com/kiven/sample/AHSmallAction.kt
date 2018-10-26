@@ -123,16 +123,16 @@ class AHSmallAction : KActivityDebugHelper() {
 
         // http://doc.xfyun.cn/msc_android/%E9%A2%84%E5%A4%87%E5%B7%A5%E4%BD%9C.html
         val mAsr = getXunfei()
-        addView("讯飞识别", View.OnClickListener {
+        addView("讯飞识别", View.OnClickListener {_ ->
             KGranting.requestPermissions(activity, 377, Manifest.permission.RECORD_AUDIO,
-                    "录音", KGranting.GrantingCallBack {
+                    "录音") {
                 if (it) {
                     val ret = mAsr.startListening(mRecognizerListener)
                     if (ret != ErrorCode.SUCCESS) {
                         showTip("听写失败,错误码：$ret")
                     }
                 }
-            })
+            }
         })
 
         // TODO: 2018/6/4 ----------------------------------------------------------
@@ -241,7 +241,7 @@ class AHSmallAction : KActivityDebugHelper() {
             }
             KAlertDialogHelper.Show1BDialog(mActivity, "网络类型：$ts")
         })
-        addView("", View.OnClickListener { })
+        addView("录音播放", View.OnClickListener { })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })

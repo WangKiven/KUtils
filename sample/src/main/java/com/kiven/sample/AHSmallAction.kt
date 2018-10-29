@@ -241,7 +241,7 @@ class AHSmallAction : KActivityDebugHelper() {
             }
             KAlertDialogHelper.Show1BDialog(mActivity, "网络类型：$ts")
         })
-        addView("录音播放", View.OnClickListener { })
+        addView("录音播放", View.OnClickListener { AHRecorderPlay().startActivity(mActivity) })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })

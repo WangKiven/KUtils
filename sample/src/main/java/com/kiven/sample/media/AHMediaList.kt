@@ -23,6 +23,7 @@ import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.*
 import com.kiven.sample.R
+import com.kiven.sample.util.Const
 import java.io.File
 
 /**
@@ -30,7 +31,6 @@ import java.io.File
  * Created by wangk on 2018/2/4.
  */
 open class AHMediaList : KActivityHelper() {
-    private val FILEPROVIDER_AUTHORITY = "com.kiven.sample.fileprovider"
     private val IMAGE_DIR = "KUtilSampleFile" + File.separator + "testImage"
 
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
@@ -39,11 +39,11 @@ open class AHMediaList : KActivityHelper() {
 
         val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
         val permissionInfos = arrayOf("存储空间", "相机")
-        KGranting.requestPermissions(mActivity, 345, permissions, permissionInfos, { isSuccess ->
+        KGranting.requestPermissions(mActivity, 345, permissions, permissionInfos) { isSuccess ->
             if (!isSuccess) {
                 finish()
             }
-        })
+        }
     }
 
     private var cameraPath: String = ""
@@ -72,7 +72,7 @@ open class AHMediaList : KActivityHelper() {
                 if (Build.VERSION.SDK_INT < 24) {
                     camera.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file))
                 } else {
-                    camera.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(mActivity, FILEPROVIDER_AUTHORITY, file))
+                    camera.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(mActivity, Const.FILEPROVIDER_AUTHORITY, file))
                 }
                 mActivity.startActivityForResult(camera, 346)
             }

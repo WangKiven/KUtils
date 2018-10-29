@@ -212,10 +212,11 @@ class AHRecorderPlay : KActivityDebugHelper() {
                 reset()
             }
             release()
+
+            KToast.ToastMessage("已停止录音")
         }
 
         recorder = null
-        KToast.ToastMessage("已停止录音")
     }
 
     override fun onStop() {

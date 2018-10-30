@@ -7,6 +7,7 @@ import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.os.Bundle
 import android.os.Environment
+import android.os.Handler
 import android.support.v4.widget.NestedScrollView
 import android.support.v7.app.AlertDialog
 import android.view.View
@@ -20,6 +21,7 @@ import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
 import com.kiven.kutils.activityHelper.KActivityDebugHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
+import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KGranting
 import com.kiven.kutils.tools.KToast
 import java.io.File
@@ -125,7 +127,11 @@ class AHRecorderPlay : KActivityDebugHelper() {
             if (dir.exists() && dir.isDirectory) {
                 val files = dir.listFiles()
                 if (files != null && files.isNotEmpty()) {
-                    val items = Array<String>(files.size) { files[it].name }
+                    val items = Array<String>(files.size) {
+                        val file = files[it]
+
+                        "${file.name} - ${file.length() / 1024f}k"
+                    }
                     Arrays.sort(items) { o1: String, o2: String ->
                         return@sort o2.compareTo(o1)
                     }
@@ -196,6 +202,8 @@ class AHRecorderPlay : KActivityDebugHelper() {
                 setOutputFile(filePath.absolutePath)
                 prepare()
                 start()
+
+                dbHandler.sendEmptyMessageDelayed(0, 100)
             }
 
             KToast.ToastMessage("开始录音")
@@ -222,5 +230,29 @@ class AHRecorderPlay : KActivityDebugHelper() {
     override fun onStop() {
         stopRecord()
         super.onStop()
+    }
+
+    private val dbHandler = Handler(Handler.Callback {
+        printDb()
+        return@Callback true
+    })
+
+    /**
+     * 打印分贝
+     * 分贝自测表: https://baike.baidu.com/item/%E5%88%86%E8%B4%9D/553473?fr=aladdin
+     * 城市区域环境噪声标准: https://baike.baidu.com/item/%E5%9F%8E%E5%B8%82%E5%8C%BA%E5%9F%9F%E7%8E%AF%E5%A2%83%E5%99%AA%E5%A3%B0%E6%A0%87%E5%87%86/2420721?fr=aladdin
+     */
+    private fun printDb() {
+        recorder?.apply {
+            try {
+                val ratio = maxAmplitude
+                if (ratio > 0) {
+                    KLog.i("分贝：${20 * Math.log10(ratio.toDouble())}")
+                }
+            } catch (e: Exception) {
+                KLog.e(e)
+            }
+            dbHandler.sendEmptyMessageDelayed(0, 200)
+        }
     }
 }

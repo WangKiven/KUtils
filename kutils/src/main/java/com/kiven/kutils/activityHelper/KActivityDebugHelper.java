@@ -22,7 +22,8 @@ public class KActivityDebugHelper extends KActivityHelper implements SensorEvent
     public void onCreate(KHelperActivity activity, Bundle savedInstanceState) {
         super.onCreate(activity, savedInstanceState);
 
-        sensorManager = (SensorManager) mActivity.getSystemService(Activity.SENSOR_SERVICE);
+        if (showLog())
+            sensorManager = (SensorManager) mActivity.getSystemService(Activity.SENSOR_SERVICE);
     }
 
     @Override

@@ -9,6 +9,7 @@ import android.os.StatFs;
 import android.os.storage.StorageManager;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.kiven.kutils.logHelper.KLog;
@@ -222,10 +223,9 @@ public class KFile {
      * @return 返回MIME类型
      * thx https://www.oschina.net/question/571282_223549
      */
+    @Nullable
     private static String getMimeType(String fileName) {
-        FileNameMap fileNameMap = URLConnection.getFileNameMap();
-        String type = fileNameMap.getContentTypeFor(fileName);
-        return type;
+        return URLConnection.getFileNameMap().getContentTypeFor(fileName);
     }
 
     /**
@@ -236,10 +236,7 @@ public class KFile {
      */
     public static boolean isVedioFile(String fileName) {
         String mimeType = getMimeType(fileName);
-        if (!TextUtils.isEmpty(fileName) && mimeType.contains("video/")) {
-            return true;
-        }
-        return false;
+        return !TextUtils.isEmpty(fileName) && mimeType != null && mimeType.contains("video/");
     }
 
     /**

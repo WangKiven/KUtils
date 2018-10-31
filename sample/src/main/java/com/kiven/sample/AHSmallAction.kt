@@ -27,6 +27,7 @@ import com.kiven.kutils.tools.KGranting
 import com.kiven.kutils.tools.KNetwork
 import com.kiven.kutils.tools.KString
 import com.kiven.sample.anim.AHAnim
+import com.kiven.sample.imui.ImActivity
 import com.kiven.sample.xutils.net.AHNetDemo
 import com.kiven.sample.service.LiveWallpaper2
 import com.kiven.sample.spss.AHSpssTemple
@@ -242,7 +243,7 @@ class AHSmallAction : KActivityDebugHelper() {
             KAlertDialogHelper.Show1BDialog(mActivity, "网络类型：$ts")
         })
         addView("录音播放", View.OnClickListener { AHRecorderPlay().startActivity(mActivity) })
-        addView("", View.OnClickListener { })
+        addView("imui界面", View.OnClickListener { ImActivity().startActivity(mActivity)})
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
 

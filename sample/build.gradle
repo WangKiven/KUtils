@@ -33,7 +33,7 @@ android {
                 renderscript.srcDirs = ['src']
                 res.srcDirs = ['res']
                 assets.srcDirs = ['assets']*/
-            res.srcDirs = ['src/main/res', 'src/main/res/layout']
+//            res.srcDirs = ['src/main/res', 'src/main/res/layout']// 有这句代码的话，布局文件改变，不能实时运行到手机，必须clean project 后运行，才有效果
             jniLibs.srcDirs = ['xunfeiLibs', 'zxingLibs', 'libs']
         }
     }

@@ -9,7 +9,8 @@ android {
 
     defaultConfig {
         applicationId "com.kiven.sample"
-        minSdkVersion 14
+//        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion parent.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
@@ -104,6 +105,10 @@ dependencies {
     implementation 'cn.bingoogolapple:bga-qrcode-zxing:1.2.5'
     // okhttp
     implementation 'com.squareup.okhttp3:okhttp:3.11.0'
+
+
+    implementation 'cn.jiguang.imui:messagelist:0.7.4'
+    implementation 'cn.jiguang.imui:chatinput:0.9.1'
 }
 kotlin {
     experimental {

@@ -28,6 +28,7 @@ import com.kiven.kutils.tools.KNetwork
 import com.kiven.kutils.tools.KString
 import com.kiven.sample.anim.AHAnim
 import com.kiven.sample.imui.ImActivity
+import com.kiven.sample.jpushUI.AHImui
 import com.kiven.sample.xutils.net.AHNetDemo
 import com.kiven.sample.service.LiveWallpaper2
 import com.kiven.sample.spss.AHSpssTemple
@@ -244,6 +245,15 @@ class AHSmallAction : KActivityDebugHelper() {
         })
         addView("录音播放", View.OnClickListener { AHRecorderPlay().startActivity(mActivity) })
         addView("imui界面", View.OnClickListener { ImActivity().startActivity(mActivity)})
+        addView("jpushUI", View.OnClickListener {
+            val ahImui = AHImui()
+            ahImui.getIntent()
+                    .putExtra("toAccount", "186429")
+                    .putExtra("sessionType", 1)
+            ahImui.startActivity(mActivity)
+        })
+        addView("", View.OnClickListener { })
+        addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
 

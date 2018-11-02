@@ -14,6 +14,8 @@ import com.kiven.sample.R;
 public class ImInputBoard extends LinearLayout implements View.OnClickListener {
     private FrameLayout expendBoard;
 
+    private int curShow = 0;//当前显示的面板， 0：没显示面板， 1：显示语言面板， 2： 显示表情面板， 3： 显示更多功能面板
+
     public ImInputBoard(Context context) {
         super(context);
         init(context);
@@ -59,4 +61,6 @@ public class ImInputBoard extends LinearLayout implements View.OnClickListener {
                 break;
         }
     }
+
+
 }

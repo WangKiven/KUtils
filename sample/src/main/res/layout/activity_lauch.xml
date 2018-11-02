@@ -195,11 +195,20 @@
             android:onClick="onClick"
             app:item_title="helper test"/>
 
-        <EditText
+        <android.support.v7.widget.AppCompatEditText
             android:id="@+id/et_auto"
-            android:layout_width="match_parent"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:lines="1"/>
+            android:maxLines="1"/>
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="hill好哈好哈好哈"
+            android:maxLines="1"
+            app:autoSizeTextType="uniform"
+            app:autoSizeMinTextSize="7sp"
+            app:autoSizeMaxTextSize="14sp" />
 
         <com.kiven.kutils.widget.UIGridView
             android:layout_width="match_parent"

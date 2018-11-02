@@ -5,9 +5,11 @@ import android.app.ActivityManager
 import android.app.WallpaperManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.support.v4.widget.NestedScrollView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -17,14 +19,21 @@ import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
 import com.iflytek.cloud.*
 import com.jaredrummler.android.processes.AndroidProcesses
-import com.kiven.kutils.activityHelper.KActivityHelper
+import com.kiven.kutils.activityHelper.KActivityDebugHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KAlertDialogHelper
 import com.kiven.kutils.tools.KGranting
+import com.kiven.kutils.tools.KNetwork
+import com.kiven.kutils.tools.KString
 import com.kiven.sample.anim.AHAnim
+import com.kiven.sample.imui.ImActivity
+import com.kiven.sample.jpushUI.AHImui
+import com.kiven.sample.xutils.net.AHNetDemo
 import com.kiven.sample.service.LiveWallpaper2
 import com.kiven.sample.spss.AHSpssTemple
+import com.kiven.sample.util.EncryptUtils
+import com.kiven.sample.xutils.db.AHDbDemo
 import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.android.UI
 import org.jetbrains.anko.coroutines.experimental.Ref
@@ -35,14 +44,16 @@ import kotlin.coroutines.experimental.suspendCoroutine
 /**
  * Created by wangk on 2018/3/28.
  */
-class AHSmallAction : KActivityHelper() {
+class AHSmallAction : KActivityDebugHelper() {
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
         val flexboxLayout = FlexboxLayout(activity)
         flexboxLayout.flexWrap = FlexWrap.WRAP
         flexboxLayout.alignContent = AlignContent.FLEX_START
 
-        setContentView(flexboxLayout)
+        val scroll = NestedScrollView(activity)
+        scroll.addView(flexboxLayout)
+        setContentView(scroll)
 
         val addTitle = fun(text: String) {
             val tv = TextView(activity)
@@ -114,28 +125,28 @@ class AHSmallAction : KActivityHelper() {
 
         // http://doc.xfyun.cn/msc_android/%E9%A2%84%E5%A4%87%E5%B7%A5%E4%BD%9C.html
         val mAsr = getXunfei()
-        addView("讯飞识别", View.OnClickListener {
+        addView("讯飞识别", View.OnClickListener {_ ->
             KGranting.requestPermissions(activity, 377, Manifest.permission.RECORD_AUDIO,
-                    "录音", KGranting.GrantingCallBack {
+                    "录音") {
                 if (it) {
                     val ret = mAsr.startListening(mRecognizerListener)
                     if (ret != ErrorCode.SUCCESS) {
                         showTip("听写失败,错误码：$ret")
                     }
                 }
-            })
+            }
         })
 
         // TODO: 2018/6/4 ----------------------------------------------------------
         addTitle("kotlin 特性")
         addView("协程", View.OnClickListener {
-            launch(CommonPool){
+            launch(CommonPool) {
                 delay(1000)
                 val data = doSomthing()
                 KLog.i("data = $data")
 
                 val dea = suspendCoroutine<Int> {
-                    Thread{
+                    Thread {
                         Thread.sleep(1000)
                         val cuth = Thread.currentThread()
                         KLog.i("Threadid = ${cuth.id}, Threadname = ${cuth.name}")
@@ -152,10 +163,10 @@ class AHSmallAction : KActivityHelper() {
         })
 
         addView("anko Ref协程", View.OnClickListener {
-            val ref:Ref<AHSmallAction> = this.asReference()
+            val ref: Ref<AHSmallAction> = this.asReference()
 
             // 进入协程
-            async(UI){
+            async(UI) {
                 delay(2000)
 
                 // 启动ui线程
@@ -165,8 +176,8 @@ class AHSmallAction : KActivityHelper() {
 
         addView("anko bg()协程", View.OnClickListener {
             // 进入协程
-            async(UI){
-                val data:Deferred<String> = bg {
+            async(UI) {
+                val data: Deferred<String> = bg {
                     Thread.sleep(2000)
                     "anko bg()协程"
                 }
@@ -175,6 +186,11 @@ class AHSmallAction : KActivityHelper() {
                 showDialog(data.await())
             }
         })
+
+        // todo
+        addTitle("xUtil")
+        addView("Net FrameWork", View.OnClickListener { AHNetDemo().startActivity(mActivity) })
+        addView("数据库", View.OnClickListener { AHDbDemo().startActivity(mActivity) })
 
         // TODO: 2018/3/28 ----------------------------------------------------------
         addTitle("其他")
@@ -186,10 +202,56 @@ class AHSmallAction : KActivityHelper() {
         addView("统计分析", View.OnClickListener { AHSpssTemple().startActivity(mActivity) })
         addView("文件管理方案", View.OnClickListener { AHFileTemple().startActivity(mActivity) })
         addView("二维码", View.OnClickListener { AHQrCode().startActivity(mActivity) })
-        addView("", View.OnClickListener { })
-        addView("", View.OnClickListener { })
-        addView("", View.OnClickListener { })
-        addView("", View.OnClickListener { })
+        // 微信要的签名信息是：将MD5中的字母消息后的字符串
+        addView("签名信息", View.OnClickListener { _ ->
+            val flag = if (Build.VERSION.SDK_INT >= 28) {
+                PackageManager.GET_SIGNING_CERTIFICATES
+            } else {
+                PackageManager.GET_SIGNATURES
+            }
+
+            val info = mActivity.packageManager.getPackageInfo(mActivity.packageName, flag)
+
+            val sign = if (Build.VERSION.SDK_INT >= 28) {
+                info.signingInfo.apkContentsSigners
+            } else
+                info.signatures
+
+            val ss = StringBuffer()
+            for (si in sign) {
+                val bytes = si.toByteArray()
+
+                val md5 = EncryptUtils.encryptMD5ToString(bytes)
+                val sha1 = EncryptUtils.encryptSHA1ToString(bytes)
+                val sha256 = EncryptUtils.encryptSHA256ToString(bytes)
+                ss.append("sign : \nmd5 = $md5 \nsha1 = $sha1 \nsha256 = $sha256")
+            }
+
+            KAlertDialogHelper.Show1BDialog(mActivity, String(ss)) {
+                KString.setClipText(mActivity, String(ss))
+            }
+
+        })
+        addView("检测网络", View.OnClickListener {
+            val type = KNetwork.getNetworkType(mActivity)
+            val ts = when (type) {
+                0 -> {"没有网络"}
+                1 -> {"WIFI"}
+                2 -> {"WAP"}
+                3 -> {"MNET"}
+                else -> {"检测失败"}
+            }
+            KAlertDialogHelper.Show1BDialog(mActivity, "网络类型：$ts")
+        })
+        addView("录音播放", View.OnClickListener { AHRecorderPlay().startActivity(mActivity) })
+        addView("imui界面", View.OnClickListener { ImActivity().startActivity(mActivity)})
+        addView("jpushUI", View.OnClickListener {
+            val ahImui = AHImui()
+            ahImui.getIntent()
+                    .putExtra("toAccount", "186429")
+                    .putExtra("sessionType", 1)
+            ahImui.startActivity(mActivity)
+        })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
@@ -197,7 +259,7 @@ class AHSmallAction : KActivityHelper() {
 
     }
 
-    private suspend fun doSomthing():Int {
+    private suspend fun doSomthing(): Int {
         /*return async(CommonPool){
             val data = 6
             data

@@ -34,14 +34,12 @@ dependencies {
     compileOnly "com.android.support:recyclerview-v7:${parent.ext.libraryVersion}"
 
     // ViewModel and LiveData
-    compileOnly "android.arch.lifecycle:extensions:1.0.0"
+    compileOnly "android.arch.lifecycle:extensions:1.1.1"
 //    annotationProcessor "android.arch.lifecycle:compiler:1.0.0"
 
-//    provided 'org.roboguice:roboguice:3.0.1'
-//    provided 'org.roboguice:roboblender:3.0.1'
-    compileOnly 'com.google.code.gson:gson:2.8.2'
-    compileOnly 'com.google.android:flexbox:0.3.0'
-    compileOnly project(':xutils')
+    compileOnly 'com.google.code.gson:gson:2.8.3'
+    compileOnly 'com.google.android:flexbox:0.3.2'
+//    compileOnly project(':xutils')
 }
 apply from: 'jcenerUpload.gradle'
 //apply(from('mavenpush.gradle'))

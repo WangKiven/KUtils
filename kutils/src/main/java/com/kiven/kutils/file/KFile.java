@@ -1,16 +1,24 @@
 package com.kiven.kutils.file;
 
+import android.content.ContentResolver;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.media.MediaScannerConnection;
 import android.os.Environment;
 import android.os.StatFs;
 import android.os.storage.StorageManager;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
+import com.kiven.kutils.logHelper.KLog;
 import com.kiven.kutils.tools.KString;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.lang.reflect.Method;
 import java.net.FileNameMap;
 import java.net.URLConnection;
@@ -72,6 +80,13 @@ public class KFile {
             return null;
         }
         return new File(directory, prefix + "-" + getTimeTag() + suffix);
+    }
+
+    public static File createNameFile(@NonNull String fileName, @NonNull File directory) {
+        if ((!directory.exists()) && (!directory.mkdirs())) {
+            return null;
+        }
+        return new File(directory, fileName);
     }
 
     /**
@@ -208,10 +223,9 @@ public class KFile {
      * @return 返回MIME类型
      * thx https://www.oschina.net/question/571282_223549
      */
+    @Nullable
     private static String getMimeType(String fileName) {
-        FileNameMap fileNameMap = URLConnection.getFileNameMap();
-        String type = fileNameMap.getContentTypeFor(fileName);
-        return type;
+        return URLConnection.getFileNameMap().getContentTypeFor(fileName);
     }
 
     /**
@@ -222,9 +236,68 @@ public class KFile {
      */
     public static boolean isVedioFile(String fileName) {
         String mimeType = getMimeType(fileName);
-        if (!TextUtils.isEmpty(fileName) && mimeType.contains("video/")) {
-            return true;
+        return !TextUtils.isEmpty(fileName) && mimeType != null && mimeType.contains("video/");
+    }
+
+    /**
+     * 保存文件
+     */
+    public static boolean saveFile(@NonNull File file, @NonNull byte[] data) {
+        if (file.exists()) {
+            file.delete();
         }
-        return false;
+
+        try {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            outputStream.write(data);
+            outputStream.flush();
+            outputStream.close();
+        } catch (Exception e) {
+            KLog.e(e);
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * 保存后，如果想在图库中查看，需要通知图库刷新，调用方法：{@link com.kiven.kutils.tools.KUtil#addPicture(String, MediaScannerConnection.OnScanCompletedListener)}
+     * 或者使用方法将图片插入图库中：{@link MediaStore.Images.Media#insertImage(ContentResolver, String, String, String)}
+     */
+    public static boolean saveJpgBitmap(@NonNull Context context, @NonNull File file, @NonNull Bitmap bitmap) {
+        if (file.exists()) {
+            file.delete();
+        }
+
+        boolean b = false;
+        try {
+            FileOutputStream outputStream = new FileOutputStream(file);
+
+            b = bitmap.compress(Bitmap.CompressFormat.JPEG, 90, outputStream);
+
+            outputStream.flush();
+            outputStream.close();
+        } catch (Exception e) {
+            KLog.e(e);
+        }
+
+        return b;
+    }
+
+    /**
+     * 保存图片到图库, 一般在手机存储卡根目录下Pictures文件内。
+     * 保存后，可以直接打开相册查看。不用通知图库刷新
+     */
+    public static String saveJpgBitmap(@NonNull Context context, @NonNull Bitmap bitmap, String title, String detail) {
+        String fileName = KString.isBlank(title) ? getTimeTag() : title;
+        try {
+            MediaStore.Images.Media.insertImage(context.getContentResolver(),
+                    bitmap, fileName, detail);
+        } catch (Exception e) {
+            KLog.e(e);
+            return null;
+        }
+
+        return fileName;
     }
 }

@@ -1,6 +1,7 @@
 package com.kiven.kutils.logHelper;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -8,9 +9,11 @@ import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.NinePatchDrawable;
 import android.graphics.drawable.StateListDrawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.GridLayoutManager;
@@ -61,6 +64,7 @@ public class ACheckRes extends KActivityHelper {
         menu.add(0, Menu.FIRST + 1, 0, "查看日志");
         menu.add(0, Menu.FIRST + 2, 0, "改变背景");
         menu.add(0, Menu.FIRST + 3, 1, "文件目录");
+        menu.add(0, Menu.FIRST + 4, 2, "查看应用相关");
         return true;
     }
 
@@ -85,6 +89,11 @@ public class ACheckRes extends KActivityHelper {
                 break;
             case Menu.FIRST + 3:
                 new AHFileManager().startActivity(mActivity);
+                break;
+            case Menu.FIRST + 4:
+                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                intent.setData(Uri.fromParts("package", mActivity.getPackageName(), null));
+                mActivity.startActivity(intent);
                 break;
         }
         return true;

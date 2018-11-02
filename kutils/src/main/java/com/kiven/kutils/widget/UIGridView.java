@@ -4,6 +4,8 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Message;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +13,6 @@ import android.widget.ImageView;
 
 import com.kiven.kutils.R;
 import com.kiven.kutils.tools.KUtil;
-
-import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,6 +99,11 @@ public class UIGridView extends ViewGroup {
     //每一行的高度
     private List<Integer> mLineHeight = new ArrayList<>();
 
+    /**
+     * 精确模式（MeasureSpec.EXACTLY）:在这种模式下，尺寸的值是多少，那么这个组件的长或宽就是多少。对应布局参数（match_parent，具体值）
+     * 最大模式（MeasureSpec.AT_MOST）:这个也就是父组件，能够给出的最大的空间，当前组件的长或宽最大只能为这么大，当然也可以比这个小。对应布局参数（wrap_content）
+     * 未指定模式（MeasureSpec.UNSPECIFIED）:这个就是说，当前组件，可以随便用空间，不受限制。
+     */
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -303,9 +308,17 @@ public class UIGridView extends ViewGroup {
 
         }
 
+
+        final Handler ch = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message msg) {
+                addAllItemView();
+                return true;
+            }
+        });
         public void notifyDataSetChanged() {
             if (mGridView != null) {
-                x.task().run(new Runnable() {
+                /*x.task().run(new Runnable() {
                     @Override
                     public void run() {
                         x.task().post(new Runnable() {
@@ -315,7 +328,14 @@ public class UIGridView extends ViewGroup {
                             }
                         });
                     }
-                });
+                });*/
+
+                new Thread() {
+                    @Override
+                    public void run() {
+                        ch.sendEmptyMessage(0);
+                    }
+                }.start();
             }
         }
 

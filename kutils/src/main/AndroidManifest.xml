@@ -7,4 +7,5 @@
     <!--<uses-sdk
         tools:overrideLibrary="android.support.v7.appcompat, android.support.fragment, android.support.coreutils, android.support.graphics.drawable.animated" />-->
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 </manifest>

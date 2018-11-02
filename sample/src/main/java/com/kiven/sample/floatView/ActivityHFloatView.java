@@ -1,6 +1,7 @@
 package com.kiven.sample.floatView;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -46,6 +47,7 @@ public class ActivityHFloatView extends KActivityHelper {
                 if (Build.VERSION.SDK_INT >= 23) {
                     if (!Settings.canDrawOverlays(mActivity)) {
                         Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
+                        intent.setData(Uri.parse("package:" + mActivity.getPackageName()));
                         mActivity.startActivity(intent);
                     } else {
                         startAppOutFloat();
@@ -67,5 +69,13 @@ public class ActivityHFloatView extends KActivityHelper {
             mActivity.startService(intent);
         }
         isShow = !isShow;
+    }
+
+    @Override
+    public void onPause() {
+        if (activityFloatView != null && activityFloatView.isShow) {
+            activityFloatView.hideFloat();
+        }
+        super.onPause();
     }
 }

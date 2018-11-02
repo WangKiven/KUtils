@@ -6,22 +6,20 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.kiven.kutils.activityHelper.KActivityHelper;
-import com.kiven.kutils.logHelper.KLog;
-
-import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * Created by kiven on 16/5/6.
  */
 public class KContext extends Application {
     private static KContext mInstance;
+
     public static KContext getInstance() {
         return mInstance;
     }
@@ -36,10 +34,29 @@ public class KContext extends Application {
     }
 
     protected void init() {
-        x.Ext.init(this);
-        x.Ext.setDebug(KLog.isDebug());
+//        x.Ext.init(this);
+//        x.Ext.setDebug(KLog.isDebug());
     }
 
+    /**
+     * 判断当前进程是否是主进程， 可用于防止多次调用 onCreate()
+     */
+    protected boolean isMainProcess() {
+        String packageName = getPackageName();
+
+        int pid = android.os.Process.myPid();
+        ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        if (activityManager != null)
+            for (ActivityManager.RunningAppProcessInfo appProcess : activityManager
+                    .getRunningAppProcesses()) {
+
+                if (appProcess.pid == pid) {
+                    return packageName.equals(appProcess.processName);
+                }
+            }
+
+        return true;
+    }
 
     // TODO-------------------------------
 
@@ -50,6 +67,7 @@ public class KContext extends Application {
     public enum ActivityStatus {
         UNKNOWN, CREATED, STARTED, RESUMED, PAUSED, FINISHING, STOPED, DESTORIED;
     }
+
     public class ActivityInfo {
         Activity activity;
         ActivityStatus status;
@@ -79,6 +97,7 @@ public class KContext extends Application {
 
         changeStatus(checkOrAdd(activity, ActivityStatus.CREATED));
     }
+
     public void onActivityStart(Activity activity) {
         if (activity == null) {
             return;
@@ -86,6 +105,7 @@ public class KContext extends Application {
 
         changeStatus(checkOrAdd(activity, ActivityStatus.STARTED));
     }
+
     public void onActivityResume(Activity activity) {
         if (activity == null) {
             return;
@@ -109,6 +129,7 @@ public class KContext extends Application {
 
         changeStatus(checkOrAdd(activity, ActivityStatus.PAUSED));
     }
+
     public void onActivityStop(Activity activity) {
         if (activity == null) {
             return;
@@ -116,6 +137,7 @@ public class KContext extends Application {
 
         changeStatus(checkOrAdd(activity, ActivityStatus.STOPED));
     }
+
     public void onActivityDestory(Activity activity) {
         if (activity == null) {
             return;
@@ -140,7 +162,6 @@ public class KContext extends Application {
     }
 
     /**
-     *
      * @param activity 是否是当前显示的activity
      */
     public boolean canShowDialog(Activity activity) {
@@ -156,6 +177,7 @@ public class KContext extends Application {
 
     /**
      * app是否在前台
+     *
      * @return
      */
     public boolean isOnForeground() {
@@ -196,6 +218,7 @@ public class KContext extends Application {
         a.status = status;
         return a;
     }
+
     private ActivityInfo checkOrAdd(@NonNull Activity activity) {
 
         for (ActivityInfo a : activities) {
@@ -230,6 +253,7 @@ public class KContext extends Application {
 
     private List<ActivityInfo> activities = new ArrayList<>();
     private List<ActivityOnChangeStatusListener> activityOnChangeStatusListeners = new ArrayList<>();
+
     private void changeStatus(ActivityInfo activityInfo) {
         for (ActivityOnChangeStatusListener listener : activityOnChangeStatusListeners) {
             listener.onChange(activityInfo);
@@ -255,6 +279,7 @@ public class KContext extends Application {
     }
 
     // TODO------------ 启动关闭activity -------------------
+
     /**
      * 关闭所有activity
      */
@@ -263,6 +288,7 @@ public class KContext extends Application {
             a.activity.finish();
         }
     }
+
     /**
      * 下沉启动activity。关闭所有activity，启动新的activity
      */
@@ -270,6 +296,7 @@ public class KContext extends Application {
         closeAllActivity();
         startActivity(new Intent(this, aClass));
     }
+
     /**
      * 下沉启动activity。关闭所有activity，启动新的activity
      */
@@ -279,5 +306,16 @@ public class KContext extends Application {
         // 不加这句可能会蹦
         helper.getIntent().addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
         helper.startActivity(this);
+    }
+
+    @Nullable
+    public Activity getTopActivity() {
+        if (activities.size() > 0) {
+            ActivityInfo activityInfo = activities.get(activities.size() - 1);
+            if (activityInfo.status == ActivityStatus.RESUMED)
+                return activityInfo.activity;
+        }
+
+        return null;
     }
 }

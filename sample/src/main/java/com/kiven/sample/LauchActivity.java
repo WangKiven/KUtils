@@ -43,7 +43,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.kiven.kutils.activityHelper.KFragmentActivity;
-import com.kiven.kutils.activityHelper.activity.KXUtilActivity;
+import com.kiven.kutils.activityHelper.activity.KActivity;
 import com.kiven.kutils.callBack.CallBack;
 import com.kiven.kutils.file.KFile;
 import com.kiven.kutils.logHelper.KLog;
@@ -71,7 +71,7 @@ import java.util.HashMap;
 import me.grantland.widget.AutofitHelper;
 
 @ContentView(R.layout.activity_lauch)
-public class LauchActivity extends KXUtilActivity {
+public class LauchActivity extends KActivity {
 
     private static final String FILEPROVIDER_AUTHORITY = "com.kiven.sample.fileprovider";
     private static final String IMAGE_DIR = "KUtilSampleFile" + File.separator + "testImage";
@@ -86,6 +86,8 @@ public class LauchActivity extends KXUtilActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        x.view().inject(this);
+
         KUtil.printDeviceInfo();
 
         setupWindowAnimations();

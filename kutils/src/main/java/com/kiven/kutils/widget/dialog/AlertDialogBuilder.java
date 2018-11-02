@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.StyleRes;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
@@ -13,14 +14,17 @@ import android.widget.TextView;
 import com.kiven.kutils.R;
 
 /**
- *
  * Created by kiven on 2016/10/10.
  */
 
 public class AlertDialogBuilder {
     // 使用的布局, 可设置为自己的布局
-    public static @LayoutRes int k_layout = R.layout.k_alert_dialog;
-    public static @StyleRes int k_style = R.style.KAlertDialog;
+    public static @LayoutRes
+    int k_layout = R.layout.k_alert_dialog;
+    public static @StyleRes
+    int k_style = R.style.KAlertDialog;
+
+    private boolean dealCancel = true;// 是否处理其他（点击界面外部或者点击手机返回键 触发的关闭界面）取消情况，默认处理
 
     private Context context;
     private Dialog dialog;
@@ -46,7 +50,7 @@ public class AlertDialogBuilder {
 
             @Override
             public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                if (KeyEvent.KEYCODE_BACK == keyCode && event.getAction() == KeyEvent.ACTION_DOWN) {
+                if (dealCancel && KeyEvent.KEYCODE_BACK == keyCode && event.getAction() == KeyEvent.ACTION_DOWN) {
                     dialog.dismiss();
                     if (cancleListener != null) {
                         cancleListener.onClick(null);
@@ -62,30 +66,48 @@ public class AlertDialogBuilder {
         dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
-                if (cancleListener != null) {
-                    cancleListener.onClick(null);
-                } else if (okListener != null) {
-                    okListener.onClick(null);
-                }
+                if (dealCancel)
+                    if (cancleListener != null) {
+                        cancleListener.onClick(null);
+                    } else if (okListener != null) {
+                        okListener.onClick(null);
+                    }
             }
         });
     }
 
-    public void setCancelable(boolean flag) {
+    public AlertDialogBuilder setCancelable(boolean flag) {
         dialog.setCancelable(flag);
+        return this;
     }
 
-    public void setTitle(String text) {
-        TextView tv_title = (TextView) findViewById(R.id.tv_title);
-        tv_title.setText(text);
+    /**
+     * 是否处理其他（点击界面外部或者点击手机返回键 触发的关闭界面）取消情况，默认处理
+     */
+    public AlertDialogBuilder setDealCancel(boolean dealCancel) {
+        this.dealCancel = dealCancel;
+        return this;
     }
 
-    public void setMessage(String text) {
+
+    public AlertDialogBuilder setTitle(String text) {
+        if (TextUtils.isEmpty(text)) {
+            TextView tv_title = (TextView) findViewById(R.id.tv_title);
+            tv_title.setVisibility(View.GONE);
+        } else {
+            TextView tv_title = (TextView) findViewById(R.id.tv_title);
+            tv_title.setText(text);
+        }
+        return this;
+    }
+
+    public AlertDialogBuilder setMessage(String text) {
         TextView tv_message = (TextView) findViewById(R.id.tv_message);
         tv_message.setText(text);
+        return this;
     }
 
-    public void setCancleBtn(String text, int color, View.OnClickListener listener) {
+    public AlertDialogBuilder setCancleBtn(String text, int color, View.OnClickListener listener) {
         TextView tv_cancel = (TextView) findViewById(R.id.tv_cancel);
         tv_cancel.setText(text);
         if (color > 0) {
@@ -112,9 +134,10 @@ public class AlertDialogBuilder {
                 dialog.dismiss();
             }
         });
+        return this;
     }
 
-    public void setOkBtn(String text, int color, View.OnClickListener listener) {
+    public AlertDialogBuilder setOkBtn(String text, int color, View.OnClickListener listener) {
         TextView tv_ok = (TextView) findViewById(R.id.tv_ok);
         tv_ok.setText(text);
         if (color > 0) {
@@ -131,6 +154,7 @@ public class AlertDialogBuilder {
                 dialog.dismiss();
             }
         });
+        return this;
     }
 
     private View findViewById(@IdRes int resId) {

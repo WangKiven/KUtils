@@ -3,6 +3,7 @@ package com.kiven.kutils.logHelper;
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -29,8 +30,6 @@ import com.kiven.kutils.tools.KString;
 import com.kiven.kutils.tools.KUtil;
 import com.kiven.kutils.tools.KView;
 import com.kiven.kutils.widget.UIGridView;
-
-import org.xutils.x;
 
 import java.io.File;
 import java.io.IOException;
@@ -178,8 +177,9 @@ public class AHFileManager extends KActivityHelper {
         void showImage() {
             ImageView iv = new ImageView(mActivity);
             iv.setAdjustViewBounds(true);
-            iv.setScaleType(ImageView.ScaleType.CENTER);
-            x.image().bind(iv, cFile.getAbsolutePath());
+            iv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+//            x.image().bind(iv, cFile.getAbsolutePath());
+            iv.setImageBitmap(BitmapFactory.decodeFile(cFile.getAbsolutePath()));
 
             new AlertDialog.Builder(mActivity).setView(iv).show();
         }
@@ -267,7 +267,9 @@ public class AHFileManager extends KActivityHelper {
                 imageView.setImageResource(android.R.drawable.ic_dialog_email);
             } else {
                 if (KFile.checkFileType(cFile) != KFile.FileType.UNKNOWN) {
-                    x.image().bind(imageView, cFile.getAbsolutePath());
+//                    x.image().bind(imageView, cFile.getAbsolutePath());
+
+                    imageView.setImageBitmap(BitmapFactory.decodeFile(cFile.getAbsolutePath()));
                 } else
                     imageView.setImageResource(android.R.drawable.ic_menu_gallery);
             }

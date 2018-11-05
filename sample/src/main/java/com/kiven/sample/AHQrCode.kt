@@ -158,7 +158,7 @@ class AHQrCode : KActivityHelper() {
             canvas.drawBitmap(src, 0f, 0f, null)
             canvas.scale(scaleFactor, scaleFactor, (srcWidth / 2).toFloat(), (srcHeight / 2).toFloat())
             canvas.drawBitmap(logo, ((srcWidth - logoWidth) / 2).toFloat(), ((srcHeight - logoHeight) / 2).toFloat(), null)
-            canvas.save(Canvas.ALL_SAVE_FLAG)
+            canvas.save()
             canvas.restore()
         } catch (e: Exception) {
             e.printStackTrace()

@@ -35,7 +35,7 @@ android {
                 res.srcDirs = ['res']
                 assets.srcDirs = ['assets']*/
 //            res.srcDirs = ['src/main/res', 'src/main/res/layout']// 有这句代码的话，布局文件改变，不能实时运行到手机，必须clean project 后运行，才有效果
-            jniLibs.srcDirs = ['xunfeiLibs', 'zxingLibs', 'libs']
+            jniLibs.srcDirs = ['xunfeiLibs', 'zxingLibs', 'mimcLibs', 'libs']
         }
     }
     packagingOptions {
@@ -56,6 +56,7 @@ project.tasks.withType(JavaCompile) { task ->
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation fileTree(dir: 'xunfeiLibs', include: ['*.jar', '*.bak'])
+    implementation fileTree(dir: 'mimcLibs', include: ['*.jar', '*.bak'])
 
     testImplementation 'junit:junit:4.12'
     implementation project(':kutils')
@@ -111,6 +112,9 @@ dependencies {
 
     implementation 'cn.jiguang.imui:messagelist:0.7.4'
     implementation 'cn.jiguang.imui:chatinput:0.9.1'
+
+
+    implementation 'com.google.protobuf:protobuf-lite:3.0.0'// 小米即时通讯用到
 }
 kotlin {
     experimental {

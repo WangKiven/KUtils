@@ -10,6 +10,8 @@ import com.kiven.kutils.activityHelper.KHelperActivity;
 import com.kiven.kutils.tools.KUtil;
 import com.kiven.sample.R;
 
+import org.xutils.x;
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
@@ -30,17 +32,18 @@ import cn.jiguang.imui.messages.MsgListAdapter;
 
 public class AHImui extends KActivityDebugHelper {
 
-    /*@InjectExtra("toAccount")
     private String toAccount;
 
-    @InjectExtra(value = "sessionType", optional = true)
-    private SessionTypeEnum sessionType = SessionTypeEnum.P2P;*/
+    private int sessionType = 0;
 
 
     @Override
     public void onCreate(KHelperActivity activity, Bundle savedInstanceState) {
         super.onCreate(activity, savedInstanceState);
         setContentView(R.layout.ah_imui);
+
+        toAccount = mActivity.getIntent().getStringExtra("toAccount");
+        sessionType = mActivity.getIntent().getIntExtra("sessionType", 0);
 
         initList();
 

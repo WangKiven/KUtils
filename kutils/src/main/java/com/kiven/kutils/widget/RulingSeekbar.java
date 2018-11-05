@@ -170,9 +170,10 @@ public class RulingSeekbar extends View {
                 break;
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
-                if (onChange != null)
+                if (onChange != null) {
                     progress = position2Value(binX);
                     onChange.onStopTrackingTouch(this);
+                }
                 break;
         }
         return true;

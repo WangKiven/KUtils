@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.TextView
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
@@ -17,8 +18,6 @@ import com.kiven.kutils.tools.KUtil
 import kotlinx.android.synthetic.main.ah_check_res.view.*
 import kotlinx.android.synthetic.main.item_res.view.*
 import org.jetbrains.anko.backgroundColor
-import org.jetbrains.anko.sdk25.coroutines.onClick
-import org.jetbrains.anko.sdk25.coroutines.onItemSelectedListener
 import java.lang.reflect.Field
 
 /**
@@ -57,14 +56,20 @@ class AHCheckRes : KActivityHelper() {
         recyclerView.layoutManager = GridLayoutManager(mActivity, KUtil.getScreenWith(mActivity) / KUtil.dip2px(50f))
         recyclerView.adapter = resAdapter
 
-        findViewById<AppCompatSpinner>(R.id.spinner_where).onItemSelectedListener {
-            onItemSelected { _, _, position, _ ->
-                resWhere = position
+
+        findViewById<AppCompatSpinner>(R.id.spinner_where).onItemSelectedListener = object : OnItemSelectedListener {
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+
+            }
+
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                resWhere = p2
                 onChange()
             }
+
         }
 
-        findViewById<AppCompatSpinner>(R.id.spinner_type).onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        findViewById<AppCompatSpinner>(R.id.spinner_type).onItemSelectedListener = object : OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
 
@@ -74,9 +79,7 @@ class AHCheckRes : KActivityHelper() {
             }
         }
 
-        findViewById<TextView?>(R.id.tv_bd)?.onClick {
-
-        }
+        findViewById<TextView?>(R.id.tv_bd)?.setOnClickListener { }
     }
 
     private fun onChange() {

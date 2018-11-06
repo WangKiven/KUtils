@@ -1,6 +1,8 @@
 package com.kiven.sample
 
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
@@ -21,7 +23,7 @@ import com.kiven.kutils.tools.KAlertDialogHelper
 import com.kiven.kutils.tools.KUtil
 import java.util.*
 
-class AHQrCode:KActivityHelper() {
+class AHQrCode : KActivityHelper() {
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
         val flexboxLayout = FlexboxLayout(activity)
@@ -53,7 +55,7 @@ class AHQrCode:KActivityHelper() {
         // TODO: 2018/7/6 ---------------------------------------------
         addTitle("zxing: https://github.com/WangKiven/zxing")
 
-        var bitmap:Bitmap? = null
+        var bitmap: Bitmap? = null
         addView("创建", View.OnClickListener {
             var text = editText.text.toString()
             if (text.isEmpty()) {
@@ -61,7 +63,17 @@ class AHQrCode:KActivityHelper() {
                 editText.setText(text)
             }
 
-            bitmap = encodeAsBitmap(text)
+            bitmap = encodeAsBitmap(text, false)
+            image.setImageBitmap(bitmap)
+        })
+        addView("创建带图标", View.OnClickListener {
+            var text = editText.text.toString()
+            if (text.isEmpty()) {
+                text = "好好学习，天天向上"
+                editText.setText(text)
+            }
+
+            bitmap = encodeAsBitmap(text, true)
             image.setImageBitmap(bitmap)
         })
         addView("识别图片 ", View.OnClickListener {
@@ -78,16 +90,18 @@ class AHQrCode:KActivityHelper() {
                     KAlertDialogHelper.Show1BDialog(mActivity, "呀！没解析出来额。。。")
                 }
 
-            }?:return@OnClickListener
+            } ?: return@OnClickListener
         })
 
         addView("扫描", View.OnClickListener {
 
         })
+
+        addTitle("\n\nzxing zbar 使用快捷使用库: https://github.com/WangKiven/BGAQRCode-Android")
     }
 
     @Throws(WriterException::class)
-    private fun encodeAsBitmap(text: String): Bitmap? {
+    private fun encodeAsBitmap(text: String, withLogo: Boolean): Bitmap? {
         var hints: EnumMap<EncodeHintType, Any>? = null
         val encoding = guessAppropriateEncoding(text)
         if (encoding != null) {
@@ -114,7 +128,7 @@ class AHQrCode:KActivityHelper() {
 
         val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         bitmap.setPixels(pixels, 0, width, 0, 0, width, height)
-        return bitmap
+        return if (withLogo) addLogoToQRCode(bitmap, BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher)) else bitmap
     }
 
     private fun guessAppropriateEncoding(contents: CharSequence): String? {
@@ -125,5 +139,32 @@ class AHQrCode:KActivityHelper() {
             }
         }
         return null
+    }
+
+    /**
+     * 添加logo到二维码图片上
+     */
+    private fun addLogoToQRCode(src: Bitmap, logo: Bitmap): Bitmap? {
+
+        val srcWidth = src.width
+        val srcHeight = src.height
+        val logoWidth = logo.width
+        val logoHeight = logo.height
+
+        val scaleFactor = srcWidth * 1.0f / 5f / logoWidth.toFloat()
+        var bitmap: Bitmap? = Bitmap.createBitmap(srcWidth, srcHeight, Bitmap.Config.ARGB_8888)
+        try {
+            val canvas = Canvas(bitmap!!)
+            canvas.drawBitmap(src, 0f, 0f, null)
+            canvas.scale(scaleFactor, scaleFactor, (srcWidth / 2).toFloat(), (srcHeight / 2).toFloat())
+            canvas.drawBitmap(logo, ((srcWidth - logoWidth) / 2).toFloat(), ((srcHeight - logoHeight) / 2).toFloat(), null)
+            canvas.save()
+            canvas.restore()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            bitmap = null
+        }
+
+        return bitmap
     }
 }

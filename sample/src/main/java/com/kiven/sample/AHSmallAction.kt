@@ -8,6 +8,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.support.design.widget.Snackbar
 import android.support.v4.widget.NestedScrollView
 import android.view.View
@@ -34,6 +35,7 @@ import com.kiven.sample.service.LiveWallpaper2
 import com.kiven.sample.spss.AHSpssTemple
 import com.kiven.sample.util.EncryptUtils
 import com.kiven.sample.xutils.db.AHDbDemo
+import com.xiaomi.mimc.MIMCUser
 import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.android.UI
 import org.jetbrains.anko.coroutines.experimental.Ref
@@ -246,9 +248,19 @@ class AHSmallAction : KActivityDebugHelper() {
         addView("录音播放", View.OnClickListener { AHRecorderPlay().startActivity(mActivity) })
         addView("imui界面", View.OnClickListener { ImActivity().startActivity(mActivity)})
         addView("jpushUI", View.OnClickListener {
+
+
+
+            // 登录小米通信
+            val  mdir = mActivity.getDir("mimc", Context.MODE_PRIVATE)
+            if (!mdir.exists()) {
+                mdir.mkdir()
+            }
+            val user = MIMCUser.newInstance("123", mdir.absolutePath)
+
             val ahImui = AHImui()
-            ahImui.getIntent()
-                    .putExtra("toAccount", "186429")
+            ahImui.intent
+                    .putExtra("toAccount", "456")
                     .putExtra("sessionType", 1)
             ahImui.startActivity(mActivity)
         })

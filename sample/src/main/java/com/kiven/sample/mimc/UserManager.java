@@ -314,7 +314,7 @@ public class UserManager {
      * @param appAccount APP自己维护的用户帐号，不能为null
      * @return 返回新创建的用户
      */
-    public MIMCUser newUser(String appAccount){
+    public MIMCUser newUser(String appAccount, String cachePath){
         if (appAccount == null || appAccount.isEmpty()) return null;
         if (this.appAccount.equals(appAccount)) return getUser();
 
@@ -326,7 +326,7 @@ public class UserManager {
 
         // online
         // cachePath必须传入，用于缓存文件读写，否则返回null
-        mUser = MIMCUser.newInstance(appAccount, AppContext.getInstance().getExternalFilesDir(null).getAbsolutePath());
+        mUser = MIMCUser.newInstance(appAccount, cachePath == null? AppContext.getInstance().getExternalFilesDir(null).getAbsolutePath(): cachePath);
         // 注册相关监听，必须
         mUser.registerTokenFetcher(new TokenFetcher());
         mUser.registerMessageHandler(new MessageHandler());

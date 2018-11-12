@@ -30,12 +30,18 @@ import com.kiven.kutils.tools.KString
 import com.kiven.sample.anim.AHAnim
 import com.kiven.sample.imui.ImActivity
 import com.kiven.sample.jpushUI.AHImui
+import com.kiven.sample.mimc.ChatMsg
+import com.kiven.sample.mimc.UserManager
 import com.kiven.sample.xutils.net.AHNetDemo
 import com.kiven.sample.service.LiveWallpaper2
 import com.kiven.sample.spss.AHSpssTemple
 import com.kiven.sample.util.EncryptUtils
 import com.kiven.sample.xutils.db.AHDbDemo
+import com.xiaomi.mimc.MIMCGroupMessage
+import com.xiaomi.mimc.MIMCMessage
+import com.xiaomi.mimc.MIMCServerAck
 import com.xiaomi.mimc.MIMCUser
+import com.xiaomi.mimc.common.MIMCConstant
 import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.android.UI
 import org.jetbrains.anko.coroutines.experimental.Ref
@@ -249,20 +255,91 @@ class AHSmallAction : KActivityDebugHelper() {
         addView("imui界面", View.OnClickListener { ImActivity().startActivity(mActivity)})
         addView("jpushUI", View.OnClickListener {
 
+            UserManager.getInstance().setHandleMIMCMsgListener(object :UserManager.OnHandleMIMCMsgListener{
+                override fun onHandleMessage(chatMsg: ChatMsg?) {
+                }
 
+                override fun onHandleGroupMessage(chatMsg: ChatMsg?) {
+                }
+
+                override fun onHandleStatusChanged(status: MIMCConstant.OnlineStatus?) {
+                    mActivity.runOnUiThread {
+                        if (status == MIMCConstant.OnlineStatus.ONLINE) {
+                            val ahImui = AHImui()
+                            ahImui.intent
+                                    .putExtra("toAccount", "456")
+                                    .putExtra("sessionType", 1)
+                            ahImui.startActivity(mActivity)
+                        }
+                    }
+                }
+
+                override fun onHandleServerAck(serverAck: MIMCServerAck?) {
+                }
+
+                override fun onHandleCreateGroup(json: String?, isSuccess: Boolean) {
+                }
+
+                override fun onHandleQueryGroupInfo(json: String?, isSuccess: Boolean) {
+                }
+
+                override fun onHandleQueryGroupsOfAccount(json: String?, isSuccess: Boolean) {
+                }
+
+                override fun onHandleJoinGroup(json: String?, isSuccess: Boolean) {
+                }
+
+                override fun onHandleQuitGroup(json: String?, isSuccess: Boolean) {
+                }
+
+                override fun onHandleKickGroup(json: String?, isSuccess: Boolean) {
+                }
+
+                override fun onHandleUpdateGroup(json: String?, isSuccess: Boolean) {
+                }
+
+                override fun onHandleDismissGroup(json: String?, isSuccess: Boolean) {
+                }
+
+                override fun onHandlePullP2PHistory(json: String?, isSuccess: Boolean) {
+                }
+
+                override fun onHandlePullP2THistory(json: String?, isSuccess: Boolean) {
+                }
+
+                override fun onHandleSendMessageTimeout(message: MIMCMessage?) {
+                }
+
+                override fun onHandleSendGroupMessageTimeout(groupMessage: MIMCGroupMessage?) {
+                }
+
+                override fun onHandleJoinUnlimitedGroup(topicId: Long, code: Int, errMsg: String?) {
+                }
+
+                override fun onHandleQuitUnlimitedGroup(topicId: Long, code: Int, errMsg: String?) {
+                }
+
+                override fun onHandleDismissUnlimitedGroup(json: String?, isSuccess: Boolean) {
+                }
+
+                override fun onHandleQueryUnlimitedGroupMembers(json: String?, isSuccess: Boolean) {
+                }
+
+                override fun onHandleQueryUnlimitedGroups(json: String?, isSuccess: Boolean) {
+                }
+
+                override fun onHandleQueryUnlimitedGroupOnlineUsers(json: String?, isSuccess: Boolean) {
+                }
+            })
 
             // 登录小米通信
             val  mdir = mActivity.getDir("mimc", Context.MODE_PRIVATE)
             if (!mdir.exists()) {
                 mdir.mkdir()
             }
-            val user = MIMCUser.newInstance("123", mdir.absolutePath)
+//            val user = MIMCUser.newInstance("123", mdir.absolutePath)
+            UserManager.getInstance().newUser("123", mdir.absolutePath)?.login()
 
-            val ahImui = AHImui()
-            ahImui.intent
-                    .putExtra("toAccount", "456")
-                    .putExtra("sessionType", 1)
-            ahImui.startActivity(mActivity)
         })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })

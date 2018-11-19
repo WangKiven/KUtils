@@ -248,10 +248,13 @@ public class KFile {
         }
 
         try {
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            fileOutputStream.write(data);
+            fileOutputStream.close();
+            /*ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             outputStream.write(data);
             outputStream.flush();
-            outputStream.close();
+            outputStream.close();*/
         } catch (Exception e) {
             KLog.e(e);
             return false;

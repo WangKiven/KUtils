@@ -37,8 +37,8 @@ dependencies {
     compileOnly "android.arch.lifecycle:extensions:1.1.1"
 //    annotationProcessor "android.arch.lifecycle:compiler:1.0.0"
 
-    compileOnly 'com.google.code.gson:gson:2.8.3'
-    compileOnly 'com.google.android:flexbox:0.3.2'
+    compileOnly 'com.google.code.gson:gson:2.8.5'
+    compileOnly 'com.google.android:flexbox:1.0.0'
 //    compileOnly project(':xutils')
 }
 apply from: 'jcenerUpload.gradle'

@@ -51,10 +51,10 @@ public class KGranting {
             if (ContextCompat.checkSelfPermission(mActivity, g) != PackageManager.PERMISSION_GRANTED) {
                 if (!mGrant.contains(g)) {
                     mGrant.add(g);
+                    grantName.add(tGrantName[i]);
+                    /*if (!ActivityCompat.shouldShowRequestPermissionRationale(mActivity, g)) {
 
-                    if (!ActivityCompat.shouldShowRequestPermissionRationale(mActivity, g)) {
-                        grantName.add(tGrantName[i]);
-                    }
+                    }*/
                 }
             }
             i++;

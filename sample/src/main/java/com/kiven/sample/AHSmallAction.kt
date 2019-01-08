@@ -8,7 +8,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.support.design.widget.Snackbar
 import android.support.v4.widget.NestedScrollView
 import android.view.View
@@ -32,22 +31,18 @@ import com.kiven.sample.imui.ImActivity
 import com.kiven.sample.jpushUI.AHImui
 import com.kiven.sample.mimc.ChatMsg
 import com.kiven.sample.mimc.UserManager
-import com.kiven.sample.xutils.net.AHNetDemo
 import com.kiven.sample.service.LiveWallpaper2
 import com.kiven.sample.spss.AHSpssTemple
 import com.kiven.sample.util.EncryptUtils
 import com.kiven.sample.xutils.db.AHDbDemo
+import com.kiven.sample.xutils.net.AHNetDemo
 import com.xiaomi.mimc.MIMCGroupMessage
 import com.xiaomi.mimc.MIMCMessage
 import com.xiaomi.mimc.MIMCServerAck
-import com.xiaomi.mimc.MIMCUser
 import com.xiaomi.mimc.common.MIMCConstant
-import kotlinx.coroutines.experimental.*
-import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.*
 import org.jetbrains.anko.coroutines.experimental.Ref
 import org.jetbrains.anko.coroutines.experimental.asReference
-import org.jetbrains.anko.coroutines.experimental.bg
-import kotlin.coroutines.experimental.suspendCoroutine
 
 /**
  * Created by wangk on 2018/3/28.
@@ -133,7 +128,7 @@ class AHSmallAction : KActivityDebugHelper() {
 
         // http://doc.xfyun.cn/msc_android/%E9%A2%84%E5%A4%87%E5%B7%A5%E4%BD%9C.html
         val mAsr = getXunfei()
-        addView("讯飞识别", View.OnClickListener {_ ->
+        addView("讯飞识别", View.OnClickListener { _ ->
             KGranting.requestPermissions(activity, 377, Manifest.permission.RECORD_AUDIO,
                     "录音") {
                 if (it) {
@@ -148,7 +143,7 @@ class AHSmallAction : KActivityDebugHelper() {
         // TODO: 2018/6/4 ----------------------------------------------------------
         addTitle("kotlin 特性")
         addView("协程", View.OnClickListener {
-            launch(CommonPool) {
+            /*launch(CommonPool) {
                 delay(1000)
                 val data = doSomthing()
                 KLog.i("data = $data")
@@ -164,6 +159,29 @@ class AHSmallAction : KActivityDebugHelper() {
                 KLog.i("dea = $dea")
                 val cuth = Thread.currentThread()
                 KLog.i("id = ${cuth.id}, name = ${cuth.name}")
+            }*/
+
+            GlobalScope.launch {
+                delay(1000)
+                val data = doSomthing()
+                KLog.i("data = $data")
+
+                /*val dea = suspendCoroutine<Int> {
+                    Thread {
+                        Thread.sleep(1000)
+                        val cuth = Thread.currentThread()
+                        KLog.i("Threadid = ${cuth.id}, Threadname = ${cuth.name}")
+                        it.resume(7)
+                    }.start()
+                }
+
+                KLog.i("dea = $dea")*/
+                val cuth = Thread.currentThread()
+                KLog.i("id = ${cuth.id}, name = ${cuth.name}")
+            }
+
+            runBlocking {
+
             }
 
             val ct = Thread.currentThread()
@@ -174,7 +192,14 @@ class AHSmallAction : KActivityDebugHelper() {
             val ref: Ref<AHSmallAction> = this.asReference()
 
             // 进入协程
-            async(UI) {
+            /*async(UI) {
+                delay(2000)
+
+                // 启动ui线程
+                ref().showDialog("anko Ref协程")
+            }*/
+
+            GlobalScope.launch(Dispatchers.Main) {
                 delay(2000)
 
                 // 启动ui线程
@@ -184,8 +209,17 @@ class AHSmallAction : KActivityDebugHelper() {
 
         addView("anko bg()协程", View.OnClickListener {
             // 进入协程
-            async(UI) {
+            /*async(UI) {
                 val data: Deferred<String> = bg {
+                    Thread.sleep(2000)
+                    "anko bg()协程"
+                }
+
+                // 启动ui线程
+                showDialog(data.await())
+            }*/
+            GlobalScope.launch(Dispatchers.Main) {
+                val data = async {
                     Thread.sleep(2000)
                     "anko bg()协程"
                 }
@@ -243,19 +277,29 @@ class AHSmallAction : KActivityDebugHelper() {
         addView("检测网络", View.OnClickListener {
             val type = KNetwork.getNetworkType(mActivity)
             val ts = when (type) {
-                0 -> {"没有网络"}
-                1 -> {"WIFI"}
-                2 -> {"WAP"}
-                3 -> {"MNET"}
-                else -> {"检测失败"}
+                0 -> {
+                    "没有网络"
+                }
+                1 -> {
+                    "WIFI"
+                }
+                2 -> {
+                    "WAP"
+                }
+                3 -> {
+                    "MNET"
+                }
+                else -> {
+                    "检测失败"
+                }
             }
             KAlertDialogHelper.Show1BDialog(mActivity, "网络类型：$ts")
         })
         addView("录音播放", View.OnClickListener { AHRecorderPlay().startActivity(mActivity) })
-        addView("imui界面", View.OnClickListener { ImActivity().startActivity(mActivity)})
+        addView("imui界面", View.OnClickListener { ImActivity().startActivity(mActivity) })
         addView("jpushUI", View.OnClickListener {
 
-            UserManager.getInstance().setHandleMIMCMsgListener(object :UserManager.OnHandleMIMCMsgListener{
+            UserManager.getInstance().setHandleMIMCMsgListener(object : UserManager.OnHandleMIMCMsgListener {
                 override fun onHandleMessage(chatMsg: ChatMsg?) {
                 }
 
@@ -333,7 +377,7 @@ class AHSmallAction : KActivityDebugHelper() {
             })
 
             // 登录小米通信
-            val  mdir = mActivity.getDir("mimc", Context.MODE_PRIVATE)
+            val mdir = mActivity.getDir("mimc", Context.MODE_PRIVATE)
             if (!mdir.exists()) {
                 mdir.mkdir()
             }
@@ -353,9 +397,12 @@ class AHSmallAction : KActivityDebugHelper() {
             val data = 6
             data
         }.await()*/
-        return suspendCoroutine {
+        /*return suspendCoroutine {
             it.resume(6)
-        }
+        }*/
+
+        delay(1000)
+        return 6
     }
 
     /**

@@ -5,6 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -43,6 +44,8 @@ public class KActivity extends AppCompatActivity implements SensorEventListener 
         if (showLog()) {
             showLogTime = System.currentTimeMillis();
             sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+
+            if (Build.MODEL.contains("Android SDK built for")) showDebugView();
         }
     }
 

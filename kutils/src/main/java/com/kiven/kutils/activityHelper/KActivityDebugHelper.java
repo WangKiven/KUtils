@@ -5,6 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.kiven.kutils.activityHelper.activity.DebugView;
@@ -32,6 +33,8 @@ public class KActivityDebugHelper extends KActivityHelper implements SensorEvent
         if (showLog()) {
             showLogTime = System.currentTimeMillis();
             sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+
+            if (Build.MODEL.contains("Android SDK built for")) showDebugView();
         }
     }
 
@@ -77,13 +80,17 @@ public class KActivityDebugHelper extends KActivityHelper implements SensorEvent
 
             if (sens > 15) {
                 /*new KShowLog().startActivity(mActivity);*/
-                if (floatView == null) {
-                    floatView = new DebugView(mActivity);
-                }
-                floatView.showFloat();
+                showDebugView();
                 showLogTime = System.currentTimeMillis();
             }
         }
+    }
+
+    private void showDebugView() {
+        if (floatView == null) {
+            floatView = new DebugView(mActivity);
+        }
+        floatView.showFloat();
     }
 
     /**

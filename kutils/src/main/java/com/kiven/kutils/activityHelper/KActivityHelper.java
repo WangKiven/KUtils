@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.kiven.kutils.callBack.CallBack;
+import com.kiven.kutils.callBack.Consumer;
 import com.kiven.kutils.tools.KView;
 
 import java.io.Serializable;
@@ -163,8 +164,17 @@ public class KActivityHelper {
     public void onStart() {
     }
 
+    private CallBack nextResumeAction;
     public void onResume() {
+        if (nextResumeAction != null) {
+            nextResumeAction.callBack();
+            nextResumeAction = null;
+        }
+    }
 
+    // todo 注册该方法后第一次调用onResume需要运行的操作, 传null取消操作。建议用在，打开新界面后返回该界面时刷新（列表中某条）数据
+    public void registerNextResumeAction(CallBack callBack){
+        nextResumeAction = callBack;
     }
 
     public void onPause() {
@@ -201,8 +211,16 @@ public class KActivityHelper {
         mActivity.finish();
     }
 
+    private Consumer<ActivityResultInfo> activityResultAction;
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
+        if (activityResultAction != null) {
+            activityResultAction.callBack(new ActivityResultInfo(requestCode, resultCode, data));
+        }
+        activityResultAction = null;
+    }
+    // todo 注册该方法后第一次调用onActivityResult需要运行的操作, 传null取消操作。建议启动新界面后立刻调用该方法
+    public void registerNextActivityResultAction(Consumer<ActivityResultInfo> action) {
+        activityResultAction = action;
     }
 
 

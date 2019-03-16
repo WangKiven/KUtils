@@ -218,7 +218,7 @@ public class KActivityHelper {
         }
         activityResultAction = null;
     }
-    // todo 注册该方法后第一次调用onActivityResult需要运行的操作, 传null取消操作。建议启动新界面后立刻调用该方法
+    // todo 注册该方法后第一次调用onActivityResult需要运行的操作, 传null取消操作。建议启动新界面后立刻调用该方法。
     public void registerNextActivityResultAction(Consumer<ActivityResultInfo> action) {
         activityResultAction = action;
     }

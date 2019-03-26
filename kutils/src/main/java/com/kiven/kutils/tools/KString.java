@@ -25,6 +25,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -486,7 +487,8 @@ public class KString {
             //	        formater.setMaximumFractionDigits(2);//设置小数点后最大位数为2
             formater.setGroupingSize(0);//利用逗号进行分组时每个分组的大小,这里不分组
 //            formater.setGroupingUsed(false);//当为false时上述设置的分组大小无效，为true时才能进行分组
-            //	        formater.setRoundingMode(RoundingMode.FLOOR);// http://blog.csdn.net/alanzyy/article/details/8465098
+//            	        formater.setRoundingMode(RoundingMode.FLOOR);// http://blog.csdn.net/alanzyy/article/details/8465098
+            formater.setRoundingMode(RoundingMode.DOWN);//舍去多余的位数
         }
     }
 
@@ -528,7 +530,7 @@ public class KString {
     }
 
     /**
-     * 格式化金额 23450 -> 2.35
+     * 格式化金额 23450 -> 2.34
      */
     public static String formaterWan(int value) {
         BigDecimal decimal = new BigDecimal(value);
@@ -537,7 +539,7 @@ public class KString {
     }
 
     /**
-     * 格式化金额 "23450" -> 2.35
+     * 格式化金额 "23450" -> 2.34
      */
     public static String formaterWan(String value) {
         BigDecimal decimal = new BigDecimal(value);

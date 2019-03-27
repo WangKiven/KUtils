@@ -837,7 +837,7 @@ public class KString {
     }
 
     /**
-     * 空格补齐字符串,注：两个空格占一个字位
+     * 空格补齐字符串,注：两个空格占一个字位。如：“123” -> "     123"
      * @param a 补齐到多少位
      */
     public static String polishing(String s, int a) {

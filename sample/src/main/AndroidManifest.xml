@@ -45,10 +45,14 @@
     <application
         android:name=".AppContext"
         android:allowBackup="true"
+        android:appComponentFactory="任意字符"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:resizeableActivity="true"
+        android:theme="@style/AppTheme"
+        tools:ignore="UnusedAttribute"
+        tools:replace="icon,label,theme,android:appComponentFactory">
         <meta-data android:name="roboguice.annotations.packages" android:value="com.kiven.sample"/>
 
         <activity android:name=".LauchActivity">

@@ -2,7 +2,7 @@ package com.kiven.kutils.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.support.v7.widget.AppCompatEditText;
+import androidx.appcompat.widget.AppCompatEditText;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.text.TextUtils;

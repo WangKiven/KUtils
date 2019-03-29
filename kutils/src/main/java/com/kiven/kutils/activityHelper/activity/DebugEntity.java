@@ -1,10 +1,10 @@
 package com.kiven.kutils.activityHelper.activity;
 
 import android.app.Activity;
-import android.content.Context;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.IdRes;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.DrawableRes;
+import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
 
 import com.kiven.kutils.callBack.Consumer;
 import com.kiven.kutils.tools.KString;

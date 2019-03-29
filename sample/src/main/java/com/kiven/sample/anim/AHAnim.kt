@@ -5,11 +5,11 @@ import android.graphics.Color
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.os.Build
 import android.os.Bundle
-import android.support.animation.FlingAnimation
-import android.support.animation.SpringAnimation
-import android.support.animation.SpringForce
-import android.support.design.widget.Snackbar
-import android.support.transition.*
+import androidx.dynamicanimation.animation.FlingAnimation
+import androidx.dynamicanimation.animation.SpringAnimation
+import androidx.dynamicanimation.animation.SpringForce
+import com.google.android.material.snackbar.Snackbar
+import androidx.transition.*
 import android.util.TypedValue
 import android.view.View
 import android.view.View.OnClickListener

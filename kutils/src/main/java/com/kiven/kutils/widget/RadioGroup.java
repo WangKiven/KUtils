@@ -1,6 +1,6 @@
 package com.kiven.kutils.widget;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.View;
 
 import java.util.ArrayList;

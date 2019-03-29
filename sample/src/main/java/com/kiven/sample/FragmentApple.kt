@@ -9,7 +9,7 @@ import android.content.res.XmlResourceParser
 import android.graphics.Color
 import android.graphics.Point
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.fragment_apple.*
  * Created by kiven on 2017/3/28.
  */
 
-class FragmentApple : Fragment() {
+class FragmentApple : androidx.fragment.app.Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val xmlResourceParser = resources.getLayout(R.layout.fragment_apple)
         return inflater.inflate(xmlResourceParser, container, false)

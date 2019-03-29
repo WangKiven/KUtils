@@ -3,22 +3,17 @@ package com.kiven.kutils.tools;
 import android.content.Context;
 import android.graphics.Paint;
 import android.os.Build;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.text.Html;
 import android.text.TextPaint;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.kiven.kutils.R;
 import com.kiven.kutils.logHelper.KLog;
 
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by kiven on 2017/5/18.

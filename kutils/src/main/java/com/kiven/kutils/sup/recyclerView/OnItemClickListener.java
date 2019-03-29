@@ -1,6 +1,6 @@
 package com.kiven.kutils.sup.recyclerView;
 
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by kiven on 16/7/3.

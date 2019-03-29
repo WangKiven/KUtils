@@ -2,10 +2,10 @@ package com.kiven.sample
 
 import android.graphics.Color
 import android.os.Bundle
-import android.support.v7.widget.AppCompatSpinner
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.Toolbar
+import androidx.appcompat.widget.AppCompatSpinner
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.appcompat.widget.Toolbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -52,8 +52,8 @@ class AHCheckRes : KActivityHelper() {
             toolBar.setNavigationOnClickListener { finish() }
         }
 
-        val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
-        recyclerView.layoutManager = GridLayoutManager(mActivity, KUtil.getScreenWith(mActivity) / KUtil.dip2px(50f))
+        val recyclerView: androidx.recyclerview.widget.RecyclerView = findViewById(R.id.recyclerView)
+        recyclerView.layoutManager = androidx.recyclerview.widget.GridLayoutManager(mActivity, KUtil.getScreenWith(mActivity) / KUtil.dip2px(50f))
         recyclerView.adapter = resAdapter
 
 
@@ -101,7 +101,7 @@ class AHCheckRes : KActivityHelper() {
         resAdapter.notifyDataSetChanged()
     }
 
-    inner class Holder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class Holder(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
         fun bindData(field: Field, position: Int) {
             with(itemView) {
                 try {
@@ -113,7 +113,7 @@ class AHCheckRes : KActivityHelper() {
         }
     }
 
-    inner class ResAdapter : RecyclerView.Adapter<Holder>() {
+    inner class ResAdapter : androidx.recyclerview.widget.RecyclerView.Adapter<Holder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
             return Holder(LayoutInflater.from(mActivity).inflate(R.layout.item_res, parent, false))
         }

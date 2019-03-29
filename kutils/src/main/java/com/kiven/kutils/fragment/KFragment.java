@@ -1,6 +1,6 @@
 package com.kiven.kutils.fragment;
 
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 
 /**
  * Created by kiven on 16/7/22.

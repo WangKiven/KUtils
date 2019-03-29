@@ -8,8 +8,8 @@ import android.media.MediaRecorder
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
-import android.support.v4.widget.NestedScrollView
-import android.support.v7.app.AlertDialog
+import androidx.core.widget.NestedScrollView
+import androidx.appcompat.app.AlertDialog
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button

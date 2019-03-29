@@ -1,6 +1,6 @@
 package com.kiven.kutils.activityHelper;
 
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModel;
 
 /**
  * Created by wangk on 2017/12/26.

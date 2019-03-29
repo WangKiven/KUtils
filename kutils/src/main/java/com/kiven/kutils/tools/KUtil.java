@@ -2,9 +2,7 @@ package com.kiven.kutils.tools;
 
 import android.app.ActivityManager;
 import android.app.Application;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.ConfigurationInfo;
@@ -12,13 +10,11 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.media.MediaScannerConnection;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.support.v4.content.FileProvider;
-import android.text.TextUtils;
+import androidx.core.content.FileProvider;
+
 import android.util.DisplayMetrics;
-import android.widget.TextView;
 
 import com.kiven.kutils.logHelper.KLog;
 

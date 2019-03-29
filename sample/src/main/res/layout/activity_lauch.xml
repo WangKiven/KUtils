@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.v4.widget.NestedScrollView
+<androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <android.support.v7.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
@@ -34,7 +34,7 @@
                 android:layout_marginLeft="20dp"
                 android:text="hello"/>
 
-        </android.support.v7.widget.Toolbar>
+        </androidx.appcompat.widget.Toolbar>
         
         <com.kiven.kutils.widget.RulingSeekbar
             android:layout_width="match_parent"
@@ -195,13 +195,13 @@
             android:onClick="onClick"
             app:item_title="helper test"/>
 
-        <android.support.v7.widget.AppCompatEditText
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/et_auto"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:maxLines="1"/>
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:text="hill好哈好哈好哈"
@@ -224,7 +224,7 @@
             android:paddingTop="@dimen/activity_vertical_margin"
             tools:context="com.kiven.sample.LauchActivity">
 
-            <android.support.v7.widget.LinearLayoutCompat
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/linearLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -275,7 +275,7 @@
                     android:layout_marginTop="30dp"
                     android:text="我是中国人"/>
 
-            </android.support.v7.widget.LinearLayoutCompat>
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -304,7 +304,7 @@
                     android:text="中华人民共和国万岁"
                     android:textColor="?android:attr/textColorTertiary"/>
 
-                <android.support.v7.widget.AppCompatButton
+                <androidx.appcompat.widget.AppCompatButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"
@@ -314,4 +314,4 @@
         </RelativeLayout>
     </LinearLayout>
 
-</android.support.v4.widget.NestedScrollView>
+</androidx.core.widget.NestedScrollView>

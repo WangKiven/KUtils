@@ -385,7 +385,7 @@ class AHSmallAction : KActivityDebugHelper() {
             UserManager.getInstance().newUser("123", mdir.absolutePath)?.login()
 
         })
-        addView("", View.OnClickListener { })
+        addView("Dialog", View.OnClickListener { AHDialogTest().startActivity(activity) })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })

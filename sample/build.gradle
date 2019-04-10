@@ -77,7 +77,6 @@ dependencies {
 
     // animation & transition
     implementation "com.android.support:support-dynamic-animation:${parent.ext.libraryVersion}"
-    implementation "com.android.support:support-dynamic-animation:${parent.ext.libraryVersion}"
 
     // ViewModel and LiveData
 //    implementation "android.arch.lifecycle:extensions:1.1.1"

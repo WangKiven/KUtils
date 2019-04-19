@@ -114,6 +114,7 @@ public class KString {
         }
     };
 
+
     /**
      * 以友好的方式显示时间
      */
@@ -122,6 +123,13 @@ public class KString {
         if (time == null) {
             return "Unknown";
         }
+        return friendlyTime(time);
+    }
+
+    /**
+     * 以友好的方式显示时间
+     */
+    public static String friendlyTime(@NonNull Date time) {
 
         //根据时区转化，服务器提供的时间为北京时间，转化为系统默认时区时间
         TimeZone srcTimeZone = TimeZone.getDefault();
@@ -135,24 +143,6 @@ public class KString {
 
         String ftime = "";
         Calendar cal = Calendar.getInstance();
-
-        //判断是否是同一天
-        //		String curDate = dateFormater2.get().format(cal.getTime());
-        //		String paramDate = dateFormater2.get().format(time);
-        //		if(curDate.equals(paramDate)){
-        //			int hour = (int)((cal.getTimeInMillis() - time.getTime())/3600000);
-        //			if(hour == 0)
-        //				ftime = Math.max((cal.getTimeInMillis() - time.getTime()) / 60000,1)+"分钟前";
-        //			else
-        //				ftime = hour+"小时前";
-        //			return ftime;
-        //
-        //		}
-
-
-        //		long lt = time.getTime()/86400000;
-        //		long ct = cal.getTimeInMillis()/86400000;
-        //		int days = (int)(ct - lt);
 
         int year = cal.get(Calendar.YEAR);
         int day = cal.get(Calendar.DAY_OF_YEAR);
@@ -183,12 +173,7 @@ public class KString {
         } else if (days > 1) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(time);
-            //			boolean isThisYear=cal.get(Calendar.YEAR)==calendar.get(Calendar.YEAR);
-            //			if(isThisYear){
-            //				ftime=DateFormat.format("MM-dd", time)+"";
-            //			}else{
             ftime = DateFormat.format("yyyy-MM-dd", time) + "";
-            //			}
         }
         return ftime;
     }

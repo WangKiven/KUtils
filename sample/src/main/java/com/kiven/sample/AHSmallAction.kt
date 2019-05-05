@@ -386,7 +386,9 @@ class AHSmallAction : KActivityDebugHelper() {
 
         })
         addView("Dialog", View.OnClickListener { AHDialogTest().startActivity(activity) })
-        addView("", View.OnClickListener { })
+        addView("ConstraintLayout Test", View.OnClickListener {
+            AHConstraintLayoutTest().startActivity(activity)
+        })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
 

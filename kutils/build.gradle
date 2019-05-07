@@ -30,11 +30,11 @@ uploadArchives {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    implementation "androidx.appcompat:appcompat:1.0.0-beta01"
-    compileOnly "androidx.recyclerview:recyclerview:1.0.0-beta01"
+    compileOnly "androidx.appcompat:appcompat:1.0.2"
+    compileOnly "androidx.recyclerview:recyclerview:1.0.0"
 
     // ViewModel and LiveData
-    compileOnly 'androidx.lifecycle:lifecycle-extensions:2.0.0-beta01'
+    compileOnly 'androidx.lifecycle:lifecycle-extensions:2.0.0'
 //    annotationProcessor "android.arch.lifecycle:compiler:1.0.0"
 
     compileOnly 'com.google.code.gson:gson:2.8.5'

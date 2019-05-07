@@ -43,6 +43,8 @@ import com.xiaomi.mimc.common.MIMCConstant
 import kotlinx.coroutines.*
 import org.jetbrains.anko.coroutines.experimental.Ref
 import org.jetbrains.anko.coroutines.experimental.asReference
+import org.jetbrains.anko.support.v4.nestedScrollView
+import org.jetbrains.anko.verticalLayout
 
 /**
  * Created by wangk on 2018/3/28.
@@ -54,9 +56,10 @@ class AHSmallAction : KActivityDebugHelper() {
         flexboxLayout.flexWrap = FlexWrap.WRAP
         flexboxLayout.alignContent = AlignContent.FLEX_START
 
-        val scroll = NestedScrollView(activity)
+        /*val scroll = NestedScrollView(activity)
         scroll.addView(flexboxLayout)
-        setContentView(scroll)
+        setContentView(scroll)*/
+        mActivity.nestedScrollView { addView(flexboxLayout) }
 
         val addTitle = fun(text: String) {
             val tv = TextView(activity)
@@ -385,11 +388,12 @@ class AHSmallAction : KActivityDebugHelper() {
             UserManager.getInstance().newUser("123", mdir.absolutePath)?.login()
 
         })
+        addView("Dialog", View.OnClickListener { AHDialogTest().startActivity(activity) })
+        addView("ConstraintLayout Test", View.OnClickListener {
+            AHConstraintLayoutTest().startActivity(activity)
+        })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
-        addView("", View.OnClickListener { })
-        addView("", View.OnClickListener { })
-
     }
 
     private suspend fun doSomthing(): Int {

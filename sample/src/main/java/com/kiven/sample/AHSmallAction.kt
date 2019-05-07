@@ -8,8 +8,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
-import androidx.core.widget.NestedScrollView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -17,6 +15,7 @@ import android.widget.TextView
 import com.google.android.flexbox.AlignContent
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
+import com.google.android.material.snackbar.Snackbar
 import com.iflytek.cloud.*
 import com.jaredrummler.android.processes.AndroidProcesses
 import com.kiven.kutils.activityHelper.KActivityDebugHelper
@@ -44,7 +43,6 @@ import kotlinx.coroutines.*
 import org.jetbrains.anko.coroutines.experimental.Ref
 import org.jetbrains.anko.coroutines.experimental.asReference
 import org.jetbrains.anko.support.v4.nestedScrollView
-import org.jetbrains.anko.verticalLayout
 
 /**
  * Created by wangk on 2018/3/28.

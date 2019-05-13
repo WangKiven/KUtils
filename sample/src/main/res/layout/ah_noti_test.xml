@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.google.android.flexbox.FlexboxLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:alignContent="flex_start"
+        app:flexWrap="wrap">
+
+        <TextView
+            android:id="@+id/tv_count"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="系统版本号大于26才有通知分组和通知Channel" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="\n设置操作属性" />
+
+        <RadioGroup
+            android:id="@+id/rg_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checkedButton="@id/rb_0"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rb_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="无分组" />
+
+            <RadioButton
+                android:id="@+id/rb_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="分组1" />
+
+            <RadioButton
+                android:id="@+id/rb_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="分组2" />
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="\n操作" />
+
+        <Button
+            android:id="@+id/btn_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="发个通知" />
+
+        <Button
+            android:id="@+id/btn_create_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="创建选中分组" />
+
+        <Button
+            android:id="@+id/btn_delete_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="删除选中分组" />
+
+        <Button
+            android:id="@+id/btn_delete_groups"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="删除所有分组" />
+
+        <Button
+            android:id="@+id/btn_delete_channel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="删除选中Channel" />
+
+        <Button
+            android:id="@+id/btn_delete_channels"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="删除所有Channel" />
+
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="注意：\n
+- 26以上，发送通知前必须先创建channelId\n
+- 26以上，如果使用分组，必须先创建分组。否则通知后，不在分组内" />
+
+    </com.google.android.flexbox.FlexboxLayout>
+
+</androidx.core.widget.NestedScrollView>

@@ -30,6 +30,7 @@ import com.kiven.sample.imui.ImActivity
 import com.kiven.sample.jpushUI.AHImui
 import com.kiven.sample.mimc.ChatMsg
 import com.kiven.sample.mimc.UserManager
+import com.kiven.sample.noti.AHNotiTest
 import com.kiven.sample.service.LiveWallpaper2
 import com.kiven.sample.spss.AHSpssTemple
 import com.kiven.sample.util.EncryptUtils
@@ -43,6 +44,8 @@ import kotlinx.coroutines.*
 import org.jetbrains.anko.coroutines.experimental.Ref
 import org.jetbrains.anko.coroutines.experimental.asReference
 import org.jetbrains.anko.support.v4.nestedScrollView
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 /**
  * Created by wangk on 2018/3/28.
@@ -144,7 +147,7 @@ class AHSmallAction : KActivityDebugHelper() {
         // TODO: 2018/6/4 ----------------------------------------------------------
         addTitle("kotlin 特性")
         addView("协程", View.OnClickListener {
-            /*launch(CommonPool) {
+            GlobalScope.launch {
                 delay(1000)
                 val data = doSomthing()
                 KLog.i("data = $data")
@@ -157,26 +160,9 @@ class AHSmallAction : KActivityDebugHelper() {
                         it.resume(7)
                     }.start()
                 }
+
                 KLog.i("dea = $dea")
-                val cuth = Thread.currentThread()
-                KLog.i("id = ${cuth.id}, name = ${cuth.name}")
-            }*/
 
-            GlobalScope.launch {
-                delay(1000)
-                val data = doSomthing()
-                KLog.i("data = $data")
-
-                /*val dea = suspendCoroutine<Int> {
-                    Thread {
-                        Thread.sleep(1000)
-                        val cuth = Thread.currentThread()
-                        KLog.i("Threadid = ${cuth.id}, Threadname = ${cuth.name}")
-                        it.resume(7)
-                    }.start()
-                }
-
-                KLog.i("dea = $dea")*/
                 val cuth = Thread.currentThread()
                 KLog.i("id = ${cuth.id}, name = ${cuth.name}")
             }
@@ -209,16 +195,6 @@ class AHSmallAction : KActivityDebugHelper() {
         })
 
         addView("anko bg()协程", View.OnClickListener {
-            // 进入协程
-            /*async(UI) {
-                val data: Deferred<String> = bg {
-                    Thread.sleep(2000)
-                    "anko bg()协程"
-                }
-
-                // 启动ui线程
-                showDialog(data.await())
-            }*/
             GlobalScope.launch(Dispatchers.Main) {
                 val data = async {
                     Thread.sleep(2000)
@@ -390,21 +366,15 @@ class AHSmallAction : KActivityDebugHelper() {
         addView("ConstraintLayout Test", View.OnClickListener {
             AHConstraintLayoutTest().startActivity(activity)
         })
-        addView("", View.OnClickListener { })
-        addView("", View.OnClickListener { })
+        addView("通知", View.OnClickListener { AHNotiTest().startActivity(activity) })
+        addView("", View.OnClickListener { AHNotiTest().startActivity(activity) })
     }
 
     private suspend fun doSomthing(): Int {
-        /*return async(CommonPool){
-            val data = 6
-            data
-        }.await()*/
-        /*return suspendCoroutine {
-            it.resume(6)
-        }*/
-
         delay(1000)
-        return 6
+        return suspendCoroutine {
+            it.resume(6)
+        }
     }
 
     /**

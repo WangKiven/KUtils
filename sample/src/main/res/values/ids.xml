@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="ll_root" type="id"/>
+    <item name="rb_0" type="id"/>
+    <item name="rb_1" type="id"/>
+    <item name="rb_2" type="id"/>
 </resources>

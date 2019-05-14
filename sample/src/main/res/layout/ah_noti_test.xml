@@ -55,6 +55,32 @@
                 android:text="notiGroup2" />
         </RadioGroup>
 
+        <RadioGroup
+            android:id="@+id/rg_receiver"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checkedButton="@id/rb_receiver_activity"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="事件接收："/>
+
+            <RadioButton
+                android:id="@+id/rb_receiver_activity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Activity" />
+
+            <RadioButton
+                android:id="@+id/rb_receiver_receiver"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="BroadCastReceiver" />
+
+        </RadioGroup>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

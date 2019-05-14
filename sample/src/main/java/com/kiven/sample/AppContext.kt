@@ -24,5 +24,6 @@ class AppContext : KContext() {
         KLog.i("AppContext init")
         x.Ext.init(this)
         KUtil.setApp(this)
+
     }
 }

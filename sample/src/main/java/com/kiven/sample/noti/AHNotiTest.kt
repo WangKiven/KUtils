@@ -93,7 +93,11 @@ class AHNotiTest : KActivityDebugHelper() {
                             return@launch
                         }
 
-                        val pendingIntent = PendingIntent.getActivity(mActivity, 110, Intent(mActivity, ClickNotiActivity::class.java), PendingIntent.FLAG_UPDATE_CURRENT)
+                        val pendingIntent =
+                                if (rg_receiver.checkedRadioButtonId == R.id.rb_receiver_activity)
+                                    PendingIntent.getActivity(mActivity, 110, Intent(mActivity, ClickNotiActivity::class.java), PendingIntent.FLAG_UPDATE_CURRENT)
+                                else
+                                    PendingIntent.getBroadcast(mActivity, 111, Intent(mActivity, NotificationClickReceiver::class.java), PendingIntent.FLAG_UPDATE_CURRENT)
 
                         val mBuilder = NotificationCompat.Builder(mActivity, channelId)
                                 .setSmallIcon(R.drawable.ic_launcher)

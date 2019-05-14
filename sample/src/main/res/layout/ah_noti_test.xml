@@ -22,52 +22,37 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="\n设置操作属性" />
+            android:text="\n操作属性，通知分组与channel分组不一样哦。设置了通知分组，在通知栏里不会被合并" />
 
         <RadioGroup
-            android:id="@+id/rg_group"
+            android:id="@+id/rg_noti_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:checkedButton="@id/rb_0"
+            android:checkedButton="@id/rb_noti_group0"
             android:orientation="horizontal">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="通知分组："/>
+
             <RadioButton
-                android:id="@+id/rb_0"
+                android:id="@+id/rb_noti_group0"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="无分组" />
 
             <RadioButton
-                android:id="@+id/rb_1"
+                android:id="@+id/rb_noti_group1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="分组1" />
+                android:text="notiGroup1" />
 
             <RadioButton
-                android:id="@+id/rb_2"
+                android:id="@+id/rb_noti_group2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="分组2" />
-        </RadioGroup>
-
-        <RadioGroup
-            android:id="@+id/rg_channel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checkedButton="@id/rb_channel1"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:id="@+id/rb_channel1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="channel1" />
-
-            <RadioButton
-                android:id="@+id/rb_channel2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="channel2" />
+                android:text="notiGroup2" />
         </RadioGroup>
 
         <TextView
@@ -89,13 +74,13 @@
             android:id="@+id/btn_create_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="创建选中分组" />
+            android:text="创建分组" />
 
         <Button
             android:id="@+id/btn_delete_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="删除选中分组" />
+            android:text="删除分组" />
 
         <Button
             android:id="@+id/btn_delete_groups"
@@ -108,10 +93,16 @@
             android:layout_height="wrap_content" />
 
         <Button
+            android:id="@+id/btn_create_channel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="创建Channel" />
+
+        <Button
             android:id="@+id/btn_delete_channel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="删除选中Channel" />
+            android:text="删除Channel" />
 
         <Button
             android:id="@+id/btn_delete_channels"
@@ -126,7 +117,9 @@
             android:layout_height="wrap_content"
             android:text="注意：\n
 - 26以上，发送通知前必须先创建channelId\n
-- 26以上，如果使用分组，必须先创建分组。否则通知后，不在分组内" />
+- 26以上，如果使用分组，必须先创建分组。否则通知后，不在分组内\n
+- channel可以在分组中，也可以不在分组中。如果要在分组中，分组必须提前创建，否则会崩\n
+- 发送通知前，channel也必须创建" />
 
     </com.google.android.flexbox.FlexboxLayout>
 

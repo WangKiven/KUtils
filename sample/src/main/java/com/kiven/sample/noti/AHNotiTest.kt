@@ -9,14 +9,20 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.widget.EditText
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.google.android.material.snackbar.Snackbar
 import com.kiven.kutils.activityHelper.KActivityDebugHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
-import com.kiven.kutils.tools.KImage
 import com.kiven.sample.R
 import kotlinx.android.synthetic.main.ah_noti_test.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 /**
  * Created by wangk on 2019/5/13.
@@ -32,13 +38,20 @@ class AHNotiTest : KActivityDebugHelper() {
 
         root.apply {
             val changeTopText = fun() {
-                val result = StringBuilder("系统版本号大于26才有通知分组和通知Channel, 当前系统版本号${Build.VERSION.SDK_INT}\n")
+                val result = StringBuilder("系统版本号大于26才有通知分组和通知Channel, 当前系统版本号${Build.VERSION.SDK_INT}\n\n")
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     val groups = notiManager.notificationChannelGroups
 
                     val channels = notiManager.notificationChannels
-                    result.append("有${groups.size}个分组, ${channels.size}个channel")
+                    result.append("有${groups.size}个分组, ${channels.size}个channel\n\n")
+
+                    if (groups.isNotEmpty())
+                        result.append("groups:${groups.joinToString { "\n   ${it.id}:${it.name} - {${it.channels.joinToString { it.id }}}" }}\n\n")
+
+                    if (channels.isNotEmpty()) {
+                        result.append("channels: ${channels.joinToString { "\n   ${it.id}:${it.name} - ${it.group?:"没分组"}" }}")
+                    }
                 }
 
                 tv_count.text = result
@@ -47,57 +60,62 @@ class AHNotiTest : KActivityDebugHelper() {
 
             var count = 0
             btn_send.setOnClickListener {
-                val pendingIntent = PendingIntent.getActivity(mActivity, 110, Intent(mActivity, ClickNotiActivity::class.java), PendingIntent.FLAG_UPDATE_CURRENT)
-                val channelId = when (rg_channel.checkedRadioButtonId) {
-                    R.id.rb_channel1 -> "channel1"
-                    else -> "channel2"
-                }
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    if (notiManager.getNotificationChannel(channelId) == null){
-                        val channel = NotificationChannel(channelId, "我是通知:$channelId", NotificationManager.IMPORTANCE_DEFAULT)
-                        channel.enableLights(true)
-                        channel.lightColor = Color.GREEN
-//                        channel.setSound()
-                        channel.enableVibration(true) // 震动
-                        notiManager.createNotificationChannel(channel)
-                    }
-                }
-
-                val mBuilder = NotificationCompat.Builder(mActivity, channelId)
-                        .setSmallIcon(R.drawable.ic_launcher)
-                        .setTicker("setTicker是什么$channelId $count") // 通知响起时，状态栏显示的内容
-                        .setContentTitle("setContentTitle是什么$channelId $count")
-                        .setContentText("setContentText是什么$channelId $count")
-                        .setNumber(12)
-                        .setContentInfo("setContentInfo是什么$channelId $count")
-                        .setAutoCancel(true)
-                        .setContentIntent(pendingIntent)
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    when (rg_group.checkedRadioButtonId) {
-                        R.id.rb_0 -> {
-                        }
-                        R.id.rb_1 -> {
-                            mBuilder.setGroup("group1")
-
-                            if (notiManager.notificationChannelGroups.firstOrNull { it.id == "group1" } == null) {
-                                Snackbar.make(this, "分组不存在。还是能通知，但是通知不在设置的分组内", Snackbar.LENGTH_SHORT).show()
-                            }
-                        }
-                        R.id.rb_2 -> {
-                            mBuilder.setGroup("group2")
-
-                            if (notiManager.notificationChannelGroups.firstOrNull { it.id == "group2" } == null) {
-                                Snackbar.make(this, "分组不存在。还是能通知，但是通知不在设置的分组内", Snackbar.LENGTH_SHORT).show()
+                GlobalScope.launch {
+                    val channelId = suspendCoroutine<String> {
+                        GlobalScope.launch(Dispatchers.Main){
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                val channels = notiManager.notificationChannels
+                                if (channels.isNotEmpty()) {
+                                    AlertDialog.Builder(mActivity).setItems(channels.map { "${it.id}:${it.name} - ${it.group}" }.toTypedArray()) { dialog, p ->
+                                        it.resume(channels[p].id)
+                                        dialog.dismiss()
+                                    }.show()
+                                } else {
+                                    it.resume("")
+                                }
+                            } else {
+                                it.resume("default")
                             }
                         }
                     }
-                }
 
-                notiManager.notify(count, mBuilder.build())
-                count++
-                changeTopText()
+                    GlobalScope.launch(Dispatchers.Main){
+                        if (channelId.isEmpty()) {
+                            toast("没选择channel, 如果没有的话，请先创建channel")
+                            return@launch
+                        }
+
+                        val pendingIntent = PendingIntent.getActivity(mActivity, 110, Intent(mActivity, ClickNotiActivity::class.java), PendingIntent.FLAG_UPDATE_CURRENT)
+
+                        val mBuilder = NotificationCompat.Builder(mActivity, channelId)
+                                .setSmallIcon(R.drawable.ic_launcher)
+                                .setTicker("setTicker是什么$channelId $count") // 通知响起时，状态栏显示的内容
+                                .setContentTitle("setContentTitle是什么$channelId $count")
+                                .setContentText("setContentText是什么$channelId $count")
+                                .setNumber(12)
+                                .setContentInfo("setContentInfo是什么$channelId $count")
+                                .setAutoCancel(true)
+                                .setContentIntent(pendingIntent)
+
+                        when (rg_noti_group.checkedRadioButtonId) {
+                            R.id.rb_noti_group0 -> {
+
+                            }
+                            R.id.rb_noti_group1 -> {
+                                mBuilder.setGroup("notiGroup1")
+                            }
+                            R.id.rb_noti_group2 -> {
+                                mBuilder.setGroup("notiGroup2")
+//                                mBuilder.setGroupSummary(true)
+                            }
+                        }
+
+                        notiManager.notify(count, mBuilder.build())
+                        count++
+                        changeTopText()
+                    }
+                }
             }
 
 
@@ -105,41 +123,32 @@ class AHNotiTest : KActivityDebugHelper() {
             btn_create_group.setOnClickListener {
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    when (rg_group.checkedRadioButtonId) {
-                        R.id.rb_0 -> {
-                            Snackbar.make(this, "选中分组错误", Snackbar.LENGTH_SHORT).show()
-                        }
-                        R.id.rb_1 -> {
-                            notiManager.createNotificationChannelGroup(NotificationChannelGroup("group1", "分组1"))
-                        }
-                        R.id.rb_2 -> {
-                            notiManager.createNotificationChannelGroup(NotificationChannelGroup("group2", "分组2"))
+                    getInput("分组Id") { groupId ->
+                        getInput("分组name") { groupName ->
+                            val channel = NotificationChannelGroup(groupId.toString(), groupName)
+                            notiManager.createNotificationChannelGroup(channel)
+
+                            changeTopText()
                         }
                     }
 
                 } else {
                     Snackbar.make(this, "系统低于26", Snackbar.LENGTH_SHORT).show()
                 }
-                changeTopText()
             }
             btn_delete_group.setOnClickListener {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    when (rg_group.checkedRadioButtonId) {
-                        R.id.rb_0 -> {
-                            Snackbar.make(this, "选中分组错误", Snackbar.LENGTH_SHORT).show()
-                        }
-                        R.id.rb_1 -> {
-                            notiManager.deleteNotificationChannelGroup("group1")
-                        }
-                        R.id.rb_2 -> {
-                            notiManager.deleteNotificationChannelGroup("group2")
-                        }
-                    }
+                    val groups = notiManager.notificationChannelGroups
+
+                    AlertDialog.Builder(mActivity).setItems(groups.map { "${it.id}:${it.name}" }.toTypedArray()) { dialog, p ->
+                        notiManager.deleteNotificationChannelGroup(groups[p].id)
+                        changeTopText()
+                        dialog.dismiss()
+                    }.show()
 
                 } else {
                     Snackbar.make(this, "系统低于26", Snackbar.LENGTH_SHORT).show()
                 }
-                changeTopText()
             }
             btn_delete_groups.setOnClickListener {
                 notiManager.notificationChannelGroups.forEach {
@@ -151,12 +160,50 @@ class AHNotiTest : KActivityDebugHelper() {
                 changeTopText()
             }
 
-            btn_delete_channel.setOnClickListener {
-                when (rg_channel.checkedRadioButtonId) {
-                    R.id.rb_channel1 -> notiManager.deleteNotificationChannel("channel1")
-                    R.id.rb_channel2 -> notiManager.deleteNotificationChannel("channel2")
+            btn_create_channel.setOnClickListener {
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    getInput("channelId"){channelId ->
+                        getInput("channelName"){channelName ->
+                            val groups = notiManager.notificationChannelGroups
+
+                            AlertDialog.Builder(mActivity).setTitle("选择分组").setItems(groups.map { "${it.id}:${it.name}" }.toTypedArray() + "无分组") { dialog, p ->
+                                val channel = NotificationChannel(channelId.toString(), "$channelName", NotificationManager.IMPORTANCE_DEFAULT)
+                                channel.enableLights(true)
+                                channel.lightColor = Color.GREEN
+                                if (p < groups.size) {
+                                    channel.group = groups[p].id
+                                }
+//                        channel.setSound()
+                                channel.enableVibration(true) // 震动
+                                notiManager.createNotificationChannel(channel)
+
+
+                                changeTopText()
+
+                                dialog.dismiss()
+                            }.show()
+                        }
+                    }
+                }else {
+                    Snackbar.make(this, "系统低于26", Snackbar.LENGTH_SHORT).show()
                 }
-                changeTopText()
+            }
+
+            btn_delete_channel.setOnClickListener {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    val channels = notiManager.notificationChannels
+
+                    AlertDialog.Builder(mActivity).setItems(channels.map { "${it.id}:${it.name} - ${it.group}" }.toTypedArray()) { dialog, p ->
+                        notiManager.deleteNotificationChannel(channels[p].id)
+                        changeTopText()
+
+                        dialog.dismiss()
+                    }.show()
+
+                } else {
+                    Snackbar.make(this, "系统低于26", Snackbar.LENGTH_SHORT).show()
+                }
             }
             btn_delete_channels.setOnClickListener {
                 notiManager.notificationChannels.forEach {
@@ -167,5 +214,27 @@ class AHNotiTest : KActivityDebugHelper() {
                 changeTopText()
             }
         }
+    }
+
+    fun toast(text: String) {
+        Snackbar.make(findViewById<View>(R.id.root), text, Snackbar.LENGTH_SHORT).show()
+    }
+
+    fun getInput(inputName: String, action: (CharSequence) -> Unit) {
+        val et = EditText(mActivity)
+        AlertDialog.Builder(mActivity)
+                .setTitle(inputName)
+                .setView(et)
+                .setNegativeButton("取消") { dialog, _ -> dialog.cancel() }
+                .setPositiveButton("确定") { dialog, _ ->
+                    val teamName = et.text.trim()
+                    if (teamName.isNotBlank()) {
+                        action(teamName)
+                    } else {
+                        toast("$inputName 不能为空")
+                    }
+                    dialog.dismiss()
+                }
+                .show()
     }
 }

@@ -5,6 +5,7 @@ import android.app.NotificationChannelGroup
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -13,6 +14,7 @@ import androidx.core.app.NotificationManagerCompat
 import com.google.android.material.snackbar.Snackbar
 import com.kiven.kutils.activityHelper.KActivityDebugHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
+import com.kiven.kutils.tools.KImage
 import com.kiven.sample.R
 import kotlinx.android.synthetic.main.ah_noti_test.view.*
 
@@ -36,7 +38,7 @@ class AHNotiTest : KActivityDebugHelper() {
                     val groups = notiManager.notificationChannelGroups
 
                     val channels = notiManager.notificationChannels
-                    result.append("有${groups.size}个分组, ${channels.size}个通知")
+                    result.append("有${groups.size}个分组, ${channels.size}个channel")
                 }
 
                 tv_count.text = result
@@ -46,15 +48,29 @@ class AHNotiTest : KActivityDebugHelper() {
             var count = 0
             btn_send.setOnClickListener {
                 val pendingIntent = PendingIntent.getActivity(mActivity, 110, Intent(mActivity, ClickNotiActivity::class.java), PendingIntent.FLAG_UPDATE_CURRENT)
-                val channelId = "522$count"
+                val channelId = when (rg_channel.checkedRadioButtonId) {
+                    R.id.rb_channel1 -> "channel1"
+                    else -> "channel2"
+                }
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    if (notiManager.getNotificationChannel(channelId) == null){
+                        val channel = NotificationChannel(channelId, "我是通知:$channelId", NotificationManager.IMPORTANCE_DEFAULT)
+                        channel.enableLights(true)
+                        channel.lightColor = Color.GREEN
+//                        channel.setSound()
+                        channel.enableVibration(true) // 震动
+                        notiManager.createNotificationChannel(channel)
+                    }
+                }
 
                 val mBuilder = NotificationCompat.Builder(mActivity, channelId)
                         .setSmallIcon(R.drawable.ic_launcher)
-                        .setTicker("新消息$count") // 通知响起时，状态栏显示的内容
-                        .setContentTitle("你的新消息$count")
-                        .setContentText("巴拉巴拉巴拉$count")
+                        .setTicker("setTicker是什么$channelId $count") // 通知响起时，状态栏显示的内容
+                        .setContentTitle("setContentTitle是什么$channelId $count")
+                        .setContentText("setContentText是什么$channelId $count")
                         .setNumber(12)
-                        .setContentInfo("它是一系统级的全局通知")
+                        .setContentInfo("setContentInfo是什么$channelId $count")
                         .setAutoCancel(true)
                         .setContentIntent(pendingIntent)
 
@@ -65,28 +81,21 @@ class AHNotiTest : KActivityDebugHelper() {
                         R.id.rb_1 -> {
                             mBuilder.setGroup("group1")
 
-                            if (notiManager.notificationChannelGroups.first { it.id == "group1" } == null) {
+                            if (notiManager.notificationChannelGroups.firstOrNull { it.id == "group1" } == null) {
                                 Snackbar.make(this, "分组不存在。还是能通知，但是通知不在设置的分组内", Snackbar.LENGTH_SHORT).show()
                             }
                         }
                         R.id.rb_2 -> {
                             mBuilder.setGroup("group2")
 
-                            if (notiManager.notificationChannelGroups.first { it.id == "group2" } == null) {
+                            if (notiManager.notificationChannelGroups.firstOrNull { it.id == "group2" } == null) {
                                 Snackbar.make(this, "分组不存在。还是能通知，但是通知不在设置的分组内", Snackbar.LENGTH_SHORT).show()
                             }
                         }
                     }
                 }
 
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    if (notiManager.getNotificationChannel(channelId) == null)
-                        notiManager.createNotificationChannel(NotificationChannel(channelId, "发个通知$count", NotificationManager.IMPORTANCE_DEFAULT))
-                }
-
-                notiManager.notify(0, mBuilder.build())
-
+                notiManager.notify(count, mBuilder.build())
                 count++
                 changeTopText()
             }
@@ -111,6 +120,7 @@ class AHNotiTest : KActivityDebugHelper() {
                 } else {
                     Snackbar.make(this, "系统低于26", Snackbar.LENGTH_SHORT).show()
                 }
+                changeTopText()
             }
             btn_delete_group.setOnClickListener {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -129,6 +139,7 @@ class AHNotiTest : KActivityDebugHelper() {
                 } else {
                     Snackbar.make(this, "系统低于26", Snackbar.LENGTH_SHORT).show()
                 }
+                changeTopText()
             }
             btn_delete_groups.setOnClickListener {
                 notiManager.notificationChannelGroups.forEach {
@@ -137,15 +148,23 @@ class AHNotiTest : KActivityDebugHelper() {
                     }
                 }
 
+                changeTopText()
             }
 
-            btn_delete_channel.setOnClickListener { }
+            btn_delete_channel.setOnClickListener {
+                when (rg_channel.checkedRadioButtonId) {
+                    R.id.rb_channel1 -> notiManager.deleteNotificationChannel("channel1")
+                    R.id.rb_channel2 -> notiManager.deleteNotificationChannel("channel2")
+                }
+                changeTopText()
+            }
             btn_delete_channels.setOnClickListener {
                 notiManager.notificationChannels.forEach {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         notiManager.deleteNotificationChannel(it.id)
                     }
                 }
+                changeTopText()
             }
         }
     }

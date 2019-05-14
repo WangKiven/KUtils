@@ -50,6 +50,26 @@
                 android:text="分组2" />
         </RadioGroup>
 
+        <RadioGroup
+            android:id="@+id/rg_channel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checkedButton="@id/rb_channel1"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rb_channel1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="channel1" />
+
+            <RadioButton
+                android:id="@+id/rb_channel2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="channel2" />
+        </RadioGroup>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -60,6 +80,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="发个通知" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <Button
             android:id="@+id/btn_create_group"
@@ -79,6 +103,10 @@
             android:layout_height="wrap_content"
             android:text="删除所有分组" />
 
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
         <Button
             android:id="@+id/btn_delete_channel"
             android:layout_width="wrap_content"
@@ -96,7 +124,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="注意：\n
+            android:text="注意：\n
 - 26以上，发送通知前必须先创建channelId\n
 - 26以上，如果使用分组，必须先创建分组。否则通知后，不在分组内" />
 

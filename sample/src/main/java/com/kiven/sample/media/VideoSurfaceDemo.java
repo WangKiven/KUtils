@@ -9,6 +9,7 @@ import android.view.Display;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.kiven.kutils.activityHelper.KActivityHelper;
 import com.kiven.kutils.activityHelper.KHelperActivity;
@@ -53,9 +54,13 @@ public class VideoSurfaceDemo extends KActivityHelper implements SurfaceHolder.C
         try {
             //            player.setDataSource(dataPath);
             if (getIntent().hasExtra("mp4Path")) {
-                player.setDataSource(getIntent().getStringExtra("mp4Path"));
-            } else
+                String mp4Path = getIntent().getStringExtra("mp4Path");
+                player.setDataSource(mp4Path);
+                ((TextView) findViewById(R.id.tv_title)).setText(mp4Path);
+            } else{
                 player.setDataSource(mActivity, Uri.parse("android.resource://" + mActivity.getPackageName() + "/" + R.raw.h));
+                ((TextView) findViewById(R.id.tv_title)).setText("R.raw.h");
+            }
             Log.v("Next:::", "surfaceDestroyed called");
         } catch (IllegalArgumentException e) {
             e.printStackTrace();

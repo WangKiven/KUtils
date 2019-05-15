@@ -100,7 +100,7 @@ public class LauchActivity extends KActivity {
 
             @Override
             public void onClick(View v) {
-                String url = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1505299100227&di=1a1e1d7867714e8a5750119e20d62c93&imgtype=0&src=http%3A%2F%2Fpic2016.ytqmx.com%3A82%2F2015%2F1116%2F19%2F10.jpg%2521190.jpg";
+                String url = "http://b.hiphotos.baidu.com/image/pic/item/908fa0ec08fa513db777cf78376d55fbb3fbd9b3.jpg";
                 String url2 = "http://file5.gucn.com/file2/ShopLogoFile/20120413/Gucn_20120413327888131819Logo.jpg";
                 ImageOptions options = new ImageOptions.Builder()
                         .setCircular(true)
@@ -306,7 +306,7 @@ public class LauchActivity extends KActivity {
         KGranting.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-    @Override
+    /*@Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != RESULT_OK) {
@@ -350,5 +350,5 @@ public class LauchActivity extends KActivity {
             }
         };
         dialog.show();
-    }
+    }*/
 }

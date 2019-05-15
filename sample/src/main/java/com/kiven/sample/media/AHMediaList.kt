@@ -17,6 +17,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import androidx.core.content.FileProvider
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
@@ -24,6 +25,10 @@ import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.*
 import com.kiven.sample.R
 import com.kiven.sample.util.Const
+import com.kiven.sample.util.toast
+import org.jetbrains.anko.dip
+import org.jetbrains.anko.toast
+import org.xutils.x
 import java.io.File
 
 /**
@@ -64,7 +69,8 @@ open class AHMediaList : KActivityHelper() {
                 mActivity.startActivityForResult(intent, 345)
             }
             R.id.item_camera_image -> {
-                val file = getFile(System.currentTimeMillis().toString() + ".jpg")
+//                val file = getFile(System.currentTimeMillis().toString() + ".jpg")
+                val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).absolutePath + "/Camera/" + System.currentTimeMillis().toString() + ".jpg")
                 cameraPath = file.absolutePath
 
                 val camera = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
@@ -75,6 +81,14 @@ open class AHMediaList : KActivityHelper() {
                     camera.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(mActivity, Const.FILEPROVIDER_AUTHORITY, file))
                 }
                 mActivity.startActivityForResult(camera, 346)
+            }
+            R.id.item_camera_image2 -> {
+                val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                if (takePhotoIntent.resolveActivity(mActivity.packageManager) != null) {
+                    mActivity.startActivityForResult(takePhotoIntent, 351)
+                } else {
+                    mActivity.toast("没有相机")
+                }
             }
             R.id.item_camera_video -> mActivity.startActivityForResult(Intent(MediaStore.ACTION_VIDEO_CAPTURE),
                     347)
@@ -105,7 +119,8 @@ open class AHMediaList : KActivityHelper() {
         }
         when (requestCode) {
             345 -> {
-                val path = KPath.getPath(mActivity, data?.data)
+                val uri = data?.data
+                val path = KPath.getPath(mActivity, uri)
                 KLog.i(path)
 
                 if (path.endsWith(".mp4")) {
@@ -113,13 +128,20 @@ open class AHMediaList : KActivityHelper() {
                     val video = VideoSurfaceDemo()
                     video.putExtra("mp4Path", path)
                     video.startActivity(mActivity)
-                } else
+                } else{
                     showImage(path)
+
+                    /*val parceFileDescriptor = mActivity.contentResolver.openFileDescriptor(uri!!, "r")
+                    val fileDescriptor = parceFileDescriptor!!.fileDescriptor
+                    val image = BitmapFactory.decodeFileDescriptor(fileDescriptor)
+                    parceFileDescriptor.close()
+                    showImage(path, image)*/
+                }
             }
             346 -> {
                 showImage(cameraPath)
-                KUtil.addPicture(cameraPath, {_,_ ->
-                })
+                KUtil.addPicture(cameraPath) { _, _ ->
+                }
             }
             347 -> KAlertDialogHelper.Show1BDialog(mActivity, data?.data?.path ?: "路径获取失败")
             348 -> cropImage(KPath.getPath(mActivity, data?.data))
@@ -135,7 +157,12 @@ open class AHMediaList : KActivityHelper() {
                 if (bmp == null) {
                     KToast.ToastMessage("获取视频文件缩略图失败")
                 } else {
-                    showImage(bmp)
+                    showImage(path, bmp)
+                }
+            }
+            351 -> {
+                data?.extras?.apply {
+                    showImage("获取到的似乎是缩略图", get("data") as Bitmap)
                 }
             }
         }
@@ -144,11 +171,14 @@ open class AHMediaList : KActivityHelper() {
 
     private fun showImage(imagePath: String) {
         val bitmap = BitmapFactory.decodeFile(imagePath)
-        showImage(bitmap)
+        if (bitmap != null)
+            showImage(imagePath, bitmap)
+        else
+            mActivity.toast("获取图片失败：$imagePath")
     }
 
 
-    private fun showImage(bitmap: Bitmap) {
+    private fun showImage(title:String, bitmap: Bitmap) {
         val dialog = object : Dialog(mActivity) {
             override fun onCreate(savedInstanceState: Bundle?) {
                 super.onCreate(savedInstanceState)
@@ -158,6 +188,7 @@ open class AHMediaList : KActivityHelper() {
                 setTitle("已选图片")
             }
         }
+        dialog.setTitle(title)
         dialog.show()
     }
 

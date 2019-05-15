@@ -2,6 +2,7 @@ package com.kiven.kutils.tools;
 
 import android.app.ActivityManager;
 import android.app.Application;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -9,9 +10,11 @@ import android.content.pm.ConfigurationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.Bitmap;
 import android.media.MediaScannerConnection;
 import android.os.Build;
 import android.os.Environment;
+import android.provider.MediaStore;
 import androidx.core.content.FileProvider;
 
 import android.util.DisplayMetrics;
@@ -293,7 +296,12 @@ public class KUtil {
      * 通知相册更新图片
      *
      * @param callBack 跟新成功是否提示, 0:失败，1：成功，2：保存中
+     *
+     *                 Android Q 访问存储权限变动，该方法不再适用。
+     *                 可以使用{@link com.kiven.kutils.file.KFile#saveJpgBitmap(Context, Bitmap, String, String)}
+     *                 或者{@link com.kiven.kutils.file.KFile#savePngBitmap(Context, Bitmap, String, String)}
      */
+    @Deprecated
     public static void addPicture(String path, MediaScannerConnection.OnScanCompletedListener callBack) {
         MediaScannerConnection.scanFile(KContext.getInstance(), new String[]{path}, new String[]{"image/*"},
                 callBack);

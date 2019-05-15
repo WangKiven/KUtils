@@ -71,6 +71,14 @@
             app:item_title="拍照片（指定文件名）" />
 
         <com.kiven.kutils.widget.KNormalItemView
+            android:id="@+id/item_camera_image2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:onClick="onClick"
+            app:item_title="拍照片（不指定文件名, 仅能拿到缩略图）" />
+
+        <com.kiven.kutils.widget.KNormalItemView
             android:id="@+id/item_camera_video"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

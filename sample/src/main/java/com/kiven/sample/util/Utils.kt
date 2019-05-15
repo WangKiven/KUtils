@@ -4,6 +4,7 @@ import android.app.Activity
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.snackbar.Snackbar
+import com.kiven.kutils.logHelper.KLog
 
 /**
  * Created by wangk on 2019/5/14.
@@ -30,6 +31,7 @@ fun Activity.getInput(inputName: String, action: (CharSequence) -> Unit) {
 /// 显示提示
 fun Activity.toast(text: String) {
     Snackbar.make(window.decorView, text, Snackbar.LENGTH_SHORT).show()
+    KLog.i(text)
 }
 
 /// 选择列表

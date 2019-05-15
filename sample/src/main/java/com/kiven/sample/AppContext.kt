@@ -1,9 +1,11 @@
 package com.kiven.sample
 
 import android.content.Context
+import android.content.IntentFilter
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KContext
 import com.kiven.kutils.tools.KUtil
+import com.kiven.sample.noti.NotificationClickReceiver
 import org.xutils.x
 
 /**
@@ -25,5 +27,6 @@ class AppContext : KContext() {
         x.Ext.init(this)
         KUtil.setApp(this)
 
+        registerReceiver(NotificationClickReceiver(), IntentFilter())
     }
 }

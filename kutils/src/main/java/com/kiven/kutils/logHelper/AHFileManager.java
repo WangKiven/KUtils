@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import androidx.annotation.NonNull;
@@ -61,15 +62,20 @@ public class AHFileManager extends KActivityHelper {
         setContentView(R.layout.k_ah_file_manager);
         initBackToolbar(R.id.toolbar);
 
-        KGranting.requestPermissions(mActivity, 345, Manifest.permission.WRITE_EXTERNAL_STORAGE, "存储空间", new KGranting.GrantingCallBack() {
-            @Override
-            public void onGrantSuccess(boolean isSuccess) {
-                if (isSuccess) {
-                    // 刷新列表
-                    childAdapter.notifyDataSetChanged();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            childAdapter.notifyDataSetChanged();
+        }else{
+            KGranting.requestPermissions(mActivity, 345, Manifest.permission.WRITE_EXTERNAL_STORAGE, "存储空间", new KGranting.GrantingCallBack() {
+                @Override
+                public void onGrantSuccess(boolean isSuccess) {
+                    if (isSuccess) {
+                        // 刷新列表
+                        childAdapter.notifyDataSetChanged();
+                    }
                 }
-            }
-        });
+            });
+        }
+
 
         modules.add(new LFile("应用内部", mActivity.getFilesDir().getParentFile()));
         File cf = mActivity.getExternalCacheDir().getParentFile();

@@ -2,7 +2,6 @@ package com.kiven.kutils.tools;
 
 import android.app.ActivityManager;
 import android.app.Application;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -14,9 +13,6 @@ import android.graphics.Bitmap;
 import android.media.MediaScannerConnection;
 import android.os.Build;
 import android.os.Environment;
-import android.provider.MediaStore;
-import androidx.core.content.FileProvider;
-
 import android.util.DisplayMetrics;
 
 import com.kiven.kutils.logHelper.KLog;
@@ -149,6 +145,7 @@ public class KUtil {
 
     /**
      * 是否是模拟器
+     *
      * @return
      */
     public static boolean isAVD() {
@@ -202,14 +199,14 @@ public class KUtil {
      */
     public static void printDeviceInfo() {
         StringBuilder builder = new StringBuilder();
-        builder.append("屏幕密度（0.75 / 1.0 / 1.5）:").append(getScreenDensity(app))
+        builder.append("\n屏幕密度（0.75 / 1.0 / 1.5）:").append(getScreenDensity(app))
                 .append("\n屏幕密度DPI（120 / 160 / 240）:").append(getScreenDensityDpi(app)).append("  每英寸多少像素")
                 .append("\n屏幕宽度(px):").append(getScreenWith(app))
                 .append("\n屏幕高度(px):").append(getScreenHeight(app))
-                .append("\n屏幕宽度(dp):").append(getScreenWith(app)/getScreenDensity(app))
-                .append("\n屏幕高度(dp):").append(getScreenHeight(app)/getScreenDensity(app))
-                .append("\n屏幕宽度(英寸):").append(getScreenWith(app)*1f/getScreenDensityDpi(app))
-                .append("\n屏幕高度(英寸):").append(getScreenHeight(app)*1f/getScreenDensityDpi(app));
+                .append("\n屏幕宽度(dp):").append(getScreenWith(app) / getScreenDensity(app))
+                .append("\n屏幕高度(dp):").append(getScreenHeight(app) / getScreenDensity(app))
+                .append("\n屏幕宽度(英寸):").append(getScreenWith(app) * 1f / getScreenDensityDpi(app))
+                .append("\n屏幕高度(英寸):").append(getScreenHeight(app) * 1f / getScreenDensityDpi(app));
         builder.append("\nProduct Model: ").append(Build.BRAND).append(",").append(Build.MODEL).append(",")
                 .append(Build.VERSION.SDK_INT).append(",").append(Build.VERSION.RELEASE);
 
@@ -296,7 +293,7 @@ public class KUtil {
      * 通知相册更新图片
      *
      * @param callBack 跟新成功是否提示, 0:失败，1：成功，2：保存中
-     *
+     *                 <p>
      *                 Android Q 访问存储权限变动，该方法不再适用。
      *                 可以使用{@link com.kiven.kutils.file.KFile#saveJpgBitmap(Context, Bitmap, String, String)}
      *                 或者{@link com.kiven.kutils.file.KFile#savePngBitmap(Context, Bitmap, String, String)}
@@ -349,7 +346,6 @@ public class KUtil {
             }
         }
     }
-
 
 
     /**

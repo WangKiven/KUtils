@@ -22,6 +22,7 @@ import android.provider.Settings;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.content.FileProvider;
 import androidx.core.util.Pair;
 import androidx.appcompat.app.AlertDialog;
 import android.telephony.TelephonyManager;
@@ -42,6 +43,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.kiven.kutils.activityHelper.KFragmentActivity;
 import com.kiven.kutils.activityHelper.activity.KActivity;
 import com.kiven.kutils.callBack.CallBack;
@@ -57,6 +59,7 @@ import com.kiven.sample.floatView.ActivityHFloatView;
 import com.kiven.sample.gl.AHGL;
 import com.kiven.sample.libs.AHLibs;
 import com.kiven.sample.media.AHMediaList;
+import com.kiven.sample.util.Const;
 
 import org.xutils.image.ImageOptions;
 import org.xutils.view.annotation.ContentView;
@@ -100,12 +103,18 @@ public class LauchActivity extends KActivity {
 
             @Override
             public void onClick(View v) {
-                String url = "http://b.hiphotos.baidu.com/image/pic/item/908fa0ec08fa513db777cf78376d55fbb3fbd9b3.jpg";
-                String url2 = "http://file5.gucn.com/file2/ShopLogoFile/20120413/Gucn_20120413327888131819Logo.jpg";
-                ImageOptions options = new ImageOptions.Builder()
+                String[] urls = {
+                        "http://b.hiphotos.baidu.com/image/pic/item/908fa0ec08fa513db777cf78376d55fbb3fbd9b3.jpg",
+                        "http://file5.gucn.com/file2/ShopLogoFile/20120413/Gucn_20120413327888131819Logo.jpg",
+                        "/storage/emulated/0/DCIM/Camera/1557910396757.jpg"
+                };
+                /*ImageOptions options = new ImageOptions.Builder()
                         .setCircular(true)
                         .setAutoRotate(true).setFadeIn(true).build();
-                x.image().bind(iv_test, count % 2 == 0 ? url : url2, options);
+                x.image().bind(iv_test, urls[count%urls.length], options);*/
+
+
+                Glide.with(LauchActivity.this).load(urls[count%urls.length]).into(iv_test);
                 count++;
             }
         });

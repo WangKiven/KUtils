@@ -15,6 +15,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import androidx.core.content.FileProvider
 import android.view.View
 import android.view.ViewGroup
@@ -23,6 +24,7 @@ import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.*
+import com.kiven.sample.AppContext
 import com.kiven.sample.R
 import com.kiven.sample.util.Const
 import com.kiven.sample.util.toast
@@ -30,6 +32,7 @@ import org.jetbrains.anko.dip
 import org.jetbrains.anko.toast
 import org.xutils.x
 import java.io.File
+import java.net.URI
 
 /**
  *
@@ -69,8 +72,8 @@ open class AHMediaList : KActivityHelper() {
                 mActivity.startActivityForResult(intent, 345)
             }
             R.id.item_camera_image -> {
-//                val file = getFile(System.currentTimeMillis().toString() + ".jpg")
-                val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).absolutePath + "/Camera/" + System.currentTimeMillis().toString() + ".jpg")
+                val file = getFile(System.currentTimeMillis().toString() + ".jpg")
+//                val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).absolutePath + "/Camera/" + System.currentTimeMillis().toString() + ".jpg")
                 cameraPath = file.absolutePath
 
                 val camera = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
@@ -119,9 +122,11 @@ open class AHMediaList : KActivityHelper() {
         }
         when (requestCode) {
             345 -> {
-                val uri = data?.data
+                val uri = data?.data ?: return
+
                 val path = KPath.getPath(mActivity, uri)
                 KLog.i(path)
+                KLog.i(uri.toString())
 
                 if (path.endsWith(".mp4")) {
 
@@ -130,13 +135,18 @@ open class AHMediaList : KActivityHelper() {
                     video.startActivity(mActivity)
                 } else{
                     showImage(path)
-
-                    /*val parceFileDescriptor = mActivity.contentResolver.openFileDescriptor(uri!!, "r")
+                }
+                /*if (uri.toString().contains("video")) {
+                    val video = VideoSurfaceDemo()
+                    video.putExtra("mp4Path", uri)
+                    video.startActivity(mActivity)
+                } else {
+                    val parceFileDescriptor = mActivity.contentResolver.openFileDescriptor(uri, "r")
                     val fileDescriptor = parceFileDescriptor!!.fileDescriptor
                     val image = BitmapFactory.decodeFileDescriptor(fileDescriptor)
                     parceFileDescriptor.close()
-                    showImage(path, image)*/
-                }
+                    showImage(path, image)
+                }*/
             }
             346 -> {
                 showImage(cameraPath)
@@ -163,6 +173,10 @@ open class AHMediaList : KActivityHelper() {
             351 -> {
                 data?.extras?.apply {
                     showImage("获取到的似乎是缩略图", get("data") as Bitmap)
+                }
+                val uri = data?.data
+                if (uri == null) {
+                    Log.i("ULog_default", "uri = null")
                 }
             }
         }

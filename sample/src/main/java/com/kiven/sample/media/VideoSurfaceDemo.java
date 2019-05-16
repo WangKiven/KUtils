@@ -4,6 +4,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.ParcelFileDescriptor;
 import android.util.Log;
 import android.view.Display;
 import android.view.SurfaceHolder;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 
 import com.kiven.kutils.activityHelper.KActivityHelper;
 import com.kiven.kutils.activityHelper.KHelperActivity;
+import com.kiven.kutils.tools.KPath;
 import com.kiven.sample.R;
 
 import java.io.IOException;
@@ -54,9 +56,13 @@ public class VideoSurfaceDemo extends KActivityHelper implements SurfaceHolder.C
         try {
             //            player.setDataSource(dataPath);
             if (getIntent().hasExtra("mp4Path")) {
-                String mp4Path = getIntent().getStringExtra("mp4Path");
-                player.setDataSource(mp4Path);
-                ((TextView) findViewById(R.id.tv_title)).setText(mp4Path);
+                Uri mp4Path = getIntent().getParcelableExtra("mp4Path");
+//                player.setDataSource(mp4Path);
+                ParcelFileDescriptor parceFileDescriptor = mActivity.getContentResolver().openFileDescriptor(mp4Path, "r");
+                player.setDataSource(parceFileDescriptor.getFileDescriptor());
+                parceFileDescriptor.close();
+
+                ((TextView) findViewById(R.id.tv_title)).setText(KPath.getPath(mActivity, mp4Path) + "\n" + mp4Path.toString());
             } else{
                 player.setDataSource(mActivity, Uri.parse("android.resource://" + mActivity.getPackageName() + "/" + R.raw.h));
                 ((TextView) findViewById(R.id.tv_title)).setText("R.raw.h");

@@ -14,6 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
+            android:focusable="true"
             android:onClick="onClick"
             app:item_title="mp4 播放" />
 
@@ -22,6 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
+            android:focusable="true"
             android:onClick="onClick"
             app:item_title="gif 播放" />
 
@@ -36,6 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
+            android:focusable="true"
             android:onClick="onClick"
             app:item_title="调用系统相册选择图片" />
 
@@ -44,6 +47,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
+            android:focusable="true"
             android:onClick="onClick"
             app:item_title="调用系统相册选择视频" />
 
@@ -52,6 +56,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
+            android:focusable="true"
             android:onClick="onClick"
             app:item_title="调用文件系统选择视频或图片" />
 
@@ -67,6 +72,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
+            android:focusable="true"
             android:onClick="onClick"
             app:item_title="拍照片（指定文件名）" />
 
@@ -75,6 +81,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
+            android:focusable="true"
             android:onClick="onClick"
             app:item_title="拍照片（不指定文件名, 仅能拿到缩略图）" />
 
@@ -83,6 +90,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
+            android:focusable="true"
             android:onClick="onClick"
             app:item_title="拍视频（不指定文件名）" />
 
@@ -97,6 +105,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
+            android:focusable="true"
             android:onClick="onClick"
             app:item_title="剪切图片" />
 
@@ -105,9 +114,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
+            android:focusable="true"
             android:onClick="onClick"
             app:item_title="视频缩略图" />
 
+        <com.kiven.kutils.widget.KNormalItemView
+            android:id="@+id/item_camerax"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="onClick"
+            app:item_title="测试camerax（sdk >= 21）" />
 
     </LinearLayout>
 

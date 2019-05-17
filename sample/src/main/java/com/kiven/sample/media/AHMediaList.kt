@@ -8,7 +8,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.media.MediaMetadataRetriever
 import android.media.ThumbnailUtils
 import android.net.Uri
 import android.os.Build
@@ -16,29 +15,27 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
-import androidx.core.content.FileProvider
+import android.view.TextureView
 import android.view.View
-import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
-import com.kiven.kutils.activityHelper.KActivityHelper
+import androidx.camera.core.*
+import androidx.core.content.FileProvider
+import androidx.lifecycle.LifecycleOwner
+import com.kiven.kutils.activityHelper.KActivityDebugHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.*
-import com.kiven.sample.AppContext
 import com.kiven.sample.R
 import com.kiven.sample.util.Const
 import com.kiven.sample.util.toast
-import org.jetbrains.anko.dip
-import org.jetbrains.anko.toast
-import org.xutils.x
 import java.io.File
-import java.net.URI
 
 /**
  *
  * Created by wangk on 2018/2/4.
  */
-open class AHMediaList : KActivityHelper() {
+open class AHMediaList : KActivityDebugHelper() {
     private val IMAGE_DIR = "KUtilSampleFile" + File.separator + "testImage"
 
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
@@ -71,6 +68,7 @@ open class AHMediaList : KActivityHelper() {
                 intent.type = "video/*;image/*"
                 mActivity.startActivityForResult(intent, 345)
             }
+            // https://developer.android.google.cn/training/camera/photobasics
             R.id.item_camera_image -> {
                 val file = getFile(System.currentTimeMillis().toString() + ".jpg")
 //                val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).absolutePath + "/Camera/" + System.currentTimeMillis().toString() + ".jpg")
@@ -85,6 +83,7 @@ open class AHMediaList : KActivityHelper() {
                 }
                 mActivity.startActivityForResult(camera, 346)
             }
+            // https://developer.android.google.cn/training/camera/photobasics
             R.id.item_camera_image2 -> {
                 val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                 if (takePhotoIntent.resolveActivity(mActivity.packageManager) != null) {
@@ -99,6 +98,7 @@ open class AHMediaList : KActivityHelper() {
                     Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI), 348)
             R.id.item_video_thumb -> mActivity.startActivityForResult(
                     Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI), 350)
+            R.id.item_camerax -> AHCameraxTest().startActivity(mActivity)
         }
     }
 
@@ -131,9 +131,9 @@ open class AHMediaList : KActivityHelper() {
                 if (path.endsWith(".mp4")) {
 
                     val video = VideoSurfaceDemo()
-                    video.putExtra("mp4Path", path)
+                    video.putExtra("mp4Path", uri)
                     video.startActivity(mActivity)
-                } else{
+                } else {
                     showImage(path)
                 }
                 /*if (uri.toString().contains("video")) {
@@ -152,6 +152,11 @@ open class AHMediaList : KActivityHelper() {
                 showImage(cameraPath)
                 KUtil.addPicture(cameraPath) { _, _ ->
                 }
+                /*Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE).also { mediaScanIntent ->
+                    val f = File(cameraPath)
+                    mediaScanIntent.data = Uri.fromFile(f)
+                    mActivity.sendBroadcast(mediaScanIntent)
+                }*/
             }
             347 -> KAlertDialogHelper.Show1BDialog(mActivity, data?.data?.path ?: "路径获取失败")
             348 -> cropImage(KPath.getPath(mActivity, data?.data))
@@ -192,7 +197,7 @@ open class AHMediaList : KActivityHelper() {
     }
 
 
-    private fun showImage(title:String, bitmap: Bitmap) {
+    private fun showImage(title: String, bitmap: Bitmap) {
         val dialog = object : Dialog(mActivity) {
             override fun onCreate(savedInstanceState: Bundle?) {
                 super.onCreate(savedInstanceState)

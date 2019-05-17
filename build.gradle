@@ -37,7 +37,7 @@ buildscript {
         compileSdkVersion = 'android-Q'
         buildToolsVersion = "29.0.0 rc3"
         minSdkVersion = 14
-        targetSdkVersion = 'Q'
+        targetSdkVersion = 28
 
         libraryVersion = "28.0.1"
     }

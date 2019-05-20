@@ -23,6 +23,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Properties;
 import java.util.Set;
@@ -171,14 +172,14 @@ public class KUtil {
             if (uuId == null) {
                 uuId = System.currentTimeMillis() + "" +
                         Build.BOARD.length() % 10 +
-                        Build.BRAND.length() % 10 +
+                        Build.BRAND.length() % 10 +//品牌
                         Build.CPU_ABI.length() % 10 +
                         Build.DEVICE.length() % 10 +
                         Build.DISPLAY.length() % 10 +
                         Build.HOST.length() % 10 +
                         Build.ID.length() % 10 +
-                        Build.MANUFACTURER.length() % 10 +
-                        Build.MODEL.length() % 10 +
+                        Build.MANUFACTURER.length() % 10 +//制造商
+                        Build.MODEL.length() % 10 +//型号
                         Build.PRODUCT.length() % 10 +
                         Build.TAGS.length() % 10 +
                         Build.TYPE.length() % 10 +
@@ -222,10 +223,31 @@ public class KUtil {
             builder.append(String.format("\ngles = %x", info.reqGlEsVersion));
         }
 
+
+        builder.append("\n\n>>>>>>>>>>Build properties");
+        Field[] buildFields = Build.class.getFields();
+        for (Field field : buildFields) {
+            try {
+                Object value = field.get(Build.class);
+
+                if (value != null && value.getClass() == Class.forName("[Ljava.lang.String;")) {
+                    String as = "\n" + field.getName() + ": " + Arrays.toString((Object[]) value);
+                    builder.append(as);
+                } else {
+                    String as = "\n" + field.getName() + ": " + value;
+                    builder.append(as);
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+
         Properties properties = System.getProperties();
         Set<String> set = System.getProperties().stringPropertyNames(); //获取java虚拟机和系统的信息。
 
-        builder.append("\n>>>>>>>>>>system properties");
+        builder.append("\n\n>>>>>>>>>>system properties");
         for (String name : set) {
             builder.append("\n").append(name).append(":\t").append(properties.getProperty(name));
         }

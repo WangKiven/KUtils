@@ -7,6 +7,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -42,6 +44,7 @@ import kotlinx.coroutines.*
 import org.jetbrains.anko.coroutines.experimental.Ref
 import org.jetbrains.anko.coroutines.experimental.asReference
 import org.jetbrains.anko.support.v4.nestedScrollView
+import java.util.*
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -353,7 +356,32 @@ class AHSmallAction : KActivityDebugHelper() {
             AHConstraintLayoutTest().startActivity(activity)
         })
         addView("通知", View.OnClickListener { AHNotiTest().startActivity(activity) })
-        addView("", View.OnClickListener { AHNotiTest().startActivity(activity) })
+        addView("唯一标识", View.OnClickListener {
+            val sb = StringBuilder()
+
+            val uniqueID = UUID.randomUUID().toString()
+            sb.append("UUID:$uniqueID, 每次获取都不一样\n")
+
+            //实例化TelephonyManager对象
+//            val telephonyManager = mActivity.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+//            //获取IMEI号
+//            val imei = telephonyManager.getDeviceId()
+
+
+            // 厂商预装的系统应用可以拿到设备 ID。具体来说，应用必须获得 READ_PRIVILEGED_PHONE_STATE 权限，而这个权限只可能被赋予预装在系统分区的应用。
+
+            // 不是厂商预装的系统应用，似乎拿不到唯一标识了
+
+            val androidID = Settings.System.getString(mActivity.contentResolver, Settings.Secure.ANDROID_ID)
+            sb.append("ANDROID_ID:$androidID\n")// 不同的设备可能会产生相同的ANDROID_ID
+
+            sb.append("串号:${Build.SERIAL}\n")
+
+            showDialog(sb.toString())
+        })
+        addView("", View.OnClickListener {  })
+        addView("", View.OnClickListener {  })
+        addView("", View.OnClickListener {  })
     }
 
     private suspend fun doSomthing(): Int {
@@ -375,5 +403,6 @@ class AHSmallAction : KActivityDebugHelper() {
 
     private fun showDialog(word: String) {
         KAlertDialogHelper.Show1BDialog(mActivity, word)
+        Log.i("ULog_default", word)
     }
 }

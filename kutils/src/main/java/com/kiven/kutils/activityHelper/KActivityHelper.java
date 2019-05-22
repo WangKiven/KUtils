@@ -8,16 +8,15 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
-import androidx.annotation.IdRes;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
+import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 import com.kiven.kutils.callBack.CallBack;
 import com.kiven.kutils.callBack.Consumer;
 import com.kiven.kutils.tools.KView;
@@ -61,7 +60,10 @@ public class KActivityHelper {
 
     public final Intent getIntent() {
         if (mIntent == null) {
-            mIntent = new Intent();
+            if (mActivity == null)
+                mIntent = new Intent();
+            else
+                mIntent = mActivity.getIntent();
         }
         return mIntent;
     }
@@ -134,6 +136,7 @@ public class KActivityHelper {
         Toolbar toolBar = findViewById(toolBarId);
         initBackToolbar(toolBar);
     }
+
     protected void initBackToolbar(Toolbar toolBar) {
         if (toolBar == null) {
             return;
@@ -165,6 +168,7 @@ public class KActivityHelper {
     }
 
     private CallBack nextResumeAction;
+
     public void onResume() {
         if (nextResumeAction != null) {
             nextResumeAction.callBack();
@@ -173,7 +177,7 @@ public class KActivityHelper {
     }
 
     // todo 注册该方法后第一次调用onResume需要运行的操作, 传null取消操作。建议用在，打开新界面后返回该界面时刷新（列表中某条）数据
-    public void registerNextResumeAction(CallBack callBack){
+    public void registerNextResumeAction(CallBack callBack) {
         nextResumeAction = callBack;
     }
 
@@ -212,12 +216,14 @@ public class KActivityHelper {
     }
 
     private Consumer<ActivityResultInfo> activityResultAction;
+
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (activityResultAction != null) {
             activityResultAction.callBack(new ActivityResultInfo(requestCode, resultCode, data));
         }
         activityResultAction = null;
     }
+
     // todo 注册该方法后第一次调用onActivityResult需要运行的操作, 传null取消操作。建议启动新界面后立刻调用该方法。
     public void registerNextActivityResultAction(Consumer<ActivityResultInfo> action) {
         activityResultAction = action;

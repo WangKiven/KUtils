@@ -20,7 +20,7 @@ class AHCPUMemory : KActivityHelper() {
     private var cpu = 0.0
     private var mem = 0.0
     private val handler = Handler(Handler.Callback {
-        findViewById<TextView>(R.id.tv_message).setText("cpu = ${cpu}%\nmem = $mem M")
+        findViewById<TextView>(R.id.tv_message).text = "cpu = ${cpu}%\nmem = $mem M"
         return@Callback true
     })
 

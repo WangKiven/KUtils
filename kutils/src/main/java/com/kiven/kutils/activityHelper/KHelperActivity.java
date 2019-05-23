@@ -152,7 +152,7 @@ public class KHelperActivity extends AppCompatActivity {
     @Override
     public void finish() {
         super.finish();
-
+        helper = null;
         KContext.getInstance().onActivityFinish(this);
     }
 

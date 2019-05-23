@@ -70,7 +70,7 @@ public class KCPUMem extends KActivityHelper {
     }
 
     private void start() {
-        new Thread(){
+        new Thread() {
             @Override
             public void run() {
                 super.run();
@@ -118,15 +118,18 @@ public class KCPUMem extends KActivityHelper {
 
     private double cpu = 0;
     private boolean isExit = false;
-    private void cpu(){
+
+    private void cpu() {
         RandomAccessFile procStatFile = null;
         try {
             procStatFile = new RandomAccessFile("/proc/stat", "r");
-        } catch (Exception ignored) { }
+        } catch (Exception ignored) {
+        }
         RandomAccessFile appStatFile = null;
         try {
             appStatFile = new RandomAccessFile("/proc/" + Process.myPid() + "/stat", "r");
-        } catch (Exception ignored) { }
+        } catch (Exception ignored) {
+        }
 
         if (procStatFile != null && appStatFile != null) {
 
@@ -149,7 +152,8 @@ public class KCPUMem extends KActivityHelper {
                     cpu = (appTime - lastAppCpuTime) / (cpuTime - lastCpuTime) * 100;
                     lastCpuTime = cpuTime;
                     lastAppCpuTime = appTime;
-                }catch (Exception ignored) { }
+                } catch (Exception ignored) {
+                }
             }
 
 

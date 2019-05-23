@@ -13,7 +13,6 @@ import com.kiven.kutils.logHelper.KLog
 import org.jetbrains.anko.activityManager
 import org.jetbrains.anko.doAsync
 import java.io.RandomAccessFile
-import java.util.concurrent.ThreadFactory
 
 /**
  * Created by wangk on 2018/3/9.

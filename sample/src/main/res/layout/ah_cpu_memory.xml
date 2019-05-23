@@ -10,12 +10,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <com.kiven.kutils.widget.KNormalItemView
-        android:id="@+id/item_cpu"
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/btn_run_gc"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:clickable="true"
         android:onClick="onClick"
-        app:item_title="cpu、内存管理"/>
+        android:text="Runtime.gc()"/>
+
+    <Button
+        android:id="@+id/btn_run_gc2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onClick"
+        android:text="System.gc()"/>
 
 </LinearLayout>

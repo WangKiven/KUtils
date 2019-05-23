@@ -79,7 +79,7 @@ public class KShowLog extends KActivityHelper implements AdapterView.OnItemClick
         menu.add(0, Menu.FIRST + 1000, 0, "高亮结果");
         menu.add(0, Menu.FIRST + 1001, 1, "文件目录");
         menu.add(0, Menu.FIRST + 1002, 2, "查看应用相关");
-        menu.add(0, Menu.FIRST + 1003, 3, "System.gc()");
+        menu.add(0, Menu.FIRST + 1003, 3, "内存CPU情况");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             MenuItem searchItem = menu.findItem(R.id.search);
@@ -148,7 +148,7 @@ public class KShowLog extends KActivityHelper implements AdapterView.OnItemClick
             intent.setData(Uri.fromParts("package", mActivity.getPackageName(), null));
             mActivity.startActivity(intent);
         } else if (i == Menu.FIRST + 1003) {
-            System.gc();
+            new KCPUMem().startActivity(mActivity);
         }
         return true;
     }

@@ -1,9 +1,6 @@
 package com.kiven.sample.noti
 
-import android.app.NotificationChannel
-import android.app.NotificationChannelGroup
-import android.app.NotificationManager
-import android.app.PendingIntent
+import android.app.*
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
@@ -24,7 +21,9 @@ import com.kiven.sample.util.toast
 import kotlinx.android.synthetic.main.ah_noti_test.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.lang.Exception
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -107,7 +106,11 @@ class AHNotiTest : KActivityDebugHelper() {
                                 .setNumber(12)
                                 .setContentInfo("setContentInfo是什么$channelId $count")
                                 .setAutoCancel(true)
+                                .setBadgeIconType(NotificationCompat.BADGE_ICON_SMALL)//图标类型
                                 .setContentIntent(pendingIntent)
+                        /*when (rg_delay.checkedRadioButtonId) {
+                            R.id.rb_delay_5s -> {mBuilder.setTimeoutAfter(5000)} // 华为好像没作用
+                        }*/
 
                         when (rg_noti_group.checkedRadioButtonId) {
                             R.id.rb_noti_group0 -> {
@@ -122,9 +125,17 @@ class AHNotiTest : KActivityDebugHelper() {
                             }
                         }
 
+                        when (rg_delay.checkedRadioButtonId) {
+                            R.id.rb_delay_5s -> delay(5000)
+                        }
+
                         notiManager.notify(count, mBuilder.build())
                         count++
                         changeTopText()
+
+                        runUI {
+                            BadgeUtil.setBadgeCount(mActivity, 5, R.drawable.ic_launcher)
+                        }
                     }
                 }
             }
@@ -187,6 +198,14 @@ class AHNotiTest : KActivityDebugHelper() {
                                 }
 //                        channel.setSound()
                                 channel.enableVibration(true) // 震动
+                                channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC // 锁屏可见
+                                channel.setShowBadge(true)
+                                channel.description = "这是一个测试用的通知分类" // 描述
+                                try {
+                                    channel.setAllowBubbles(true) // 小红点显示。华为崩了，所以放try里面
+                                }catch (e:NoSuchMethodError){}
+                                channel.setBypassDnd(true) // 免打扰模式下，允许响铃或震动
+
                                 notiManager.createNotificationChannel(channel)
 
 

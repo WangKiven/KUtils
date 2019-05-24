@@ -81,6 +81,32 @@
 
         </RadioGroup>
 
+        <RadioGroup
+            android:id="@+id/rg_delay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checkedButton="@id/rb_delay_no"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="延迟时间："/>
+
+            <RadioButton
+                android:id="@+id/rb_delay_no"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="无延时" />
+
+            <RadioButton
+                android:id="@+id/rb_delay_5s"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="延时5秒" />
+
+        </RadioGroup>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -162,7 +188,8 @@
 - 26以上，发送通知前必须先创建channelId\n
 - 26以上，如果使用分组，必须先创建分组。否则通知后，不在分组内\n
 - channel可以在分组中，也可以不在分组中。如果要在分组中，分组必须提前创建，否则会崩\n
-- 发送通知前，channel也必须创建" />
+- 发送通知前，channel也必须创建\n
+- 应用图标角标的问题，也许是因为厂家定制了各自的角标使用方法，而废弃了新系统的角标，所以设置角标可能导致崩溃。还注意各个厂家的具体使用方法吧" />
 
     </com.google.android.flexbox.FlexboxLayout>
 

@@ -2,6 +2,10 @@ package com.kiven.kutils.logHelper;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.BatteryManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Debug;
 import android.os.Process;
@@ -16,6 +20,8 @@ import com.kiven.kutils.activityHelper.KActivityHelper;
 import com.kiven.kutils.activityHelper.KHelperActivity;
 
 import java.io.RandomAccessFile;
+
+import static android.content.Context.BATTERY_SERVICE;
 
 public class KCPUMem extends KActivityHelper {
     private TextView showText;
@@ -74,8 +80,11 @@ public class KCPUMem extends KActivityHelper {
             @Override
             public void run() {
                 super.run();
+
+                int batterLevel = getBatteryLevel();
                 while (!isExit) {
                     final StringBuilder sb = new StringBuilder();
+                    sb.append("电量 = ").append(batterLevel).append("%\n");
                     sb.append("cpu = ").append(cpu).append("%(Permission denied)\n");
 
 
@@ -114,6 +123,17 @@ public class KCPUMem extends KActivityHelper {
 
     private double toM(long length) {
         return (length * 1.0) / (1024 * 1024);
+    }
+
+    private int getBatteryLevel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            BatteryManager batteryManager = (BatteryManager) mActivity.getSystemService(BATTERY_SERVICE);
+            return batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+        } else {
+            Intent intent = mActivity.registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+            return (intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1) * 100) /
+                    intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+        }
     }
 
     private double cpu = 0;

@@ -11,6 +11,7 @@ import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.provider.Settings
 import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
@@ -52,6 +53,7 @@ import kotlinx.coroutines.*
 import org.jetbrains.anko.coroutines.experimental.Ref
 import org.jetbrains.anko.coroutines.experimental.asReference
 import org.jetbrains.anko.support.v4.nestedScrollView
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -399,7 +401,8 @@ class AHSmallAction : KActivityDebugHelper() {
             }
         })
         addView("电话监听", View.OnClickListener {
-            KGranting.requestPermissions(mActivity, 989, arrayOf(Manifest.permission.READ_PHONE_STATE, Manifest.permission.CALL_PHONE), arrayOf("通话状态", "拨号")) {
+            KGranting.requestPermissions(mActivity, 989, arrayOf(Manifest.permission.READ_PHONE_STATE,
+                    Manifest.permission.CALL_PHONE, Manifest.permission.RECORD_AUDIO), arrayOf("通话状态", "拨号", "录音")) {
                 if (it) {
                     val telephonyManager = mActivity.getSystemService(Activity.TELEPHONY_SERVICE) as TelephonyManager
                     val lis = object : PhoneStateListener() {
@@ -419,9 +422,9 @@ class AHSmallAction : KActivityDebugHelper() {
 
                             if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
                                 if (recorder == null) {
-                                    /*recorder = MediaRecorder().apply {
+                                    recorder = MediaRecorder().apply {
                                         try {
-                                            setAudioSource(MediaRecorder.AudioSource.MIC) //模拟器报异常
+                                            setAudioSource(MediaRecorder.AudioSource.MIC) //RECORD_AUDIO权限
                                             setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)//设置音频格式
                                             setOutputFile(mActivity.getDir(Environment.DIRECTORY_MUSIC, Context.MODE_PRIVATE).absolutePath
                                                     + "/${SimpleDateFormat("yyyyMMddHHmmss").format(Date())}.3gp")
@@ -432,7 +435,7 @@ class AHSmallAction : KActivityDebugHelper() {
                                             KLog.e(e)
                                         }
 
-                                    }*/
+                                    }
                                 }
                             } else {
                                 recorder?.apply {

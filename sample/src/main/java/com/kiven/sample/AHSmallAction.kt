@@ -5,6 +5,7 @@ import android.app.WallpaperManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -34,6 +35,7 @@ import com.kiven.sample.noti.AHNotiTest
 import com.kiven.sample.service.LiveWallpaper2
 import com.kiven.sample.spss.AHSpssTemple
 import com.kiven.sample.util.EncryptUtils
+import com.kiven.sample.util.toast
 import com.kiven.sample.xutils.db.AHDbDemo
 import com.kiven.sample.xutils.net.AHNetDemo
 import com.xiaomi.mimc.MIMCGroupMessage
@@ -379,7 +381,17 @@ class AHSmallAction : KActivityDebugHelper() {
 
             showDialog(sb.toString())
         })
-        addView("", View.OnClickListener {  })
+        // https://www.jianshu.com/p/a90563606e1f
+        // https://developer.android.google.cn/guide/slices/templates
+        addView("Slice(提供App外搜索模块)", View.OnClickListener {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                // 需要先安装SliceViewer：https://github.com/googlesamples/android-SliceViewer/releases
+                // 一些设备可能禁止了这个功能
+                mActivity.startActivity(Intent("android.intent.action.VIEW", Uri.parse("slice-content://com.kiven.sample/hello")))
+            } else {
+                mActivity.toast("该版本不支持")
+            }
+        })
         addView("", View.OnClickListener {  })
         addView("", View.OnClickListener {  })
     }

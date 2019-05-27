@@ -7,6 +7,7 @@ import android.app.WallpaperManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -398,12 +399,12 @@ class AHSmallAction : KActivityDebugHelper() {
             }
         })
         addView("电话监听", View.OnClickListener {
-            KGranting.requestPermissions(mActivity, 989, arrayOf(Manifest.permission.READ_PHONE_STATE, Manifest.permission.CALL_PHONE), arrayOf("通话状态","拨号")){
+            KGranting.requestPermissions(mActivity, 989, arrayOf(Manifest.permission.READ_PHONE_STATE, Manifest.permission.CALL_PHONE), arrayOf("通话状态", "拨号")) {
                 if (it) {
                     val telephonyManager = mActivity.getSystemService(Activity.TELEPHONY_SERVICE) as TelephonyManager
                     val lis = object : PhoneStateListener() {
                         var oldTime = 0L
-
+                        var recorder: MediaRecorder? = null
                         override fun onCallStateChanged(state: Int, phoneNumber: String?) {
                             super.onCallStateChanged(state, phoneNumber)
                             val nowTime = System.currentTimeMillis()
@@ -416,14 +417,39 @@ class AHSmallAction : KActivityDebugHelper() {
                             Log.i("ULog_default", "$ss($phoneNumber):${nowTime - oldTime}")
                             oldTime = nowTime
 
+                            if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
+                                if (recorder == null) {
+                                    /*recorder = MediaRecorder().apply {
+                                        try {
+                                            setAudioSource(MediaRecorder.AudioSource.MIC) //模拟器报异常
+                                            setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)//设置音频格式
+                                            setOutputFile(mActivity.getDir(Environment.DIRECTORY_MUSIC, Context.MODE_PRIVATE).absolutePath
+                                                    + "/${SimpleDateFormat("yyyyMMddHHmmss").format(Date())}.3gp")
+                                            setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)//设置音频编码
+                                            prepare()
+                                            start()
+                                        } catch (e: Exception) {
+                                            KLog.e(e)
+                                        }
 
+                                    }*/
+                                }
+                            } else {
+                                recorder?.apply {
+                                    stop()
+                                    release()
+                                }
+                                recorder = null
+                            }
+                        }
+
+                        override fun onDataConnectionStateChanged(state: Int, networkType: Int) {
+                            super.onDataConnectionStateChanged(state, networkType)
+                            Log.i("ULog_default", "$state($networkType)")
                         }
                     }
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                        telephonyManager.listen(lis, PhoneStateListener.LISTEN_CALL_STATE or PhoneStateListener.LISTEN_USER_MOBILE_DATA_STATE)
-                    } else {
-                        telephonyManager.listen(lis, PhoneStateListener.LISTEN_CALL_STATE)
-                    }
+
+                    telephonyManager.listen(lis, PhoneStateListener.LISTEN_CALL_STATE)
 
                     mActivity.callPhone("17132307428")
                 }
@@ -431,7 +457,7 @@ class AHSmallAction : KActivityDebugHelper() {
 
 
         })
-        addView("", View.OnClickListener {  })
+        addView("", View.OnClickListener { })
     }
 
     private suspend fun doSomthing(): Int {

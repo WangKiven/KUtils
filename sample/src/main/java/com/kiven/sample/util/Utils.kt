@@ -1,6 +1,8 @@
 package com.kiven.sample.util
 
 import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.snackbar.Snackbar
@@ -40,4 +42,11 @@ fun Activity.listPicker(title: String, items: Array<String>, action: (Int) -> Un
         action(p)
         dialog.dismiss()
     }.show()
+}
+/// 打电话
+fun Activity.callPhone(phoneNum: String) {
+    startActivity(Intent().apply {
+        action = Intent.ACTION_CALL
+        data = Uri.parse("tel:$phoneNum")
+    })
 }

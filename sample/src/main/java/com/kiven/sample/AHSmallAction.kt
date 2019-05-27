@@ -1,5 +1,7 @@
 package com.kiven.sample
 
+import android.Manifest
+import android.app.Activity
 import android.app.ActivityManager
 import android.app.WallpaperManager
 import android.content.Context
@@ -9,6 +11,8 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.telephony.PhoneStateListener
+import android.telephony.TelephonyManager
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -35,6 +39,7 @@ import com.kiven.sample.noti.AHNotiTest
 import com.kiven.sample.service.LiveWallpaper2
 import com.kiven.sample.spss.AHSpssTemple
 import com.kiven.sample.util.EncryptUtils
+import com.kiven.sample.util.callPhone
 import com.kiven.sample.util.toast
 import com.kiven.sample.xutils.db.AHDbDemo
 import com.kiven.sample.xutils.net.AHNetDemo
@@ -392,7 +397,40 @@ class AHSmallAction : KActivityDebugHelper() {
                 mActivity.toast("该版本不支持")
             }
         })
-        addView("", View.OnClickListener {  })
+        addView("电话监听", View.OnClickListener {
+            KGranting.requestPermissions(mActivity, 989, arrayOf(Manifest.permission.READ_PHONE_STATE, Manifest.permission.CALL_PHONE), arrayOf("通话状态","拨号")){
+                if (it) {
+                    val telephonyManager = mActivity.getSystemService(Activity.TELEPHONY_SERVICE) as TelephonyManager
+                    val lis = object : PhoneStateListener() {
+                        var oldTime = 0L
+
+                        override fun onCallStateChanged(state: Int, phoneNumber: String?) {
+                            super.onCallStateChanged(state, phoneNumber)
+                            val nowTime = System.currentTimeMillis()
+                            val ss = when (state) {
+                                TelephonyManager.CALL_STATE_IDLE -> "空闲状态"// 可能是挂断、拒绝接听或真的空闲
+                                TelephonyManager.CALL_STATE_RINGING -> "响铃状态"
+                                TelephonyManager.CALL_STATE_OFFHOOK -> "通话状态"
+                                else -> "unknown"
+                            }
+                            Log.i("ULog_default", "$ss($phoneNumber):${nowTime - oldTime}")
+                            oldTime = nowTime
+
+
+                        }
+                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                        telephonyManager.listen(lis, PhoneStateListener.LISTEN_CALL_STATE or PhoneStateListener.LISTEN_USER_MOBILE_DATA_STATE)
+                    } else {
+                        telephonyManager.listen(lis, PhoneStateListener.LISTEN_CALL_STATE)
+                    }
+
+                    mActivity.callPhone("17132307428")
+                }
+            }
+
+
+        })
         addView("", View.OnClickListener {  })
     }
 

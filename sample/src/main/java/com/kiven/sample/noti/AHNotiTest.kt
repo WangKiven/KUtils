@@ -17,7 +17,7 @@ import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.sample.R
 import com.kiven.sample.util.getInput
 import com.kiven.sample.util.listPicker
-import com.kiven.sample.util.toast
+import com.kiven.sample.util.snackbar
 import kotlinx.android.synthetic.main.ah_noti_test.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -88,7 +88,7 @@ class AHNotiTest : KActivityDebugHelper() {
 
                     GlobalScope.launch(Dispatchers.Main) {
                         if (channelId.isEmpty()) {
-                            mActivity.toast("没选择channel, 如果没有的话，请先创建channel")
+                            mActivity.snackbar("没选择channel, 如果没有的话，请先创建channel")
                             return@launch
                         }
 

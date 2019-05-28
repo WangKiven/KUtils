@@ -41,7 +41,7 @@ import com.kiven.sample.service.LiveWallpaper2
 import com.kiven.sample.spss.AHSpssTemple
 import com.kiven.sample.util.EncryptUtils
 import com.kiven.sample.util.callPhone
-import com.kiven.sample.util.toast
+import com.kiven.sample.util.snackbar
 import com.kiven.sample.xutils.db.AHDbDemo
 import com.kiven.sample.xutils.net.AHNetDemo
 import com.xiaomi.mimc.MIMCGroupMessage
@@ -396,7 +396,7 @@ class AHSmallAction : KActivityDebugHelper() {
                 // 一些设备可能禁止了这个功能
                 mActivity.startActivity(Intent("android.intent.action.VIEW", Uri.parse("slice-content://com.kiven.sample/hello")))
             } else {
-                mActivity.toast("该版本不支持")
+                mActivity.snackbar("该版本不支持")
             }
         })
         addView("电话监听", View.OnClickListener {

@@ -23,7 +23,7 @@ fun Activity.getInput(inputName: String, action: (CharSequence) -> Unit) {
                 if (teamName.isNotBlank()) {
                     action(teamName)
                 } else {
-                    toast("$inputName 不能为空")
+                    snackbar("$inputName 不能为空")
                 }
                 dialog.dismiss()
             }
@@ -31,7 +31,7 @@ fun Activity.getInput(inputName: String, action: (CharSequence) -> Unit) {
 }
 
 /// 显示提示
-fun Activity.toast(text: String) {
+fun Activity.snackbar(text: String) {
     Snackbar.make(window.decorView, text, Snackbar.LENGTH_SHORT).show()
     KLog.i(text)
 }

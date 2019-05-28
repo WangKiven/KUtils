@@ -38,7 +38,7 @@ import com.kiven.kutils.tools.*
 import com.kiven.sample.R
 import com.kiven.sample.util.Const
 import com.kiven.sample.util.Const.IMAGE_DIR
-import com.kiven.sample.util.toast
+import com.kiven.sample.util.snackbar
 import java.io.File
 
 /**
@@ -98,7 +98,7 @@ open class AHMediaList : KActivityDebugHelper() {
                 if (takePhotoIntent.resolveActivity(mActivity.packageManager) != null) {
                     mActivity.startActivityForResult(takePhotoIntent, 351)
                 } else {
-                    mActivity.toast("没有相机")
+                    mActivity.snackbar("没有相机")
                 }
             }
             R.id.item_camera_video -> mActivity.startActivityForResult(Intent(MediaStore.ACTION_VIDEO_CAPTURE),
@@ -230,7 +230,7 @@ open class AHMediaList : KActivityDebugHelper() {
         if (bitmap != null)
             showImage(imagePath, bitmap)
         else
-            mActivity.toast("获取图片失败：$imagePath")
+            mActivity.snackbar("获取图片失败：$imagePath")
     }
 
 

@@ -1,9 +1,7 @@
 package com.kiven.sample
 
 import android.Manifest
-import android.app.Activity
-import android.app.ActivityManager
-import android.app.WallpaperManager
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -12,6 +10,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.os.Process
 import android.provider.Settings
 import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
@@ -460,6 +459,24 @@ class AHSmallAction : KActivityDebugHelper() {
 
 
         })
+        addView("KAlert和定时5秒后重启", View.OnClickListener {
+            KAlertDialogHelper.Show2BDialog(mActivity, "这是一个KAlertDialogHelper。\n是否5秒后重启？？？") {
+                /*ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+                                manager.killBackgroundProcesses(getPackageName());*/
+
+                val intent = mActivity.packageManager
+                        .getLaunchIntentForPackage(mActivity.packageName)
+                val restartIntent = PendingIntent.getActivity(mActivity, 0, intent, PendingIntent.FLAG_ONE_SHOT)
+                val mgr = mActivity.getSystemService(Context.ALARM_SERVICE) as AlarmManager?
+                mgr!!.set(AlarmManager.RTC, System.currentTimeMillis() + 5000, restartIntent) // 5秒钟后重启应用
+
+                Process.killProcess(Process.myPid())
+            }
+        })
+        addView("", View.OnClickListener { })
+        addView("", View.OnClickListener { })
+        addView("", View.OnClickListener { })
+        addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
     }
 

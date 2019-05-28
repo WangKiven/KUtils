@@ -37,6 +37,7 @@ import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.*
 import com.kiven.sample.R
 import com.kiven.sample.util.Const
+import com.kiven.sample.util.Const.IMAGE_DIR
 import com.kiven.sample.util.toast
 import java.io.File
 
@@ -45,7 +46,6 @@ import java.io.File
  * Created by wangk on 2018/2/4.
  */
 open class AHMediaList : KActivityDebugHelper() {
-    private val IMAGE_DIR = "KUtilSampleFile" + File.separator + "testImage"
 
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)

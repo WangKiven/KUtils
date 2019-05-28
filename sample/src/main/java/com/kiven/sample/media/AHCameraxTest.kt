@@ -10,6 +10,7 @@ import androidx.lifecycle.LifecycleOwner
 import com.kiven.kutils.activityHelper.KActivityDebugHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.tools.KUtil
+import com.kiven.sample.util.Const.IMAGE_DIR
 import org.jetbrains.anko.*
 import java.io.File
 
@@ -68,7 +69,6 @@ class AHCameraxTest : KActivityDebugHelper() {
         }
     }
 
-    private val IMAGE_DIR = "KUtilSampleFile" + File.separator + "testImage"
     private fun getFile(fileName: String): File {
         val dir = File(Environment.getExternalStorageDirectory(), IMAGE_DIR)
         if (!dir.exists()) {

@@ -92,14 +92,6 @@
             android:layout_height="50dp" />
 
         <com.kiven.kutils.widget.KNormalItemView
-            android:id="@+id/item_load_activity"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:onClick="onClick"
-            app:item_title="显示系统资源"/>
-
-        <com.kiven.kutils.widget.KNormalItemView
             android:id="@+id/item_fragment_proxy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -148,28 +140,12 @@
             app:item_title="路径测试"/>
 
         <com.kiven.kutils.widget.KNormalItemView
-            android:id="@+id/item_widget"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:onClick="onClick"
-            app:item_title="widget"/>
-
-        <com.kiven.kutils.widget.KNormalItemView
             android:id="@+id/item_data_binding"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
             android:onClick="onClick"
             app:item_title="Data Binding"/>
-
-        <com.kiven.kutils.widget.KNormalItemView
-            android:id="@+id/item_recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:onClick="onClick"
-            app:item_title="RecyclerView 自定义"/>
 
         <com.kiven.kutils.widget.KNormalItemView
             android:id="@+id/item_flyco_dialog"

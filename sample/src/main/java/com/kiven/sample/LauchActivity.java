@@ -6,25 +6,13 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.media.MediaMetadataRetriever;
-import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.os.Process;
-import android.provider.MediaStore;
 import android.provider.Settings;
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.app.ActivityOptionsCompat;
-import androidx.core.content.FileProvider;
-import androidx.core.util.Pair;
-import androidx.appcompat.app.AlertDialog;
 import android.telephony.TelephonyManager;
 import android.text.Html;
 import android.transition.Slide;
@@ -36,6 +24,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.util.Pair;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -51,7 +45,6 @@ import com.kiven.kutils.file.KFile;
 import com.kiven.kutils.logHelper.KLog;
 import com.kiven.kutils.tools.KAlertDialogHelper;
 import com.kiven.kutils.tools.KGranting;
-import com.kiven.kutils.tools.KPath;
 import com.kiven.kutils.tools.KUtil;
 import com.kiven.kutils.tools.KView;
 import com.kiven.kutils.widget.KNormalItemView;
@@ -59,25 +52,18 @@ import com.kiven.sample.floatView.ActivityHFloatView;
 import com.kiven.sample.gl.AHGL;
 import com.kiven.sample.libs.AHLibs;
 import com.kiven.sample.media.AHMediaList;
-import com.kiven.sample.util.Const;
 
-import org.xutils.image.ImageOptions;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
-import java.io.File;
 import java.text.DateFormat;
 import java.util.Date;
-import java.util.HashMap;
 
 import me.grantland.widget.AutofitHelper;
 
 @ContentView(R.layout.activity_lauch)
 public class LauchActivity extends KActivity {
-
-    private static final String FILEPROVIDER_AUTHORITY = "com.kiven.sample.fileprovider";
-    private static final String IMAGE_DIR = "KUtilSampleFile" + File.separator + "testImage";
 
     @ViewInject(R.id.iv_test)
     private ImageView iv_test;
@@ -114,7 +100,7 @@ public class LauchActivity extends KActivity {
                 x.image().bind(iv_test, urls[count%urls.length], options);*/
 
 
-                Glide.with(LauchActivity.this).load(urls[count%urls.length]).into(iv_test);
+                Glide.with(LauchActivity.this).load(urls[count % urls.length]).circleCrop().into(iv_test);
                 count++;
             }
         });
@@ -173,10 +159,6 @@ public class LauchActivity extends KActivity {
                 });
                 handler.sendEmptyMessageDelayed(0, 5000);
                 break;
-            case R.id.item_load_activity:
-                new AHCheckRes().startActivity(this);
-//                new ACheckRes().startActivity(this);
-                break;
             case R.id.item_fragment_proxy:
                 Intent fproxyIntent = new Intent(this, KFragmentActivity.class);
                 fproxyIntent.putExtra("fragment_name", FragmentApple.class.getName());
@@ -218,7 +200,9 @@ public class LauchActivity extends KActivity {
                     public void onGrantSuccess(boolean isSuccess) {
                         if (isSuccess) {
                             KLog.i("" + KFile.createFile("tmp", ".img", getDir(Environment.DIRECTORY_PICTURES, Context.MODE_PRIVATE)).getAbsolutePath());
-                            KLog.i("" + KFile.createFile("tmp", ".img", getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)).getAbsolutePath());
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                                KLog.i("" + KFile.createFile("tmp", ".img", getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)).getAbsolutePath());
+                            }
                             KLog.i("" + KFile.createFile("tmp", ".img", getDatabasePath("db")).getAbsolutePath());
                             KLog.i("" + KFile.createFile("tmp", ".img", getCacheDir()).getAbsolutePath());
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -228,39 +212,12 @@ public class LauchActivity extends KActivity {
                     }
                 });
                 break;
-            case R.id.item_widget:
-                KAlertDialogHelper.Show1BDialog(this, "在系统widget中去选择要显示的widget", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        /*ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-                        manager.killBackgroundProcesses(getPackageName());*/
-
-                        KLog.i("a = " + a);
-                        KLog.i("b = " + b);
-
-                        /*Intent intent = getBaseContext().getPackageManager()
-                                .getLaunchIntentForPackage(getBaseContext().getPackageName());
-                        PendingIntent restartIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
-                        AlarmManager mgr = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-                        mgr.set(AlarmManager.RTC, System.currentTimeMillis(), restartIntent); // 1秒钟后重启应用*/
-
-                        a = "66666";
-                        b = 7777;
-
-                        Process.killProcess(Process.myPid());
-                    }
-                });
-                break;
             case R.id.item_data_binding:
 //                startActivity(new Intent(this, ActivityDataBinding.class));
                 KNormalItemView itemView = (KNormalItemView) view;
                 ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, new Pair(itemView.textViewName, "text_transition_name"));
                 ActivityCompat.startActivity(this, new Intent(this, ActivityDataBinding.class), optionsCompat.toBundle());
 
-                break;
-
-            case R.id.item_recycler_view:
-                new ActivityCustomRecyclerView().startActivity(this);
                 break;
             case R.id.item_flyco_dialog:
                 TextView textView = new TextView(this);

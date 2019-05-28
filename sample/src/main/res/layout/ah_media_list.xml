@@ -126,7 +126,17 @@
             android:clickable="true"
             android:focusable="true"
             android:onClick="onClick"
-            app:item_title="测试camerax（sdk >= 21）" />
+            app:item_title="测试camerax（sdk >= 21）(真机用不了？？)" />
+
+        <com.kiven.kutils.widget.KNormalItemView
+            android:id="@+id/item_exoplayer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="onClick"
+            app:item_title="ExoPlayer " />
 
     </LinearLayout>
 

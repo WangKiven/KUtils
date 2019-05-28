@@ -22,6 +22,15 @@ import android.widget.ImageView
 import androidx.camera.core.*
 import androidx.core.content.FileProvider
 import androidx.lifecycle.LifecycleOwner
+import com.google.android.exoplayer2.ExoPlayerFactory
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
+import com.google.android.exoplayer2.source.ExtractorMediaSource
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
+import com.google.android.exoplayer2.ui.PlayerView
+import com.google.android.exoplayer2.ui.SimpleExoPlayerView
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
 import com.kiven.kutils.activityHelper.KActivityDebugHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
@@ -42,7 +51,7 @@ open class AHMediaList : KActivityDebugHelper() {
         super.onCreate(activity, savedInstanceState)
         setContentView(R.layout.ah_media_list)
 
-        val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
+        val permissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
         val permissionInfos = arrayOf("存储空间", "相机")
         KGranting.requestPermissions(mActivity, 345, permissions, permissionInfos) { isSuccess ->
             if (!isSuccess) {
@@ -99,6 +108,34 @@ open class AHMediaList : KActivityDebugHelper() {
             R.id.item_video_thumb -> mActivity.startActivityForResult(
                     Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI), 350)
             R.id.item_camerax -> AHCameraxTest().startActivity(mActivity)
+            R.id.item_exoplayer -> {
+                /// https://github.com/google/ExoPlayer
+                /// https://blog.csdn.net/dianziagen/article/details/82258356
+                /// https://juejin.im/post/5cc5c2ec6fb9a032414f65c0
+                val bandwidthMeter = DefaultBandwidthMeter()
+                var player = ExoPlayerFactory.newSimpleInstance(mActivity, DefaultTrackSelector(AdaptiveTrackSelection.Factory(bandwidthMeter)))
+
+                val dataSourceFactory = DefaultHttpDataSourceFactory("userAgent")
+                player.prepare(ExtractorMediaSource(Uri.parse("https://raw.githubusercontent.com/WangKiven/mygit/master/company.mp4"), dataSourceFactory, DefaultExtractorsFactory(), null, null))
+
+                val dialog = object :Dialog(mActivity){
+                    init {
+                        setContentView(PlayerView(mActivity).apply {
+                            setPlayer(player)
+                            player.playWhenReady = true
+                        })
+                    }
+
+                    override fun dismiss() {
+                        super.dismiss()
+                        player.stop()
+                        player.release()
+                        player = null
+                    }
+                }
+
+                dialog.show()
+            }
         }
     }
 

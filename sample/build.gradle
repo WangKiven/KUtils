@@ -132,6 +132,8 @@ dependencies {
     // slices
     implementation 'androidx.slice:slice-builders:1.0.0'
 
+    // ExoPlayer
+    implementation 'com.google.android.exoplayer:exoplayer:2.8.2'
 
 //    implementation 'com.jakewharton:butterknife:10.0.0'
 //    kapt 'com.jakewharton:butterknife-compiler:10.0.0'

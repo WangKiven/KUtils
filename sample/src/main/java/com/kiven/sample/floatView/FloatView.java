@@ -3,6 +3,7 @@ package com.kiven.sample.floatView;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.PixelFormat;
+import android.os.Build;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -17,25 +18,34 @@ import com.kiven.kutils.tools.KUtil;
 
 /**
  * 学习文档：TODO http://blog.csdn.net/stevenhu_223/article/details/8504058
- *
+ * <p>
  * Created by kiven on 2016/11/1.
  */
 
 public class FloatView {
     //定义浮动窗口布局
-    LinearLayout mFloatLayout;
-    WindowManager.LayoutParams wmParams;
+    private LinearLayout mFloatLayout;
+    private WindowManager.LayoutParams wmParams;
     //创建浮动窗口设置布局参数的对象
-    WindowManager mWindowManager;
+    private WindowManager mWindowManager;
+
+    private int type = WindowManager.LayoutParams.TYPE_APPLICATION;
 
 //    Button mFloatView;
 
-    Context context;
+    private Context context;
     private static final String TAG = "FloatView";
 
-    public FloatView(Context context, WindowManager windowManager) {
+    public FloatView(Context context, WindowManager windowManager, boolean isOverlay) {
         this.context = context;
         mWindowManager = windowManager;
+        if (isOverlay) {// 应用外悬浮
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;// TYPE_APPLICATION 才是activity内
+            } else {
+                type = WindowManager.LayoutParams.TYPE_PHONE;
+            }
+        }
 
         createParams();
         createFloatView();
@@ -47,7 +57,7 @@ public class FloatView {
 //        mWindowManager = (WindowManager) getApplication().getSystemService(getApplication().WINDOW_SERVICE);
         Log.i(TAG, "mWindowManager--->" + mWindowManager);
         //设置window type
-        wmParams.type = WindowManager.LayoutParams.TYPE_PHONE;// TYPE_APPLICATION 才是activity内
+        wmParams.type = type;
         //设置图片格式，效果为背景透明
         wmParams.format = PixelFormat.RGBA_8888;
         //设置浮动窗口不可聚焦（实现操作除浮动窗口外的其他可见窗口的操作）
@@ -139,6 +149,7 @@ public class FloatView {
     }
 
     boolean isShow = false;
+
     public void showFloat() {
         if (!isShow) {
             //添加mFloatLayout

@@ -10,7 +10,6 @@ import android.os.Environment
 import android.os.Handler
 import android.provider.Settings
 import android.telephony.TelephonyManager
-import android.text.Html
 import android.transition.Slide
 import android.util.Log
 import android.view.Gravity

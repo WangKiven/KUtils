@@ -106,8 +106,9 @@ dependencies {
 
     implementation 'com.google.android:flexbox:1.0.0'
 
+    // https://github.com/koush/AndroidAsync
     implementation 'com.koushikdutta.async:androidasync:2.2.1'
-//    compile 'com.koushikdutta.ion:ion:2.2.11'
+//    compile 'com.koushikdutta.ion:ion:2.2.11' // https://github.com/koush/ion
 
     // 获取设备正在运行的进程: https://github.com/jaredrummler/AndroidProcesses
     implementation 'com.jaredrummler:android-processes:1.1.1'

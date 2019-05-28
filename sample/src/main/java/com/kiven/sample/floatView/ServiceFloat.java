@@ -1,13 +1,13 @@
 package com.kiven.sample.floatView;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.WindowManager;
 
 /**
- *
  * Created by kiven on 2016/10/31.
  */
 
@@ -19,7 +19,7 @@ public class ServiceFloat extends Service {
     public void onCreate() {
         // TODO Auto-generated method stub
         super.onCreate();
-        floatView = new FloatView(getBaseContext(), (WindowManager) getApplication().getSystemService(getApplication().WINDOW_SERVICE));
+        floatView = new FloatView(getBaseContext(), (WindowManager) getApplication().getSystemService(Context.WINDOW_SERVICE), true);
         floatView.showFloat();
         printLog("onCreate");
     }

@@ -24,7 +24,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Field;
+import java.net.Inet6Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.Properties;
 import java.util.Set;
 
@@ -223,6 +227,24 @@ public class KUtil {
             builder.append(String.format("\ngles = %x", info.reqGlEsVersion));
         }
 
+        builder.append("\n\n>>>>>>>>>>IP");
+        try {
+            Enumeration<NetworkInterface> nets = NetworkInterface.getNetworkInterfaces();
+            while (nets.hasMoreElements()) {
+                NetworkInterface intf = nets.nextElement();
+                Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses();
+
+                builder.append("\n网络(").append(intf.getDisplayName()).append("):");
+                while (enumIpAddr.hasMoreElements()) {
+                    InetAddress inetAddress = enumIpAddr.nextElement();
+                    builder.append("\n----").append(inetAddress.getHostAddress())
+                            .append("(isLoopbackAddress=").append(inetAddress.isLoopbackAddress())
+                            .append(",isIPV6=").append(inetAddress instanceof Inet6Address).append(")");
+                }
+            }
+        } catch (Exception e) {
+            builder.append("\n获取IP异常或没有网络");
+        }
 
         builder.append("\n\n>>>>>>>>>>Build properties");
         Field[] buildFields = Build.class.getFields();

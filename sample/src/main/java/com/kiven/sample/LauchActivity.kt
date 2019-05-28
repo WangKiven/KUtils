@@ -31,10 +31,7 @@ import com.kiven.kutils.activityHelper.activity.KActivity
 import com.kiven.kutils.callBack.CallBack
 import com.kiven.kutils.file.KFile
 import com.kiven.kutils.logHelper.KLog
-import com.kiven.kutils.tools.KAlertDialogHelper
-import com.kiven.kutils.tools.KGranting
-import com.kiven.kutils.tools.KUtil
-import com.kiven.kutils.tools.KView
+import com.kiven.kutils.tools.*
 import com.kiven.kutils.widget.KNormalItemView
 import com.kiven.sample.floatView.ActivityHFloatView
 import com.kiven.sample.gl.AHGL
@@ -44,19 +41,16 @@ import com.kiven.sample.util.callPhone
 import com.kiven.sample.util.snackbar
 import kotlinx.android.synthetic.main.activity_lauch.*
 import me.grantland.widget.AutofitHelper
-import org.xutils.view.annotation.ContentView
-import org.xutils.x
 import java.text.DateFormat
 import java.util.*
 
-@ContentView(R.layout.activity_lauch)
 class LauchActivity : KActivity() {
 
     private var queue: RequestQueue? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        x.view().inject(this)
+        setContentView(R.layout.activity_lauch)
 
         KUtil.printDeviceInfo()
 
@@ -65,7 +59,7 @@ class LauchActivity : KActivity() {
         AutofitHelper.create(et_auto)
 
 
-        iv_test!!.setOnClickListener(object : View.OnClickListener {
+        iv_test.setOnClickListener(object : View.OnClickListener {
             var count = 0
 
             override fun onClick(v: View) {
@@ -80,8 +74,7 @@ class LauchActivity : KActivity() {
                 count++
             }
         })
-
-        textView2!!.text = Html.fromHtml(getString(R.string.text_test, 5, 9))
+        textView2.text = KString.fromHtml(getString(R.string.text_test, 5, 9))
     }
 
     private fun setupWindowAnimations() {

@@ -16,7 +16,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|enterAlways|snap"
-            app:navigationIcon="@android:drawable/arrow_down_float"
+            app:navigationIcon="@drawable/abc_ic_ab_back_material"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
             <TextView

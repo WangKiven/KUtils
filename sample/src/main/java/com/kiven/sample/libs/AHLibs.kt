@@ -7,6 +7,7 @@ import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KToast
 import com.kiven.sample.R
+import com.kiven.sample.util.snackbar
 import com.koushikdutta.async.http.AsyncHttpClient
 import com.koushikdutta.async.http.server.AsyncHttpServer
 import java.net.Inet4Address
@@ -39,13 +40,13 @@ class AHLibs : KActivityHelper() {
                     }
 
                     webSocket.setStringCallback {
-                        KToast.ToastMessage("接收到推送：$it")
+                        mActivity.snackbar("接收到推送：$it")
                     }
                 }
                 server.listen(5001)
             }
             R.id.btn_aa_send -> {
-                AsyncHttpClient.getDefaultInstance().websocket(getIPAddress() + ":5001/live", "my-protocal") { ex, webSocket ->
+                AsyncHttpClient.getDefaultInstance().websocket("ws://" + getIPAddress() + ":5001/live", "my-protocal") { ex, webSocket ->
                     if (ex == null) {
                         webSocket.send("Hello World")
                     } else

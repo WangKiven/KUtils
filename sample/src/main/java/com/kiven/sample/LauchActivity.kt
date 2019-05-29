@@ -14,6 +14,8 @@ import android.transition.Slide
 import android.util.Log
 import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
@@ -74,6 +76,33 @@ class LauchActivity : KActivity() {
             }
         })
         textView2.text = KString.fromHtml(getString(R.string.text_test, 5, 9))
+
+
+
+        val addTitle = fun(text: String) {
+            val tv = TextView(this)
+            tv.text = text
+            tv.layoutParams = ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.MATCH_PARENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT)
+            flex.addView(tv)
+        }
+
+        val addView = fun(text: String, click: View.OnClickListener) {
+            val btn = Button(this)
+            btn.text = text
+            btn.setOnClickListener(click)
+            flex.addView(btn)
+        }
+
+        addView("小功能", View.OnClickListener { AHSmallAction().startActivity(this) })
+        addView("悬浮框", View.OnClickListener { ActivityHFloatView().startActivity(this) })
+        addView("opengl", View.OnClickListener { AHGL().startActivity(this) })
+        addView("cpu、内存管理", View.OnClickListener { AHCPUMemory().startActivity(this) })
+        addView("测试KActivityHelper", View.OnClickListener { ActivityHTestBase().startActivity(this) })
+        addView("", View.OnClickListener {  })
+        addView("", View.OnClickListener {  })
+        addView("", View.OnClickListener {  })
+        addView("", View.OnClickListener {  })
+        addView("", View.OnClickListener {  })
     }
 
     private fun setupWindowAnimations() {
@@ -89,10 +118,7 @@ class LauchActivity : KActivity() {
 
     fun onClick(view: View) {
         when (view.id) {
-            R.id.btn_small_action -> AHSmallAction().startActivity(this)
             R.id.item_libs -> AHLibs().startActivity(this)
-            R.id.item_cpu -> AHCPUMemory().startActivity(this)
-            R.id.item_opengl -> AHGL().startActivity(this)
             R.id.item_live_data -> {
                 val handler = Handler(Handler.Callback {
                     KView.runUI(this@LauchActivity, CallBack { KAlertDialogHelper.Show1BDialog(this@LauchActivity, "LiveData 行不行？") })
@@ -120,7 +146,6 @@ class LauchActivity : KActivity() {
                 }
             }
             R.id.item_media -> AHMediaList().startActivity(this)
-            R.id.item_float -> ActivityHFloatView().startActivity(this)
             R.id.item_path -> KGranting.requestPermissions(this, 345, Manifest.permission.WRITE_EXTERNAL_STORAGE, "存储空间") { isSuccess ->
                 if (isSuccess) {
                     KLog.i("" + KFile.createFile("tmp", ".img", getDir(Environment.DIRECTORY_PICTURES, Context.MODE_PRIVATE))!!.absolutePath)
@@ -154,8 +179,6 @@ class LauchActivity : KActivity() {
                 volley("https://github.com/google/volley")
                 volley("http://blog.csdn.net/linmiansheng/article/details/21646753")
             }
-            R.id.item_helper_test -> ActivityHTestBase().startActivity(this)
-            else -> ActivityHTestBase().startActivity(this)
         }
     }
 

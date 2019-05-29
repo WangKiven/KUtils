@@ -2,17 +2,15 @@ package com.kiven.sample;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
+import com.kiven.kutils.activityHelper.KActivityDebugHelper;
 import com.kiven.kutils.activityHelper.KHelperActivity;
-import com.kiven.kutils.custom.BaseHelper;
 
 /**
- *
  * Created by kiven on 16/5/6.
  */
-public class ActivityHTestBase extends BaseHelper {
+public class ActivityHTestBase extends KActivityDebugHelper {
 
     private String key = "ActivityHTestBase_count_key";
 
@@ -25,6 +23,8 @@ public class ActivityHTestBase extends BaseHelper {
         count = mActivity.getIntent().getIntExtra(key, 0);
         TextView textView = findViewById(R.id.tv_message);
         textView.setText("count = " + count);
+
+        initBackToolbar(R.id.toolbar);
     }
 
     private int count;

@@ -152,7 +152,6 @@ public class KHelperActivity extends AppCompatActivity {
     @Override
     public void finish() {
         super.finish();
-        helper = null;
         KContext.getInstance().onActivityFinish(this);
     }
 
@@ -174,6 +173,8 @@ public class KHelperActivity extends AppCompatActivity {
         KActivityHelper.removeStack(getIntent().getStringExtra("BaseActivityHelper"));//将helper移除
         super.onDestroy();
         KContext.getInstance().onActivityDestory(this);
+
+        helper = null;
     }
 
     @Override

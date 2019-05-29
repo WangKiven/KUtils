@@ -19,7 +19,7 @@ public class ServiceFloat extends Service {
     public void onCreate() {
         // TODO Auto-generated method stub
         super.onCreate();
-        floatView = new FloatView(getBaseContext(), (WindowManager) getApplication().getSystemService(Context.WINDOW_SERVICE), true);
+        floatView = new FloatView(getBaseContext(), (WindowManager) getApplication().getSystemService(Context.WINDOW_SERVICE), true);// y由于是后台服务，必须是应用外悬浮
         floatView.showFloat();
         printLog("onCreate");
     }

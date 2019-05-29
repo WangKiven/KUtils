@@ -13,6 +13,7 @@ import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.sample.R
 import com.kiven.sample.util.snackbar
 import org.jetbrains.anko.button
+import org.jetbrains.anko.dip
 import org.jetbrains.anko.linearLayout
 import org.jetbrains.anko.sdk27.coroutines.onClick
 
@@ -33,7 +34,6 @@ class ActivityHFloatView : KActivityHelper() {
     private var isShow = false
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
-//        setContentView(R.layout.activity_h_float_view)
         mActivity.linearLayout {
             orientation = LinearLayout.VERTICAL
 
@@ -41,6 +41,10 @@ class ActivityHFloatView : KActivityHelper() {
                 text = "activity float"
                 setOnClickListener {
                     if (activityFloatView == null) {
+                        // 应用内悬浮框，生命周期只能在Activity类，退出Activity时，记得关闭悬浮框。否则会报错，甚至崩溃
+                        // 这里也可以使用应用外悬浮框，但是记得先开启权限。
+                        // 应用外悬浮框，可以在Activity和ServiceFloat中开启
+                        // 应用内悬浮框，应该只能在Activity中开启
                         activityFloatView = FloatView(mActivity, mActivity.windowManager, false)
                     }
                     if (activityFloatView!!.isShow) {
@@ -96,10 +100,11 @@ class ActivityHFloatView : KActivityHelper() {
         isShow = !isShow
     }
 
-    /*override fun onPause() {
+    override fun onPause() {
+        // 只能放在这里，放在onDestroy()，onStop()里面，退出时都会报错。
         if (activityFloatView != null && activityFloatView!!.isShow) {
             activityFloatView!!.hideFloat()
         }
         super.onPause()
-    }*/
+    }
 }

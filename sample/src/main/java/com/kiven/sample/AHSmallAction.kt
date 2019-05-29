@@ -42,8 +42,6 @@ import com.kiven.sample.spss.AHSpssTemple
 import com.kiven.sample.util.EncryptUtils
 import com.kiven.sample.util.callPhone
 import com.kiven.sample.util.snackbar
-import com.kiven.sample.xutils.db.AHDbDemo
-import com.kiven.sample.xutils.net.AHNetDemo
 import com.xiaomi.mimc.MIMCGroupMessage
 import com.xiaomi.mimc.MIMCMessage
 import com.xiaomi.mimc.MIMCServerAck
@@ -205,9 +203,80 @@ class AHSmallAction : KActivityDebugHelper() {
         })
 
         // todo
-        addTitle("xUtil")
-        addView("Net FrameWork", View.OnClickListener { AHNetDemo().startActivity(mActivity) })
-        addView("数据库", View.OnClickListener { AHDbDemo().startActivity(mActivity) })
+        addTitle("拨号与电话监听")
+        addView("电话监听", View.OnClickListener {
+            KGranting.requestPermissions(mActivity, 989, arrayOf(Manifest.permission.READ_PHONE_STATE,
+                    Manifest.permission.CALL_PHONE, Manifest.permission.RECORD_AUDIO), arrayOf("通话状态", "拨号", "录音")) {
+                if (it) {
+                    val telephonyManager = mActivity.getSystemService(Activity.TELEPHONY_SERVICE) as TelephonyManager
+                    val lis = object : PhoneStateListener() {
+                        var oldTime = 0L
+                        var recorder: MediaRecorder? = null
+                        override fun onCallStateChanged(state: Int, phoneNumber: String?) {
+                            super.onCallStateChanged(state, phoneNumber)
+                            val nowTime = System.currentTimeMillis()
+                            val ss = when (state) {
+                                TelephonyManager.CALL_STATE_IDLE -> "空闲状态"// 可能是挂断、拒绝接听或真的空闲
+                                TelephonyManager.CALL_STATE_RINGING -> "响铃状态"
+                                TelephonyManager.CALL_STATE_OFFHOOK -> "通话状态"
+                                else -> "unknown"
+                            }
+                            Log.i("ULog_default", "$ss($phoneNumber):${nowTime - oldTime}")
+                            oldTime = nowTime
+
+                            if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
+                                if (recorder == null) {
+                                    recorder = MediaRecorder().apply {
+                                        try {
+                                            setAudioSource(MediaRecorder.AudioSource.MIC) //RECORD_AUDIO权限
+                                            setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)//设置音频格式
+                                            setOutputFile(mActivity.getDir(Environment.DIRECTORY_MUSIC, Context.MODE_PRIVATE).absolutePath
+                                                    + "/${SimpleDateFormat("yyyyMMddHHmmss").format(Date())}.3gp")
+                                            setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)//设置音频编码
+                                            prepare()
+                                            start()
+                                        } catch (e: Exception) {
+                                            KLog.e(e)
+                                        }
+
+                                    }
+                                }
+                            } else {
+                                recorder?.apply {
+                                    stop()
+                                    release()
+                                }
+                                recorder = null
+                            }
+                        }
+
+                        override fun onDataConnectionStateChanged(state: Int, networkType: Int) {
+                            super.onDataConnectionStateChanged(state, networkType)
+                            Log.i("ULog_default", "$state($networkType)")
+                        }
+                    }
+
+                    telephonyManager.listen(lis, PhoneStateListener.LISTEN_CALL_STATE)
+                }
+            }
+
+
+        })
+        addView("拨号", View.OnClickListener {
+            KGranting.requestPermissions(mActivity, 101, Manifest.permission.CALL_PHONE, "拨号") { isSuccess ->
+                val phoneno = "17132307428"
+                if (isSuccess) {
+                    mActivity.callPhone(phoneno)
+
+                    // 与拨号并行，检测sim卡状态
+                    val telephonyManager = mActivity.getSystemService(Activity.TELEPHONY_SERVICE) as TelephonyManager
+                    val simState = telephonyManager.simState
+                    if (simState == TelephonyManager.SIM_STATE_ABSENT || simState == TelephonyManager.SIM_STATE_UNKNOWN) {
+                        mActivity.snackbar("未检测到sim卡或当前sim卡不可用，请另行拨号$phoneno")
+                    }
+                }
+            }
+        })
 
         // TODO: 2018/3/28 ----------------------------------------------------------
         addTitle("其他")
@@ -398,66 +467,6 @@ class AHSmallAction : KActivityDebugHelper() {
             } else {
                 mActivity.snackbar("该版本不支持")
             }
-        })
-        addView("电话监听", View.OnClickListener {
-            KGranting.requestPermissions(mActivity, 989, arrayOf(Manifest.permission.READ_PHONE_STATE,
-                    Manifest.permission.CALL_PHONE, Manifest.permission.RECORD_AUDIO), arrayOf("通话状态", "拨号", "录音")) {
-                if (it) {
-                    val telephonyManager = mActivity.getSystemService(Activity.TELEPHONY_SERVICE) as TelephonyManager
-                    val lis = object : PhoneStateListener() {
-                        var oldTime = 0L
-                        var recorder: MediaRecorder? = null
-                        override fun onCallStateChanged(state: Int, phoneNumber: String?) {
-                            super.onCallStateChanged(state, phoneNumber)
-                            val nowTime = System.currentTimeMillis()
-                            val ss = when (state) {
-                                TelephonyManager.CALL_STATE_IDLE -> "空闲状态"// 可能是挂断、拒绝接听或真的空闲
-                                TelephonyManager.CALL_STATE_RINGING -> "响铃状态"
-                                TelephonyManager.CALL_STATE_OFFHOOK -> "通话状态"
-                                else -> "unknown"
-                            }
-                            Log.i("ULog_default", "$ss($phoneNumber):${nowTime - oldTime}")
-                            oldTime = nowTime
-
-                            if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
-                                if (recorder == null) {
-                                    recorder = MediaRecorder().apply {
-                                        try {
-                                            setAudioSource(MediaRecorder.AudioSource.MIC) //RECORD_AUDIO权限
-                                            setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)//设置音频格式
-                                            setOutputFile(mActivity.getDir(Environment.DIRECTORY_MUSIC, Context.MODE_PRIVATE).absolutePath
-                                                    + "/${SimpleDateFormat("yyyyMMddHHmmss").format(Date())}.3gp")
-                                            setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)//设置音频编码
-                                            prepare()
-                                            start()
-                                        } catch (e: Exception) {
-                                            KLog.e(e)
-                                        }
-
-                                    }
-                                }
-                            } else {
-                                recorder?.apply {
-                                    stop()
-                                    release()
-                                }
-                                recorder = null
-                            }
-                        }
-
-                        override fun onDataConnectionStateChanged(state: Int, networkType: Int) {
-                            super.onDataConnectionStateChanged(state, networkType)
-                            Log.i("ULog_default", "$state($networkType)")
-                        }
-                    }
-
-                    telephonyManager.listen(lis, PhoneStateListener.LISTEN_CALL_STATE)
-
-                    mActivity.callPhone("17132307428")
-                }
-            }
-
-
         })
         addView("KAlert和定时5秒后重启", View.OnClickListener {
             KAlertDialogHelper.Show2BDialog(mActivity, "这是一个KAlertDialogHelper。\n是否5秒后重启？？？") {

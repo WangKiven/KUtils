@@ -1,26 +1,21 @@
 package com.kiven.sample
 
-import android.animation.AnimatorSet
-import android.animation.ArgbEvaluator
-import android.animation.ObjectAnimator
-import android.animation.TypeEvaluator
-import android.animation.ValueAnimator
-import android.content.res.XmlResourceParser
+import android.animation.*
 import android.graphics.Color
 import android.graphics.Point
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
+import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_apple.*
 
 /**
  * Created by kiven on 2017/3/28.
  */
 
-class FragmentApple : androidx.fragment.app.Fragment() {
+class FragmentApple : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val xmlResourceParser = resources.getLayout(R.layout.fragment_apple)
         return inflater.inflate(xmlResourceParser, container, false)

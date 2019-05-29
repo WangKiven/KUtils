@@ -41,59 +41,11 @@
             app:flexWrap="wrap">
         </com.google.android.flexbox.FlexboxLayout>
 
-        <com.kiven.kutils.widget.KNormalItemView
-            android:id="@+id/item_libs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:onClick="onClick"
-            app:item_title="Libraries"/>
-
-        <com.kiven.kutils.widget.KNormalItemView
-            android:id="@+id/item_live_data"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:onClick="onClick"
-            app:item_title="liveData控制界面展示"/>
-
         <ImageView
             android:id="@+id/iv_test"
             android:layout_width="50dp"
             android:src="@mipmap/ic_launcher"
             android:layout_height="50dp" />
-
-        <com.kiven.kutils.widget.KNormalItemView
-            android:id="@+id/item_fragment_proxy"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:onClick="onClick"
-            app:item_title="fragment代理activity, Animator"/>
-
-        <com.kiven.kutils.widget.KNormalItemView
-            android:id="@+id/item_setings"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:onClick="onClick"
-            app:item_title="打开设置界面"/>
-
-        <com.kiven.kutils.widget.KNormalItemView
-            android:id="@+id/item_phone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:onClick="onClick"
-            app:item_title="拨号"/>
-
-        <com.kiven.kutils.widget.KNormalItemView
-            android:id="@+id/item_media"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:onClick="onClick"
-            app:item_title="媒体文件处理"/>
 
         <com.kiven.kutils.widget.KNormalItemView
             android:id="@+id/item_path"
@@ -102,30 +54,6 @@
             android:clickable="true"
             android:onClick="onClick"
             app:item_title="路径测试"/>
-
-        <com.kiven.kutils.widget.KNormalItemView
-            android:id="@+id/item_data_binding"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:onClick="onClick"
-            app:item_title="Data Binding"/>
-
-        <com.kiven.kutils.widget.KNormalItemView
-            android:id="@+id/item_flyco_dialog"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:onClick="onClick"
-            app:item_title="FlycoDialog"/>
-
-        <com.kiven.kutils.widget.KNormalItemView
-            android:id="@+id/item_volley"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:onClick="onClick"
-            app:item_title="volley"/>
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/et_auto"

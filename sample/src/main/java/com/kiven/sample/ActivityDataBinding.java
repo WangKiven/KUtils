@@ -1,21 +1,21 @@
 package com.kiven.sample;
 
-import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.view.View;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import android.view.View;
+import androidx.databinding.DataBindingUtil;
 
 import com.kiven.sample.entity.EntityUser;
 
 /**
- *
  * Created by kiven on 2017/2/13.
  */
 
 public class ActivityDataBinding extends AppCompatActivity implements View.OnClickListener {
-    com.kiven.sample.DataBindingMode dataBindingMode;
+    DataBindingMode dataBindingMode;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,6 +36,6 @@ public class ActivityDataBinding extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onClick(View v) {
-        dataBindingMode.setBoo(true);
+        dataBindingMode.setBoo(!dataBindingMode.getBoo());
     }
 }

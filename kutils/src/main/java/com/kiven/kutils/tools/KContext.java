@@ -5,10 +5,9 @@ import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import android.util.Log;
-
 import com.kiven.kutils.activityHelper.KActivityHelper;
 
 import java.util.ArrayList;
@@ -27,10 +26,15 @@ public class KContext extends Application {
     @Override
     public final void onCreate() {
         super.onCreate();
-
         mInstance = this;
 
+        if (isMainProcess()) {
+            initOnlyMainProcess();
+        }
         init();
+    }
+
+    protected void initOnlyMainProcess() {
     }
 
     protected void init() {
@@ -41,7 +45,7 @@ public class KContext extends Application {
     /**
      * 判断当前进程是否是主进程， 可用于防止多次调用 onCreate()
      */
-    protected boolean isMainProcess() {
+    public boolean isMainProcess() {
         String packageName = getPackageName();
 
         int pid = android.os.Process.myPid();

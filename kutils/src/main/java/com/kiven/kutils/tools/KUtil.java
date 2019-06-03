@@ -338,11 +338,10 @@ public class KUtil {
      *
      * @param callBack 跟新成功是否提示, 0:失败，1：成功，2：保存中
      *                 <p>
-     *                 Android Q 访问存储权限变动，该方法不再适用。
+     *                 Android Q 访问存储权限变动，该方法可能不再适用。
      *                 可以使用{@link com.kiven.kutils.file.KFile#saveJpgBitmap(Context, Bitmap, String, String)}
      *                 或者{@link com.kiven.kutils.file.KFile#savePngBitmap(Context, Bitmap, String, String)}
      */
-    @Deprecated
     public static void addPicture(String path, MediaScannerConnection.OnScanCompletedListener callBack) {
         MediaScannerConnection.scanFile(KContext.getInstance(), new String[]{path}, new String[]{"image/*"},
                 callBack);

@@ -19,10 +19,12 @@ import com.kiven.kutils.tools.KString;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.net.URLConnection;
+import java.nio.file.NoSuchFileException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -262,6 +264,21 @@ public class KFile {
         }
 
         return true;
+    }
+
+    /**
+     * 读取文件
+     */
+    public static byte[] readFile(@NonNull File file) throws Exception {
+        if (!file.exists()) {
+            throw new FileNotFoundException();
+        }
+
+        FileInputStream fileInputStream = new FileInputStream(file);
+        byte[] buf = new byte[fileInputStream.available()];
+        fileInputStream.read(buf);
+        fileInputStream.close();
+        return buf;
     }
 
     /**

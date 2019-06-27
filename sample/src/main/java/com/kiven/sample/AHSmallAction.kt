@@ -137,7 +137,7 @@ class AHSmallAction : KActivityDebugHelper() {
 
         // http://doc.xfyun.cn/msc_android/%E9%A2%84%E5%A4%87%E5%B7%A5%E4%BD%9C.html
         addView("讯飞识别", View.OnClickListener {
-            AHXunfeiTest().startActivity(mActivity)
+            com.kiven.sample.AHXunfeiTest().startActivity(mActivity)
         })
 
         // TODO: 2018/6/4 ----------------------------------------------------------
@@ -429,7 +429,7 @@ class AHSmallAction : KActivityDebugHelper() {
             UserManager.getInstance().newUser("123", mdir.absolutePath)?.login()
 
         })
-        addView("Dialog", View.OnClickListener { AHDialogTest().startActivity(activity) })
+        addView("Dialog", View.OnClickListener { com.kiven.sample.AHDialogTest().startActivity(activity) })
         addView("ConstraintLayout Test", View.OnClickListener {
             AHConstraintLayoutTest().startActivity(activity)
         })

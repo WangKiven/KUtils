@@ -28,6 +28,8 @@ import java.io.File
 import java.util.*
 
 class AHRecorderPlay : KActivityDebugHelper() {
+    var tvFb:TextView? = null
+
     @SuppressLint("ResourceType")
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
@@ -111,6 +113,7 @@ class AHRecorderPlay : KActivityDebugHelper() {
         flexboxLayout.addView(oupGroup)
 
 
+        tvFb = addTitle("")
         addTitle("操作")
 
         addView("开始录音", View.OnClickListener { startRecord(sourceGroup.checkedRadioButtonId, encodeGroup.checkedRadioButtonId, oupGroup.checkedRadioButtonId) })
@@ -247,7 +250,9 @@ class AHRecorderPlay : KActivityDebugHelper() {
             try {
                 val ratio = maxAmplitude
                 if (ratio > 0) {
-                    KLog.i("分贝：${20 * Math.log10(ratio.toDouble())}")
+                    val fb = "分贝：${20 * Math.log10(ratio.toDouble())}"
+                    KLog.i(fb)
+                    tvFb?.text = fb;
                 }
             } catch (e: Exception) {
                 KLog.e(e)

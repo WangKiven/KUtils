@@ -318,7 +318,7 @@ class AHSmallAction : KActivityDebugHelper() {
             }
 
         })
-        addView("检测网络", View.OnClickListener {
+        addView("检测网络与IP", View.OnClickListener {
             val type = KNetwork.getNetworkType(mActivity)
             val ts = when (type) {
                 0 -> {
@@ -337,7 +337,7 @@ class AHSmallAction : KActivityDebugHelper() {
                     "检测失败"
                 }
             }
-            KAlertDialogHelper.Show1BDialog(mActivity, "网络类型：$ts")
+            KAlertDialogHelper.Show1BDialog(mActivity, "网络类型：$ts\nIP:${KNetwork.getIPAddress()}")
         })
         addView("录音播放", View.OnClickListener { AHRecorderPlay().startActivity(mActivity) })
         addView("imui界面", View.OnClickListener { ImActivity().startActivity(mActivity) })

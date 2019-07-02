@@ -142,6 +142,8 @@ dependencies {
     // 聊天UI库: https://github.com/stfalcon-studio/ChatKit
     implementation 'com.github.stfalcon:chatkit:0.3.3'
 
+    // 图表库 MPAndroidChart：https://github.com/PhilJay/MPAndroidChart
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 }
 /*kotlin {
     experimental {

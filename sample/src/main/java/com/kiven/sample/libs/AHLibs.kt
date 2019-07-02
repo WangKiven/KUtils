@@ -155,7 +155,11 @@ class AHLibs : KActivityDebugHelper() {
             volley("https://github.com/google/volley")
             volley("http://blog.csdn.net/linmiansheng/article/details/21646753")
         })
+        addTitle("other")
         addBtn("ChatKit", View.OnClickListener { AHChatList().startActivity(activity) })
+        addBtn("MPAndroidChart", View.OnClickListener { AHMPAndroidChart().startActivity(activity) })
+        addBtn("", View.OnClickListener { })
+        addBtn("", View.OnClickListener { })
         addBtn("", View.OnClickListener { })
         addBtn("", View.OnClickListener { })
     }

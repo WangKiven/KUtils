@@ -137,7 +137,7 @@ class AHSmallAction : KActivityDebugHelper() {
 
         // http://doc.xfyun.cn/msc_android/%E9%A2%84%E5%A4%87%E5%B7%A5%E4%BD%9C.html
         addView("讯飞识别", View.OnClickListener {
-            AHXunfeiTest().startActivity(mActivity)
+            com.kiven.sample.AHXunfeiTest().startActivity(mActivity)
         })
 
         // TODO: 2018/6/4 ----------------------------------------------------------
@@ -318,7 +318,7 @@ class AHSmallAction : KActivityDebugHelper() {
             }
 
         })
-        addView("检测网络", View.OnClickListener {
+        addView("检测网络与IP", View.OnClickListener {
             val type = KNetwork.getNetworkType(mActivity)
             val ts = when (type) {
                 0 -> {
@@ -337,7 +337,7 @@ class AHSmallAction : KActivityDebugHelper() {
                     "检测失败"
                 }
             }
-            KAlertDialogHelper.Show1BDialog(mActivity, "网络类型：$ts")
+            KAlertDialogHelper.Show1BDialog(mActivity, "网络类型：$ts\nIP:${KNetwork.getIPAddress()}")
         })
         addView("录音播放", View.OnClickListener { AHRecorderPlay().startActivity(mActivity) })
         addView("imui界面", View.OnClickListener { ImActivity().startActivity(mActivity) })
@@ -429,7 +429,7 @@ class AHSmallAction : KActivityDebugHelper() {
             UserManager.getInstance().newUser("123", mdir.absolutePath)?.login()
 
         })
-        addView("Dialog", View.OnClickListener { AHDialogTest().startActivity(activity) })
+        addView("Dialog", View.OnClickListener { com.kiven.sample.AHDialogTest().startActivity(activity) })
         addView("ConstraintLayout Test", View.OnClickListener {
             AHConstraintLayoutTest().startActivity(activity)
         })

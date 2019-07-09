@@ -21,10 +21,12 @@ import com.flyco.dialog.widget.NormalListDialog
 import com.google.android.flexbox.AlignContent
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
+import com.kiven.kutils.activityHelper.KActivityDebugHelper
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KToast
+import com.kiven.sample.libs.chatkit.AHChatList
 import com.kiven.sample.util.snackbar
 import com.kiven.sample.xutils.db.AHDbDemo
 import com.kiven.sample.xutils.net.AHNetDemo
@@ -39,7 +41,7 @@ import java.util.*
 /**
  * Created by wangk on 2018/3/27.
  */
-class AHLibs : KActivityHelper() {
+class AHLibs : KActivityDebugHelper() {
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
         val flexboxLayout = FlexboxLayout(activity)
@@ -153,6 +155,10 @@ class AHLibs : KActivityHelper() {
             volley("https://github.com/google/volley")
             volley("http://blog.csdn.net/linmiansheng/article/details/21646753")
         })
+        addTitle("other")
+        addBtn("ChatKit", View.OnClickListener { AHChatList().startActivity(activity) })
+        addBtn("MPAndroidChart", View.OnClickListener { AHMPAndroidChart().startActivity(activity) })
+        addBtn("", View.OnClickListener { })
         addBtn("", View.OnClickListener { })
         addBtn("", View.OnClickListener { })
         addBtn("", View.OnClickListener { })

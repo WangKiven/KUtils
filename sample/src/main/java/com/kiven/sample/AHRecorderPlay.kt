@@ -3,6 +3,7 @@ package com.kiven.sample
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.media.AudioRecord
 import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.os.Bundle
@@ -28,6 +29,8 @@ import java.io.File
 import java.util.*
 
 class AHRecorderPlay : KActivityDebugHelper() {
+    var tvFb:TextView? = null
+
     @SuppressLint("ResourceType")
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
@@ -111,7 +114,8 @@ class AHRecorderPlay : KActivityDebugHelper() {
         flexboxLayout.addView(oupGroup)
 
 
-        addTitle("操作")
+        tvFb = addTitle("")
+        addTitle("操作（MediaRecorder）")
 
         addView("开始录音", View.OnClickListener { startRecord(sourceGroup.checkedRadioButtonId, encodeGroup.checkedRadioButtonId, oupGroup.checkedRadioButtonId) })
 
@@ -153,6 +157,14 @@ class AHRecorderPlay : KActivityDebugHelper() {
                 KToast.ToastMessage("没找到文件夹")
             }
         })
+
+        addTitle("MediaRecorder不能输出mp3。要输出mp3的话，可采用AudioRecorder + Lame 的方案。" +
+                "\n参考文档：https://www.jianshu.com/p/047b573a9ac4" +
+                "\nAudioTrack: 可用于处理音频" +
+                "\nringdroid（apk源码），录制和编辑声音，并创建铃声：https://github.com/google/ringdroid" +
+                "\nmp3agic, 读取MP3文件并可修改MP3信息的java库：https://github.com/mpatric/mp3agic" +
+                "\nMP3音频录制,可单边或者双边波形显示：https://github.com/CarGuo/GSYRecordWave")
+
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -247,7 +259,9 @@ class AHRecorderPlay : KActivityDebugHelper() {
             try {
                 val ratio = maxAmplitude
                 if (ratio > 0) {
-                    KLog.i("分贝：${20 * Math.log10(ratio.toDouble())}")
+                    val fb = "分贝：${20 * Math.log10(ratio.toDouble())}"
+                    KLog.i(fb)
+                    tvFb?.text = fb;
                 }
             } catch (e: Exception) {
                 KLog.e(e)

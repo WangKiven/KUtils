@@ -18,7 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kiven.kutils.R;
-import com.kiven.kutils.callBack.Consumer;
 import com.kiven.kutils.logHelper.KShowLog;
 import com.kiven.kutils.tools.KUtil;
 
@@ -35,11 +34,11 @@ public class DebugView {
     // todo 自定义选项
     private final static List<DebugEntity> customAction = new ArrayList<DebugEntity>();
 
-    public static void addAction(@DrawableRes int resId, Consumer<Activity> callBack) {
+    public static void addAction(@DrawableRes int resId, DebugViewListener callBack) {
         customAction.add(new DebugEntity(resId, callBack));
     }
 
-    public static void addAction(@NonNull String text, Consumer<Activity> callBack) {
+    public static void addAction(@NonNull String text, DebugViewListener callBack) {
         customAction.add(new DebugEntity(text, callBack));
     }
 
@@ -65,15 +64,15 @@ public class DebugView {
         // todo 装载自定义选项
         actions.addAll(customAction);
         // todo 固定选项：日志，关闭
-        actions.add(new DebugEntity(R.mipmap.k_ic_text_log, new Consumer<Activity>() {
+        actions.add(new DebugEntity(R.mipmap.k_ic_text_log, new DebugViewListener() {
             @Override
-            public void callBack(Activity param) {
+            public void onClick(Activity activity, View view) {
                 new KShowLog().startActivity(activity);
             }
         }));
-        actions.add(new DebugEntity(R.drawable.k_ic_close, new Consumer<Activity>() {
+        actions.add(new DebugEntity(R.drawable.k_ic_close, new DebugViewListener() {
             @Override
-            public void callBack(Activity param) {
+            public void onClick(Activity activity, View view) {
                 hideFloat();
             }
         }));
@@ -142,7 +141,6 @@ public class DebugView {
             }
         }
 
-
         mFloatLayout.measure(View.MeasureSpec.makeMeasureSpec(0,
                 View.MeasureSpec.UNSPECIFIED), View.MeasureSpec
                 .makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
@@ -177,7 +175,7 @@ public class DebugView {
                         if (Math.abs(wmParams.x - oldX1) <= a && Math.abs(wmParams.y - oldY1) <= a) {// 认定单点击
                             int position = ((int) event.getX()) / childSize;
                             if (position >= 0 && position < actions.size()) {
-                                actions.get(position).onClick(activity);
+                                actions.get(position).onClick(activity, mFloatLayout.getChildAt(position));
                             }
                         }
                         break;

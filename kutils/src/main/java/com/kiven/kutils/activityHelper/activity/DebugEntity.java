@@ -2,11 +2,10 @@ package com.kiven.kutils.activityHelper.activity;
 
 import android.app.Activity;
 
+import android.view.View;
 import androidx.annotation.DrawableRes;
-import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 
-import com.kiven.kutils.callBack.Consumer;
 import com.kiven.kutils.tools.KString;
 
 class DebugEntity {
@@ -15,22 +14,22 @@ class DebugEntity {
     private int resId;
     private String text;
 
-    private Consumer<Activity> callBack;
+    private DebugViewListener callBack;
 
-    public DebugEntity(@DrawableRes int resId, Consumer<Activity> callBack) {
+    public DebugEntity(@DrawableRes int resId, DebugViewListener callBack) {
         this.resId = resId;
         this.callBack = callBack;
     }
 
-    public DebugEntity(@NonNull String text, Consumer<Activity> callBack) {
+    public DebugEntity(@NonNull String text, DebugViewListener callBack) {
         this.isIcon = false;
         this.text = text;
         this.callBack = callBack;
     }
 
-    public void onClick(Activity context) {
+    public void onClick(Activity context, View clickView) {
         if (callBack != null) {
-            callBack.callBack(context);
+            callBack.onClick(context, clickView);
         }
     }
 

@@ -86,7 +86,7 @@ public class KActivityDebugHelper extends KActivityHelper implements SensorEvent
         }
     }
 
-    private void showDebugView() {
+    public void showDebugView() {
         if (floatView == null) {
             floatView = new DebugView(mActivity);
         }

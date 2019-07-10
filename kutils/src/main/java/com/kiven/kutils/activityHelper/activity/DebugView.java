@@ -66,13 +66,13 @@ public class DebugView {
         // todo 固定选项：日志，关闭
         actions.add(new DebugEntity(R.mipmap.k_ic_text_log, new DebugViewListener() {
             @Override
-            public void onClick(Activity activity, View view) {
+            public void onClick(Activity activity, View view, DebugEntity entity) {
                 new KShowLog().startActivity(activity);
             }
         }));
         actions.add(new DebugEntity(R.drawable.k_ic_close, new DebugViewListener() {
             @Override
-            public void onClick(Activity activity, View view) {
+            public void onClick(Activity activity, View view, DebugEntity entity) {
                 hideFloat();
             }
         }));

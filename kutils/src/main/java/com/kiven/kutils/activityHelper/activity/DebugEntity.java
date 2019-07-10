@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 
 import com.kiven.kutils.tools.KString;
 
-class DebugEntity {
+public class DebugEntity {
     private boolean isIcon = true;
     @DrawableRes
     private int resId;
@@ -29,7 +29,7 @@ class DebugEntity {
 
     public void onClick(Activity context, View clickView) {
         if (callBack != null) {
-            callBack.onClick(context, clickView);
+            callBack.onClick(context, clickView, this);
         }
     }
 
@@ -39,6 +39,14 @@ class DebugEntity {
 
     public int getResId() {
         return resId;
+    }
+
+    public void setResId(@DrawableRes int resId) {
+        this.resId = resId;
+    }
+
+    public void setText(@NonNull String text) {
+        this.text = text;
     }
 
     public String getText() {

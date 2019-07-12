@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.util.DisplayMetrics;
 
+import androidx.annotation.NonNull;
 import com.kiven.kutils.logHelper.KLog;
 
 import java.io.BufferedReader;
@@ -38,9 +39,13 @@ import java.util.Set;
 public class KUtil {
 
     private static Application app;
+    private static String CONFIG_SHARED_PREFERENCES = "KContext.ACCOUNT_CONFIG";
 
     public static void setApp(Application app) {
         KUtil.app = app;
+    }
+    public static void setConfigSharedPreferences(@NonNull String configSharedPreferences){
+        CONFIG_SHARED_PREFERENCES = configSharedPreferences;
     }
 
     /**
@@ -395,7 +400,7 @@ public class KUtil {
      * SharedPreferences
      */
     public static SharedPreferences getSharedPreferences() {
-        return KContext.getInstance().getSharedPreferences("KContext.ACCOUNT_CONFIG", Context.MODE_PRIVATE);
+        return KContext.getInstance().getSharedPreferences(CONFIG_SHARED_PREFERENCES, Context.MODE_PRIVATE);
     }
 
     public static void removeSharedPreferencesValue(String key) {

@@ -1,8 +1,10 @@
 package com.kiven.kutils.tools;
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.ConfigurationInfo;
@@ -93,6 +95,20 @@ public class KUtil {
     public static int sp2px(float spValue) {
         final float fontScale = app.getResources().getDisplayMetrics().scaledDensity;
         return (int) (spValue * fontScale + 0.5f);
+    }
+
+    /**
+     *
+     * 根据 @param context 获取Activity
+     */
+    public static Activity getActivity(Context context) {
+        if (context == null) {
+            return null;
+        } else if (context instanceof Activity) {
+            return (Activity)context;
+        } else {
+            return context instanceof ContextWrapper ? getActivity(((ContextWrapper)context).getBaseContext()) : null;
+        }
     }
 
     /**

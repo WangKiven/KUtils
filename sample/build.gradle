@@ -141,7 +141,9 @@ dependencies {
 //    kapt 'com.jakewharton:butterknife-compiler:10.0.0'
 
     // 聊天UI库: https://github.com/stfalcon-studio/ChatKit
-    implementation 'com.github.stfalcon:chatkit:0.3.3'
+    // https://github.com/WangKiven/ChatKit
+//    implementation 'com.github.stfalcon:chatkit:0.3.3'
+    implementation project(':chatkit')
 
     // 图表库 MPAndroidChart：https://github.com/PhilJay/MPAndroidChart
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'

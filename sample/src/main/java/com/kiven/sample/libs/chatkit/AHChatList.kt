@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.kiven.kutils.activityHelper.KActivityDebugHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
+import com.kiven.sample.xutils.db.entity.User
 import com.stfalcon.chatkit.commons.ImageLoader
 import com.stfalcon.chatkit.commons.models.IDialog
 import com.stfalcon.chatkit.commons.models.IMessage
@@ -46,6 +47,7 @@ class AHChatList : KActivityDebugHelper() {
             addView(listView as View, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
         }
 
+        adapter.addItem(DefaultDailog())
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -67,7 +69,7 @@ class AHChatList : KActivityDebugHelper() {
     }
 
     class DefaultDailog : IDialog<DefaultMessage> {
-        var lastMsg: DefaultMessage? = null
+        var lastMsg: DefaultMessage? = DefaultMessage("msgId004", Date(), DefaultUser("x33", "34k", ""), "i love u")
         var dialogId = "0"
 
         override fun getDialogPhoto(): String {
@@ -87,7 +89,7 @@ class AHChatList : KActivityDebugHelper() {
         }
 
         override fun getUsers(): MutableList<out IUser> {
-            return mutableListOf()
+            return mutableListOf(DefaultUser("123", "Katter", ""))
         }
 
         override fun getLastMessage(): DefaultMessage? {

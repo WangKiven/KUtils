@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.kiven.kutils.activityHelper.KActivityDebugHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
+import com.kiven.sample.util.Const
 import com.kiven.sample.xutils.db.entity.User
 import com.stfalcon.chatkit.commons.ImageLoader
 import com.stfalcon.chatkit.commons.models.IDialog
@@ -62,8 +63,10 @@ class AHChatList : KActivityDebugHelper() {
             Menu.FIRST + 1 -> {
                 adapter.addItem(DefaultDailog())
             }
-            Menu.FIRST + 2 -> {}
-            Menu.FIRST + 3 -> {}
+            Menu.FIRST + 2 -> {
+            }
+            Menu.FIRST + 3 -> {
+            }
         }
         return true
     }
@@ -73,7 +76,7 @@ class AHChatList : KActivityDebugHelper() {
         var dialogId = "0"
 
         override fun getDialogPhoto(): String {
-            return "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1564045468923&di=9316f56ad4bb4d9232658d249f94f11f&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fblog%2F201406%2F16%2F20140616171020_TiEXR.thumb.700_0.jpeg"
+            return Const.randomImage()
         }
 
         override fun getUnreadCount(): Int {
@@ -89,7 +92,11 @@ class AHChatList : KActivityDebugHelper() {
         }
 
         override fun getUsers(): MutableList<out IUser> {
-            return mutableListOf(DefaultUser("123", "Katter", ""))
+            return mutableListOf(
+                    DefaultUser("123", "Katter", Const.randomImage()),
+                    DefaultUser("143", "Katter", Const.randomImage())
+
+            )
         }
 
         override fun getLastMessage(): DefaultMessage? {

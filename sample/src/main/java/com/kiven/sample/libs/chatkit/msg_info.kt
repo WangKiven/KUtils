@@ -4,6 +4,7 @@ import com.kiven.sample.util.Const
 import com.stfalcon.chatkit.commons.models.IDialog
 import com.stfalcon.chatkit.commons.models.IMessage
 import com.stfalcon.chatkit.commons.models.IUser
+import com.stfalcon.chatkit.commons.models.MessageContentType
 import java.util.*
 
 /**
@@ -47,10 +48,12 @@ class DefaultDailog : IDialog<DefaultMessage> {
 
 }
 
-class DefaultMessage(private val msgId: String,
-                     private val time: Date,
-                     private val who: IUser,
-                     private val msgInfo: String?) : IMessage {
+open class DefaultMessage(private val msgId: String,
+                          private val time: Date,
+                          private val who: IUser,
+                          private val msgInfo: String?
+) : IMessage {
+
     override fun getId(): String = msgId
 
     override fun getCreatedAt(): Date = time
@@ -59,6 +62,13 @@ class DefaultMessage(private val msgId: String,
 
     override fun getText(): String? = msgInfo
 
+}
+
+class DefaultImageMessage(msgId: String, time: Date, who: IUser, private val msgInfo: String?)
+    : DefaultMessage(msgId, time, who, msgInfo), MessageContentType.Image, MessageContentType {
+    override fun getImageUrl(): String? {
+        return msgInfo
+    }
 }
 
 class DefaultUser(private val userId: String,

@@ -20,7 +20,7 @@ class AHMsgList : KActivityDebugHelper() {
 
     val adapter by lazy {
         MessagesListAdapter<DefaultMessage>(myId, ImageLoader { imageView, url, payload ->
-            imageView?.let { Glide.with(mActivity).load(url).circleCrop().into(it) }
+            imageView?.let { Glide.with(mActivity).load(url).into(it) }
         })
     }
 
@@ -46,7 +46,7 @@ class AHMsgList : KActivityDebugHelper() {
             }
 
             input.setAttachmentsListener {
-                val message = DefaultMessage("12", Date(), if (count %2 == 0) mi else ta, null)
+                val message = DefaultImageMessage("12", Date(), if (count %2 == 0) mi else ta, Const.randomImage())
                 adapter.addToStart(message, true)
                 count ++
             }

@@ -32,6 +32,7 @@ import com.kiven.sample.xutils.db.AHDbDemo
 import com.kiven.sample.xutils.net.AHNetDemo
 import com.koushikdutta.async.http.AsyncHttpClient
 import com.koushikdutta.async.http.server.AsyncHttpServer
+import com.stfalcon.chatkit.dialogs.DialogsList
 import org.jetbrains.anko.support.v4.nestedScrollView
 import java.net.Inet4Address
 import java.net.NetworkInterface
@@ -155,9 +156,33 @@ class AHLibs : KActivityDebugHelper() {
             volley("https://github.com/google/volley")
             volley("http://blog.csdn.net/linmiansheng/article/details/21646753")
         })
+
+
+        addTitle("emoji")
+        // https://github.com/rockerhieu/emojicon
+        addBtn("emojicon", View.OnClickListener { /*AHEmojiconLibs().startActivity(activity)*/DFEmojicon().show(activity.supportFragmentManager, null) })
+        // https://github.com/rockerhieu/emojiconize
+        addBtn("", View.OnClickListener { })
+        // https://github.com/w446108264/XhsEmoticonsKeyboard
+        addBtn("", View.OnClickListener { })
+        // https://github.com/vanniktech/Emoji
+        addBtn("Emoji库及各库TextView的展示对比", View.OnClickListener { AHEmoji().startActivity(activity) })
+
         addTitle("other")
         addBtn("ChatKit", View.OnClickListener { AHChatList().startActivity(activity) })
         addBtn("MPAndroidChart", View.OnClickListener { AHMPAndroidChart().startActivity(activity) })
+        // 安卓平台下，图片或视频转化为ascii，图片转化成低多边形风格图形，emoji表情填充图片，合并视频用到ffmpeg库。后期会加入带色彩的ascii码图片或视频
+        // https://github.com/LineCutFeng/PlayPicdio
+        addBtn("PlayPicdio(图片或视频转化为ascii)", View.OnClickListener { })
+
+        // https://github.com/burhanrashid52/PhotoEditor
+        addBtn("PhotoEditor(图片编辑)", View.OnClickListener { })
+        addBtn("", View.OnClickListener { })
+        addBtn("", View.OnClickListener { })
+        addBtn("", View.OnClickListener { })
+        addBtn("", View.OnClickListener { })
+        addBtn("", View.OnClickListener { })
+        addBtn("", View.OnClickListener { })
         addBtn("", View.OnClickListener { })
         addBtn("", View.OnClickListener { })
         addBtn("", View.OnClickListener { })

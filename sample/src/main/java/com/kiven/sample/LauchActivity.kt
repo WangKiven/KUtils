@@ -1,7 +1,6 @@
 package com.kiven.sample
 
 import android.Manifest
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -9,23 +8,15 @@ import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
 import android.provider.Settings
-import android.telephony.TelephonyManager
 import android.transition.Slide
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
-import com.android.volley.Request
-import com.android.volley.RequestQueue
-import com.android.volley.Response
-import com.android.volley.toolbox.StringRequest
-import com.android.volley.toolbox.Volley
 import com.bumptech.glide.Glide
 import com.kiven.kutils.activityHelper.KFragmentActivity
 import com.kiven.kutils.activityHelper.activity.KActivity
@@ -33,19 +24,14 @@ import com.kiven.kutils.callBack.CallBack
 import com.kiven.kutils.file.KFile
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.*
-import com.kiven.kutils.widget.KNormalItemView
 import com.kiven.sample.arch.AHArch
 import com.kiven.sample.floatView.ActivityHFloatView
 import com.kiven.sample.gl.AHGL
 import com.kiven.sample.libs.AHLibs
 import com.kiven.sample.media.AHMediaList
 import com.kiven.sample.theme.AHTheme
-import com.kiven.sample.util.callPhone
-import com.kiven.sample.util.snackbar
 import kotlinx.android.synthetic.main.activity_lauch.*
 import me.grantland.widget.AutofitHelper
-import java.text.DateFormat
-import java.util.*
 
 class LauchActivity : KActivity() {
 

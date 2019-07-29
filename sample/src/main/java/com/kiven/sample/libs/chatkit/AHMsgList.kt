@@ -32,7 +32,7 @@ class AHMsgList : KActivityDebugHelper() {
         activity.apply {
             messagesList.setAdapter(adapter)
             adapter.setOnMessageClickListener {
-                Snackbar.make(activity.window.decorView, "别点我", Snackbar.LENGTH_LONG).show()
+                Snackbar.make(messagesList, "别点我", Snackbar.LENGTH_LONG).show()
             }
 
             val mi = DefaultUser(myId, "kee", Const.randomImage())

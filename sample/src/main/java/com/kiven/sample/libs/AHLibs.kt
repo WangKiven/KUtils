@@ -158,12 +158,16 @@ class AHLibs : KActivityDebugHelper() {
         })
 
 
+        // android emoji说明：https://www.jianshu.com/p/d82ac2edc7e8
+        // emoji所有表情(官宣)：http://www.unicode.org/emoji/charts/full-emoji-list.html
         addTitle("emoji")
         // https://github.com/rockerhieu/emojicon
         addBtn("emojicon", View.OnClickListener { /*AHEmojiconLibs().startActivity(activity)*/DFEmojicon().show(activity.supportFragmentManager, null) })
         // https://github.com/rockerhieu/emojiconize
         addBtn("", View.OnClickListener { })
         // https://github.com/w446108264/XhsEmoticonsKeyboard
+        addBtn("", View.OnClickListener { })
+        // https://github.com/SiberiaDante/EmotionApp
         addBtn("", View.OnClickListener { })
         // https://github.com/vanniktech/Emoji
         addBtn("Emoji库及各库TextView的展示对比", View.OnClickListener { AHEmoji().startActivity(activity) })

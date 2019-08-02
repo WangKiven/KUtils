@@ -12,9 +12,9 @@ public class CountHandler extends Handler {
     private int downTime;
     private Consumer<Integer> consumer;
 
-    public CountHandler(int downTime, Consumer<Integer> consumer) {
+    public CountHandler(int second, Consumer<Integer> consumer) {
         super();
-        this.downTime = downTime;
+        this.downTime = second;
         this.consumer = consumer;
     }
 

@@ -128,6 +128,7 @@
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
+        <activity android:name=".dock.ActivityDock" />
 
         <receiver android:name=".widget.ProviderWidget">
             <intent-filter>

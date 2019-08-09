@@ -17,6 +17,7 @@ import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
+import androidx.lifecycle.LifecycleOwner
 import com.bumptech.glide.Glide
 import com.kiven.kutils.activityHelper.KFragmentActivity
 import com.kiven.kutils.activityHelper.activity.KActivity
@@ -33,7 +34,7 @@ import com.kiven.sample.theme.AHTheme
 import kotlinx.android.synthetic.main.activity_lauch.*
 import me.grantland.widget.AutofitHelper
 
-class LauchActivity : KActivity() {
+class LauchActivity : KActivity(), LifecycleOwner {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +63,6 @@ class LauchActivity : KActivity() {
             }
         })
         textView2.text = KString.fromHtml(getString(R.string.text_test, 5, 9))
-
 
 
         val addTitle = fun(text: String) {
@@ -105,11 +105,11 @@ class LauchActivity : KActivity() {
             ActivityCompat.startActivity(this, Intent(this, ActivityDataBinding::class.java), optionsCompat.toBundle())
         })
         addView("arch", View.OnClickListener { AHArch().startActivity(this) })
-        addView("", View.OnClickListener {  })
-        addView("", View.OnClickListener {  })
-        addView("", View.OnClickListener {  })
-        addView("", View.OnClickListener {  })
-        addView("", View.OnClickListener {  })
+        addView("", View.OnClickListener { })
+        addView("", View.OnClickListener { })
+        addView("", View.OnClickListener { })
+        addView("", View.OnClickListener { })
+        addView("", View.OnClickListener { })
     }
 
     private fun setupWindowAnimations() {

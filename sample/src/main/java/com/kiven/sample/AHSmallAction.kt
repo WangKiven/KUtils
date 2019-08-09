@@ -36,6 +36,7 @@ import com.kiven.kutils.tools.KGranting
 import com.kiven.kutils.tools.KNetwork
 import com.kiven.kutils.tools.KString
 import com.kiven.sample.anim.AHAnim
+import com.kiven.sample.dock.ActivityDock
 import com.kiven.sample.imui.ImActivity
 import com.kiven.sample.jpushUI.AHImui
 import com.kiven.sample.mimc.ChatMsg
@@ -114,7 +115,7 @@ class AHSmallAction : KActivityDebugHelper() {
         // TODO: 2018/3/31 ----------------------------------------------------------
         // Android锁屏实现与总结: https://www.jianshu.com/p/6c3a6b0f145e
 
-        addTitle("壁纸锁屏")
+        addTitle("壁纸锁屏桌面")
         addView("静态壁纸锁屏", View.OnClickListener {
             val wallPaperManager = WallpaperManager.getInstance(mActivity)
 
@@ -156,6 +157,9 @@ class AHSmallAction : KActivityDebugHelper() {
         addView("壁纸是动态壁纸吗", View.OnClickListener {
             val yes = WallpaperUtil.isLivingWallpaper(mActivity)
             showDialog(if (yes) "是的" else "不是")
+        })
+        addView("自定义桌面", View.OnClickListener {
+            mActivity.startActivity(Intent(mActivity, ActivityDock::class.java))
         })
 
         // TODO: 2018/3/28 ----------------------------------------------------------

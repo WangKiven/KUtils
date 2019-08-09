@@ -61,12 +61,10 @@ public class WallpaperUtil {
     public static Bitmap getDefaultWallpaper(Context paramContext) {
         Bitmap localBitmap;
         if (isLivingWallpaper(paramContext))
-            localBitmap = null;
-        do {
-            localBitmap = ((BitmapDrawable) WallpaperManager.getInstance(paramContext).getDrawable()).getBitmap();
-            return localBitmap;
-        }
-        while (localBitmap != null);
+            return null;
+
+        localBitmap = ((BitmapDrawable) WallpaperManager.getInstance(paramContext).getDrawable()).getBitmap();
+        return localBitmap;
     }
 
     public static boolean isLivingWallpaper(Context paramContext) {

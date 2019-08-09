@@ -9,6 +9,7 @@ import android.content.pm.PackageManager
 import android.hardware.biometrics.BiometricManager
 import android.hardware.biometrics.BiometricPrompt
 import android.hardware.fingerprint.FingerprintManager
+import android.media.Image
 import android.media.MediaRecorder
 import android.net.Uri
 import android.os.*
@@ -19,6 +20,7 @@ import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.hardware.fingerprint.FingerprintManagerCompat
 import com.google.android.flexbox.AlignContent
@@ -134,6 +136,26 @@ class AHSmallAction : KActivityDebugHelper() {
             val intent = Intent(mActivity, LiveWallpaper2::class.java)
             mActivity.startService(intent)
 //            WallpaperUtil.setLiveWallpaper(mActivity, 322)
+        })
+        addView("获取在用壁纸", View.OnClickListener {
+            val bp = WallpaperUtil.getDefaultWallpaper(mActivity)
+            if (bp == null) {
+                showDialog("获取失败或者为动态壁纸")
+            } else {
+                val iv = ImageView(mActivity)
+                iv.setImageBitmap(bp)
+                AlertDialog.Builder(mActivity)
+                        .setView(iv)
+                        .show()
+            }
+        })
+        addView("壁纸是本应用设置的吗", View.OnClickListener {
+            val yes = WallpaperUtil.wallpaperIsUsed(mActivity)
+            showDialog(if (yes) "是的" else "不是")
+        })
+        addView("壁纸是动态壁纸吗", View.OnClickListener {
+            val yes = WallpaperUtil.isLivingWallpaper(mActivity)
+            showDialog(if (yes) "是的" else "不是")
         })
 
         // TODO: 2018/3/28 ----------------------------------------------------------

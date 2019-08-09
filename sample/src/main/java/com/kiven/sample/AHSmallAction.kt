@@ -42,6 +42,7 @@ import com.kiven.sample.noti.AHNotiTest
 import com.kiven.sample.service.LiveWallpaper2
 import com.kiven.sample.spss.AHSpssTemple
 import com.kiven.sample.util.EncryptUtils
+import com.kiven.sample.util.WallpaperUtil
 import com.kiven.sample.util.callPhone
 import com.kiven.sample.util.snackbar
 import com.xiaomi.mimc.MIMCGroupMessage
@@ -118,6 +119,7 @@ class AHSmallAction : KActivityDebugHelper() {
             // FLAG_LOCK 设置锁屏，FLAG_SYSTEM 设置壁纸
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 wallPaperManager.setResource(R.mipmap.fish, WallpaperManager.FLAG_LOCK)
+                wallPaperManager.setResource(R.mipmap.fish, WallpaperManager.FLAG_SYSTEM)
                 Snackbar.make(flexboxLayout, "设置锁屏", Snackbar.LENGTH_LONG).show()
             } else {
                 // 7.0以下，似乎只能设置壁纸。7.0及之后，这个方法似乎同时设置壁纸和锁屏
@@ -128,7 +130,7 @@ class AHSmallAction : KActivityDebugHelper() {
 
         // 没有系统权限，用不了
         addView("动态壁纸", View.OnClickListener {
-            Snackbar.make(flexboxLayout, "没有系统权限，用不了", Snackbar.LENGTH_LONG).show()
+            Snackbar.make(flexboxLayout, "没有系统权限，用不了。看来只能设置静态壁纸了。还是去写桌面应用吧！！", Snackbar.LENGTH_LONG).show()
             val intent = Intent(mActivity, LiveWallpaper2::class.java)
             mActivity.startService(intent)
 //            WallpaperUtil.setLiveWallpaper(mActivity, 322)

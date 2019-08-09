@@ -66,6 +66,8 @@
 
         <activity android:name=".LauchActivity">
             <intent-filter>
+                <!-- 应用入口, 多个activity都配置了android.intent.action.MAIN的话，启动App的时候那个在清单文件前面，就启动那个 -->
+                <!-- 个人猜测，寻找可能的activity时，按照manifest配置从上到下读取，直到寻找到第一个符合要求的activity -->
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -84,7 +86,8 @@
 
         <activity
             android:name=".dock.ActivityDock"
-            android:label="KUDock">
+            android:label="KUDock"
+            android:icon="@mipmap/ic_launcher_u">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

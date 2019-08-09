@@ -3,10 +3,13 @@ package com.kiven.sample.util
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.snackbar.Snackbar
+import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.logHelper.KLog
+import com.kiven.kutils.tools.KAlertDialogHelper
 
 /**
  * Created by wangk on 2019/5/14.
@@ -43,10 +46,16 @@ fun Activity.listPicker(title: String, items: Array<String>, action: (Int) -> Un
         dialog.dismiss()
     }.show()
 }
+
 /// 打电话
 fun Activity.callPhone(phoneNum: String) {
     startActivity(Intent().apply {
         action = Intent.ACTION_CALL
         data = Uri.parse("tel:$phoneNum")
     })
+}
+
+fun Activity.showDialog(word: String) {
+    KAlertDialogHelper.Show1BDialog(this, word)
+    Log.i("ULog_default", word)
 }

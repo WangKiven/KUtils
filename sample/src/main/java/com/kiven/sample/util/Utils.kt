@@ -7,7 +7,6 @@ import android.util.Log
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.snackbar.Snackbar
-import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KAlertDialogHelper
 
@@ -55,7 +54,16 @@ fun Activity.callPhone(phoneNum: String) {
     })
 }
 
+fun showTip(word: String) {
+    KLog.d(word)
+}
+
 fun Activity.showDialog(word: String) {
     KAlertDialogHelper.Show1BDialog(this, word)
+    Log.i("ULog_default", word)
+}
+
+fun Activity.showSnack(word: String) {
+    Snackbar.make(window.decorView.findViewById(android.R.id.content), word, Snackbar.LENGTH_LONG).show()
     Log.i("ULog_default", word)
 }

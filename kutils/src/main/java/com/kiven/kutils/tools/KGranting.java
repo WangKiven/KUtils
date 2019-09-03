@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.Settings;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -161,22 +162,20 @@ public class KGranting {
         requestPermissions(activity, requestCode, new String[]{tGrant}, new String[]{tGrantName}, callBack);
     }
 
-
-    public static final String STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE;
-    public static final String BLUETOOTH = Manifest.permission.BLUETOOTH;
-    public static final String CAMERA = Manifest.permission.CAMERA;
-    public static final String PHONE = Manifest.permission.CALL_PHONE;
-
     /**
      * 请求多个授权, 不需描述。
      * 描述不全面，如需跟多权限，需在此添加
      */
     public static void requestPermissions(@NonNull Activity activity, int requestCode, @NonNull String[] tGrant, GrantingCallBack callBack) {
         Map<String, String> grants = new TreeMap<>();
-        grants.put(STORAGE, "内存");
-        grants.put(BLUETOOTH, "蓝牙");
-        grants.put(CAMERA, "相机");
-        grants.put(PHONE, "拨号");
+        grants.put(Manifest.permission.WRITE_EXTERNAL_STORAGE, "内存");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            grants.put(Manifest.permission.READ_EXTERNAL_STORAGE, "内存");
+        }
+        grants.put(Manifest.permission.BLUETOOTH, "蓝牙");
+        grants.put(Manifest.permission.CAMERA, "相机");
+        grants.put(Manifest.permission.CALL_PHONE, "拨号");
+        grants.put(Manifest.permission.RECORD_AUDIO, "录音");
 
         String[] tGrantName = new String[tGrant.length];
         for (int i = 0; i < tGrant.length; i++) {
@@ -191,6 +190,48 @@ public class KGranting {
      */
     public static void requestPermissions(@NonNull Activity activity, int requestCode, @NonNull String tGrant, GrantingCallBack callBack) {
         requestPermissions(activity, requestCode, new String[]{tGrant}, callBack);
+    }
+
+    /**
+     * 仅检测是否有权限，不做权限申请
+     */
+    public static Boolean checkPermissions(@NonNull Activity activity, @NonNull String[] tGrant) {
+        for (String g : tGrant) {
+            if (ContextCompat.checkSelfPermission(activity, g) != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
+    }
+    /**
+     * 仅检测是否有权限，不做权限申请
+     */
+    public static Boolean checkPermission(@NonNull Activity activity, @NonNull String tGrant) {
+        return ContextCompat.checkSelfPermission(activity, tGrant) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    /**
+     * 请求录音需要的权限
+     */
+    public static void requestRecordAudioPermissions(@NonNull Activity activity, int requestCode, GrantingCallBack callBack){
+        String[] grant = new String[]{Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        requestPermissions(activity, requestCode, grant, callBack);
+    }
+    /**
+     * 请求拍照需要的权限
+     */
+    public static void requestTakePhotoPermissions(@NonNull Activity activity, int requestCode, GrantingCallBack callBack){
+        String[] grant = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        requestPermissions(activity, requestCode, grant, callBack);
+    }
+    /**
+     * 请求访问相册需要的权限
+     */
+    public static void requestAlbumPermissions(@NonNull Activity activity, int requestCode, GrantingCallBack callBack){
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            String[] grant = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE};
+            requestPermissions(activity, requestCode, grant, callBack);
+        }
     }
 
     /**

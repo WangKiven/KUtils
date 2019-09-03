@@ -122,24 +122,6 @@ class LauchActivity : KActivity(), LifecycleOwner {
                     showDialog("获取相册权限失败")
                 }
             }
-
-            KGranting.requestTakePhotoPermissions(this, 123){
-                if (it) {
-                    showDialog("获取拍照权限到了")
-                } else {
-                    showDialog("获取拍照权限失败")
-                }
-            }
-
-            /*RequestPermissionFragment.requestPermissions(supportFragmentManager, listOf(Manifest.permission.READ_EXTERNAL_STORAGE)){
-                showDialog("获取到了内存权限")
-            }
-            RequestPermissionFragment.requestPermissions(supportFragmentManager, listOf(Manifest.permission.CAMERA)){
-                showDialog("获取到了相机权限")
-            }
-            RequestPermissionFragment.requestPermissions(supportFragmentManager, listOf(Manifest.permission.CALL_PHONE)){
-                showDialog("获取到了拨号权限")
-            }*/
         })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })

@@ -2,6 +2,7 @@ package com.kiven.sample
 
 import android.content.Context
 import android.content.IntentFilter
+import androidx.multidex.MultiDex
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KContext
 import com.kiven.kutils.tools.KUtil
@@ -18,6 +19,7 @@ class AppContext : KContext() {
 
     override fun attachBaseContext(base: Context) {
         super.attachBaseContext(base)
+        MultiDex.install(this)
         KLog.i("AppContext attachBaseContext")
     }
 

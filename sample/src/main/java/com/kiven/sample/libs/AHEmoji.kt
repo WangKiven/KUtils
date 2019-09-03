@@ -1,7 +1,6 @@
 package com.kiven.sample.libs
 
 import android.os.Bundle
-import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
@@ -16,7 +15,6 @@ import com.vanniktech.emoji.ios.IosEmojiProvider
 import com.vanniktech.emoji.twitter.TwitterEmojiProvider
 import io.github.rockerhieu.emojicon.EmojiconTextView
 import org.jetbrains.anko.linearLayout
-import org.jetbrains.anko.sp
 import org.jetbrains.anko.support.v4.nestedScrollView
 import org.jetbrains.anko.textView
 

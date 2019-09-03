@@ -8,12 +8,16 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
+
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.FragmentActivity;
+
 import android.widget.Toast;
 
+import com.kiven.kutils.callBack.Consumer;
 import com.kiven.kutils.logHelper.KLog;
 
 import java.util.ArrayList;
@@ -26,6 +30,11 @@ import java.util.TreeMap;
  * Created by kiven on 16/3/31.
  */
 public class KGranting {
+    // todo 全局设置，是否通过fragment请求权限。不要频繁改变该值，否则会出问题。
+    //  默认false: 通过activity请求，需要在activity中配置onRequestPermissionsResult().
+    //  true: activity中的onRequestPermissionsResult()必须调用super.onRequestPermissionsResult()，否则回调会出问题
+    public static boolean useFragmentRequest = false;
+
     private Activity mActivity;
     private int requestCode;
     private String[] waitGrant;// 待授权数组
@@ -38,6 +47,7 @@ public class KGranting {
     private KGranting(@NonNull Activity activity, int requestCode, @NonNull String[] tGrant, @NonNull String[] tGrantName, GrantingCallBack callBack) {
         this(activity, requestCode, tGrant, tGrantName, true, callBack);
     }
+
     private KGranting(@NonNull Activity activity, int requestCode, @NonNull String[] tGrant, @NonNull String[] tGrantName, boolean isShowErrorTip, GrantingCallBack callBack) {
         mActivity = activity;
         this.requestCode = requestCode;
@@ -53,9 +63,6 @@ public class KGranting {
                 if (!mGrant.contains(g)) {
                     mGrant.add(g);
                     grantName.add(tGrantName[i]);
-                    /*if (!ActivityCompat.shouldShowRequestPermissionRationale(mActivity, g)) {
-
-                    }*/
                 }
             }
             i++;
@@ -89,15 +96,12 @@ public class KGranting {
                 message = message + " 等权限";
             }
 
-//            message = message + ", 请在设置'权限'中打开相关权限.";
-
             new AlertDialog.Builder(mActivity)
                     .setMessage(message)
                     .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            ActivityCompat.requestPermissions(mActivity, waitGrant,
-                                    requestCode);
+                            requestPermissions();
                         }
                     })
                     .setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -113,8 +117,65 @@ public class KGranting {
                     .create()
                     .show();
         } else {
+            requestPermissions();
+        }
+    }
+
+    private void requestPermissions(){
+        if (useFragmentRequest) {
+            granting = null;
+
+            if (mActivity instanceof FragmentActivity) {
+                FragmentActivity fragmentActivity = (FragmentActivity) mActivity;
+                RequestPermissionFragment.requestPermissions(fragmentActivity.getSupportFragmentManager(), waitGrant, new Consumer<Boolean>() {
+                    @Override
+                    public void callBack(Boolean param) {
+                        onResult(param);
+                    }
+                });
+            }
+
+            KLog.e("使用fragment请求权限，请使用FragmentActivity作为activity传入");
+        } else
             ActivityCompat.requestPermissions(mActivity, waitGrant,
                     requestCode);
+    }
+
+    private void onResult(boolean isSuccess) {
+        if (isSuccess) {
+            if (callBack != null) {
+                callBack.onGrantSuccess(true);
+            }
+        } else {
+            if (!isShowErrorTip) {
+                if (callBack != null)
+                    callBack.onGrantSuccess(false);
+            } else {
+                String message = "您未全部授权相关权限，您可以在设置中打开相关权限。";
+
+                new AlertDialog.Builder(mActivity)
+                        .setMessage(message)
+                        .setPositiveButton("前去设置", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (callBack != null)
+                                    callBack.onGrantSuccess(false);
+                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                intent.setData(Uri.fromParts("package", mActivity.getPackageName(), null));
+                                mActivity.startActivity(intent);
+                            }
+                        })
+                        .setNegativeButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                if (callBack != null)
+                                    callBack.onGrantSuccess(false);
+                            }
+                        })
+                        .setCancelable(false)
+                        .create()
+                        .show();
+            }
         }
     }
 
@@ -144,6 +205,7 @@ public class KGranting {
         if (granting == null) {
             granting = new KGranting(activity, requestCode, tGrant, tGrantName, isShowErrorTip, callBack);
             granting.startCheck();
+
         } else {
             granting = null;
             if (KLog.isDebug()) {
@@ -151,6 +213,7 @@ public class KGranting {
             }
         }
     }
+
     public static void requestPermissions(@NonNull Activity activity, int requestCode, @NonNull String[] tGrant, @NonNull String[] tGrantName, GrantingCallBack callBack) {
         requestPermissions(activity, requestCode, tGrant, tGrantName, true, callBack);
     }
@@ -203,6 +266,7 @@ public class KGranting {
         }
         return true;
     }
+
     /**
      * 仅检测是否有权限，不做权限申请
      */
@@ -213,21 +277,23 @@ public class KGranting {
     /**
      * 请求录音需要的权限
      */
-    public static void requestRecordAudioPermissions(@NonNull Activity activity, int requestCode, GrantingCallBack callBack){
+    public static void requestRecordAudioPermissions(@NonNull Activity activity, int requestCode, GrantingCallBack callBack) {
         String[] grant = new String[]{Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         requestPermissions(activity, requestCode, grant, callBack);
     }
+
     /**
      * 请求拍照需要的权限
      */
-    public static void requestTakePhotoPermissions(@NonNull Activity activity, int requestCode, GrantingCallBack callBack){
+    public static void requestTakePhotoPermissions(@NonNull Activity activity, int requestCode, GrantingCallBack callBack) {
         String[] grant = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         requestPermissions(activity, requestCode, grant, callBack);
     }
+
     /**
      * 请求访问相册需要的权限
      */
-    public static void requestAlbumPermissions(@NonNull Activity activity, int requestCode, GrantingCallBack callBack){
+    public static void requestAlbumPermissions(@NonNull Activity activity, int requestCode, GrantingCallBack callBack) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
             String[] grant = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE};
             requestPermissions(activity, requestCode, grant, callBack);
@@ -239,15 +305,18 @@ public class KGranting {
      */
     public static void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull final int[] grantResults) {
         if (granting != null) {
-//            granting.callBack.onGrantSuccess(granting.checkResult(grantResults));
 
-            if (granting.checkResult(grantResults)) {
+            granting.onResult(granting.checkResult(grantResults));
+            granting = null;
+
+            /*if (granting.checkResult(grantResults)) {
                 if (granting.callBack != null)
                     granting.callBack.onGrantSuccess(true);
                 granting = null;
             } else {
                 if (!granting.isShowErrorTip) {
-                    granting.callBack.onGrantSuccess(false);
+                    if (granting.callBack != null)
+                        granting.callBack.onGrantSuccess(false);
                     granting = null;
                 } else {
                     String message = "您未全部授权相关权限，您可以在设置中打开相关权限。";
@@ -278,7 +347,7 @@ public class KGranting {
                             .create()
                             .show();
                 }
-            }
+            }*/
         } else {
             granting = null;
         }

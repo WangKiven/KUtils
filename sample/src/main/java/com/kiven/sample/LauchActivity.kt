@@ -3,6 +3,7 @@ package com.kiven.sample
 import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
@@ -31,6 +32,7 @@ import com.kiven.sample.gl.AHGL
 import com.kiven.sample.libs.AHLibs
 import com.kiven.sample.media.AHMediaList
 import com.kiven.sample.theme.AHTheme
+import com.kiven.sample.util.showDialog
 import kotlinx.android.synthetic.main.activity_lauch.*
 import me.grantland.widget.AutofitHelper
 
@@ -98,6 +100,11 @@ class LauchActivity : KActivity(), LifecycleOwner {
             startActivity(fproxyIntent)
         })
         addView("打开设置", View.OnClickListener { startActivity(Intent(Settings.ACTION_SETTINGS)) })
+        addView("打开应用设置", View.OnClickListener {
+            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+            intent.data = Uri.fromParts("package", packageName, null)
+            startActivity(intent)
+        })
         addView("媒体文件处理", View.OnClickListener { AHMediaList().startActivity(this) })
         addView("Theme和Style", View.OnClickListener { AHTheme().startActivity(this) })
         addView("Data Binding", View.OnClickListener {
@@ -105,7 +112,35 @@ class LauchActivity : KActivity(), LifecycleOwner {
             ActivityCompat.startActivity(this, Intent(this, ActivityDataBinding::class.java), optionsCompat.toBundle())
         })
         addView("arch", View.OnClickListener { AHArch().startActivity(this) })
-        addView("", View.OnClickListener { })
+        addView("KGranting", View.OnClickListener {
+            KGranting.useFragmentRequest = true
+
+            KGranting.requestAlbumPermissions(this, 233){
+                if (it) {
+                    showDialog("获取相册权限到了")
+                } else {
+                    showDialog("获取相册权限失败")
+                }
+            }
+
+            KGranting.requestTakePhotoPermissions(this, 123){
+                if (it) {
+                    showDialog("获取拍照权限到了")
+                } else {
+                    showDialog("获取拍照权限失败")
+                }
+            }
+
+            /*RequestPermissionFragment.requestPermissions(supportFragmentManager, listOf(Manifest.permission.READ_EXTERNAL_STORAGE)){
+                showDialog("获取到了内存权限")
+            }
+            RequestPermissionFragment.requestPermissions(supportFragmentManager, listOf(Manifest.permission.CAMERA)){
+                showDialog("获取到了相机权限")
+            }
+            RequestPermissionFragment.requestPermissions(supportFragmentManager, listOf(Manifest.permission.CALL_PHONE)){
+                showDialog("获取到了拨号权限")
+            }*/
+        })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })

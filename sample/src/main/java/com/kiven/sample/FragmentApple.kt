@@ -59,5 +59,14 @@ class FragmentApple : Fragment() {
             // 开始动画
             anim.start()
         }
+
+        btn_test.setOnClickListener {
+            /*RequestPermissionFragment.requestPermissions(childFragmentManager, listOf(Manifest.permission.READ_EXTERNAL_STORAGE)){
+                activity!!.showDialog("获取到了")
+            }*/
+        }
+        /*RequestPermissionFragment.requestPermissions(childFragmentManager, listOf(Manifest.permission.READ_EXTERNAL_STORAGE)){
+            activity!!.showDialog("获取到了")
+        }*/
     }
 }

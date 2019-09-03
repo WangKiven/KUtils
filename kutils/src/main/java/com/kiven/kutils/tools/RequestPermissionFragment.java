@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -17,13 +18,27 @@ import androidx.fragment.app.FragmentTransaction;
 import com.kiven.kutils.callBack.Consumer;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-@RequiresApi(api = Build.VERSION_CODES.M)
 public class RequestPermissionFragment extends Fragment {
-    private RequestPermissionFragment(){}
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private RequestPermissionFragment() {
+    }
 
-    public static void requestPermissions(@NonNull FragmentManager manager, @NonNull List<String> pers, @NonNull Consumer<Boolean> call) {
+    /*public static void requestPermissions(@NonNull FragmentManager manager, @NonNull List<String> pers, @NonNull Consumer<Boolean> call) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            RequestPermissionFragment fragment = new RequestPermissionFragment();
+            fragment.pers = pers;
+            fragment.call = call;
+
+            fragment.show(manager);
+        } else {
+            call.callBack(true);
+        }
+    }*/
+
+    public static void requestPermissions(@NonNull FragmentManager manager, @NonNull String[] pers, @NonNull Consumer<Boolean> call) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             RequestPermissionFragment fragment = new RequestPermissionFragment();
             fragment.pers = pers;
@@ -41,7 +56,7 @@ public class RequestPermissionFragment extends Fragment {
         ft.commit();
     }
 
-    private List<String> pers;
+    private String[] pers;
     private Consumer<Boolean> call;
 
     @Nullable
@@ -50,24 +65,30 @@ public class RequestPermissionFragment extends Fragment {
         return new View(getContext());
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        List<String> shouldReq = new ArrayList<>();
+        /*List<String> shouldReq = new ArrayList<>();
         for (int i = 0; i < pers.size(); i++) {
             String pp = pers.get(i);
-            if (getActivity().checkSelfPermission(pp) != PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(getActivity(), pp) != PackageManager.PERMISSION_GRANTED) {
                 shouldReq.add(pp);
             }
         }
 
         if (shouldReq.size() > 0) {
-            requestPermissions((String[]) shouldReq.toArray(), 777);
+            String[] os = new String[shouldReq.size()];
+            for (int i = 0; i < shouldReq.size(); i++) {
+                os[i] = shouldReq.get(i);
+            }
+            requestPermissions(os, 777);
         } else {
             call.callBack(true);
             dismiss();
-        }
+        }*/
+        requestPermissions(pers, 777);
     }
 
     @Override

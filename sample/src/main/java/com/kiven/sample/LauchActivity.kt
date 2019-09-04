@@ -33,6 +33,7 @@ import com.kiven.sample.libs.AHLibs
 import com.kiven.sample.media.AHMediaList
 import com.kiven.sample.theme.AHTheme
 import com.kiven.sample.util.showDialog
+import com.kiven.sample.util.showListDialog
 import kotlinx.android.synthetic.main.activity_lauch.*
 import me.grantland.widget.AutofitHelper
 
@@ -99,11 +100,33 @@ class LauchActivity : KActivity(), LifecycleOwner {
             fproxyIntent.putExtra("fragment_name", FragmentApple::class.java.name)
             startActivity(fproxyIntent)
         })
-        addView("打开设置", View.OnClickListener { startActivity(Intent(Settings.ACTION_SETTINGS)) })
+        addView("打开设置", View.OnClickListener {
+//            startActivity(Intent(Settings.ACTION_SETTINGS))
+            val fields = Settings::class.java.fields
+            val flist = mutableMapOf<String, String>()
+            fields.forEach {
+                try {
+                    if (it.name.startsWith("ACTION_")) {
+                        val value = it.get(Settings::class.java)
+                        if (value != null && value is String) {
+                            flist[it.name] = value
+                        }
+                    }
+                } catch (e: Exception) {
+
+                }
+            }
+            showListDialog(flist.keys.toList()) { _, key ->
+                startActivity(Intent(flist[key]))
+            }
+        })
         addView("打开应用设置", View.OnClickListener {
             val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
             intent.data = Uri.fromParts("package", packageName, null)
             startActivity(intent)
+        })
+        addView("打开WiFi设置", View.OnClickListener {
+            startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
         })
         addView("媒体文件处理", View.OnClickListener { AHMediaList().startActivity(this) })
         addView("Theme和Style", View.OnClickListener { AHTheme().startActivity(this) })

@@ -6,6 +6,7 @@ import android.net.Uri
 import android.util.Log
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
+import com.flyco.dialog.widget.NormalListDialog
 import com.google.android.material.snackbar.Snackbar
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KAlertDialogHelper
@@ -61,6 +62,17 @@ fun showTip(word: String) {
 fun Activity.showDialog(word: String) {
     KAlertDialogHelper.Show1BDialog(this, word)
     Log.i("ULog_default", word)
+}
+
+fun Activity.showListDialog(list: List<String>, onClickItem: (Int, String) -> Unit) {
+    showListDialog(list.toTypedArray(), onClickItem)
+}
+
+fun Activity.showListDialog(list: Array<String>, onClickItem: (Int, String) -> Unit) {
+    val dialog = NormalListDialog(this, list)
+    dialog.isTitleShow(false)
+    dialog.setOnOperItemClickL { _, _, position, _ -> onClickItem(position, list[position]) }
+    dialog.show()
 }
 
 fun Activity.showSnack(word: String) {

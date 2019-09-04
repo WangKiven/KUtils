@@ -61,8 +61,6 @@ public class KNetwork {
 
     /**
      * 获取IP
-     *
-     * @return
      */
     public static String getIPAddress() {
 

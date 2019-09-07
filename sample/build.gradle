@@ -133,7 +133,7 @@ dependencies {
     implementation 'com.google.protobuf:protobuf-lite:3.0.0'// 小米即时通讯用到
 
     implementation 'com.github.bumptech.glide:glide:4.9.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
+    kapt 'com.github.bumptech.glide:compiler:4.9.0'
 
     // slices
     implementation 'androidx.slice:slice-builders:1.0.0'

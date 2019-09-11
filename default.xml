@@ -7,7 +7,8 @@
     fetch: 远程仓库地址，用户和 project 节点中的 name 一起确定项目地址
     -->
     <remote name="xUtil"
-            fetch="ssh://git@git.local.sxbcar.com:10022/android/xUtils3.git" />
+            fetch="ssh://git@git.local.sxbcar.com:10022/android/xUtils3.git"
+            revision="master" />
 
     <!--
     project: 单个代码库配置
@@ -17,5 +18,5 @@
     remote: 指定所在远程仓库
     revision: 指定代码分支
     -->
-    <project path="xx" name="mytest" groups="tt" remote="xUtil" revision="master"/>
+    <project path="xx" name="mytest" groups="tt" remote="xUtil"/>
 </manifest>

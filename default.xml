@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <manifest>
-    <remote name="sxbDoc"
-            fetch="ssh://git@git.local.sxbcar.com:10022/SXB/SXB-Document.git" />
-    <project path="aIOS" name="iOS" groups="docIos" remote="sxbDoc"/>
+    <remote name="xUtil"
+            fetch="ssh://git@git.local.sxbcar.com:10022/android/xUtils3.git" />
+    <project path="xx" name="mytest" groups="tt" remote="xUtil"/>
 </manifest>

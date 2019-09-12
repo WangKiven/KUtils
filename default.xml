@@ -11,6 +11,17 @@
             revision="master" />
 
     <!--
+    default: 默认配置
+    remote: 默认使用的远程仓库
+    revision: 默认使用的分支
+    sync-j: 同步代码时的并发数
+    -->
+    <default
+            remote="xUtil"
+            revision="master"
+            sync-j="1"/>
+
+    <!--
     project: 单个代码库配置
     name: 项目地址，和指定的 remote 节点中的 fetch 一起组成仓库地址（fetch + name）
     group: 项目所属分组，可选
@@ -18,5 +29,5 @@
     remote: 指定所在远程仓库
     revision: 指定代码分支
     -->
-    <project path="xx" name="mytest" groups="tt" remote="xUtil"/>
+    <!-- <project path="xx" name="mytest" groups="tt" remote="xUtil"/> -->
 </manifest>

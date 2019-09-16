@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import com.alibaba.android.arouter.launcher.ARouter
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.Response
@@ -181,7 +182,8 @@ class AHLibs : KActivityDebugHelper() {
 
         // https://github.com/burhanrashid52/PhotoEditor
         addBtn("PhotoEditor(图片编辑)", View.OnClickListener { })
-        addBtn("", View.OnClickListener { })
+        // https://github.com/alibaba/ARouter ，TODO 需要注意代码混淆和加固的问题, 我们的helper不适用，只能用于activity
+        addBtn("ARouter", View.OnClickListener { ARouter.getInstance().build("/dock/home").navigation() })
         addBtn("", View.OnClickListener { })
         addBtn("", View.OnClickListener { })
         addBtn("", View.OnClickListener { })

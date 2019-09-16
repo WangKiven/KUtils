@@ -4,6 +4,7 @@ import android.content.ComponentName
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import com.alibaba.android.arouter.facade.annotation.Route
 import com.kiven.kutils.activityHelper.activity.KActivity
 import com.kiven.sample.R
 import com.kiven.sample.util.showDialog
@@ -12,6 +13,7 @@ import com.kiven.sample.util.showSnack
 /**
  * Created by oukobayashi on 2019-08-09.
  */
+@Route(path = "/dock/home")
 class ActivityDock : KActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

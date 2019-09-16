@@ -55,13 +55,13 @@ class AHCameraxTest : KActivityDebugHelper() {
 
                 setOnClickListener {
                     val file = getFile(System.currentTimeMillis().toString() + ".jpg")
-                    imageCapture.takePicture(file, object : ImageCapture.OnImageSavedListener {
+                    imageCapture.takePicture(file, object :ImageCapture.OnImageSavedListener{
                         override fun onImageSaved(file: File) {
                             KUtil.addPicture(file.absolutePath) { _, _ ->
                             }
                         }
 
-                        override fun onError(useCaseError: ImageCapture.UseCaseError, message: String, cause: Throwable?) {
+                        override fun onError(imageCaptureError: ImageCapture.ImageCaptureError, message: String, cause: Throwable?) {
                         }
                     })
                 }

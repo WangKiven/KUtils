@@ -3,10 +3,13 @@ package com.kiven.sample.actions
 import android.os.Bundle
 import android.view.Gravity
 import android.widget.LinearLayout
+import androidx.annotation.StyleRes
 import androidx.appcompat.app.AppCompatDelegate
 import com.kiven.kutils.activityHelper.KActivityDebugHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
+import com.kiven.kutils.tools.KUtil
 import com.kiven.sample.R
+import com.kiven.sample.util.showListDialog
 import org.jetbrains.anko.*
 
 /**
@@ -22,13 +25,32 @@ class AHThemeDemo : KActivityDebugHelper() {
         initUI()
     }
 
-    var nightMode = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+    var nightMode: Int
+        set(value) {
+            KUtil.putSharedPreferencesIntValue("AHThemeDemo.nightMode", value)
+        }
+        get() {
+            return KUtil.getSharedPreferencesIntValue("AHThemeDemo.nightMode", AppCompatDelegate.getDefaultNightMode())
+        }
+    private var themeId: Int
+        set(@StyleRes value) {
+            KUtil.putSharedPreferencesIntValue("AHThemeDemo.themeId", value)
+        }
+        get() {
+            return KUtil.getSharedPreferencesIntValue("AHThemeDemo.themeId", R.style.Theme_AppCompat_DayNight)
+        }
 
-    private fun initUI(){
+    private fun initUI() {
         mActivity.apply {
-            setTheme(R.style.Theme_AppCompat_DayNight)
+            // delegate.localNightMode 不报错，但是编译不通过。
+            // delegate.getLocalNightMode()是不对外提供的方法，应该是kotlin编译器出错，才没有报错，但是依然编译不通过。
+            // delegate.setLocalNightMode() 能正常使用
+            if (nightMode != AppCompatDelegate.getDefaultNightMode()) {
+//                delegate.setLocalNightMode(nightMode)
+                AppCompatDelegate.setDefaultNightMode(nightMode)
+            }
+            setTheme(themeId)
 
-            R.style.ThemeOverlay_AppCompat
             linearLayout {
                 gravity = Gravity.CENTER
                 orientation = LinearLayout.VERTICAL
@@ -55,7 +77,7 @@ class AHThemeDemo : KActivityDebugHelper() {
                         text = "黑夜"
                     }
 
-                    check(when(nightMode){
+                    check(when (nightMode) {
                         AppCompatDelegate.MODE_NIGHT_AUTO -> R.id.rb_1
                         AppCompatDelegate.MODE_NIGHT_NO -> R.id.rb_2
                         AppCompatDelegate.MODE_NIGHT_YES -> R.id.rb_3
@@ -71,7 +93,29 @@ class AHThemeDemo : KActivityDebugHelper() {
                         }
 
                         // delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_YES // 不会报错，但是编译不能通过。
-                        delegate.setLocalNightMode(nightMode)
+//                        delegate.setLocalNightMode(nightMode)
+                        AppCompatDelegate.setDefaultNightMode(nightMode)
+                        recreate()
+                    }
+                }
+
+                button {
+                    text = "选择主题"
+                    setOnClickListener {
+                        showListDialog(listOf("系统主题", "自定义主题")) { index, _ ->
+                            themeId = when(index){
+                                0 -> R.style.Theme_AppCompat_DayNight
+                                else -> R.style.ThemeDemo
+                            }
+//                            initUI()
+                            recreate()
+                        }
+                    }
+                }
+                textView {
+                    text = when (themeId) {
+                        R.style.Theme_AppCompat_DayNight -> "当前主题是 系统主题"
+                        else -> "当前主题是 自定义主题"
                     }
                 }
             }

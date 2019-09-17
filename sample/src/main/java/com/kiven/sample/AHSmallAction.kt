@@ -35,6 +35,7 @@ import com.kiven.kutils.tools.KAlertDialogHelper
 import com.kiven.kutils.tools.KGranting
 import com.kiven.kutils.tools.KNetwork
 import com.kiven.kutils.tools.KString
+import com.kiven.sample.actions.AHThemeDemo
 import com.kiven.sample.actions.BiometricDemo
 import com.kiven.sample.anim.AHAnim
 import com.kiven.sample.dock.ActivityDock
@@ -460,7 +461,7 @@ class AHSmallAction : KActivityDebugHelper() {
             UserManager.getInstance().newUser("123", mdir.absolutePath)?.login()
 
         })
-        addView("Dialog", View.OnClickListener { com.kiven.sample.AHDialogTest().startActivity(activity) })
+        addView("Dialog", View.OnClickListener { AHDialogTest().startActivity(activity) })
         addView("ConstraintLayout Test", View.OnClickListener {
             AHConstraintLayoutTest().startActivity(activity)
         })
@@ -521,7 +522,7 @@ class AHSmallAction : KActivityDebugHelper() {
             // <uses-permission android:name="android.permission.USE_BIOMETRIC"/>
             BiometricDemo(mActivity).test()
         })
-        addView("", View.OnClickListener { })
+        addView("Theme", View.OnClickListener { AHThemeDemo().startActivity(mActivity) })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })

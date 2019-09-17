@@ -44,6 +44,12 @@
         <item name="colorAccent">#b31ae5</item>
     </style>
 
+    <style name="ThemeDemo2" parent="Theme.AppCompat.DayNight">
+        <item name="colorPrimary">@color/demo_colorPrimary</item>
+        <item name="colorPrimaryDark">@color/demo_colorPrimaryDark</item>
+        <item name="colorAccent">@color/demo_colorAccent</item>
+    </style>
+
     <style name="Dialog">
         <item name="android:windowBackground">@android:color/transparent</item><!-- 控制背景 -->
         <!--<item name="android:windowFrame">@null</item>

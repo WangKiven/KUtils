@@ -102,10 +102,11 @@ class AHThemeDemo : KActivityDebugHelper() {
                 button {
                     text = "选择主题"
                     setOnClickListener {
-                        showListDialog(listOf("系统主题", "自定义主题")) { index, _ ->
+                        showListDialog(listOf("系统主题", "自定义主题 双style", "自定义主题 双color")) { index, _ ->
                             themeId = when(index){
                                 0 -> R.style.Theme_AppCompat_DayNight
-                                else -> R.style.ThemeDemo
+                                1 -> R.style.ThemeDemo
+                                else -> R.style.ThemeDemo2
                             }
 //                            initUI()
                             recreate()
@@ -115,7 +116,8 @@ class AHThemeDemo : KActivityDebugHelper() {
                 textView {
                     text = when (themeId) {
                         R.style.Theme_AppCompat_DayNight -> "当前主题是 系统主题"
-                        else -> "当前主题是 自定义主题"
+                        R.style.ThemeDemo -> "当前主题是 自定义主题 双style"
+                        else -> "当前主题是 自定义主题 双color"
                     }
                 }
             }

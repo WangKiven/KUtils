@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <color name="demo_colorPrimary">#212121</color>
+    <color name="demo_colorPrimaryDark">#000000</color>
+    <color name="demo_colorAccent">#f4dbae</color>
 </resources>

@@ -525,29 +525,30 @@ class AHSmallAction : KActivityDebugHelper() {
                 when (bm.canAuthenticate()) {
                     BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> {
                         showTip("用户没设置生物识别。功能存在，但是用户没打开")
+                        return@OnClickListener
                     }
                     BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE -> {
                         showTip("当前设备不支持或不可用生物识别")
+                        return@OnClickListener
                     }
                     BiometricManager.BIOMETRIC_SUCCESS -> {
                         showTip("可以使用生物特征识别（已注册并可用）")
                     }
                     BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE -> {
                         showTip("没有生物识别硬件")
+                        return@OnClickListener
                     }
                 }
-            }
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            }else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 val fm = mActivity.getSystemService(FingerprintManager::class.java)
                 // 确定指纹硬件是否存在且功能正常
                 if (!fm.isHardwareDetected) {
-                    showTip("指纹硬件不存在或不可用")
+                    showDialog("指纹硬件不存在或不可用")
                     return@OnClickListener
                 }
                 // 确定是否至少注册了一个指纹
                 if (!fm.hasEnrolledFingerprints()) {
-                    showTip("用户没设置指纹")
+                    showDialog("用户没设置指纹")
                     return@OnClickListener
                 }
             }

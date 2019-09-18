@@ -128,7 +128,8 @@ class AHThemeDemo : KActivityDebugHelper() {
                 textView {
                     autoLinkMask = Linkify.WEB_URLS
                     text = "10款 Material Design 配色工具: https://blog.csdn.net/dsc114/article/details/52120080 " +
-                            "\nAndroid Theme 属性详解: https://www.jianshu.com/p/06a3bbb7ce79"
+                            "\nAndroid Theme 属性详解: https://www.jianshu.com/p/06a3bbb7ce79 " +
+                            "\n换肤框架：https://github.com/ximsfei/Android-skin-support"
                 }
             }
         }

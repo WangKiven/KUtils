@@ -1,8 +1,10 @@
 package com.kiven.sample.actions
 
 import android.os.Bundle
+import android.text.util.Linkify
 import android.view.Gravity
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.annotation.StyleRes
 import androidx.appcompat.app.AppCompatDelegate
 import com.kiven.kutils.activityHelper.KActivityDebugHelper
@@ -18,6 +20,8 @@ import org.jetbrains.anko.*
  * Theme 属性详解: https://www.jianshu.com/p/06a3bbb7ce79
  *
  * 日夜主题切换(google推荐): https://www.jianshu.com/p/27f1aad049f7
+ *
+ * 助你快速搭配 Material Design 配色方案的10款Web工具: https://blog.csdn.net/dsc114/article/details/52120080
  */
 class AHThemeDemo : KActivityDebugHelper() {
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
@@ -119,6 +123,12 @@ class AHThemeDemo : KActivityDebugHelper() {
                         R.style.ThemeDemo -> "当前主题是 自定义主题 双style"
                         else -> "当前主题是 自定义主题 双color"
                     }
+                }
+
+                textView {
+                    autoLinkMask = Linkify.WEB_URLS
+                    text = "10款 Material Design 配色工具: https://blog.csdn.net/dsc114/article/details/52120080 " +
+                            "\nAndroid Theme 属性详解: https://www.jianshu.com/p/06a3bbb7ce79"
                 }
             }
         }

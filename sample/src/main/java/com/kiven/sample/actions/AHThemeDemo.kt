@@ -129,7 +129,8 @@ class AHThemeDemo : KActivityDebugHelper() {
                     autoLinkMask = Linkify.WEB_URLS
                     text = "10款 Material Design 配色工具: https://blog.csdn.net/dsc114/article/details/52120080 " +
                             "\nAndroid Theme 属性详解: https://www.jianshu.com/p/06a3bbb7ce79 " +
-                            "\n换肤框架：https://github.com/ximsfei/Android-skin-support"
+                            "\n换肤框架：https://github.com/ximsfei/Android-skin-support " +
+                            "\n可下载切换主题皮肤: https://www.jianshu.com/p/0d07a2e45be2?tdsourcetag=s_pcqq_aiomsg"
                 }
             }
         }

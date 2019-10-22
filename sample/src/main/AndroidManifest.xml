@@ -87,6 +87,7 @@
         <activity
             android:name=".dock.ActivityDock"
             android:label="KUDock"
+            android:theme="@style/ThemeDemo"
             android:icon="@mipmap/ic_launcher_u">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

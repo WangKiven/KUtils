@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingBottom="10dp"
+    android:paddingTop="10dp">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/iv_app_icon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        tools:src="@mipmap/ic_launcher"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_app_titile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        tools:text="设置"
+        android:singleLine="true"
+        android:gravity="center_horizontal"
+        android:background="#eeffffff"
+        android:elevation="1dp"/>
+
+</androidx.appcompat.widget.LinearLayoutCompat>

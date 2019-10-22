@@ -7,8 +7,10 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
+
 import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
+
 import android.widget.Toast;
 
 import com.kiven.kutils.logHelper.KLog;
@@ -194,6 +196,32 @@ public class KAppTool {
             KLog.e(e);
             return null;
         }
+    }
+
+    // TODO: 2018/1/3 --------------------------------------- 应用市场安装 ---------------------------------------
+
+    /**
+     * @param packageName 包名
+     * @param webUrl      如果应用市场不可用，使用的下载网页地址。如果传空，则不论是否有应用市场，都去打开应用市场
+     */
+    public static void openAppMarket(@NonNull Context context, @NonNull String packageName, String webUrl) {
+
+        // TODO 判断应用市场不可用的设备，目前还没确定不可调起应用市场的设备，先乱设置一个
+        if (Build.BRAND.equals("8ieu8r4e348t8948")) {
+            if (!KString.isBlank(webUrl)) {
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(webUrl));
+                context.startActivity(intent);
+                return;
+            }
+        }
+        openAppMarket(context, packageName);
+    }
+
+    public static void openAppMarket(@NonNull Context context, @NonNull String packageName) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse("market://details?id=" + packageName));
+        context.startActivity(intent);
     }
 
     // TODO: 2018/1/3 --------------------------------------- 卸载apk ---------------------------------------

@@ -2,10 +2,13 @@ package com.kiven.sample.dock
 
 import android.content.ComponentName
 import android.content.Intent
+import android.content.pm.ApplicationInfo
+import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.AsyncTask
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.view.*
@@ -31,6 +34,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.xutils.x
 import java.io.IOException
+import java.lang.ref.SoftReference
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -184,23 +188,26 @@ class ActivityDock : KActivity() {
 
             // 获取所有应用，包括系统服务
             val packageManager = packageManager
-            val applicationInfos = packageManager.getInstalledApplications(0)
-            if (applicationInfos != null && applicationInfos.size > 0) {
+
+            val applicationInfos = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                packageManager.getInstalledApplications(PackageManager.MATCH_UNINSTALLED_PACKAGES)
+            } else {
+                packageManager.getInstalledApplications(PackageManager.GET_UNINSTALLED_PACKAGES)
+            }
+            if (applicationInfos.size > 0) {
                 for (applicationInfo in applicationInfos) {
                     //Android System WebView
                     val ss = String.format("{\n%s\n%s\n}", applicationInfo.loadLabel(packageManager), applicationInfo.packageName)
                     KLog.w(ss)
 
-                    apps!!.add(EntityAppInfo(packageManager, applicationInfo))
+                    apps.add(EntityAppInfo(packageManager, applicationInfo))
                 }
 
-                Collections.sort(apps, object : Comparator<EntityAppInfo> {
-                    override fun compare(o1: EntityAppInfo, o2: EntityAppInfo): Int {
-                        return if (o1.canStart) {
-                            if (o2.canStart) 0 else -1
-                        } else {
-                            if (o2.canStart) 1 else 0
-                        }
+                apps.sortWith(Comparator { o1, o2 ->
+                    if (o1.canStart) {
+                        if (o2.canStart) 0 else -1
+                    } else {
+                        if (o2.canStart) 1 else 0
                     }
                 })
             }
@@ -226,7 +233,7 @@ class ActivityDock : KActivity() {
 
             holder.itemView.apply {
                 val task = MyTask()
-                task.imageView = iv_app_icon
+                task.imageView = SoftReference(iv_app_icon)
                 task.appInfo = appInfo
                 task.execute()
 
@@ -251,11 +258,11 @@ class ActivityDock : KActivity() {
         override fun getItemCount(): Int = apps.size
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
-             object : RecyclerView.ViewHolder(LayoutInflater.from(this@ActivityDock).inflate(R.layout.item_app, parent, false)) {}
+                object : RecyclerView.ViewHolder(LayoutInflater.from(this@ActivityDock).inflate(R.layout.item_app, parent, false)) {}
     }
 
     class MyTask : AsyncTask<Any, Drawable, Drawable>() {
-        var imageView: AppCompatImageView? = null
+        var imageView: SoftReference<ImageView>? = null
         var appInfo: EntityAppInfo? = null
 
         override fun doInBackground(params: Array<Any>): Drawable {
@@ -264,7 +271,7 @@ class ActivityDock : KActivity() {
 
         override fun onPostExecute(drawable: Drawable) {
             super.onPostExecute(drawable)
-            imageView!!.setImageDrawable(drawable)
+            imageView?.get()?.setImageDrawable(drawable)
         }
     }
 }

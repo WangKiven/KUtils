@@ -2,8 +2,8 @@ package com.kiven.sample.dock
 
 import android.content.ComponentName
 import android.content.Intent
-import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
+import android.content.pm.ResolveInfo
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.Drawable
@@ -13,17 +13,12 @@ import android.os.Bundle
 import android.provider.Settings
 import android.view.*
 import android.widget.ImageView
-import android.widget.TextView
-import androidx.appcompat.widget.AppCompatImageView
 import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.kiven.kutils.activityHelper.activity.KActivity
 import com.kiven.kutils.logHelper.KLog
-import com.kiven.kutils.sup.recyclerView.BaseRecyclerViewAdapter
-import com.kiven.kutils.sup.recyclerView.BaseRecyclerViewHolder
-import com.kiven.kutils.sup.recyclerView.OnItemClickListener
 import com.kiven.kutils.tools.KAppTool
 import com.kiven.kutils.tools.KUtil
 import com.kiven.sample.R
@@ -43,6 +38,7 @@ import kotlin.collections.ArrayList
  * Created by oukobayashi on 2019-08-09.
  *
  * 桌面检测与设置：https://blog.csdn.net/weixin_41549915/article/details/81633354
+ * Android获取应用信息(AndroidManifest): https://www.jianshu.com/p/94dfcb869995
  */
 @Route(path = "/dock/home")
 class ActivityDock : KActivity() {
@@ -186,6 +182,11 @@ class ActivityDock : KActivity() {
             apps.addAll(appInfos);
         }*/
 
+            /*val resolveInfos = packageManager.queryIntentActivities(Intent(Intent.ACTION_MAIN, null), PackageManager.MATCH_ALL)
+            resolveInfos.forEach {
+                it.filter.categoriesIterator()
+            }*/
+
             // 获取所有应用，包括系统服务
             val packageManager = packageManager
 
@@ -196,10 +197,6 @@ class ActivityDock : KActivity() {
             }
             if (applicationInfos.size > 0) {
                 for (applicationInfo in applicationInfos) {
-                    //Android System WebView
-                    val ss = String.format("{\n%s\n%s\n}", applicationInfo.loadLabel(packageManager), applicationInfo.packageName)
-                    KLog.w(ss)
-
                     apps.add(EntityAppInfo(packageManager, applicationInfo))
                 }
 
@@ -245,12 +242,8 @@ class ActivityDock : KActivity() {
                     tv_app_titile.setTextColor(Color.GRAY)
 
                 setOnClickListener {
-                    //该应用的包名
-                    val pkg = appInfo.packageName
-                    //应用的主activity类
-                    KLog.i("packageName = $pkg")
-                    KLog.i("versionCode = " + appInfo.curVersionCode)
-                    startApp(pkg)
+                    appInfo.print()
+                    startApp(appInfo.packageName)
                 }
             }
         }

@@ -1,5 +1,6 @@
 package com.kiven.sample.dock
 
+import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
@@ -65,5 +66,40 @@ class EntityAppInfo(private val packageManager: PackageManager, private val appl
 
         // 获取启动Intent, 如果获取到空，表示没有提供启动界面
         canStart = packageManager.getLaunchIntentForPackage(packageName) != null
+    }
+
+    fun print(){
+        KLog.i("----------------- $appTitle - $packageName - $curVersion -------------------")
+
+        /*packageInfo.activities?.forEach {
+                val bundle = it.metaData
+                KLog.i(packageName + "-" + it.name + ":::::::")
+                bundle?.keySet()?.forEach {
+                    KLog.i(bundle[it].toString())
+                }
+            }*/
+
+        // 打印activity的filter
+        KLog.i("--- activity filter and action")
+        val intent = Intent(Intent.ACTION_MAIN)
+        intent.setPackage(packageName)
+//        intent.addCategory(Intent.CATEGORY_LAUNCHER)
+
+        val resolveInfos = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            packageManager.queryIntentActivities(intent, PackageManager.MATCH_ALL)
+        } else {
+            packageManager.queryIntentActivities(intent, 0)
+        }
+        resolveInfos.forEach {
+            KLog.i("------ ${it.activityInfo.name} - filter")
+            it.filter?.categoriesIterator()?.forEach {
+                KLog.i("--------- $it")
+            }
+            KLog.i("------ ${it.activityInfo.name} - action")
+            it?.filter?.actionsIterator()?.forEach {
+                KLog.i("--------- $it")
+            }
+        }
+        KLog.i("--------------------------------------------------------")
     }
 }

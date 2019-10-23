@@ -16,7 +16,12 @@ import com.kiven.kutils.tools.KAlertDialogHelper
  */
 /// 获取一个输入
 fun Activity.getInput(inputName: String, action: (CharSequence) -> Unit) {
+    getInput(inputName, "", action)
+}
+
+fun Activity.getInput(inputName: String, text: String, action: (CharSequence) -> Unit) {
     val et = EditText(this)
+    et.setText(text)
     AlertDialog.Builder(this)
             .setTitle(inputName)
             .setView(et)

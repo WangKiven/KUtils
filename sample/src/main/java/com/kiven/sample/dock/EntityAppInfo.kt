@@ -69,7 +69,7 @@ class EntityAppInfo(private val packageManager: PackageManager, private val appl
     }
 
     fun print(){
-        KLog.i("----------------- $appTitle - $packageName - $curVersion -------------------")
+        KLog.i("\n----------------- $appTitle - $packageName - $curVersion -------------------")
 
         /*packageInfo.activities?.forEach {
                 val bundle = it.metaData

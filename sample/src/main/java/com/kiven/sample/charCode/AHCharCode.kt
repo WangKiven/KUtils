@@ -30,7 +30,7 @@ class AHCharCode : KActivityDebugHelper() {
     private var textView: TextView? = null
 
     private var textCode = "0f5d"
-    private var textChinese = "马"
+    private var textChinese = "马" // 马的Unicode为：U+9A6C
 
     private var useCharset = Charsets.UTF_8
     set(value) {

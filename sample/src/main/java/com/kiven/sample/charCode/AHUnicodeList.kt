@@ -1,10 +1,13 @@
 package com.kiven.sample.charCode
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.graphics.PaintCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
@@ -29,7 +32,7 @@ class AHUnicodeList : KActivityDebugHelper() {
 
     private val adapter = MyAdapter()
 
-//    val startCode = 0x0000
+    //    val startCode = 0x0000
 //    val endCode = 0xFFFF
     var curGoup = UnicodeGroup("0000", "FFFF", "全部")
 
@@ -84,9 +87,19 @@ class AHUnicodeList : KActivityDebugHelper() {
             val curCode = curGoup.start + position
 
             holder.itemView.apply {
-                // 采用UTF_32 大端解码，如果使用UTF-8需要更复杂的处理
-                tv_text.text = StringCodeUtil.hexStr2Str(String.format("%08x", curCode), Charsets.UTF_32BE)
+                // 判断字符有没有对应的unicode形式，就是通过unicode中是否定义了字符的unicode写法
+                if (Character.isDefined(curCode)) {
+                    // 采用UTF_32 大端解码，如果使用UTF-8需要更复杂的处理
+                    tv_text.text = StringCodeUtil.hexStr2Str(String.format("%08x", curCode), Charsets.UTF_32BE)
+                    tv_text.setTextColor(Color.BLACK)
+                } else {
+                    tv_text.text = "XX"
+                    tv_text.setTextColor(Color.GRAY)
+                }
+
                 tv_code.text = String.format("%x", curCode)
+
+//                PaintCompat.hasGlyph() // 确定绘图上的字体集是否有一个字形以向后兼容的方式支持字符串。
             }
         }
 

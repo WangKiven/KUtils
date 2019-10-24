@@ -3,8 +3,13 @@ package com.kiven.sample.charCode
 import java.nio.charset.Charset
 import kotlin.experimental.and
 
+/**
+ * 字符串转码
+ */
 object StringCodeUtil {
-
+    /**
+     * 16进制转换为字符串
+     */
     fun hexStr2Str(hexStr: String, charset: Charset = Charsets.UTF_8): String {
         if (hexStr.isBlank())
             return ""
@@ -24,6 +29,9 @@ object StringCodeUtil {
         return String(bytes, charset)
     }
 
+    /**
+     * 字符串转16进制
+     */
     fun str2HexStr(str: String, charset: Charset = Charsets.UTF_8): String {
         val chars = "0123456789abcdef".toCharArray()
 

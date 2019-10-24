@@ -6,15 +6,12 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.kiven.kutils.activityHelper.KActivityDebugHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
+import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KString
 import com.kiven.sample.util.getInput
 import com.kiven.sample.util.showListDialog
-import org.jetbrains.anko.button
-import org.jetbrains.anko.dip
-import org.jetbrains.anko.linearLayout
-import org.jetbrains.anko.textView
+import org.jetbrains.anko.*
 import java.nio.charset.Charset
-import kotlin.experimental.and
 
 /**
  * Created by oukobayashi on 2019-10-23.
@@ -23,7 +20,10 @@ import kotlin.experimental.and
  * https://zh.wikipedia.org/wiki/ASCII
  * https://zh.wikipedia.org/wiki/%E7%B5%84%E5%90%88%E5%AD%97%E7%AC%A6
  * https://home.unicode.org/
+ * http://www.unicode.org/charts/
  * unicode 与 utf-8 转化： https://blog.csdn.net/qq_36761831/article/details/82291166
+ * unicode 的组成部分(0号平面，即基本多文种平面): https://baike.baidu.com/item/Unicode/750500?fr=aladdin
+ * unicode 的组成部分(其他平面)：https://www.qqxiuzi.cn/wz/zixun/1663.htm
  */
 class AHCharCode : KActivityDebugHelper() {
 
@@ -33,10 +33,10 @@ class AHCharCode : KActivityDebugHelper() {
     private var textChinese = "马" // 马的Unicode为：U+9A6C
 
     private var useCharset = Charsets.UTF_8
-    set(value) {
-        field = value
-        textView?.text = "使用编码: $value"
-    }
+        set(value) {
+            field = value
+            textView?.text = "使用编码: $value"
+        }
     private val charsets = arrayOf(
             Charsets.UTF_8,
             Charsets.UTF_16,
@@ -55,22 +55,13 @@ class AHCharCode : KActivityDebugHelper() {
 
         mActivity.linearLayout {
             orientation = LinearLayout.VERTICAL
-            textView {
-                textView = this
-                text = "点击按钮显示结果"
-                gravity = Gravity.CENTER
-                left = dip(50)
-                textSize = 25f
-                setOnClickListener {
-                    KString.setClipText(mActivity, text.toString())
-                }
-            }
+            topPadding = dip(30)
 
             button {
                 text = "16进制 转 字符"
                 setOnClickListener {
                     mActivity.getInput("16进制", textCode) {
-                        textView?.text = hexStr2Str(it.toString(), useCharset)
+                        textView?.text = StringCodeUtil.hexStr2Str(it.toString(), useCharset)
                         textCode = it.toString()
                     }
                 }
@@ -79,8 +70,13 @@ class AHCharCode : KActivityDebugHelper() {
                 text = "字符 转 16进制"
                 setOnClickListener {
                     mActivity.getInput("汉字", textChinese) {
-                        textView?.text = str2HexStr(it.toString(), useCharset)
+                        textView?.text = StringCodeUtil.str2HexStr(it.toString(), useCharset)
                         textChinese = it.toString()
+
+                        // 后台输出更多
+                        charsets.forEach { cs ->
+                            KLog.i("$cs : ${StringCodeUtil.str2HexStr(it.toString(), cs)}")
+                        }
                     }
                 }
             }
@@ -108,42 +104,22 @@ class AHCharCode : KActivityDebugHelper() {
                     }
                 }
             }
+
+            textView {
+                textView = this
+                text = "点击按钮显示结果"
+                gravity = Gravity.CENTER
+                left = dip(50)
+                textSize = 25f
+                setOnClickListener {
+                    KString.setClipText(mActivity, text.toString())
+                }
+            }
+
+            button {
+                text = "unicode 列表"
+                setOnClickListener { AHUnicodeList().startActivity(activity) }
+            }
         }
-    }
-
-    private fun hexStr2Str(hexStr: String, charset: Charset = Charsets.UTF_8): String {
-        if (hexStr.isBlank())
-            return ""
-
-        val str = "0123456789abcdef"
-
-        val hexs = hexStr.toCharArray()
-        val bytes = ByteArray(hexs.size / 2)
-
-        for (i in bytes.indices) {
-            var n = str.indexOf(hexs[2 * i]) * 16
-            n += str.indexOf(hexs[2 * i + 1])
-
-            bytes[i] = (n and 0xff).toByte()
-        }
-
-        return String(bytes, charset)
-    }
-
-    private fun str2HexStr(str: String, charset: Charset = Charsets.UTF_8): String {
-        val chars = "0123456789abcdef".toCharArray()
-
-        val sb = StringBuilder()
-        val bs = str.toByteArray(charset)
-
-        for (i in bs.indices) {
-            val bit = (bs[i].toLong() and 0x0f0) shr 4
-            sb.append(chars[bit.toInt()])
-
-            val bit2 = bs[i] and 0x0f
-            sb.append(chars[bit2.toInt()])
-        }
-
-        return sb.toString().trim()
     }
 }

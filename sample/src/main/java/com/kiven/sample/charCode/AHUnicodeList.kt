@@ -1,17 +1,28 @@
 package com.kiven.sample.charCode
 
+import android.content.DialogInterface
+import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
+import com.google.gson.Gson
+import com.google.gson.JsonParser
 import com.kiven.kutils.activityHelper.KActivityDebugHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
+import com.kiven.kutils.logHelper.KLog
+import com.kiven.kutils.tools.KString
+import com.kiven.sample.AHWebView
 import com.kiven.sample.R
 import com.kiven.sample.util.showListDialog
 import kotlinx.android.synthetic.main.item_unicode.view.*
@@ -19,6 +30,8 @@ import org.jetbrains.anko.button
 import org.jetbrains.anko.linearLayout
 import org.jetbrains.anko.textView
 import java.io.InputStreamReader
+import java.lang.StringBuilder
+import java.nio.charset.Charset
 
 
 /**
@@ -107,8 +120,8 @@ class AHUnicodeList : KActivityDebugHelper() {
         val ca = IntArray(size)
 
         var a = 0
-        for (i in IntRange(curGoup.start, curGoup.end)){
-            if (Character.isDefined(i)){
+        for (i in IntRange(curGoup.start, curGoup.end)) {
+            if (Character.isDefined(i)) {
                 ca[a] = i
                 a++
             }
@@ -138,6 +151,30 @@ class AHUnicodeList : KActivityDebugHelper() {
                 }
 
                 tv_code.text = String.format("%x", curCode)
+
+                setOnClickListener {
+
+                    val sb = StringBuilder()
+                    sb.appendln("编号：$curCode - ${tv_code.text}")
+                            .appendln("\n对应其他编码")
+                    Charset.availableCharsets().forEach {
+                        sb.appendln("${it.key}:${StringCodeUtil.str2HexStr(tv_text.text.toString(), it.value)}")
+                    }
+
+                    val builder = AlertDialog.Builder(mActivity)
+                    builder.setMessage(sb.toString())
+                    builder.setPositiveButton("复制") { dialog, which ->
+                        KString.setClipText(mActivity, tv_text.text.toString())
+                    }
+                    builder.setNegativeButton("百度") { dialog, which ->
+                        AHWebView().putExtra("url", "https://www.baidu.com/s?wd=${tv_text.text}")
+                                .startActivity(mActivity)
+                    }
+                    builder.setNeutralButton("取消") { dialog, which ->
+
+                    }
+                    builder.create().show()
+                }
 
 //                PaintCompat.hasGlyph() // 确定绘图上的字体集是否有一个字形以向后兼容的方式支持字符串。
             }

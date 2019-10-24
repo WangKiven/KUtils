@@ -1,4 +1,4 @@
-0000-FFFF：全部
+0000-FFFF：0号平面全部
 0000-007F：C0控制符及基本拉丁文 (C0 Control and Basic Latin)
 0080-00FF：C1控制符及拉丁文补充-1 (C1 Control and Latin 1 Supplement)
 0100-017F：拉丁文扩展-A (Latin Extended-A)

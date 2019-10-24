@@ -118,9 +118,14 @@ class AHCharCode : KActivityDebugHelper() {
                 }
 
                 button {
-                    text = "unicode 列表"
+                    text = "unicode(0号平面) 列表"
                     setOnClickListener { AHUnicodeList().startActivity(activity) }
                 }
+
+                /*button {
+                    text = "unicode(1~16号平面) 列表"
+                    setOnClickListener { AHUnicodeList().startActivity(activity) }
+                }*/
 
                 textView {
                     text = "平面介绍：" +

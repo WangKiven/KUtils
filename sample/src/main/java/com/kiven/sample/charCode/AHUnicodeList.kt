@@ -9,12 +9,8 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.flexbox.FlexDirection
-import com.google.android.flexbox.FlexboxLayoutManager
-import com.google.android.flexbox.JustifyContent
 import com.kiven.kutils.activityHelper.KActivityDebugHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
-import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KString
 import com.kiven.kutils.tools.KUtil
 import com.kiven.sample.AHWebView
@@ -99,7 +95,6 @@ class AHUnicodeList : KActivityDebugHelper() {
 
                     setOnClickListener {
                         if (charArray.isNotEmpty()) {
-                            selValue = 0
                             selScroll()
                         }
 
@@ -126,34 +121,32 @@ class AHUnicodeList : KActivityDebugHelper() {
         }
     }
 
-    var selValue = 0
     private fun selScroll() {
-        var min = charArray[0]
-        var max = charArray.last()
 
         val aa = "0123456789ABCDEF".toCharArray().map { it.toString() }
+        val maxLength = String.format("%x", charArray.last()).length
+        val ss = IntArray(maxLength)
+        var step = 0
+
         mActivity.showListDialog(aa) { index, _ ->
 
-            if (max < 16) return@showListDialog
+            // 记录选择的数据
+            if (step >= maxLength) return@showListDialog
 
-            if (index > 0) {
-                var vv = index
-                while (vv < max) {
-                    if (vv * 16 > max) {
-                        selValue += vv
+            ss[step] = index
+            step ++
 
-                    }
-                    vv *= 16
-                }
+
+            // 计算选择的值
+            var selValue = 0
+            for (i in 0 until maxLength){
+                selValue = (selValue * 16) + ss[i]
             }
 
-
+            // 找到位置并滚动
             val ii = charArray.indexOfFirst { it >= selValue }
-//            KLog.i(String.format("%08x ---- %08x ---- %08x", selValue, ii, charArray[ii]))
+//            KLog.i(String.format("%08x ---- %08x", selValue, ii))
             recyclerView.scrollToPosition(if (ii < 0) charArray.size - 1 else ii)
-
-            min /= 16
-            max /= 16
 
         }
     }

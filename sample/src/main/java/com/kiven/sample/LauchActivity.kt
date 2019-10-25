@@ -148,7 +148,7 @@ class LauchActivity : KActivity(), LifecycleOwner {
                 }
             }
         })
-        addView("", View.OnClickListener { })
+        addView("无障碍", View.OnClickListener { })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
     }

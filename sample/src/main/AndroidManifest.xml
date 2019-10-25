@@ -128,6 +128,21 @@
                 android:name="android.service.wallpaper"
                 android:resource="@xml/my_wallpaper" />
         </service>
+        <!-- 无障碍功能 -->
+        <service
+            android:name=".AutoInstallService"
+            android:label="巴拉啦无障碍"
+            android:process=":install"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+
+            <!--在xml文件配置辅助功能,也可在onServiceConnected()中使用setServiceInfo()动态配置-->
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accessibility_config" />
+        </service>
 
         <activity android:name="com.kiven.kutils.activityHelper.KFragmentActivity" />
 

@@ -1,36 +1,31 @@
 package com.kiven.sample.charCode
 
-import android.content.DialogInterface
-import android.content.Intent
 import android.graphics.Color
-import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
-import com.google.gson.Gson
-import com.google.gson.JsonParser
 import com.kiven.kutils.activityHelper.KActivityDebugHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KString
+import com.kiven.kutils.tools.KUtil
 import com.kiven.sample.AHWebView
 import com.kiven.sample.R
 import com.kiven.sample.util.showListDialog
 import kotlinx.android.synthetic.main.item_unicode.view.*
 import org.jetbrains.anko.button
+import org.jetbrains.anko.dip
 import org.jetbrains.anko.linearLayout
 import org.jetbrains.anko.textView
 import java.io.InputStreamReader
-import java.lang.StringBuilder
 import java.nio.charset.Charset
 
 
@@ -41,9 +36,12 @@ class AHUnicodeList : KActivityDebugHelper() {
 
     var showSel: TextView? = null
 
+    private val recyclerView by lazy {
+        RecyclerView(mActivity)
+    }
     private val adapter = MyAdapter()
     private var charArray = IntArray(0)
-    private var charCount = 0
+//    private var charCount = 0
 
     //    val startCode = 0x0000
 //    val endCode = 0xFFFF
@@ -95,6 +93,19 @@ class AHUnicodeList : KActivityDebugHelper() {
                         }
                     }
                 }
+
+                button {
+                    text = "滚动"
+
+                    setOnClickListener {
+                        if (charArray.isNotEmpty()) {
+                            selValue = 0
+                            selScroll()
+                        }
+
+//                        recyclerView.scrollToPosition(0x6000)
+                    }
+                }
             }
 
             textView {
@@ -103,15 +114,47 @@ class AHUnicodeList : KActivityDebugHelper() {
             }
 
 
-            val recyclerView = RecyclerView(activity)
             addView(recyclerView)
 
-            val layoutManager = FlexboxLayoutManager(mActivity)
+            /*val layoutManager = FlexboxLayoutManager(mActivity)
             layoutManager.flexDirection = FlexDirection.ROW
             layoutManager.justifyContent = JustifyContent.CENTER
 
-            recyclerView.layoutManager = layoutManager
+            recyclerView.layoutManager = layoutManager*/ // 由于要计算每一个单元格的位置，当item太多的时候，会消耗大量内存存储相关数据
+            recyclerView.layoutManager = GridLayoutManager(mActivity, KUtil.getScreenWith(activity) / dip(70))
             recyclerView.adapter = adapter
+        }
+    }
+
+    var selValue = 0
+    private fun selScroll() {
+        var min = charArray[0]
+        var max = charArray.last()
+
+        val aa = "0123456789ABCDEF".toCharArray().map { it.toString() }
+        mActivity.showListDialog(aa) { index, _ ->
+
+            if (max < 16) return@showListDialog
+
+            if (index > 0) {
+                var vv = index
+                while (vv < max) {
+                    if (vv * 16 > max) {
+                        selValue += vv
+
+                    }
+                    vv *= 16
+                }
+            }
+
+
+            val ii = charArray.indexOfFirst { it >= selValue }
+//            KLog.i(String.format("%08x ---- %08x ---- %08x", selValue, ii, charArray[ii]))
+            recyclerView.scrollToPosition(if (ii < 0) charArray.size - 1 else ii)
+
+            min /= 16
+            max /= 16
+
         }
     }
 
@@ -127,8 +170,10 @@ class AHUnicodeList : KActivityDebugHelper() {
             }
         }
 
-        charArray = ca
-        charCount = a
+        charArray =
+                if (a > 0) IntArray(a) { ca[it] }
+                else IntArray(0)
+
 
         adapter.notifyDataSetChanged()
         showSel?.text = "当前显示范围：${curGoup.startCode} - ${curGoup.endCode}：${curGoup.detail}，实际可用 $a/$size"
@@ -137,7 +182,7 @@ class AHUnicodeList : KActivityDebugHelper() {
     private inner class MyAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
-            val curCode = /*curGoup.start + position*/charArray[position]
+            val curCode = charArray[position]
 
             holder.itemView.apply {
                 // 判断字符有没有对应的unicode形式，就是通过unicode中是否定义了字符的unicode写法
@@ -180,7 +225,7 @@ class AHUnicodeList : KActivityDebugHelper() {
             }
         }
 
-        override fun getItemCount(): Int = /*curGoup.end - curGoup.start + 1*/charCount
+        override fun getItemCount(): Int = charArray.size
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
                 object : RecyclerView.ViewHolder(LayoutInflater.from(mActivity).inflate(R.layout.item_unicode, parent, false)) {}

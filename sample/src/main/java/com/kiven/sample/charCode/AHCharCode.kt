@@ -118,7 +118,7 @@ class AHCharCode : KActivityDebugHelper() {
                 }
 
                 button {
-                    text = "unicode(0号平面) 列表"
+                    text = "unicode 列表"
                     setOnClickListener { AHUnicodeList().startActivity(activity) }
                 }
 

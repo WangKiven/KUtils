@@ -4,11 +4,15 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexboxLayout
+import com.google.android.flexbox.JustifyContent
 import com.kiven.kutils.activityHelper.KActivityDebugHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.tools.KString
@@ -17,7 +21,6 @@ import com.kiven.sample.AHWebView
 import com.kiven.sample.R
 import com.kiven.sample.util.showListDialog
 import kotlinx.android.synthetic.main.item_unicode.view.*
-import org.jetbrains.anko.button
 import org.jetbrains.anko.dip
 import org.jetbrains.anko.linearLayout
 import org.jetbrains.anko.textView
@@ -49,10 +52,13 @@ class AHUnicodeList : KActivityDebugHelper() {
         activity.linearLayout {
             orientation = LinearLayout.VERTICAL
 
+            val flexBox = FlexboxLayout(mActivity)
+            flexBox.flexDirection = FlexDirection.ROW
+            flexBox.justifyContent = JustifyContent.CENTER
+            addView(flexBox)
 
-
-            linearLayout {
-                button {
+            flexBox.apply {
+                addView(Button(mActivity).apply {
                     text = "选择0号平面分组"
                     setOnClickListener {
                         val fileInput = activity.assets.open("unicode_code_detail.txt")
@@ -67,9 +73,8 @@ class AHUnicodeList : KActivityDebugHelper() {
                             }
                         }
                     }
-                }
-
-                button {
+                })
+                addView(Button(mActivity).apply {
                     text = "选择其他平面"
                     setOnClickListener {
                         val groups = arrayOf(
@@ -88,9 +93,8 @@ class AHUnicodeList : KActivityDebugHelper() {
                             }
                         }
                     }
-                }
-
-                button {
+                })
+                addView(Button(mActivity).apply {
                     text = "滚动"
 
                     setOnClickListener {
@@ -100,8 +104,13 @@ class AHUnicodeList : KActivityDebugHelper() {
 
 //                        recyclerView.scrollToPosition(0x6000)
                     }
-                }
+                })
+                addView(Button(mActivity).apply {
+                    text = "更多"
+                    setOnClickListener { AHCharCode().startActivity(activity) }
+                })
             }
+
 
             textView {
                 showSel = this
@@ -134,12 +143,12 @@ class AHUnicodeList : KActivityDebugHelper() {
             if (step >= maxLength) return@showListDialog
 
             ss[step] = index
-            step ++
+            step++
 
 
             // 计算选择的值
             var selValue = 0
-            for (i in 0 until maxLength){
+            for (i in 0 until maxLength) {
                 selValue = (selValue * 16) + ss[i]
             }
 

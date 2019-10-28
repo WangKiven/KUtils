@@ -4,6 +4,6 @@
     android:accessibilityFeedbackType="feedbackGeneric"
     android:accessibilityFlags="flagDefault"
     android:canRetrieveWindowContent="true"
-    android:description="巴拉啦小魔仙"
+    android:description="@string/auto_access_service_description"
     android:notificationTimeout="100"
-    android:packageNames="com.tencent.mm"/>
+    android:packageNames="@string/auto_access_service_dist_package"/>

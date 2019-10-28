@@ -27,6 +27,8 @@ import com.kiven.kutils.file.KFile
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.*
 import com.kiven.sample.arch.AHArch
+import com.kiven.sample.autoService.AccessibilityUtil
+import com.kiven.sample.autoService.AutoInstallService
 import com.kiven.sample.charCode.AHCharCode
 import com.kiven.sample.charCode.AHUnicodeList
 import com.kiven.sample.floatView.ActivityHFloatView
@@ -148,7 +150,11 @@ class LauchActivity : KActivity(), LifecycleOwner {
                 }
             }
         })
-        addView("无障碍", View.OnClickListener { })
+        addView("无障碍", View.OnClickListener {
+            if (!AutoInstallService.isStarted()){
+                AccessibilityUtil.jumpToSetting(this)
+            }
+        })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
     }

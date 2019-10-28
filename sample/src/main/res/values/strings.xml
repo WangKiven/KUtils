@@ -15,4 +15,10 @@
         <item>string</item>
         <item>color</item>
     </array>
+
+    <string name="auto_access_service_description">巴拉啦小魔仙</string>
+    <string name="auto_access_service_dist_package">com.jeeinc.save.worry</string>
+
+    <string name="auto_access_service_dist_package1">com.jeeinc.save.worry</string>
+    <string name="auto_access_service_dist_package2">com.tencent.mm</string>
 </resources>

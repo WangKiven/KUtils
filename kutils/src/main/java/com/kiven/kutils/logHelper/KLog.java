@@ -2,6 +2,8 @@ package com.kiven.kutils.logHelper;
 
 import android.util.Log;
 
+import com.kiven.kutils.tools.KString;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.LinkedList;
@@ -132,37 +134,43 @@ public class KLog {
 
     }
 
+    private static String tag = "KLog_default";
+    public static void setTag(String newTag){
+        if (KString.isBlank(newTag)) return;
+        tag = newTag;
+    }
+
     public static void d(String debugInfo) {
         if (isDebug()) {
-            Log.d("ULog_default", debugInfo + findLog());
+            Log.d(tag, debugInfo + findLog());
             addLog(debugInfo);
         }
     }
 
     public static void e(String errorInfo) {
         if (isDebug()) {
-            Log.e("ULog_default", errorInfo + findLog());
+            Log.e(tag, errorInfo + findLog());
             addLog(errorInfo);
         }
     }
 
     public static void v(String msg) {
         if (isDebug()) {
-            Log.v("ULog_default", msg + findLog());
+            Log.v(tag, msg + findLog());
             addLog(msg);
         }
     }
 
     public static void i(String msg) {
         if (isDebug()) {
-            Log.i("ULog_default", msg + findLog());
+            Log.i(tag, msg + findLog());
             addLog(msg);
         }
     }
 
     public static void w(String msg) {
         if (isDebug()) {
-            Log.w("ULog_default", msg + findLog());
+            Log.w(tag, msg + findLog());
             addLog(msg);
         }
     }
@@ -204,7 +212,7 @@ public class KLog {
                     }
                 }
             }
-            Log.i("ULog_default", new String(po));
+            Log.i(tag, new String(po));
         }
     }
 }

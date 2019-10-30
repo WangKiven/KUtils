@@ -1,5 +1,6 @@
 package com.kiven.sample.floatView
 
+import android.annotation.TargetApi
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -81,12 +82,11 @@ class ActivityHFloatView : KActivityHelper() {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.M)
     private fun startOverlaySetting() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
-            intent.data = Uri.parse("package:" + mActivity.packageName)
-            mActivity.startActivity(intent)
-        }
+        val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
+        intent.data = Uri.parse("package:" + mActivity.packageName)
+        mActivity.startActivity(intent)
     }
 
 

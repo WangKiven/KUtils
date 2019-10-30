@@ -11,7 +11,7 @@ android {
     defaultConfig {
         applicationId "com.kiven.sample"
 //        minSdkVersion 14
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion parent.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
@@ -175,6 +175,9 @@ dependencies {
     implementation 'com.alibaba:arouter-api:1.5.0'
     kapt 'com.alibaba:arouter-compiler:1.2.2'
     implementation 'androidx.palette:palette-ktx:1.0.0'
+
+    // 基于无障碍服务实现微信多图分享: https://github.com/shichaohui/WXShareMultiImage
+    implementation 'com.sch.share:wx-share:1.0.10'
 }
 /*kotlin {
     experimental {

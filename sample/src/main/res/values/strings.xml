@@ -22,4 +22,6 @@
     <string name="auto_access_service_dist_package1">com.jeeinc.save.worry</string>
     <string name="auto_access_service_dist_package2">com.tencent.mm</string>
     <string name="auto_access_service_dist_package3">com.sxb.caraide</string>
+
+    <string name="wx_share_multi_image_service_label">ShareDemo【多图分享】</string>
 </resources>

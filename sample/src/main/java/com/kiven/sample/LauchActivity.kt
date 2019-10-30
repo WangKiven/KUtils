@@ -3,6 +3,7 @@ package com.kiven.sample
 import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -38,6 +39,8 @@ import com.kiven.sample.media.AHMediaList
 import com.kiven.sample.theme.AHTheme
 import com.kiven.sample.util.showDialog
 import com.kiven.sample.util.showListDialog
+import com.kiven.sample.util.showSnack
+import com.sch.share.WXShareMultiImageHelper
 import kotlinx.android.synthetic.main.activity_lauch.*
 import me.grantland.widget.AutofitHelper
 
@@ -105,7 +108,7 @@ class LauchActivity : KActivity(), LifecycleOwner {
             startActivity(fproxyIntent)
         })
         addView("打开设置", View.OnClickListener {
-//            startActivity(Intent(Settings.ACTION_SETTINGS))
+            //            startActivity(Intent(Settings.ACTION_SETTINGS))
             val fields = Settings::class.java.fields
             val flist = mutableMapOf<String, String>()
             fields.forEach {
@@ -142,7 +145,7 @@ class LauchActivity : KActivity(), LifecycleOwner {
         addView("KGranting", View.OnClickListener {
             KGranting.useFragmentRequest = true
 
-            KGranting.requestAlbumPermissions(this, 233){
+            KGranting.requestAlbumPermissions(this, 233) {
                 if (it) {
                     showDialog("获取相册权限到了")
                 } else {
@@ -151,11 +154,32 @@ class LauchActivity : KActivity(), LifecycleOwner {
             }
         })
         addView("无障碍", View.OnClickListener {
-            if (!AutoInstallService.isStarted()){
+            if (!AutoInstallService.isStarted()) {
                 AccessibilityUtil.jumpToSetting(this)
             }
         })
-        addView("", View.OnClickListener { })
+        addView("无障碍lib", View.OnClickListener {
+            KGranting.requestPermissions(this, 899, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), arrayOf("内存")){
+                if (it){
+//                    val images = listOf(BitmapFactory.decodeResource(resources, R.mipmap.fish))
+                    val images = resources.assets.list("wallpaper")!!.map { BitmapFactory.decodeStream(resources.assets.open("wallpaper/$it")) }
+
+                    if (WXShareMultiImageHelper.isServiceEnabled(this)) {
+                        WXShareMultiImageHelper.shareToTimeline(this, images)
+                    } else {
+                        WXShareMultiImageHelper.openService(this) {
+                            if (it) {
+                                val options = WXShareMultiImageHelper.Options()
+                                options.isAutoFill = it
+                                WXShareMultiImageHelper.shareToTimeline(this, images, options)
+                            } else showSnack("无障碍开启失败")
+                        }
+                    }
+                }
+            }
+
+
+        })
         addView("", View.OnClickListener { })
     }
 

@@ -8,6 +8,8 @@ import android.text.TextUtils;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
+import androidx.annotation.NonNull;
+
 import com.kiven.kutils.logHelper.KLog;
 
 import java.util.List;
@@ -26,6 +28,8 @@ public class AutoInstallService extends AccessibilityService {
     private static final int DELAY_PAGE = 320; // 页面切换时间
     private final Handler mHandler = new Handler();
 
+    AccessibilityTask task = new WXShareTask();
+
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
@@ -33,38 +37,27 @@ public class AutoInstallService extends AccessibilityService {
                 .contains(getString(R.string.auto_access_service_dist_package)))//不写完整包名，是因为某些手机(如小米)安装器包名是自定义的
             return;*/
 
-        KLog.i("onAccessibilityEvent: " + (event == null ? "null" : event.getPackageName().toString()));
+        task.onAccessibilityEvent(this, event);
+
+        /*KLog.i("onAccessibilityEvent: " + (event == null ? "null" : event.getPackageName().toString()));
         if (event == null) return;
 
 
         AccessibilityNodeInfo eventNode = event.getSource();
         if (eventNode == null) return;
 
-//        eventNode.findAccessibilityNodeInfosByText("通讯录");
-//        findTxtClick("我的");
         AccessibilityNodeInfo rootNode = getRootInActiveWindow(); //当前窗口根节点
         if (rootNode == null) return;
 
-//        findTxtClick(rootNode, "我");
 
 
-        /*AccessibilityNodeInfo rootNode = getRootInActiveWindow(); //当前窗口根节点
-        if (rootNode == null)
-            return;
-        KLog.i( "rootNode: " + rootNode);
-        if (isNotAD(rootNode))
-            findTxtClick(rootNode, "安装"); //一起执行：安装->下一步->打开,以防意外漏掉节点
-        findTxtClick(rootNode, "继续安装");
-        findTxtClick(rootNode, "下一步");
-        findTxtClick(rootNode, "打开");
-        // 回收节点实例来重用
-        rootNode.recycle();*/
+        AccessibilityUtil.printTree(rootNode);
 
 
-        printTree(rootNode);
+        AccessibilityUtil.findTxtClick(rootNode, "我", "com.tencent.mm:id/djv");
 
 
-        eventNode.recycle();
+        eventNode.recycle();*/
 
 
         /*
@@ -102,83 +95,6 @@ public class AutoInstallService extends AccessibilityService {
         // 回收节点实例来重用
         eventNode.recycle();
         rootNode.recycle();*/
-    }
-
-    String lastTreeStr;
-
-    private void printTree(AccessibilityNodeInfo nodeInfo) {
-        StringBuilder sb = new StringBuilder("windowId:").append(nodeInfo.getWindowId()).append("\n");
-        getTree(nodeInfo, sb, 0);
-
-        if (!TextUtils.equals(lastTreeStr, sb))
-            KLog.i(sb.toString());
-    }
-
-    private void getTree(AccessibilityNodeInfo nodeInfo, StringBuilder tree, int deep) {
-        if (nodeInfo == null) return;
-
-        int childCount = nodeInfo.getChildCount();
-        boolean visible = nodeInfo.isVisibleToUser();
-
-        tree.append(getDeepHeader(deep))
-                .append(nodeInfo.getWindowId()).append(" ")
-                .append(nodeInfo.getClassName());
-        if (TextUtils.equals(nodeInfo.getClassName(), "android.widget.TextView")) {
-            tree.append("(").append(nodeInfo.getText()).append(")");
-        }
-        if (childCount > 0) {
-            tree.append("(childCount:").append(childCount).append(")");
-        }
-        if (!visible) {
-            tree.append("(visible:").append(false).append(")");
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            tree.append("(resourceId:").append(nodeInfo.getViewIdResourceName()).append(")");
-        }
-
-        Rect rect = new Rect();
-        nodeInfo.getBoundsInScreen(rect);
-        tree.append("(boundsInScreen:").append(rect.toString()).append(")");
-
-        tree.append("\n");
-
-        if (visible)
-            for (int i = 0; i < childCount; i++) {
-                getTree(nodeInfo.getChild(i), tree, deep + 1);
-            }
-    }
-
-    private String getDeepHeader(int deep) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < deep; i++) {
-            sb.append("-");
-        }
-        sb.append(deep).append(" ");
-        return sb.toString();
-    }
-
-
-    // 查找安装,并模拟点击(findAccessibilityNodeInfosByText判断逻辑是contains而非equals)
-    private void findTxtClick(AccessibilityNodeInfo nodeInfo, String txt) {
-        List<AccessibilityNodeInfo> nodes = nodeInfo.findAccessibilityNodeInfosByText(txt);
-        if (nodes == null || nodes.isEmpty())
-            return;
-
-
-        for (AccessibilityNodeInfo ni : nodes) {
-            KLog.i("findTxtClick: " + txt + ", " + nodes.size() + ", " + ni);
-
-        }
-
-//        KLog.i("findTxtClick: " + txt + ", " + nodes.size() + ", " + nodes);
-        /*for (AccessibilityNodeInfo node : nodes) {
-            if (node.isEnabled() && node.isClickable() && (node.getClassName().equals("android.widget.Button")
-                    || node.getClassName().equals("android.widget.CheckBox") // 兼容华为安装界面的复选框
-            )) {
-                node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-            }
-        }*/
     }
 
     // 排除广告[安装]按钮
@@ -225,5 +141,9 @@ public class AutoInstallService extends AccessibilityService {
         AccessibilityUtil.jumpToSetting(this);
 
         mInstance = null;
+    }
+
+    public interface AccessibilityTask {
+        void onAccessibilityEvent(AccessibilityService service, AccessibilityEvent event);
     }
 }

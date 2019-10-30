@@ -5,10 +5,13 @@ import android.text.TextUtils;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
+import com.github.mikephil.charting.utils.Utils;
 import com.kiven.kutils.logHelper.KLog;
 import com.kiven.kutils.util.ArrayMap;
+import com.kiven.sample.util.UtilsKt;
 
 public class WXShareTask implements AutoInstallService.AccessibilityTask {
+    public static int logType = 0;//控制打印日志, 微信工具用
 
     private final String LauncherUI = "com.tencent.mm.ui.LauncherUI";//微信界面
     private final String SnsTimeLineUI = "com.tencent.mm.plugin.sns.ui.SnsTimeLineUI";//朋友圈界面
@@ -51,8 +54,15 @@ public class WXShareTask implements AutoInstallService.AccessibilityTask {
 
     private String curWXUI;
     private void deal(AccessibilityEvent event, AccessibilityNodeInfo rootNode) {
-//        AccessibilityUtil.printTree(rootNode);
-        KLog.i(String.format("%s %x %x", event.getClassName().toString(), event.getEventType(), event.getAction()));
+
+        switch (logType %3){
+            case 0:
+                KLog.i(String.format("%s %x %x", event.getClassName().toString(), event.getEventType(), event.getAction()));
+                break;
+            case 1:
+                AccessibilityUtil.printTree(rootNode);
+                break;
+        }
 
 
         // step 1 :

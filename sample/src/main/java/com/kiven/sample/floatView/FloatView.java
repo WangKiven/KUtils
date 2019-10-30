@@ -15,6 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.kiven.kutils.tools.KUtil;
+import com.kiven.sample.autoService.WXShareTask;
+import com.kiven.sample.util.UtilsKt;
 
 /**
  * 学习文档：TODO http://blog.csdn.net/stevenhu_223/article/details/8504058
@@ -126,7 +128,9 @@ public class FloatView {
                     default:
                         int a = KUtil.dip2px(context, 2);
                         if (Math.abs(wmParams.x - oldX1) <= a && Math.abs(wmParams.y - oldY1) <= a) {// 认定单点击
-                            Toast.makeText(context, "onClickss", Toast.LENGTH_SHORT).show();
+                            WXShareTask.logType ++;
+
+                            Toast.makeText(context, "onClickss" + WXShareTask.logType, Toast.LENGTH_SHORT).show();
                         }
                         break;
                 }
@@ -138,14 +142,13 @@ public class FloatView {
             }
         });
 
-        mFloatView.setOnClickListener(new View.OnClickListener() {
+        /*mFloatView.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
-                Toast.makeText(context, "onClick", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "onClick ", Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
     }
 
     boolean isShow = false;

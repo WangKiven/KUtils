@@ -33,6 +33,7 @@ import com.kiven.sample.autoService.AutoInstallService
 import com.kiven.sample.charCode.AHCharCode
 import com.kiven.sample.charCode.AHUnicodeList
 import com.kiven.sample.floatView.ActivityHFloatView
+import com.kiven.sample.floatView.ServiceFloat
 import com.kiven.sample.gl.AHGL
 import com.kiven.sample.libs.AHLibs
 import com.kiven.sample.media.AHMediaList
@@ -154,6 +155,15 @@ class LauchActivity : KActivity(), LifecycleOwner {
             }
         })
         addView("无障碍", View.OnClickListener {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (!KUtil.canDrawOverlays()) {
+                    KUtil.startOverlaySetting()
+                    return@OnClickListener
+                }
+            }
+
+            KUtil.startService(ServiceFloat::class.java)
+
             if (!AutoInstallService.isStarted()) {
                 AccessibilityUtil.jumpToSetting(this)
             }

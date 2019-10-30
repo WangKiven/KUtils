@@ -11,6 +11,7 @@ import android.widget.LinearLayout
 
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
+import com.kiven.kutils.tools.KUtil
 import com.kiven.sample.R
 import com.kiven.sample.util.snackbar
 import org.jetbrains.anko.button
@@ -32,7 +33,6 @@ class ActivityHFloatView : KActivityHelper() {
 
     private var activityFloatView: FloatView? = null
 
-    private var isShow = false
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
         mActivity.linearLayout {
@@ -92,12 +92,13 @@ class ActivityHFloatView : KActivityHelper() {
 
     private fun startAppOutFloat() {
         val intent = Intent(mActivity, ServiceFloat::class.java)
-        if (isShow) {
+        if (KUtil.isRun(ServiceFloat::class.java)) {
             mActivity.stopService(intent)
         } else {
             mActivity.startService(intent)
         }
-        isShow = !isShow
+
+
     }
 
     override fun onPause() {

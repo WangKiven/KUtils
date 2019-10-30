@@ -1,14 +1,9 @@
 package com.kiven.sample.autoService;
 
 import android.accessibilityservice.AccessibilityService;
-import android.graphics.Rect;
-import android.os.Build;
 import android.os.Handler;
-import android.text.TextUtils;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
-
-import androidx.annotation.NonNull;
 
 import com.kiven.kutils.logHelper.KLog;
 

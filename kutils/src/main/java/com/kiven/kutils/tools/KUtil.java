@@ -1,10 +1,12 @@
 package com.kiven.kutils.tools;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.ConfigurationInfo;
@@ -13,11 +15,16 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
 import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Process;
+import android.provider.Settings;
 import android.util.DisplayMetrics;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+
 import com.kiven.kutils.logHelper.KLog;
 
 import java.io.BufferedReader;
@@ -30,6 +37,7 @@ import java.lang.reflect.Field;
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.Properties;
@@ -46,7 +54,8 @@ public class KUtil {
     public static void setApp(Application app) {
         KUtil.app = app;
     }
-    public static void setConfigSharedPreferences(@NonNull String configSharedPreferences){
+
+    public static void setConfigSharedPreferences(@NonNull String configSharedPreferences) {
         CONFIG_SHARED_PREFERENCES = configSharedPreferences;
     }
 
@@ -98,16 +107,15 @@ public class KUtil {
     }
 
     /**
-     *
      * 根据 @param context 获取Activity
      */
     public static Activity getActivity(Context context) {
         if (context == null) {
             return null;
         } else if (context instanceof Activity) {
-            return (Activity)context;
+            return (Activity) context;
         } else {
-            return context instanceof ContextWrapper ? getActivity(((ContextWrapper)context).getBaseContext()) : null;
+            return context instanceof ContextWrapper ? getActivity(((ContextWrapper) context).getBaseContext()) : null;
         }
     }
 
@@ -411,6 +419,53 @@ public class KUtil {
         }
     }
 
+    // todo -------------------------- Overlay ----------------------------
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public static boolean canDrawOverlays() {
+        return Settings.canDrawOverlays(app);
+    }
+
+    /**
+     * 设置可显示悬浮界面
+     */
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public static void startOverlaySetting() {
+        Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
+        intent.setData(Uri.parse("package:" + app.getPackageName()));
+        app.startActivity(intent);
+    }
+
+    // todo -------------------------- service ----------------------------
+
+    public static boolean isRun(@NonNull Class serviceClass) {
+        String serviceName = serviceClass.getName();
+
+        ActivityManager myManager = (ActivityManager) app
+                .getSystemService(Context.ACTIVITY_SERVICE);
+
+        if (myManager != null) {
+            ArrayList<ActivityManager.RunningServiceInfo> runningService = (ArrayList<ActivityManager.RunningServiceInfo>) myManager
+                    .getRunningServices(30);
+            for (int i = 0; i < runningService.size(); i++) {
+                if (runningService.get(i).service.getClassName().equals(serviceName)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static void startService(@NonNull Class serviceClass) {
+        Intent ii = new Intent(app, serviceClass);
+        app.startService(ii);
+    }
+
+    public static void stopService(@NonNull Class serviceClass) {
+        Intent ii = new Intent(app, serviceClass);
+        app.stopService(ii);
+    }
+
+    // todo -------------------------- SharedPreferences ----------------------------
 
     /**
      * SharedPreferences

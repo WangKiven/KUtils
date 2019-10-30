@@ -10,6 +10,7 @@ import com.flyco.dialog.widget.NormalListDialog
 import com.google.android.material.snackbar.Snackbar
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KAlertDialogHelper
+import com.kiven.kutils.tools.KUtil
 
 /**
  * Created by wangk on 2019/5/14.
@@ -84,3 +85,4 @@ fun Activity.showSnack(word: String) {
     Snackbar.make(window.decorView.findViewById(android.R.id.content), word, Snackbar.LENGTH_LONG).show()
     Log.i("ULog_default", word)
 }
+

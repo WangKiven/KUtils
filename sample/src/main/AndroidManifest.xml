@@ -132,7 +132,6 @@
         <service
             android:name=".autoService.AutoInstallService"
             android:label="巴拉啦无障碍"
-            android:process=":install"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />

@@ -3,6 +3,7 @@ package com.kiven.sample.autoService;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 import android.text.TextUtils;
@@ -10,8 +11,10 @@ import android.util.Log;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.kiven.kutils.logHelper.KLog;
+import com.kiven.kutils.tools.KString;
 
 import java.util.List;
 
@@ -47,11 +50,13 @@ public class AccessibilityUtil {
      * 跳转到系统设置：开启辅助服务
      */
     public static void jumpToSetting(final Context cxt) {
+        Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+//        intent.setData(Uri.parse("package:" + cxt.getPackageName()));
+
         try {
-            cxt.startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
+            cxt.startActivity(intent);
         } catch (Throwable e) {//若出现异常，则说明该手机设置被厂商篡改了,需要适配
             try {
-                Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 cxt.startActivity(intent);
             } catch (Throwable e2) {
@@ -94,8 +99,17 @@ public class AccessibilityUtil {
             tree.append("(clickable:").append(true).append(")");
         }
 
+        if (nodeInfo.isSelected()) {
+            tree.append("(selected:").append(true).append(")");
+        }
+
+        if (nodeInfo.isChecked()) {
+            tree.append("(checked:").append(true).append(")");
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            tree.append("(resourceId:").append(nodeInfo.getViewIdResourceName()).append(")");
+            if (nodeInfo.getViewIdResourceName() != null)
+                tree.append("(resourceId:").append(nodeInfo.getViewIdResourceName()).append(")");
         }
 
         Rect rect = new Rect();
@@ -122,20 +136,21 @@ public class AccessibilityUtil {
 
     // TODO 查找安装,并模拟点击(findAccessibilityNodeInfosByText判断逻辑是contains而非equals)
 
-    public static void findTxtClick(AccessibilityNodeInfo nodeInfo, String txt, String souceId) {
-        List<AccessibilityNodeInfo> nodes = nodeInfo.findAccessibilityNodeInfosByText(txt);
+
+    public static void findTxtClick(@NonNull AccessibilityNodeInfo nodeInfo, @NonNull String txt, @Nullable String souceId) {
+        List<AccessibilityNodeInfo> nodes;
+        if (KString.isBlank(souceId)) {
+            nodes = nodeInfo.findAccessibilityNodeInfosByText(txt);
+        } else {
+            nodes = nodeInfo.findAccessibilityNodeInfosByViewId(souceId);
+        }
+
         if (nodes == null || nodes.isEmpty())
             return;
 
         for (AccessibilityNodeInfo ni : nodes) {
             if (TextUtils.equals(ni.getText(), txt)) {
-                /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                    if (TextUtils.equals(ni.getViewIdResourceName(), souceId)){
-
-                    }
-                }*/
                 KLog.i("click: " + ni);
-//                ni.performAction(AccessibilityNodeInfo.ACTION_CLICK);
                 clickNode(ni, true);
             }
         }
@@ -195,6 +210,10 @@ public class AccessibilityUtil {
         return false;
     }
 
+    public static void clickNode(AccessibilityNodeInfo nodeInfo) {
+        nodeInfo.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+    }
+
     /**
      * 是否有文案是txt的组件，文案必须一样
      */
@@ -210,5 +229,26 @@ public class AccessibilityUtil {
         }
 
         return false;
+    }
+
+
+    public static AccessibilityNodeInfo findTxtNode(@NonNull AccessibilityNodeInfo nodeInfo, @NonNull String txt, @Nullable String souceId) {
+        List<AccessibilityNodeInfo> nodes;
+        if (KString.isBlank(souceId)) {
+            nodes = nodeInfo.findAccessibilityNodeInfosByText(txt);
+        } else {
+            nodes = nodeInfo.findAccessibilityNodeInfosByViewId(souceId);
+        }
+
+        if (nodes == null || nodes.isEmpty())
+            return null;
+
+        for (AccessibilityNodeInfo ni : nodes) {
+            if (TextUtils.equals(ni.getText(), txt)) {
+                return ni;
+            }
+        }
+
+        return null;
     }
 }

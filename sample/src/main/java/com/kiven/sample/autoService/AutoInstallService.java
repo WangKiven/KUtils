@@ -107,7 +107,7 @@ public class AutoInstallService extends AccessibilityService {
     String lastTreeStr;
 
     private void printTree(AccessibilityNodeInfo nodeInfo) {
-        StringBuilder sb = new StringBuilder("\n\n").append("windowId:").append(nodeInfo.getWindowId()).append("\n");
+        StringBuilder sb = new StringBuilder("windowId:").append(nodeInfo.getWindowId()).append("\n");
         getTree(nodeInfo, sb, 0);
 
         if (!TextUtils.equals(lastTreeStr, sb))

@@ -6,6 +6,7 @@ import com.kiven.kutils.tools.KString;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 /**
@@ -135,42 +136,53 @@ public class KLog {
     }
 
     private static String tag = "KLog_default";
-    public static void setTag(String newTag){
+
+    public static void setTag(String newTag) {
         if (KString.isBlank(newTag)) return;
         tag = newTag;
     }
 
     public static void d(String debugInfo) {
         if (isDebug()) {
-            Log.d(tag, debugInfo + findLog());
+            for (String burst : burstLog(debugInfo + findLog())) {
+                Log.d(tag, burst);
+            }
             addLog(debugInfo);
         }
     }
 
     public static void e(String errorInfo) {
         if (isDebug()) {
-            Log.e(tag, errorInfo + findLog());
+            for (String burst : burstLog(errorInfo + findLog())) {
+                Log.e(tag, burst);
+            }
             addLog(errorInfo);
         }
     }
 
     public static void v(String msg) {
         if (isDebug()) {
-            Log.v(tag, msg + findLog());
+            for (String burst : burstLog(msg + findLog())) {
+                Log.v(tag, burst);
+            }
             addLog(msg);
         }
     }
 
     public static void i(String msg) {
         if (isDebug()) {
-            Log.i(tag, msg + findLog());
+            for (String burst : burstLog(msg + findLog())) {
+                Log.i(tag, burst);
+            }
             addLog(msg);
         }
     }
 
     public static void w(String msg) {
         if (isDebug()) {
-            Log.w(tag, msg + findLog());
+            for (String burst : burstLog(msg + findLog())) {
+                Log.w(tag, burst);
+            }
             addLog(msg);
         }
     }
@@ -214,5 +226,26 @@ public class KLog {
             }
             Log.i(tag, new String(po));
         }
+    }
+
+    /**
+     * 分段log, 由于Log输出有长度限制
+     */
+    private static ArrayList<String> burstLog(String log) {
+        ArrayList<String> bl = new ArrayList<>();
+
+        int logLength = log.length();
+        int maxLength = 3 * 1024;
+        if (logLength > maxLength) {
+            for (int i = 0; i < logLength; i += maxLength) {
+                int endPosition = Math.min(i + maxLength, logLength);
+                bl.add(log.substring(i, endPosition));
+            }
+        } else {
+            bl.add(log);
+        }
+
+
+        return bl;
     }
 }

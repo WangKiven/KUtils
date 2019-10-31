@@ -1,13 +1,16 @@
 package com.kiven.sample.autoService;
 
 import android.accessibilityservice.AccessibilityService;
+import android.content.Context;
 import android.os.Handler;
+import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 import androidx.annotation.NonNull;
 
 import com.kiven.kutils.logHelper.KLog;
+import com.kiven.sample.floatView.FloatView;
 
 import java.util.List;
 
@@ -27,6 +30,15 @@ public class AutoInstallService extends AccessibilityService {
 
     public static AccessibilityTask task;
 
+    private FloatView floatView;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        // y由于是后台服务，必须是应用外悬浮
+        floatView = new FloatView(getBaseContext(), (WindowManager) getApplication().getSystemService(Context.WINDOW_SERVICE), true);
+        floatView.showFloat();
+    }
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
@@ -112,7 +124,17 @@ public class AutoInstallService extends AccessibilityService {
         KLog.i("onServiceConnected: ");
 
         mInstance = this;
-        if (task != null) task.onServiceConnected(this);
+
+        // 退出设置界面，后面再优化
+        performGlobalAction(GLOBAL_ACTION_BACK);
+        performGlobalAction(GLOBAL_ACTION_BACK);
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // 任务处理
+                if (task != null) task.onServiceConnected(AutoInstallService.this);
+            }
+        }, DELAY_PAGE * 3);
     }
 
     @Override
@@ -139,6 +161,10 @@ public class AutoInstallService extends AccessibilityService {
         AccessibilityUtil.jumpToSetting(this);
 
         mInstance = null;
+
+        if (floatView != null) {
+            floatView.hideFloat();
+        }
     }
 
     public interface AccessibilityTask {

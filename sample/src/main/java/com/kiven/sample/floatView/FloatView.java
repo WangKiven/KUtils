@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.kiven.kutils.tools.KUtil;
+import com.kiven.sample.autoService.WXConst;
 import com.kiven.sample.autoService.WXShareTask;
 import com.kiven.sample.util.UtilsKt;
 
@@ -128,9 +129,9 @@ public class FloatView {
                     default:
                         int a = KUtil.dip2px(context, 2);
                         if (Math.abs(wmParams.x - oldX1) <= a && Math.abs(wmParams.y - oldY1) <= a) {// 认定单点击
-                            WXShareTask.logType ++;
+                            WXConst.logType++;
 
-                            Toast.makeText(context, "onClickss" + WXShareTask.logType, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "onClickss" + WXConst.logType, Toast.LENGTH_SHORT).show();
                         }
                         break;
                 }

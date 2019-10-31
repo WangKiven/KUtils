@@ -16,21 +16,17 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WXShareTask implements AutoInstallService.AccessibilityTask {
-    public static int logType = 0;//控制打印日志, 微信工具用
+import static com.kiven.sample.autoService.WXConst.Page.ContactInfoUI;
+import static com.kiven.sample.autoService.WXConst.Page.LauncherUI;
+import static com.kiven.sample.autoService.WXConst.Page.MassSendHistoryUI;
+import static com.kiven.sample.autoService.WXConst.Page.MassSendMsgUI;
+import static com.kiven.sample.autoService.WXConst.Page.MassSendSelectContactUI;
+import static com.kiven.sample.autoService.WXConst.Page.SettingsPluginsUI;
+import static com.kiven.sample.autoService.WXConst.Page.settingUI;
+import static com.kiven.sample.autoService.WXConst.Page.tongYongSettingUI;
+import static com.kiven.sample.autoService.WXConst.logType;
 
-    private final String LauncherUI = "com.tencent.mm.ui.LauncherUI";//微信 界面
-    private final String SnsTimeLineUI = "com.tencent.mm.plugin.sns.ui.SnsTimeLineUI";//朋友圈 界面
-    private final String settingUI = "com.tencent.mm.plugin.setting.ui.setting.SettingsUI";//设置 界面
-    private final String tongYongSettingUI = "com.tencent.mm.plugin.setting.ui.setting.SettingsAboutSystemUI";//设置->通用 界面
-    private final String SettingsPluginsUI = "com.tencent.mm.plugin.setting.ui.setting.SettingsPluginsUI";//设置->通用->辅助功能 界面
-    private final String ContactInfoUI = "com.tencent.mm.plugin.profile.ui.ContactInfoUI";//设置->通用->辅助功能->群发助手 界面
-    private final String MassSendHistoryUI = "com.tencent.mm.plugin.masssend.ui.MassSendHistoryUI";//设置->通用->辅助功能->群发助手->点击'开始群发'出现的有'新建群发'按钮的界面
-    //设置->通用->辅助功能->群发助手->点击'开始群发'出现的有'新建群发'按钮的界面->选择收信人界面
-    private final String MassSendSelectContactUI = "com.tencent.mm.plugin.masssend.ui.MassSendSelectContactUI";
-    //设置->通用->辅助功能->群发助手->点击'开始群发'出现的有'新建群发'按钮的界面->选择收信人界面->群发消息输入界面
-    // 这个界面点击发送后，回到'MassSendHistoryUI'界面
-    private final String MassSendMsgUI = "com.tencent.mm.plugin.masssend.ui.MassSendMsgUI";
+public class WXShareTask implements AutoInstallService.AccessibilityTask {
 
 
     private final ArrayMap<String, AccessibilityStep> steps = new ArrayMap<>();
@@ -138,15 +134,18 @@ public class WXShareTask implements AutoInstallService.AccessibilityTask {
             }*/
 
             AccessibilityUtil.findTxtClick(rootNode, "通用", "android:id/title");
+            return;
         }
 
         // step 3 : 通用界面
         if (TextUtils.equals(curWXUI, tongYongSettingUI)) {
             AccessibilityUtil.findTxtClick(rootNode, "辅助功能", "android:id/title");
+            return;
         }
         // step 4: 设置->通用->辅助功能 界面
         if (TextUtils.equals(curWXUI, SettingsPluginsUI)) {
             AccessibilityUtil.findTxtClick(rootNode, "群发助手", "android:id/title");
+            return;
         }
         // step 5: 设置->通用->辅助功能->群发助手 界面
         if (TextUtils.equals(curWXUI, ContactInfoUI)) {
@@ -157,12 +156,14 @@ public class WXShareTask implements AutoInstallService.AccessibilityTask {
             } else {
                 AccessibilityUtil.clickNode(startNode, true);
             }
+            return;
         }
         // step 6: 设置->通用->辅助功能->群发助手->点击'开始群发'出现的有'新建群发'按钮的界面
         // 注意：发送信息完成之后会回到这个界面，这个界面就是群发的历史记录界面
         if (TextUtils.equals(curWXUI, MassSendHistoryUI)) {
             // 新建群发按钮
             AccessibilityUtil.findNodeClickById(rootNode, "com.tencent.mm:id/dhn");
+            return;
         }
         // step 7: 设置->通用->辅助功能->群发助手->点击'开始群发'出现的有'新建群发'按钮的界面->选择收信人界面
         if (TextUtils.equals(curWXUI, MassSendSelectContactUI)) {
@@ -197,6 +198,8 @@ public class WXShareTask implements AutoInstallService.AccessibilityTask {
 
             // 选择完成 下一步, 走到这一步，说明已经选择完成，不考虑未选的情况，一个都未选择时，按钮是不能点击的
             AccessibilityUtil.findNodeClickById(rootNode, "com.tencent.mm:id/lm");
+
+            return;
         }
         // step 8: 设置->通用->辅助功能->群发助手->点击'开始群发'出现的有'新建群发'按钮的界面->选择收信人界面->群发消息输入界面
         // 注意：这个界面点击发送后，回到'MassSendHistoryUI'界面
@@ -219,6 +222,7 @@ public class WXShareTask implements AutoInstallService.AccessibilityTask {
 
             // 操作图片视频
 
+            return;
         }
         // step 9: 应该是回到了'MassSendHistoryUI'界面，该怎么处理呢
         if (TextUtils.equals(curWXUI, "")) {

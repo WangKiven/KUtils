@@ -62,13 +62,16 @@ class AHAutoService : KActivityHelper() {
                     return@OnClickListener
                 }
             }
-            KUtil.startService(ServiceFloat::class.java)
+//            KUtil.startService(ServiceFloat::class.java)
 
 
 
             if (selTags.isEmpty()) {
                 if (tags.isEmpty()){
+                    AutoInstallService.task = WXLoadTagTask()
+                }else{
 
+                    return@OnClickListener
                 }
             }else{
                 AutoInstallService.task = WXShareTask()

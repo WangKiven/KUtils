@@ -1,16 +1,20 @@
 package com.kiven.sample.util
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.flyco.dialog.widget.NormalListDialog
 import com.google.android.material.snackbar.Snackbar
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KAlertDialogHelper
+import com.kiven.kutils.tools.KContext
 import com.kiven.kutils.tools.KUtil
+import com.kiven.sample.AppContext
 
 /**
  * Created by wangk on 2019/5/14.
@@ -86,3 +90,6 @@ fun Activity.showSnack(word: String) {
     Log.i("ULog_default", word)
 }
 
+fun showToast(word: String){
+    Toast.makeText(KContext.getInstance(), word, Toast.LENGTH_LONG).show()
+}

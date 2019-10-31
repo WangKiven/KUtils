@@ -110,6 +110,7 @@ public class AutoInstallService extends AccessibilityService {
         KLog.i("onServiceConnected: ");
 
         mInstance = this;
+        if (task != null) task.onServiceConnected(this);
     }
 
     @Override
@@ -140,5 +141,7 @@ public class AutoInstallService extends AccessibilityService {
 
     public interface AccessibilityTask {
         void onAccessibilityEvent(AccessibilityService service, AccessibilityEvent event);
+
+        void onServiceConnected(AccessibilityService service);
     }
 }

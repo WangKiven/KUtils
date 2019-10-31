@@ -86,9 +86,19 @@ public class AccessibilityUtil {
         tree.append(getDeepHeader(deep))
                 .append(nodeInfo.getWindowId()).append(" ")
                 .append(nodeInfo.getClassName());
-        if (TextUtils.equals(nodeInfo.getClassName(), "android.widget.TextView")) {
+        if (TextUtils.equals(nodeInfo.getClassName(), "android.widget.TextView") ||
+                TextUtils.equals(nodeInfo.getClassName(), "android.widget.Button")
+        ) {
             tree.append("(").append(nodeInfo.getText()).append(")");
         }
+        if (TextUtils.equals(nodeInfo.getClassName(), "android.widget.EditText")) {
+            tree.append("(text:").append(nodeInfo.getText()).append(", hint:");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                tree.append(nodeInfo.getHintText());
+            }
+            tree.append(")");
+        }
+
         if (childCount > 0) {
             tree.append("(childCount:").append(childCount).append(")");
         }
@@ -176,6 +186,15 @@ public class AccessibilityUtil {
                 node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
             }
         }*/
+    }
+
+    public static void findNodeClickById(@NonNull AccessibilityNodeInfo nodeInfo, @NonNull String souceId) {
+        List<AccessibilityNodeInfo> nodes = nodeInfo.findAccessibilityNodeInfosByViewId(souceId);
+        if (nodes != null && nodes.size() > 0) {
+            for (AccessibilityNodeInfo ni : nodes) {
+                clickNode(ni, true);
+            }
+        }
     }
 
     /**

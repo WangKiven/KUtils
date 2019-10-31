@@ -173,19 +173,10 @@ public class AccessibilityUtil {
 
 
         for (AccessibilityNodeInfo ni : nodes) {
-            KLog.i("findTxtClick: " + txt + ", " + nodes.size() + ", " + ni);
+            KLog.i("findTxtClick: " + txt + ", " + ni);
 
             ni.performAction(AccessibilityNodeInfo.ACTION_CLICK);
         }
-
-//        KLog.i("findTxtClick: " + txt + ", " + nodes.size() + ", " + nodes);
-        /*for (AccessibilityNodeInfo node : nodes) {
-            if (node.isEnabled() && node.isClickable() && (node.getClassName().equals("android.widget.Button")
-                    || node.getClassName().equals("android.widget.CheckBox") // 兼容华为安装界面的复选框
-            )) {
-                node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-            }
-        }*/
     }
 
     public static void findNodeClickById(@NonNull AccessibilityNodeInfo nodeInfo, @NonNull String souceId) {
@@ -268,6 +259,17 @@ public class AccessibilityUtil {
             }
         }
 
+        return null;
+    }
+
+    /**
+     * 根据id查找，返回找到的第一个
+     */
+    public static AccessibilityNodeInfo findNodeById(@NonNull AccessibilityNodeInfo nodeInfo, @NonNull String souceId) {
+        List<AccessibilityNodeInfo> nodes = nodeInfo.findAccessibilityNodeInfosByViewId(souceId);
+        if (nodes != null && nodes.size() > 0) {
+            return nodes.get(0);
+        }
         return null;
     }
 }

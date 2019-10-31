@@ -1,15 +1,20 @@
 package com.kiven.sample.autoService;
 
 import android.accessibilityservice.AccessibilityService;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 import com.kiven.kutils.logHelper.KLog;
 import com.kiven.kutils.tools.KAppTool;
-import com.kiven.kutils.tools.KUtil;
+import com.kiven.kutils.tools.KString;
 import com.kiven.kutils.util.ArrayMap;
-import com.kiven.sample.util.UtilsKt;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class WXShareTask implements AutoInstallService.AccessibilityTask {
     public static int logType = 0;//控制打印日志, 微信工具用
@@ -30,7 +35,17 @@ public class WXShareTask implements AutoInstallService.AccessibilityTask {
 
     private final ArrayMap<String, AccessibilityStep> steps = new ArrayMap<>();
 
-    WXShareTask() {
+    // 收信人信息
+    public boolean isSendAll = false;// 是否发送给所有好友
+
+    public boolean isSendTags = false;// 是否发送给标签好友，true: 发送给标签好友，false: 发送给不是这些标签的好友
+    public List<String> tagFriends; // 对应的标签，null: 不根据标签发送
+
+    public ArrayList<String> sendFrends; //
+
+    public String msgForSend = "买车就要省心宝，买车更要用省心宝，省心宝 你值得拥有，✌️";// 要发送的文案
+
+    public WXShareTask() {
         steps.put("toMain", new AccessibilityStep() {
             @Override
             public boolean isThis(AccessibilityNodeInfo rootNode) {
@@ -47,7 +62,7 @@ public class WXShareTask implements AutoInstallService.AccessibilityTask {
     }
 
     @Override
-    public void onAccessibilityEvent(AccessibilityService service, AccessibilityEvent event) {
+    public void onAccessibilityEvent(@NotNull AccessibilityService service, AccessibilityEvent event) {
 //        KLog.i("onAccessibilityEvent: " + (event == null ? "null" : event.getPackageName().toString()));
         if (event == null) return;
 
@@ -136,10 +151,10 @@ public class WXShareTask implements AutoInstallService.AccessibilityTask {
         // step 5: 设置->通用->辅助功能->群发助手 界面
         if (TextUtils.equals(curWXUI, ContactInfoUI)) {
             AccessibilityNodeInfo startNode = AccessibilityUtil.findTxtNode(rootNode, "开始群发", "android:id/title");
-            if (startNode == null){
+            if (startNode == null) {
                 // 如果没有开始群发按钮，那么就是没有开启，先开启功能
                 AccessibilityUtil.findTxtClick(rootNode, "启用该功能", "android:id/title");
-            }else {
+            } else {
                 AccessibilityUtil.clickNode(startNode, true);
             }
         }
@@ -151,10 +166,59 @@ public class WXShareTask implements AutoInstallService.AccessibilityTask {
         }
         // step 7: 设置->通用->辅助功能->群发助手->点击'开始群发'出现的有'新建群发'按钮的界面->选择收信人界面
         if (TextUtils.equals(curWXUI, MassSendSelectContactUI)) {
+            // 全选
+            if (isSendAll) {
+                // 根据全选按钮判断，是否已经全选，全选时：按钮文字是'不选'，未全选时：按钮文字是'全选'
+                List<AccessibilityNodeInfo> selAllNode = rootNode.findAccessibilityNodeInfosByViewId("com.tencent.mm:id/di6");
+                if (selAllNode == null || selAllNode.size() == 0) return;
+
+                boolean hasBtn = false;
+                for (AccessibilityNodeInfo ni : selAllNode) {
+                    if (TextUtils.equals("全选", ni.getText())) {
+                        AccessibilityUtil.clickNode(ni);
+
+                        hasBtn = true;
+                        break;
+                    } else if (TextUtils.equals("不选", ni.getText())) {
+                        // 说明已全选，未考虑用户点击了某一项的情况，可能取消了某个人
+                        hasBtn = true;
+                        break;
+                    }
+                }
+                // 未找到正确按钮，不操作
+                if (!hasBtn) {
+                    return;
+                }
+            } else {
+                // 选择标签
+
+                // 直接选择
+            }
+
+            // 选择完成 下一步, 走到这一步，说明已经选择完成，不考虑未选的情况，一个都未选择时，按钮是不能点击的
+            AccessibilityUtil.findNodeClickById(rootNode, "com.tencent.mm:id/lm");
         }
         // step 8: 设置->通用->辅助功能->群发助手->点击'开始群发'出现的有'新建群发'按钮的界面->选择收信人界面->群发消息输入界面
         // 注意：这个界面点击发送后，回到'MassSendHistoryUI'界面
         if (TextUtils.equals(curWXUI, MassSendMsgUI)) {
+
+            if (!KString.isBlank(msgForSend)){
+                // 操作输入框
+                AccessibilityNodeInfo editNode = AccessibilityUtil.findNodeById(rootNode,"com.tencent.mm:id/aqc");
+                if (editNode == null || !TextUtils.equals(editNode.getClassName(), "android.widget.EditText")) return;
+
+                if (!TextUtils.equals(editNode.getText(), msgForSend)){
+                    // 设置输入类容
+                    Bundle arguments = new Bundle();
+                    arguments.putCharSequence(AccessibilityNodeInfo.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE, msgForSend);
+                    editNode.performAction(AccessibilityNodeInfo.ACTION_SET_TEXT, arguments);
+                }
+            }
+
+            //
+
+            // 操作图片视频
+
         }
         // step 9: 应该是回到了'MassSendHistoryUI'界面，该怎么处理呢
         if (TextUtils.equals(curWXUI, "")) {
@@ -182,7 +246,7 @@ public class WXShareTask implements AutoInstallService.AccessibilityTask {
     }
 
     @Override
-    public void onServiceConnected(AccessibilityService service) {
+    public void onServiceConnected(@NotNull AccessibilityService service) {
         KAppTool.startApp(service, "com.tencent.mm");
     }
 }

@@ -28,8 +28,10 @@ import com.kiven.kutils.file.KFile
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.*
 import com.kiven.sample.arch.AHArch
+import com.kiven.sample.autoService.AHAutoService
 import com.kiven.sample.autoService.AccessibilityUtil
 import com.kiven.sample.autoService.AutoInstallService
+import com.kiven.sample.autoService.WXShareTask
 import com.kiven.sample.charCode.AHCharCode
 import com.kiven.sample.charCode.AHUnicodeList
 import com.kiven.sample.floatView.ActivityHFloatView
@@ -154,43 +156,10 @@ class LauchActivity : KActivity(), LifecycleOwner {
                 }
             }
         })
-        addView("无障碍", View.OnClickListener {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (!KUtil.canDrawOverlays()) {
-                    KUtil.startOverlaySetting()
-                    return@OnClickListener
-                }
-            }
 
-            KUtil.startService(ServiceFloat::class.java)
-
-            if (!AutoInstallService.isStarted()) {
-                AccessibilityUtil.jumpToSetting(this)
-            }
-        })
-        addView("无障碍lib", View.OnClickListener {
-            KGranting.requestPermissions(this, 899, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), arrayOf("内存")){
-                if (it){
-//                    val images = listOf(BitmapFactory.decodeResource(resources, R.mipmap.fish))
-                    val images = resources.assets.list("wallpaper")!!.map { BitmapFactory.decodeStream(resources.assets.open("wallpaper/$it")) }
-
-                    if (WXShareMultiImageHelper.isServiceEnabled(this)) {
-                        WXShareMultiImageHelper.shareToTimeline(this, images)
-                    } else {
-                        WXShareMultiImageHelper.openService(this) {
-                            if (it) {
-                                val options = WXShareMultiImageHelper.Options()
-                                options.isAutoFill = it
-                                WXShareMultiImageHelper.shareToTimeline(this, images, options)
-                            } else showSnack("无障碍开启失败")
-                        }
-                    }
-                }
-            }
-
-
-        })
         addView("", View.OnClickListener { })
+
+        AHAutoService().startActivity(this)
     }
 
     private fun setupWindowAnimations() {

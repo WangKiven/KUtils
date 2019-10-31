@@ -5,13 +5,15 @@ import android.os.Handler;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
+import androidx.annotation.NonNull;
+
 import com.kiven.kutils.logHelper.KLog;
 
 import java.util.List;
 
 /**
  * https://www.jianshu.com/p/04ebe2641290
- * https://blog.csdn.net/weimingjue/article/details/82744146
+ * 建议阅读：https://blog.csdn.net/weimingjue/article/details/82744146
  */
 public class AutoInstallService extends AccessibilityService {
     private static AutoInstallService mInstance;
@@ -23,7 +25,7 @@ public class AutoInstallService extends AccessibilityService {
     private static final int DELAY_PAGE = 320; // 页面切换时间
     private final Handler mHandler = new Handler();
 
-    AccessibilityTask task = new WXShareTask();
+    public static AccessibilityTask task;
 
 
     @Override
@@ -32,7 +34,7 @@ public class AutoInstallService extends AccessibilityService {
                 .contains(getString(R.string.auto_access_service_dist_package)))//不写完整包名，是因为某些手机(如小米)安装器包名是自定义的
             return;*/
 
-        task.onAccessibilityEvent(this, event);
+        if (task != null) task.onAccessibilityEvent(this, event);
 
         /*KLog.i("onAccessibilityEvent: " + (event == null ? "null" : event.getPackageName().toString()));
         if (event == null) return;
@@ -140,8 +142,8 @@ public class AutoInstallService extends AccessibilityService {
     }
 
     public interface AccessibilityTask {
-        void onAccessibilityEvent(AccessibilityService service, AccessibilityEvent event);
+        void onAccessibilityEvent(@NonNull AccessibilityService service, AccessibilityEvent event);
 
-        void onServiceConnected(AccessibilityService service);
+        void onServiceConnected(@NonNull AccessibilityService service);
     }
 }

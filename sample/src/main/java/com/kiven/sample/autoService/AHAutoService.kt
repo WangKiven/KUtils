@@ -19,6 +19,7 @@ import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KGranting
 import com.kiven.kutils.tools.KUtil
 import com.kiven.sample.floatView.ServiceFloat
+import com.kiven.sample.util.showListDialog
 import com.kiven.sample.util.showSnack
 import com.sch.share.WXShareMultiImageHelper
 import org.jetbrains.anko.support.v4.nestedScrollView
@@ -53,8 +54,13 @@ class AHAutoService : KActivityHelper() {
         // TODO: 2018/3/28 ----------------------------------------------------------
         val txtTag = addTitle("未选择标签")
 
-        val tags = mutableListOf<String>()
-        val selTags = mutableListOf<String>()
+//        val tags = mutableListOf<String>()
+        val selTags = mutableListOf<String>("大宝")
+
+        txtTag.setOnClickListener {
+            selTags.clear()
+            txtTag.text = "未选择标签"
+        }
         addView("按标签分享", View.OnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (!KUtil.canDrawOverlays()) {
@@ -65,11 +71,15 @@ class AHAutoService : KActivityHelper() {
 //            KUtil.startService(ServiceFloat::class.java)
 
 
-
             if (selTags.isEmpty()) {
-                if (tags.isEmpty()){
+                if (WXConst.frindsTags.isEmpty()){
                     AutoInstallService.task = WXLoadTagTask()
                 }else{
+                    //
+                    mActivity.showListDialog(WXConst.frindsTags.toList().map { "${it.first}(${it.second})" }){index, what ->
+                        selTags.add(WXConst.frindsTags.toList()[index].first)
+                        txtTag.text = "已选标签：${selTags.joinToString()}"
+                    }
 
                     return@OnClickListener
                 }

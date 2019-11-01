@@ -1,6 +1,8 @@
 package com.kiven.sample.autoService
 
 import android.accessibilityservice.AccessibilityService
+import android.app.ActivityManager
+import android.content.Context.ACTIVITY_SERVICE
 import android.graphics.Rect
 import android.text.TextUtils
 import android.view.accessibility.AccessibilityEvent
@@ -57,7 +59,7 @@ class WXLoadTagTask : AutoInstallService.AccessibilityTask {
 
         // step 1 : 微信主界面
         if (TextUtils.equals(curWXUI, LauncherUI)) {
-            val myNode = AccessibilityUtil.findTxtNode(rootNode, "我", "com.tencent.mm:id/djv")
+            val myNode = AccessibilityUtil.findTxtNode(rootNode, "通讯录", "com.tencent.mm:id/djv")
             if (myNode != null) {
 
                 val settingNode = AccessibilityUtil.findTxtNode(rootNode, "标签", "com.tencent.mm:id/op")
@@ -66,7 +68,10 @@ class WXLoadTagTask : AutoInstallService.AccessibilityTask {
                     AccessibilityUtil.clickNode(myNode, true)
                 } else {
                     AccessibilityUtil.clickNode(settingNode, true)
+
+                    settingNode.recycle()
                 }
+                myNode.recycle()
             }
 
             return
@@ -79,7 +84,7 @@ class WXLoadTagTask : AutoInstallService.AccessibilityTask {
                 showToast("你还没有标签呢，快创建几个吧")
                 return
             }
-            val unselTags = tags.filter { WXConst.frindsTags.get(it.text.toString()) == null }
+            val unselTags = tags.filter { WXConst.frindsTags[it.text.toString()] == null }
             if (unselTags.isNotEmpty()) {
                 unselTags.forEach {
                     val countNodes = it.parent.findAccessibilityNodeInfosByViewId("com.tencent.mm:id/b95")
@@ -93,7 +98,7 @@ class WXLoadTagTask : AutoInstallService.AccessibilityTask {
                     WXConst.frindsTags.put(it.text.toString(), count)
                 }
 
-                KLog.i("已记录标签：${WXConst.frindsTags.toMap().keys.joinToString()}")
+                KLog.i("已记录标签：${WXConst.frindsTags.keys.joinToString()}")
 
                 // 滚动判断是否需要滚动：根据最后一行底部与列表底部位置判断
                 val listViewNodes = rootNode.findAccessibilityNodeInfosByViewId("com.tencent.mm:id/b98")
@@ -115,8 +120,17 @@ class WXLoadTagTask : AutoInstallService.AccessibilityTask {
                 }
 
                 // 回到本App
-                service.performGlobalAction(AccessibilityService.GLOBAL_ACTION_RECENTS)
+//                service.performGlobalAction(AccessibilityService.GLOBAL_ACTION_RECENTS)
+//                KAppTool.startApp(service, "com.kiven.sample")
             }
+
+            val activityManager =  service.getSystemService(ACTIVITY_SERVICE) as ActivityManager
+
+            val tasks = activityManager.appTasks
+            tasks[0].moveToFront()
+            KLog.i("xxxxxxxxxxxxxx:::::${tasks.size}")
+
+
         }
 
     }

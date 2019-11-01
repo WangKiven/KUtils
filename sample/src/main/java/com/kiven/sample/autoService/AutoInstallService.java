@@ -134,7 +134,7 @@ public class AutoInstallService extends AccessibilityService {
                 // 任务处理
                 if (task != null) task.onServiceConnected(AutoInstallService.this);
             }
-        }, DELAY_PAGE * 3);
+        }, DELAY_PAGE * 4);
     }
 
     @Override

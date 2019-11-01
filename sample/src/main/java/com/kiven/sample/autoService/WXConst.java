@@ -2,7 +2,7 @@ package com.kiven.sample.autoService;
 
 import com.kiven.kutils.util.ArrayMap;
 
-import java.util.List;
+import java.util.TreeMap;
 
 public class WXConst {
     public class Page {
@@ -24,5 +24,5 @@ public class WXConst {
     }
 
     public static int logType = 0;//控制打印日志, 微信工具用
-    public static final ArrayMap<String, Integer> frindsTags = new ArrayMap<>();
+    public static final TreeMap<String, Integer> frindsTags = new TreeMap<>();
 }

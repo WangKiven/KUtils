@@ -205,12 +205,13 @@ public class WXShareTask implements AutoInstallService.AccessibilityTask {
         // 注意：这个界面点击发送后，回到'MassSendHistoryUI'界面
         if (TextUtils.equals(curWXUI, MassSendMsgUI)) {
 
-            if (!KString.isBlank(msgForSend)){
+            if (!KString.isBlank(msgForSend)) {
                 // 操作输入框
-                AccessibilityNodeInfo editNode = AccessibilityUtil.findNodeById(rootNode,"com.tencent.mm:id/aqc");
-                if (editNode == null || !TextUtils.equals(editNode.getClassName(), "android.widget.EditText")) return;
+                AccessibilityNodeInfo editNode = AccessibilityUtil.findNodeById(rootNode, "com.tencent.mm:id/aqc");
+                if (editNode == null || !TextUtils.equals(editNode.getClassName(), "android.widget.EditText"))
+                    return;
 
-                if (!TextUtils.equals(editNode.getText(), msgForSend)){
+                if (!TextUtils.equals(editNode.getText(), msgForSend)) {
                     // 设置输入类容
                     Bundle arguments = new Bundle();
                     arguments.putCharSequence(AccessibilityNodeInfo.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE, msgForSend);
@@ -240,7 +241,6 @@ public class WXShareTask implements AutoInstallService.AccessibilityTask {
             default:
                 break;
         }*/
-
     }
 
     public interface AccessibilityStep {

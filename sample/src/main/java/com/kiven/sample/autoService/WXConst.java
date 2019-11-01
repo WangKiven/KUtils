@@ -1,7 +1,5 @@
 package com.kiven.sample.autoService;
 
-import com.kiven.kutils.util.ArrayMap;
-
 import java.util.TreeMap;
 
 public class WXConst {

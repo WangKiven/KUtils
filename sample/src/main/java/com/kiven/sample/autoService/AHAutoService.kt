@@ -87,7 +87,7 @@ class AHAutoService : KActivityHelper() {
                 AutoInstallService.task = WXShareTask()
             }
 
-            if (!AutoInstallService.isStarted()) {
+            if (!AutoInstallService.isStarted) {
                 AccessibilityUtil.jumpToSetting(mActivity)
             }
         })

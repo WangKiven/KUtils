@@ -1,52 +1,37 @@
-package com.kiven.sample.autoService;
+package com.kiven.sample.autoService
 
-import android.accessibilityservice.AccessibilityService;
-import android.content.Context;
-import android.os.Handler;
-import android.view.WindowManager;
-import android.view.accessibility.AccessibilityEvent;
-import android.view.accessibility.AccessibilityNodeInfo;
+import android.accessibilityservice.AccessibilityService
+import android.content.Context
+import android.os.Handler
+import android.view.WindowManager
+import android.view.accessibility.AccessibilityEvent
+import android.view.accessibility.AccessibilityNodeInfo
 
-import androidx.annotation.NonNull;
-
-import com.kiven.kutils.logHelper.KLog;
-import com.kiven.sample.floatView.FloatView;
-
-import java.util.List;
+import com.kiven.kutils.logHelper.KLog
+import com.kiven.sample.floatView.FloatView
 
 /**
  * https://www.jianshu.com/p/04ebe2641290
  * 建议阅读：https://blog.csdn.net/weimingjue/article/details/82744146
  */
-public class AutoInstallService extends AccessibilityService {
-    private static AutoInstallService mInstance;
+class AutoInstallService : AccessibilityService() {
+    private val mHandler = Handler()
 
-    public static boolean isStarted() {
-        return mInstance != null;
-    }
+    private var floatView: FloatView? = null
 
-    private static final int DELAY_PAGE = 320; // 页面切换时间
-    private final Handler mHandler = new Handler();
-
-    public static AccessibilityTask task;
-
-    private FloatView floatView;
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
+    override fun onCreate() {
+        super.onCreate()
         // y由于是后台服务，必须是应用外悬浮
-        floatView = new FloatView(getBaseContext(), (WindowManager) getApplication().getSystemService(Context.WINDOW_SERVICE), true);
-        floatView.showFloat();
+        floatView = FloatView(baseContext, application.getSystemService(Context.WINDOW_SERVICE) as WindowManager, true)
+        floatView!!.showFloat()
     }
 
-    @Override
-    public void onAccessibilityEvent(AccessibilityEvent event) {
+    override fun onAccessibilityEvent(event: AccessibilityEvent) {
         /*if (event == null || !event.getPackageName().toString()
                 .contains(getString(R.string.auto_access_service_dist_package)))//不写完整包名，是因为某些手机(如小米)安装器包名是自定义的
             return;*/
 
-        if (task != null) task.onAccessibilityEvent(this, event);
+        if (task != null) task!!.onAccessibilityEvent(this, event)
 
         /*KLog.i("onAccessibilityEvent: " + (event == null ? "null" : event.getPackageName().toString()));
         if (event == null) return;
@@ -107,69 +92,69 @@ public class AutoInstallService extends AccessibilityService {
     }
 
     // 排除广告[安装]按钮
-    private boolean isNotAD(AccessibilityNodeInfo rootNode) {
-        return isNotFind(rootNode, "还喜欢") //小米
-                && isNotFind(rootNode, "官方安装"); //华为
+    private fun isNotAD(rootNode: AccessibilityNodeInfo): Boolean {
+        return (isNotFind(rootNode, "还喜欢") //小米
+                && isNotFind(rootNode, "官方安装")) //华为
     }
 
-    private boolean isNotFind(AccessibilityNodeInfo rootNode, String txt) {
-        List<AccessibilityNodeInfo> nodes = rootNode.findAccessibilityNodeInfosByText(txt);
-        return nodes == null || nodes.isEmpty();
+    private fun isNotFind(rootNode: AccessibilityNodeInfo, txt: String): Boolean {
+        val nodes = rootNode.findAccessibilityNodeInfosByText(txt)
+        return nodes == null || nodes.isEmpty()
     }
 
 
-    @Override
-    protected void onServiceConnected() {
-        super.onServiceConnected();
-        KLog.i("onServiceConnected: ");
+    override fun onServiceConnected() {
+        super.onServiceConnected()
+        KLog.i("onServiceConnected: ")
 
-        mInstance = this;
+        mInstance = this
 
         // 退出设置界面，后面再优化
-        performGlobalAction(GLOBAL_ACTION_BACK);
-        performGlobalAction(GLOBAL_ACTION_BACK);
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                // 任务处理
-                if (task != null) task.onServiceConnected(AutoInstallService.this);
-            }
-        }, DELAY_PAGE * 4);
+        performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK)
+        performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK)
+        mHandler.postDelayed({
+            // 任务处理
+            if (task != null) task!!.onServiceConnected(this@AutoInstallService)
+        }, (DELAY_PAGE * 4).toLong())
     }
 
-    @Override
-    public void onInterrupt() {
-        KLog.i("onInterrupt: ");
+    override fun onInterrupt() {
+        KLog.i("onInterrupt: ")
 
-        performGlobalAction(GLOBAL_ACTION_BACK);
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                performGlobalAction(GLOBAL_ACTION_BACK);
-            }
-        }, DELAY_PAGE);
+        performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK)
+        mHandler.postDelayed({ performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK) }, DELAY_PAGE.toLong())
 
-        mInstance = null;
+        mInstance = null
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        KLog.i("onDestroy: ");
+    override fun onDestroy() {
+        super.onDestroy()
+        KLog.i("onDestroy: ")
 
         // 服务停止，重新进入系统设置界面
-        AccessibilityUtil.jumpToSetting(this);
+        AccessibilityUtil.jumpToSetting(this)
 
-        mInstance = null;
+        mInstance = null
 
         if (floatView != null) {
-            floatView.hideFloat();
+            floatView!!.hideFloat()
         }
     }
 
-    public interface AccessibilityTask {
-        void onAccessibilityEvent(@NonNull AccessibilityService service, AccessibilityEvent event);
+    interface AccessibilityTask {
+        fun onAccessibilityEvent(service: AccessibilityService, event: AccessibilityEvent?)
 
-        void onServiceConnected(@NonNull AccessibilityService service);
+        fun onServiceConnected(service: AccessibilityService)
+    }
+
+    companion object {
+        private var mInstance: AutoInstallService? = null
+
+        val isStarted: Boolean
+            get() = mInstance != null
+
+        private val DELAY_PAGE = 320 // 页面切换时间
+
+        var task: AccessibilityTask? = null
     }
 }

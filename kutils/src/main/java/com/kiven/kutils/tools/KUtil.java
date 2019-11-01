@@ -432,6 +432,7 @@ public class KUtil {
     public static void startOverlaySetting() {
         Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
         intent.setData(Uri.parse("package:" + app.getPackageName()));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         app.startActivity(intent);
     }
 

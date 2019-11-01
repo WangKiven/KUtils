@@ -84,7 +84,9 @@ class AHAutoService : KActivityHelper() {
                     return@OnClickListener
                 }
             }else{
-                AutoInstallService.task = WXShareTask()
+                val wxs = WXShareTask()
+                wxs.tagForFriends = selTags
+                AutoInstallService.task = wxs
             }
 
             if (!AutoInstallService.isStarted) {

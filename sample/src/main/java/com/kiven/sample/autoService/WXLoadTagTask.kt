@@ -30,7 +30,7 @@ class WXLoadTagTask : AutoInstallService.AccessibilityTask {
 
         deal(service, event, rootNode)
 
-
+        rootNode.recycle()
         eventNode.recycle()
     }
 

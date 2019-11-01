@@ -10,18 +10,12 @@ import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KAppTool
 import com.kiven.kutils.tools.KString
 import com.kiven.kutils.util.ArrayMap
+import com.kiven.sample.autoService.WXConst.Page.*
 
 import java.util.ArrayList
 
-import com.kiven.sample.autoService.WXConst.Page.ContactInfoUI
-import com.kiven.sample.autoService.WXConst.Page.LauncherUI
-import com.kiven.sample.autoService.WXConst.Page.MassSendHistoryUI
-import com.kiven.sample.autoService.WXConst.Page.MassSendMsgUI
-import com.kiven.sample.autoService.WXConst.Page.MassSendSelectContactUI
-import com.kiven.sample.autoService.WXConst.Page.SettingsPluginsUI
-import com.kiven.sample.autoService.WXConst.Page.settingUI
-import com.kiven.sample.autoService.WXConst.Page.tongYongSettingUI
 import com.kiven.sample.autoService.WXConst.logType
+import com.kiven.sample.util.showToast
 
 class WXShareTask : AutoInstallService.AccessibilityTask {
 
@@ -33,6 +27,8 @@ class WXShareTask : AutoInstallService.AccessibilityTask {
 
     var isSendTags = false// 是否发送给标签好友，true: 发送给标签好友，false: 发送给不是这些标签的好友
     var tagForFriends: List<String>? = null // 对应的标签，null: 不根据标签发送
+    // 用作记录
+    val tagAndFriends = mutableMapOf<String, MutableList<String>>()
 
     var sendFrends: ArrayList<String>? = null //
 
@@ -65,17 +61,17 @@ class WXShareTask : AutoInstallService.AccessibilityTask {
 
         val rootNode = service.rootInActiveWindow ?: return //当前窗口根节点
 
-        deal(event, rootNode)
+        deal(service, event, rootNode)
 
-
+        rootNode.recycle()
         eventNode.recycle()
     }
 
-    private fun deal(event: AccessibilityEvent, rootNode: AccessibilityNodeInfo) {
+    private fun deal(service: AccessibilityService, event: AccessibilityEvent, rootNode: AccessibilityNodeInfo) {
 
-
-        if (event.eventType == AccessibilityEvent.TYPE_VIEW_CLICKED) {
-            KLog.i("点击：：：：：：：：：：：：：")
+        // 拦截滚动和点击
+        if (event.eventType == AccessibilityEvent.TYPE_VIEW_CLICKED || event.eventType == AccessibilityEvent.TYPE_VIEW_SCROLLED) {
+            KLog.i("点击或滚动：：：：：：：：：：：：：")
             AccessibilityUtil.printTree(event.source)
             return
         }
@@ -105,7 +101,10 @@ class WXShareTask : AutoInstallService.AccessibilityTask {
                     AccessibilityUtil.clickNode(myNode, true)
                 } else {
                     AccessibilityUtil.clickNode(settingNode, true)
+                    settingNode.recycle()
                 }
+
+                myNode.recycle()
             }
 
             return
@@ -179,10 +178,49 @@ class WXShareTask : AutoInstallService.AccessibilityTask {
                 }
             } else {
                 // 选择标签
-                if (tagForFriends != null && !tagForFriends!!.isEmpty()) {
+                if (tagForFriends != null && tagForFriends!!.isNotEmpty()) {
+                    // 标签面板, 点击收索框才会出现
+                    val tagPanlNode = rootNode.findAccessibilityNodeInfosByViewId("com.tencent.mm:id/jx")
+                    if (tagPanlNode == null || tagPanlNode.isEmpty()) {
+                        // 搜索框
+                        val searchNode = rootNode.findAccessibilityNodeInfosByViewId("com.tencent.mm:id/bdl")
+                        if (searchNode != null && searchNode.isNotEmpty()) {
+                            AccessibilityUtil.clickNode(searchNode[0])
+                        }
+                        // 没找到就不处理
+                        return
+                    } else {
+                        val childCount = tagPanlNode[0].childCount
+                        if (childCount > 0) {
 
+                            // 获取还没记录的好友标签
+                            val recorded = tagAndFriends.keys
+                            val nextTags = tagForFriends!!.filter { !recorded.contains(it) }
+                            if (nextTags.isNotEmpty()) {
+                                // 获取所有标签
+                                val allTag = mutableListOf<String>()
+                                for (i in 0 until childCount) {
+                                    allTag.add(tagPanlNode[0].getChild(i).text.toString())
+                                }
+                                // 下一个需要记录的标签
+                                val next = allTag.firstOrNull { nextTags.contains(it) }
+                                if (next == null) {
+                                    showToast("标签【${nextTags.joinToString()}】不存在")
+                                    // 剩下的标签不存在，记录为空列表，下一步
+                                    nextTags.forEach { tagAndFriends[it] = mutableListOf() }
+                                } else {
+                                    AccessibilityUtil.findTxtClick(tagPanlNode[0], next)
+                                    return
+                                }
+                            }
+                            // 已经选择完成，下一步
+                        } else {
+                            showToast("标签【${tagForFriends!!.joinToString()}】不存在")
 
-                    return
+                            // 一个人都没选，没法下一步
+                            return
+                        }
+                    }
                 }
 
                 // 直接选择
@@ -193,6 +231,54 @@ class WXShareTask : AutoInstallService.AccessibilityTask {
 
             return
         }
+
+        // step 7-1:  设置->通用->辅助功能->群发助手->点击'开始群发'出现的有'新建群发'按钮的界面->选择收信人界面->点击搜索框弹出的标签进入的'按标签选择界面'
+        // 在这个界面可以选择，但是如果之前已经选择了好友，在这里将不可取消选中，不过依然可以点击并有点击效果
+        // 如果用户意图是不选这些标签，那么在这个界面只记录标签下有哪些好友
+        if (TextUtils.equals(curWXUI, SelectLabelContactUI)) {
+            // 获取当前标签
+            val titleNode = rootNode.findAccessibilityNodeInfosByViewId("android:id/text1")
+            if (titleNode == null || titleNode.isEmpty()) return
+            val tag = titleNode[0].text.toString()
+
+            if (!tagAndFriends.containsKey(tag)) {
+                tagAndFriends[tag] = mutableListOf<String>()
+            }
+            // 获取标签下好友
+            /*val listViewNode = rootNode.findAccessibilityNodeInfosByViewId("com.tencent.mm:id/s6")
+            if (listViewNode == null || listViewNode.isEmpty()) return
+            val tfs = listViewNode.map { it.text.toString() }//当前页的数据
+
+            tagAndFriends[tag]!!.addAll(tfs)
+            // 选中控件，目前不考虑指定标签不发送的情况
+            listViewNode.forEach {
+                AccessibilityUtil.clickNode(it, true)
+            }
+            // 滚动
+            val lvn = rootNode.findAccessibilityNodeInfosByViewId("com.tencent.mm:id/js")
+            if (lvn != null && lvn.isNotEmpty()) lvn.first().performAction(AccessibilityNodeInfo.ACTION_SCROLL_FORWARD)*/
+
+            val lvn = rootNode.findAccessibilityNodeInfosByViewId("com.tencent.mm:id/js")
+            if (lvn != null && lvn.isNotEmpty()) {
+
+                val hasComplete = AccessibilityUtil.checkListView(lvn.first(), tagAndFriends[tag]!!, "com.tencent.mm:id/s6")
+                lvn[0].findAccessibilityNodeInfosByViewId("com.tencent.mm:id/a3h")?.forEach {
+                    if (!it.isChecked) {
+                        AccessibilityUtil.clickNode(it, true)
+                    }
+                }
+
+                if (hasComplete) {
+//                    service.performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK)
+                    AccessibilityUtil.findNodeClickById(rootNode, "com.tencent.mm:id/lm")
+                    KLog.i("AccessibilityService.GLOBAL_ACTION_BACK")
+                } else {
+                    lvn.first().performAction(AccessibilityNodeInfo.ACTION_SCROLL_FORWARD)
+                }
+            }
+            return
+        }
+
         // step 8: 设置->通用->辅助功能->群发助手->点击'开始群发'出现的有'新建群发'按钮的界面->选择收信人界面->群发消息输入界面
         // 注意：这个界面点击发送后，回到'MassSendHistoryUI'界面
         if (TextUtils.equals(curWXUI, MassSendMsgUI)) {

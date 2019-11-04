@@ -18,6 +18,10 @@ public class WXConst {
         //设置->通用->辅助功能->群发助手->点击'开始群发'出现的有'新建群发'按钮的界面->选择收信人界面->群发消息输入界面
         // 这个界面点击发送后，回到'MassSendHistoryUI'界面
         public static final String MassSendMsgUI = "com.tencent.mm.plugin.masssend.ui.MassSendMsgUI";
+        // 媒体文件选择界面
+        public static final String AlbumPreviewUI = "com.tencent.mm.plugin.gallery.ui.AlbumPreviewUI";
+        // 图片剪切界面
+        public static final String CropImageNewUI = "com.tencent.mm.ui.tools.CropImageNewUI";
 
         // 标签界面：微信主界面通讯录中点击'标签'按钮进入
         public static final String ContactLabelManagerUI = "com.tencent.mm.plugin.label.ui.ContactLabelManagerUI";

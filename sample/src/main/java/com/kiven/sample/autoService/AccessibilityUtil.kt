@@ -9,6 +9,7 @@ import android.provider.Settings
 import android.text.TextUtils
 import android.util.Log
 import android.view.accessibility.AccessibilityNodeInfo
+import android.widget.TextView
 
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KString
@@ -143,7 +144,7 @@ object AccessibilityUtil {
     // TODO 查找安装,并模拟点击(findAccessibilityNodeInfosByText判断逻辑是contains而非equals)
 
 
-    fun findTxtClick(nodeInfo: AccessibilityNodeInfo, txt: String, souceId: String?) {
+    fun findTxtClick(nodeInfo: AccessibilityNodeInfo, txt: String, souceId: String? = null):Boolean {
         val nodes: List<AccessibilityNodeInfo>?
         if (KString.isBlank(souceId)) {
             nodes = nodeInfo.findAccessibilityNodeInfosByText(txt)
@@ -152,28 +153,35 @@ object AccessibilityUtil {
         }
 
         if (nodes == null || nodes.isEmpty())
-            return
+            return false
 
         for (ni in nodes) {
             if (TextUtils.equals(ni.text, txt)) {
                 KLog.i("click: $ni")
                 clickNode(ni, true)
+
+                return true
             }
         }
+
+        return false
     }
 
-    fun findTxtClick(nodeInfo: AccessibilityNodeInfo, txt: String) {
+    /*fun findTxtClick(nodeInfo: AccessibilityNodeInfo, txt: String): Boolean {
         val nodes = nodeInfo.findAccessibilityNodeInfosByText(txt)
         if (nodes == null || nodes.isEmpty())
-            return
+            return false
 
 
         for (ni in nodes) {
             KLog.i("findTxtClick: $txt, $ni")
 
-            ni.performAction(AccessibilityNodeInfo.ACTION_CLICK)
+            clickNode(ni, true)
+            return true
         }
-    }
+
+        return false
+    }*/
 
     fun findNodeClickById(nodeInfo: AccessibilityNodeInfo, souceId: String) {
         val nodes = nodeInfo.findAccessibilityNodeInfosByViewId(souceId)
@@ -268,32 +276,120 @@ object AccessibilityUtil {
         } else null
     }
 
+    /**
+     * 根据class查找，返回找到的第一个子控件
+     */
+    fun <T> findNodeByClass(nodeInfo: AccessibilityNodeInfo, cl: Class<T>): AccessibilityNodeInfo? {
+        return findNodeByClass(nodeInfo, cl.name)
+    }
+
+    fun findNodeByClass(nodeInfo: AccessibilityNodeInfo, className: String): AccessibilityNodeInfo? {
+
+        if (nodeInfo.className == className)
+            return nodeInfo
+
+        val childCount = nodeInfo.childCount
+        if (childCount > 0) {
+            for (i in 0 until childCount) {
+                val childNode = findNodeByClass(nodeInfo.getChild(i), className)
+                if (childNode != null) return childNode
+            }
+        }
+
+        return null
+    }
+
+    /**
+     * 根据class查找
+     */
+    fun <T> findNodesByClass(nodeInfo: AccessibilityNodeInfo, cl: Class<T>): MutableList<AccessibilityNodeInfo> {
+        return findNodesByClass(nodeInfo, cl.name)
+    }
+
+    fun findNodesByClass(nodeInfo: AccessibilityNodeInfo, className: String): MutableList<AccessibilityNodeInfo> {
+        val nodes = mutableListOf<AccessibilityNodeInfo>()
+
+        if (nodeInfo.className == className)
+            nodes.add(nodeInfo)
+
+        val childCount = nodeInfo.childCount
+        if (childCount > 0) {
+            for (i in 0 until childCount) {
+                val childNodes = findNodesByClass(nodeInfo.getChild(i), className)
+                if (childNodes.size > 0) {
+                    nodes.addAll(childNodes)
+                }
+            }
+        }
+
+        return nodes
+    }
+
 
     private var preListPageString = ""
     /**
-     * listview 是否已经遍历完了
+     * 遍历listview
      * @param idName 数据所在的控件的id名称
      * @return 是否已经到底部，通过对比上次和这次的数据
      */
-    fun checkListView(listViewNode: AccessibilityNodeInfo, datas:MutableList<String>, idName:String): Boolean {
+    fun checkListViewById(listViewNode: AccessibilityNodeInfo, datas: MutableList<String>, idName: String): Boolean {
         val txtNodes = listViewNode.findAccessibilityNodeInfosByViewId(idName)
         if (txtNodes == null || txtNodes.isEmpty()) return true //没有数据也就不用判断滚动了
 
         // 去重加入记录表
         val txts = txtNodes.map { it.text.toString() }
         txts.forEach {
-            if (!datas.contains(it)){
+            if (!datas.contains(it)) {
                 datas.add(it)
             }
         }
 
         // 对比数据，判断是否到底部了
         val curListPageString = txts.joinToString()
-        return if (preListPageString == curListPageString){
+        return if (preListPageString == curListPageString) {
             true
-        }else{
+        } else {
             preListPageString = curListPageString
             false
         }
+    }
+
+    /**
+     * 遍历listview
+     * @param cn 数据所在的控件的class类型
+     * @return 是否已经到底部，通过对比上次和这次的数据
+     */
+    fun <T> checkListViewByClass(listViewNode: AccessibilityNodeInfo, datas: MutableList<String>, cn: Class<T>): Boolean {
+        return checkListViewByClass(listViewNode, datas, cn.name)
+    }
+
+    fun checkListViewByClass(listViewNode: AccessibilityNodeInfo, datas: MutableList<String>, className: String): Boolean {
+        val txtNodes = findNodesByClass(listViewNode, className)
+        if (txtNodes.isEmpty()) return true //没有数据也就不用判断滚动了
+
+        // 去重加入记录表
+        val txts = txtNodes.map { it.text.toString() }
+        txts.forEach {
+            if (!datas.contains(it)) {
+                datas.add(it)
+            }
+        }
+
+        // 对比数据，判断是否到底部了
+        val curListPageString = txts.joinToString()
+        return if (preListPageString == curListPageString) {
+            true
+        } else {
+            preListPageString = curListPageString
+            false
+        }
+    }
+
+    /**
+     * 遍历listview, 获取TextView 中的数据
+     * @return 是否已经到底部，通过对比上次和这次的数据
+     */
+    fun checkListViewByTextView(listViewNode: AccessibilityNodeInfo, datas: MutableList<String>): Boolean {
+        return checkListViewByClass(listViewNode, datas, TextView::class.java.name)
     }
 }

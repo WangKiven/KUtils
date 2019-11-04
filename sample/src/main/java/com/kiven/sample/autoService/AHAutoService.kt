@@ -55,7 +55,7 @@ class AHAutoService : KActivityHelper() {
         val txtTag = addTitle("未选择标签")
 
 //        val tags = mutableListOf<String>()
-        val selTags = mutableListOf<String>("大宝")
+        val selTags = mutableListOf<String>()
 
         txtTag.setOnClickListener {
             selTags.clear()

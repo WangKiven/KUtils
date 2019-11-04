@@ -7,6 +7,7 @@ import android.graphics.Rect
 import android.text.TextUtils
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
+import android.widget.ListView
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KAppTool
 import com.kiven.sample.autoService.WXConst.Page.ContactLabelManagerUI
@@ -59,10 +60,26 @@ class WXLoadTagTask : AutoInstallService.AccessibilityTask {
 
         // step 1 : 微信主界面
         if (TextUtils.equals(curWXUI, LauncherUI)) {
-            val myNode = AccessibilityUtil.findTxtNode(rootNode, "通讯录", "com.tencent.mm:id/djv")
+            // 查找通讯录选项，id要变，不能用ID
+//            val myNode = AccessibilityUtil.findTxtNode(rootNode, "通讯录", "com.tencent.mm:id/djv")
+            var myNode: AccessibilityNodeInfo? = null
+            val childCount = rootNode.childCount
+            var n = 0
+            for (i in 0 until childCount) {
+                if (TextUtils.equals(rootNode.getChild(i).className, "android.widget.RelativeLayout")) {
+                    n++
+
+                    if (n == 2) {
+                        myNode = rootNode.getChild(i)
+                        break
+                    }
+                }
+            }
+
+
             if (myNode != null) {
 
-                val settingNode = AccessibilityUtil.findTxtNode(rootNode, "标签", "com.tencent.mm:id/op")
+                val settingNode = AccessibilityUtil.findTxtNode(rootNode, "标签")
 
                 if (settingNode == null) {
                     AccessibilityUtil.clickNode(myNode, true)
@@ -79,7 +96,32 @@ class WXLoadTagTask : AutoInstallService.AccessibilityTask {
 
         // step 2 : 标签列表界面
         if (TextUtils.equals(curWXUI, ContactLabelManagerUI)) {
-            val tags = rootNode.findAccessibilityNodeInfosByViewId("com.tencent.mm:id/b94")
+            val listView = AccessibilityUtil.findNodeByClass(rootNode, ListView::class.java.name)
+
+            if (listView == null || listView.childCount < 1) {
+                showToast("你还没有标签呢，快创建几个吧")
+                return
+            }
+
+
+            val childCount = listView.childCount
+            for ( i in 0 until childCount) {
+                val tag = listView.getChild(i).getChild(0).text
+
+                val countTxt = listView.getChild(i).getChild(1).text
+                val count = countTxt.substring(1, countTxt.length - 1).toInt()
+
+                WXConst.frindsTags[tag.toString()] = count
+            }
+
+
+            if (!AccessibilityUtil.checkListViewByTextView(listView)){
+                listView.performAction(AccessibilityNodeInfo.ACTION_SCROLL_FORWARD)
+                return
+            }
+
+
+            /*val tags = rootNode.findAccessibilityNodeInfosByViewId("com.tencent.mm:id/b94")
             if (tags == null || tags.isEmpty()) {
                 showToast("你还没有标签呢，快创建几个吧")
                 return
@@ -119,10 +161,7 @@ class WXLoadTagTask : AutoInstallService.AccessibilityTask {
                     }
                 }
 
-                // 回到本App
-//                service.performGlobalAction(AccessibilityService.GLOBAL_ACTION_RECENTS)
-//                KAppTool.startApp(service, "com.kiven.sample")
-            }
+            }*/
 
             val activityManager =  service.getSystemService(ACTIVITY_SERVICE) as ActivityManager
 

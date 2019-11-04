@@ -144,7 +144,7 @@ object AccessibilityUtil {
     // TODO 查找安装,并模拟点击(findAccessibilityNodeInfosByText判断逻辑是contains而非equals)
 
 
-    fun findTxtClick(nodeInfo: AccessibilityNodeInfo, txt: String, souceId: String? = null):Boolean {
+    fun findTxtClick(nodeInfo: AccessibilityNodeInfo, txt: String, souceId: String? = null): Boolean {
         val nodes: List<AccessibilityNodeInfo>?
         if (KString.isBlank(souceId)) {
             nodes = nodeInfo.findAccessibilityNodeInfosByText(txt)
@@ -246,12 +246,11 @@ object AccessibilityUtil {
     }
 
 
-    fun findTxtNode(nodeInfo: AccessibilityNodeInfo, txt: String, souceId: String?): AccessibilityNodeInfo? {
-        val nodes: List<AccessibilityNodeInfo>?
-        if (KString.isBlank(souceId)) {
-            nodes = nodeInfo.findAccessibilityNodeInfosByText(txt)
+    fun findTxtNode(nodeInfo: AccessibilityNodeInfo, txt: String, souceId: String? = null): AccessibilityNodeInfo? {
+        val nodes: List<AccessibilityNodeInfo>? = if (KString.isBlank(souceId)) {
+            nodeInfo.findAccessibilityNodeInfosByText(txt)
         } else {
-            nodes = nodeInfo.findAccessibilityNodeInfosByViewId(souceId)
+            nodeInfo.findAccessibilityNodeInfosByViewId(souceId)
         }
 
         if (nodes == null || nodes.isEmpty())
@@ -391,5 +390,34 @@ object AccessibilityUtil {
      */
     fun checkListViewByTextView(listViewNode: AccessibilityNodeInfo, datas: MutableList<String>): Boolean {
         return checkListViewByClass(listViewNode, datas, TextView::class.java.name)
+    }
+
+    /**
+     * 遍历listview, 比较TextView 中的数据， 不获取数据
+     * @return 是否已经到底部，通过对比上次和这次的数据
+     */
+    fun checkListViewByTextView(listViewNode: AccessibilityNodeInfo): Boolean {
+        return checkListViewByClass(listViewNode, TextView::class.java.name)
+    }
+
+    /**
+     * 遍历listview, 不获取数据
+     * @return 是否已经到底部，通过对比上次和这次的数据
+     */
+    fun checkListViewByClass(listViewNode: AccessibilityNodeInfo, className: String): Boolean {
+        val txtNodes = findNodesByClass(listViewNode, className)
+        if (txtNodes.isEmpty()) return true //没有数据也就不用判断滚动了
+
+        // 去重加入记录表
+        val txts = txtNodes.map { it.text.toString() }
+
+        // 对比数据，判断是否到底部了
+        val curListPageString = txts.joinToString()
+        return if (preListPageString == curListPageString) {
+            true
+        } else {
+            preListPageString = curListPageString
+            false
+        }
     }
 }

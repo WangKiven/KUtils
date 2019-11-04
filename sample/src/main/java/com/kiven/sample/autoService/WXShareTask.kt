@@ -108,6 +108,10 @@ class WXShareTask : AutoInstallService.AccessibilityTask {
             }
         }
 
+        if (curState >= 3) {
+            return
+        }
+
         // step 1 : 微信主界面
         if (TextUtils.equals(curWXUI, LauncherUI)) {
 
@@ -116,7 +120,7 @@ class WXShareTask : AutoInstallService.AccessibilityTask {
 //            val myNode = AccessibilityUtil.findTxtNode(rootNode, "我", "com.tencent.mm:id/djv")
             var myNode: AccessibilityNodeInfo? = null
 
-            val rootBound = Rect()
+            /*val rootBound = Rect()
             rootNode.getBoundsInScreen(rootBound)
 
             val mns = rootNode.findAccessibilityNodeInfosByText("我")
@@ -131,7 +135,21 @@ class WXShareTask : AutoInstallService.AccessibilityTask {
                         }
                     }
                 }
+            }*/
+
+            val childCount = rootNode.childCount
+            var n = 0
+            for (i in 0 until childCount) {
+                if (TextUtils.equals(rootNode.getChild(i).className, "android.widget.RelativeLayout")) {
+                    n++
+
+                    if (n == 4) {
+                        myNode = rootNode.getChild(i)
+                        break
+                    }
+                }
             }
+
 
             if (myNode != null) {
 

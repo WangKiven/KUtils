@@ -362,11 +362,6 @@ class WXShareTask(
                         // 发送非标签，点击返回
                         KLog.i("xxxxxxxxxxxx")
                         AccessibilityUtil.findNodeClickByClass(rootNode, LinearLayout::class.java.name)
-//                        val nn = AccessibilityUtil.findNodeByClass(rootNode, LinearLayout::class.java.name)
-//                        if (nn != null) {
-//                            AccessibilityUtil.clickNode(nn)
-//                            nn.recycle()
-//                        }
                     }
                     // // TODO: 2019-11-05 将当前界面置空，否则出现两次回退。原因是 curWXUI = event.className.toString() 并不能及时反映当前界面
                     // // TODO: 2019-11-05 目前没找到方法获取当前界面，现在的方法有延次。
@@ -394,6 +389,8 @@ class WXShareTask(
                     val arguments = Bundle()
                     arguments.putCharSequence(AccessibilityNodeInfo.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE, msgForSend)
                     editNode.performAction(AccessibilityNodeInfo.ACTION_SET_TEXT, arguments)
+
+                    return
                 } else {
                     // 发送按钮
                     AccessibilityUtil.findNodesByClass(rootNode, Button::class.java.name)
@@ -403,6 +400,8 @@ class WXShareTask(
                                     curState = if (mediaCount < 1) 3 else 2
                                 }
                             }
+
+                    return
                 }
             }
 
@@ -427,18 +426,25 @@ class WXShareTask(
 
                 if (curIndex + 1 <= childCount) {
                     AccessibilityUtil.clickNode(gridView.getChild(curIndex))
-                    // 视频，是直接发送，不会进入剪切界面，所有在这里计数
-                    hasSendMediaCount++
 
-                    if (hasSendMediaCount >= mediaCount) {
-                        curState = 3 // 发送完毕
-                    }
+
+                    // 视频，是直接发送，不会进入剪切界面，所有在这里计数
+                    // 但是现在不考虑视频，以后处理
                 }
             }
         }
         // step 8-2: 图片剪切界面
         if (TextUtils.equals(curWXUI, CropImageNewUI)) {
-            AccessibilityUtil.findTxtClick(rootNode, "完成")
+            if (AccessibilityUtil.findTxtClick(rootNode, "完成")){
+                // 与上边相同的问题，不然导致一张图片两次计数
+                curWXUI = null
+
+                hasSendMediaCount++
+
+                if (hasSendMediaCount >= mediaCount) {
+                    curState = 3 // 发送完毕
+                }
+            }
         }
 
         // step 9: 应该是回到了'MassSendHistoryUI'界面，该怎么处理呢

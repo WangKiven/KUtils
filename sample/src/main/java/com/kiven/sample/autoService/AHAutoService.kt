@@ -122,7 +122,7 @@ class AHAutoService : KActivityHelper() {
             if (selTags.isEmpty()) {
                 mActivity.showSnack("请先选择标签")
             } else {
-                startWXTask(WXShareTask(tagForFriends = selTags, isSendTags = false))
+                startWXTask(WXShareTask(tagForFriends = selTags, isSendTags = false, mediaCount = 2))
             }
         })
 

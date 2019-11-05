@@ -32,6 +32,8 @@ class AutoInstallService : AccessibilityService() {
                 .contains(getString(R.string.auto_access_service_dist_package)))//不写完整包名，是因为某些手机(如小米)安装器包名是自定义的
             return;*/
 
+//        KLog.i(String.format("点击或滚动：：：：：%s %08x %x", event.className.toString(), event.eventType, event.action))
+
         if (task != null) task!!.onAccessibilityEvent(this, event)
 
         /*KLog.i("onAccessibilityEvent: " + (event == null ? "null" : event.getPackageName().toString()));

@@ -77,6 +77,17 @@ class WXShareTask(
 
         if (event.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
             curWXUI = event.className.toString()
+
+            // 有点系统的微信略过了 MassSendMsgUI 的通知，这里需要手动检测
+            if (curWXUI == MassSendSelectContactUI || curWXUI == SelectLabelContactUI) {
+                val titile = AccessibilityUtil.findNodeById(rootNode, "android:id/text1")
+                if (titile != null && TextUtils.equals(titile.text, "群发")) {
+                    val tts = rootNode.findAccessibilityNodeInfosByText("你将发消息")
+                    if (tts != null && tts.isNotEmpty()) {
+                        curWXUI = MassSendMsgUI
+                    }
+                }
+            }
         }
 
         if (curWXUI == null) return
@@ -109,8 +120,9 @@ class WXShareTask(
 
             var myNode: AccessibilityNodeInfo? = null
 
+            val wxpp = AccessibilityUtil.findNodeByClass(rootNode, "com.tencent.mm.ui.mogic.WxViewPager") ?: return
             val rootBound = Rect()
-            rootNode.getBoundsInScreen(rootBound)
+            wxpp.getBoundsInScreen(rootBound)
 
             val mns = rootNode.findAccessibilityNodeInfosByText("我")
             if (mns != null) {
@@ -209,12 +221,13 @@ class WXShareTask(
                         curState = 1
                 }
 
+            if (TextUtils.equals(curWXUI, MassSendHistoryUI)) curWXUI = null
             return
         }
 
         // 在这里做拦截，防止用户一打开微信就在下边的界面里面
         if (curState < 1) {
-            showToast("请回到我想主界面，自动开始群发操作")
+            showToast("请回到微信主界面，自动开始群发操作")
         }
 
         // step 7: 设置->通用->辅助功能->群发助手->点击'开始群发'出现的有'新建群发'按钮的界面->选择收信人界面
@@ -368,7 +381,7 @@ class WXShareTask(
                     }
                     // // TODO: 2019-11-05 将当前界面置空，否则出现两次回退。原因是 curWXUI = event.className.toString() 并不能及时反映当前界面
                     // // TODO: 2019-11-05 目前没找到方法获取当前界面，现在的方法有延次。
-                    curWXUI = null
+                    if (TextUtils.equals(curWXUI, SelectLabelContactUI)) curWXUI = null
                 } else {
                     lvn.performAction(AccessibilityNodeInfo.ACTION_SCROLL_FORWARD)
                 }
@@ -440,7 +453,7 @@ class WXShareTask(
         if (TextUtils.equals(curWXUI, CropImageNewUI)) {
             if (AccessibilityUtil.findTxtClick(rootNode, "完成")){
                 // 与上边相同的问题，不然导致一张图片两次计数
-                curWXUI = null
+                if (TextUtils.equals(curWXUI, CropImageNewUI)) curWXUI = null
 
                 hasSendMediaCount++
 

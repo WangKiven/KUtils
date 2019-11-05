@@ -47,6 +47,8 @@ class WXLoadTagTask : AutoInstallService.AccessibilityTask {
 
         if (event.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
             curWXUI = event.className.toString()
+
+            KLog.i("ddddddd::::: $curWXUI ")
         }
 
         if (curWXUI == null) return
@@ -74,8 +76,9 @@ class WXLoadTagTask : AutoInstallService.AccessibilityTask {
 
             var myNode: AccessibilityNodeInfo? = null
 
+            val wxpp = AccessibilityUtil.findNodeByClass(rootNode, "com.tencent.mm.ui.mogic.WxViewPager") ?: return
             val rootBound = Rect()
-            rootNode.getBoundsInScreen(rootBound)
+            wxpp.getBoundsInScreen(rootBound)
 
             val mns = rootNode.findAccessibilityNodeInfosByText("通讯录")
             if (mns != null) {

@@ -27,6 +27,6 @@ public class WXConst {
         public static final String ContactLabelManagerUI = "com.tencent.mm.plugin.label.ui.ContactLabelManagerUI";
     }
 
-    public static int logType = 0;//控制打印日志, 微信工具用
+    public static int logType = 2;//控制打印日志, 微信工具用
     public static final TreeMap<String, Integer> frindsTags = new TreeMap<>();
 }

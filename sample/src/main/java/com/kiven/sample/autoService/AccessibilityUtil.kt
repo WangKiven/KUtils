@@ -288,8 +288,11 @@ object AccessibilityUtil {
         val childCount = nodeInfo.childCount
         if (childCount > 0) {
             for (i in 0 until childCount) {
-                val childNode = findNodeByClass(nodeInfo.getChild(i), className)
-                if (childNode != null) return childNode
+                val nn = nodeInfo.getChild(i)
+                if (nn != null) {
+                    val childNode = findNodeByClass(nn, className)
+                    if (childNode != null) return childNode
+                }
             }
         }
 
@@ -312,9 +315,12 @@ object AccessibilityUtil {
         val childCount = nodeInfo.childCount
         if (childCount > 0) {
             for (i in 0 until childCount) {
-                val childNodes = findNodesByClass(nodeInfo.getChild(i), className)
-                if (childNodes.size > 0) {
-                    nodes.addAll(childNodes)
+                val nn = nodeInfo.getChild(i)
+                if (nn != null) {
+                    val childNodes = findNodesByClass(nn, className)
+                    if (childNodes.size > 0) {
+                        nodes.addAll(childNodes)
+                    }
                 }
             }
         }

@@ -66,6 +66,7 @@ class LauchActivity : KActivity(), LifecycleOwner {
                 count++
             }
         })
+        et_auto.setText(KNetwork.getIPAddress() ?: "")
         textView2.text = KString.fromHtml(getString(R.string.text_test, 5, 9))
 
 
@@ -148,11 +149,8 @@ class LauchActivity : KActivity(), LifecycleOwner {
             }
         })
 
-        addView("无障碍", View.OnClickListener { AHAutoService().startActivity(this) })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
-
-        AHAutoService().startActivity(this)
     }
 
     private fun setupWindowAnimations() {

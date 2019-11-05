@@ -38,6 +38,7 @@ import com.kiven.kutils.tools.KString
 import com.kiven.sample.actions.AHThemeDemo
 import com.kiven.sample.actions.BiometricDemo
 import com.kiven.sample.anim.AHAnim
+import com.kiven.sample.autoService.AHAutoService
 import com.kiven.sample.charCode.AHUnicodeList
 import com.kiven.sample.dock.ActivityDock
 import com.kiven.sample.imui.ImActivity
@@ -525,6 +526,7 @@ class AHSmallAction : KActivityDebugHelper() {
         })
         addView("Theme", View.OnClickListener { AHThemeDemo().startActivity(mActivity) })
         addView("字符编码测试", View.OnClickListener { AHUnicodeList().startActivity(mActivity) })
+        addView("无障碍", View.OnClickListener { AHAutoService().startActivity(mActivity) })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })

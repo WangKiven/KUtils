@@ -14,6 +14,7 @@ import com.kiven.sample.autoService.WXConst.Page.ContactLabelManagerUI
 import com.kiven.sample.autoService.WXConst.Page.LauncherUI
 import com.kiven.sample.autoService.WXConst.logType
 import com.kiven.sample.util.showToast
+import org.jetbrains.anko.windowManager
 
 /**
  * Created by oukobayashi on 2019-10-31.
@@ -40,8 +41,7 @@ class WXLoadTagTask : AutoInstallService.AccessibilityTask {
 
         // 拦截滚动和点击
         if (event.eventType == AccessibilityEvent.TYPE_VIEW_CLICKED || event.eventType == AccessibilityEvent.TYPE_VIEW_SCROLLED) {
-            KLog.i("点击或滚动：：：：：：：：：：：：：")
-            AccessibilityUtil.printTree(event.source)
+            KLog.i(String.format("点击或滚动：：：：：%s %x %x", event.className.toString(), event.eventType, event.action))
             return
         }
 
@@ -51,45 +51,57 @@ class WXLoadTagTask : AutoInstallService.AccessibilityTask {
 
         if (curWXUI == null) return
 
+
         // 放在 curWXUI 被记录之后
         when (logType % 3) {
-            0 -> KLog.i(String.format("%s %x %x", event.className.toString(), event.eventType, event.action))
-            1 -> AccessibilityUtil.printTree(rootNode)
-            2 -> return
+            0 -> {
+                KLog.i(String.format("其他：：：：：%s %x %x", event.className.toString(), event.eventType, event.action))
+                return
+            }
+            1 -> {
+                AccessibilityUtil.printTree(rootNode)
+                return
+            }
+            2 -> {
+                KLog.i(String.format("%s %x %x", event.className.toString(), event.eventType, event.action))
+            }
         }
 
         // step 1 : 微信主界面
         if (TextUtils.equals(curWXUI, LauncherUI)) {
             // 查找通讯录选项，id要变，不能用ID
 //            val myNode = AccessibilityUtil.findTxtNode(rootNode, "通讯录", "com.tencent.mm:id/djv")
+            if (rootNode.childCount < 1) return
+
             var myNode: AccessibilityNodeInfo? = null
-            val childCount = rootNode.childCount
+            val childCount = rootNode.getChild(0).childCount
             var n = 0
             for (i in 0 until childCount) {
-                if (TextUtils.equals(rootNode.getChild(i).className, "android.widget.RelativeLayout")) {
+                val cd = rootNode.getChild(0).getChild(i)
+
+                if (TextUtils.equals(cd.className, "android.widget.RelativeLayout")) {
                     n++
 
                     if (n == 2) {
-                        myNode = rootNode.getChild(i)
+                        myNode = cd
                         break
                     }
                 }
             }
 
+            if (myNode == null) return
 
-            if (myNode != null) {
 
-                val settingNode = AccessibilityUtil.findTxtNode(rootNode, "标签")
+            val settingNode = AccessibilityUtil.findTxtNode(rootNode, "标签")
 
-                if (settingNode == null) {
-                    AccessibilityUtil.clickNode(myNode, true)
-                } else {
-                    AccessibilityUtil.clickNode(settingNode, true)
+            if (settingNode == null) {
+                AccessibilityUtil.clickNode(myNode, true)
+            } else {
+                AccessibilityUtil.clickNode(settingNode, true)
 
-                    settingNode.recycle()
-                }
-                myNode.recycle()
+                settingNode.recycle()
             }
+            myNode.recycle()
 
             return
         }

@@ -157,7 +157,7 @@ object AccessibilityUtil {
 
         for (ni in nodes) {
             if (TextUtils.equals(ni.text, txt)) {
-                KLog.i("click: $ni")
+//                KLog.i("click: $ni")
                 clickNode(ni, true)
 
                 return true
@@ -167,25 +167,23 @@ object AccessibilityUtil {
         return false
     }
 
-    /*fun findTxtClick(nodeInfo: AccessibilityNodeInfo, txt: String): Boolean {
-        val nodes = nodeInfo.findAccessibilityNodeInfosByText(txt)
-        if (nodes == null || nodes.isEmpty())
-            return false
-
-
-        for (ni in nodes) {
-            KLog.i("findTxtClick: $txt, $ni")
-
-            clickNode(ni, true)
-            return true
-        }
-
-        return false
-    }*/
-
     fun findNodeClickById(nodeInfo: AccessibilityNodeInfo, souceId: String) {
         val nodes = nodeInfo.findAccessibilityNodeInfosByViewId(souceId)
         if (nodes != null && nodes.size > 0) {
+            for (ni in nodes) {
+                clickNode(ni, true)
+            }
+        }
+    }
+
+    fun findNodeClickByClass(nodeInfo: AccessibilityNodeInfo, className: String) {
+        val node = findNodeByClass(nodeInfo, className) ?: return
+        clickNode(node, true)
+    }
+
+    fun findNodesClickByClass(nodeInfo: AccessibilityNodeInfo, className: String) {
+        val nodes = findNodesByClass(nodeInfo, className)
+        if (nodes.size > 0) {
             for (ni in nodes) {
                 clickNode(ni, true)
             }

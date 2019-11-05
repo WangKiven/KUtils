@@ -16,6 +16,7 @@ import com.google.android.flexbox.FlexboxLayout
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
+import com.kiven.kutils.tools.KAppTool
 import com.kiven.kutils.tools.KGranting
 import com.kiven.kutils.tools.KUtil
 import com.kiven.sample.floatView.ServiceFloat
@@ -28,6 +29,8 @@ import org.jetbrains.anko.support.v4.nestedScrollView
  * Created by oukobayashi on 2019-10-31.
  */
 class AHAutoService : KActivityHelper() {
+    private val selTags = mutableListOf<String>()
+
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
         val flexboxLayout = FlexboxLayout(activity)
@@ -54,43 +57,75 @@ class AHAutoService : KActivityHelper() {
         // TODO: 2018/3/28 ----------------------------------------------------------
         val txtTag = addTitle("未选择标签")
 
-//        val tags = mutableListOf<String>()
-        val selTags = mutableListOf<String>()
 
         txtTag.setOnClickListener {
             selTags.clear()
             txtTag.text = "未选择标签"
         }
-        addView("按标签分享", View.OnClickListener {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (!KUtil.canDrawOverlays()) {
-                    KUtil.startOverlaySetting()
-                    return@OnClickListener
-                }
-            }
-//            KUtil.startService(ServiceFloat::class.java)
 
-
-            if (selTags.isEmpty()) {
-                if (WXConst.frindsTags.isEmpty()){
-                    AutoInstallService.task = WXLoadTagTask()
-                }else{
-                    //
-                    mActivity.showListDialog(WXConst.frindsTags.toList().map { "${it.first}(${it.second})" }){index, what ->
-                        selTags.add(WXConst.frindsTags.toList()[index].first)
-                        txtTag.text = "已选标签：${selTags.joinToString()}"
-                    }
-
-                    return@OnClickListener
-                }
-            }else{
-                AutoInstallService.task = WXShareTask(tagForFriends = selTags, isSendTags = true)
-            }
+        val startWXTask = fun(task: AutoInstallService.AccessibilityTask) {
+            AutoInstallService.task = task
 
             if (!AutoInstallService.isStarted) {
                 AccessibilityUtil.jumpToSetting(mActivity)
+            } else {
+                KAppTool.startApp(mActivity, "com.tencent.mm")
+            }
+        }
+
+        val checkOverlay = fun(): Boolean {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (!KUtil.canDrawOverlays()) {
+                    KUtil.startOverlaySetting()
+                    return false
+                }
+            }
+            return true
+        }
+
+        addView("获取微信标签", View.OnClickListener {
+            if (!checkOverlay()) return@OnClickListener
+
+            WXConst.frindsTags.clear()
+            startWXTask(WXLoadTagTask())
+        })
+
+        addView("选择标签", View.OnClickListener {
+            if (WXConst.frindsTags.isEmpty()) {
+                mActivity.showSnack("请先获取微信标签")
+            } else {
+                mActivity.showListDialog(WXConst.frindsTags.toList().map { "${it.first}(${it.second})" }) { index, _ ->
+                    val tag = WXConst.frindsTags.toList()[index].first
+
+                    if (!selTags.contains(tag)) {
+                        selTags.add(tag)
+                        txtTag.text = "已选标签：${selTags.joinToString()}"
+                    }
+                }
             }
         })
+
+
+        addView("按标签分享", View.OnClickListener {
+            if (!checkOverlay()) return@OnClickListener
+
+            if (selTags.isEmpty()) {
+                mActivity.showSnack("请先选择标签")
+            } else {
+                startWXTask(WXShareTask(tagForFriends = selTags, isSendTags = true))
+            }
+        })
+
+        addView("排除标签分享", View.OnClickListener {
+            if (!checkOverlay()) return@OnClickListener
+
+            if (selTags.isEmpty()) {
+                mActivity.showSnack("请先选择标签")
+            } else {
+                startWXTask(WXShareTask(tagForFriends = selTags, isSendTags = false))
+            }
+        })
+
         addView("微信无障碍lib", View.OnClickListener {
             KGranting.requestPermissions(mActivity, 899, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), arrayOf("内存")) {
                 if (it) {

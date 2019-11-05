@@ -43,7 +43,6 @@ class WXShareTask(
     private var curWXUI: String? = null
 
 
-
     // 当前步骤
     // 1 开始进入发送进程（群发历史及之后的界面）
     // 2 发送文案完成
@@ -92,6 +91,7 @@ class WXShareTask(
                 return
             }
             2 -> {
+                KLog.i(String.format("%s %x %x", event.className.toString(), event.eventType, event.action))
             }
         }
 
@@ -105,6 +105,8 @@ class WXShareTask(
             // ID变动过一次（7.0.8 变成了 com.tencent.mm:id/dkb），
             // 怕以后也变动，就用麻烦一点的方法验证一次. 验证控件是否靠近底部
 //            val myNode = AccessibilityUtil.findTxtNode(rootNode, "我", "com.tencent.mm:id/djv")
+            if (rootNode.childCount < 1) return
+
             var myNode: AccessibilityNodeInfo? = null
 
             /*val rootBound = Rect()
@@ -124,14 +126,15 @@ class WXShareTask(
                 }
             }*/
 
-            val childCount = rootNode.childCount
+            val childCount = rootNode.getChild(0).childCount
             var n = 0
             for (i in 0 until childCount) {
-                if (TextUtils.equals(rootNode.getChild(i).className, "android.widget.RelativeLayout")) {
-                    n++
+                val cd = rootNode.getChild(0).getChild(i)
 
+                if (TextUtils.equals(cd.className, "android.widget.RelativeLayout")) {
+                    n++
                     if (n == 4) {
-                        myNode = rootNode.getChild(i)
+                        myNode = cd
                         break
                     }
                 }
@@ -217,7 +220,7 @@ class WXShareTask(
             val buttons = AccessibilityUtil.findNodesByClass(rootNode, Button::class.java)
 
             if (buttons.size < 2) {
-                showToast("界面变动，未找到按钮，请手动操作")
+//                showToast("界面变动，未找到按钮，请手动操作")
                 return
             }
 
@@ -283,6 +286,7 @@ class WXShareTask(
 
                         if (!isSendTags) {// 如果是发送给没有这些标签的好友，需要在这里去勾选
 
+                            return
                         }
                     }
                     // 已经选择完成，下一步
@@ -325,9 +329,23 @@ class WXShareTask(
                 if (hasComplete) {
 //                    service.performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK)
 //                    AccessibilityUtil.findNodeClickById(rootNode, "com.tencent.mm:id/lm")
-                    val okBtn = AccessibilityUtil.findNodeByClass(rootNode, Button::class.java.name)
-                    if (okBtn != null) AccessibilityUtil.clickNode(okBtn)
-                    KLog.i("AccessibilityService.GLOBAL_ACTION_BACK")
+                    if (isSendTags) {
+                        // 发送标签点击确定
+                        val okBtn = AccessibilityUtil.findNodeByClass(rootNode, Button::class.java.name)
+                        if (okBtn != null) AccessibilityUtil.clickNode(okBtn)
+                    } else {
+                        // 发送非标签，点击返回
+                        KLog.i("xxxxxxxxxxxx")
+                        AccessibilityUtil.findNodeClickByClass(rootNode, LinearLayout::class.java.name)
+//                        val nn = AccessibilityUtil.findNodeByClass(rootNode, LinearLayout::class.java.name)
+//                        if (nn != null) {
+//                            AccessibilityUtil.clickNode(nn)
+//                            nn.recycle()
+//                        }
+
+                        AccessibilityUtil.printTree(rootNode)
+
+                    }
                 } else {
                     lvn.performAction(AccessibilityNodeInfo.ACTION_SCROLL_FORWARD)
                 }

@@ -71,9 +71,28 @@ class WXLoadTagTask : AutoInstallService.AccessibilityTask {
         if (TextUtils.equals(curWXUI, LauncherUI)) {
             // 查找通讯录选项，id要变，不能用ID
 //            val myNode = AccessibilityUtil.findTxtNode(rootNode, "通讯录", "com.tencent.mm:id/djv")
-            if (rootNode.childCount < 1) return
 
             var myNode: AccessibilityNodeInfo? = null
+
+            val rootBound = Rect()
+            rootNode.getBoundsInScreen(rootBound)
+
+            val mns = rootNode.findAccessibilityNodeInfosByText("通讯录")
+            if (mns != null) {
+                val cr = Rect()
+                for (ni in mns) {
+                    if (ni.text == "通讯录") {
+                        ni.parent.getBoundsInScreen(cr)
+                        if (rootBound.bottom - cr.bottom < 2) {
+                            myNode = ni
+                            break
+                        }
+                    }
+                }
+            }
+
+            /*if (rootNode.childCount < 1) return
+
             val childCount = rootNode.getChild(0).childCount
             var n = 0
             for (i in 0 until childCount) {
@@ -87,7 +106,7 @@ class WXLoadTagTask : AutoInstallService.AccessibilityTask {
                         break
                     }
                 }
-            }
+            }*/
 
             if (myNode == null) return
 

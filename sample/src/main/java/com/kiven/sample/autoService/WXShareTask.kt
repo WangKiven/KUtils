@@ -1,6 +1,7 @@
 package com.kiven.sample.autoService
 
 import android.accessibilityservice.AccessibilityService
+import android.graphics.Rect
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.ViewGroup
@@ -105,11 +106,10 @@ class WXShareTask(
             // ID变动过一次（7.0.8 变成了 com.tencent.mm:id/dkb），
             // 怕以后也变动，就用麻烦一点的方法验证一次. 验证控件是否靠近底部
 //            val myNode = AccessibilityUtil.findTxtNode(rootNode, "我", "com.tencent.mm:id/djv")
-            if (rootNode.childCount < 1) return
 
             var myNode: AccessibilityNodeInfo? = null
 
-            /*val rootBound = Rect()
+            val rootBound = Rect()
             rootNode.getBoundsInScreen(rootBound)
 
             val mns = rootNode.findAccessibilityNodeInfosByText("我")
@@ -124,7 +124,10 @@ class WXShareTask(
                         }
                     }
                 }
-            }*/
+            }
+
+
+            /*if (rootNode.childCount < 1) return
 
             val childCount = rootNode.getChild(0).childCount
             var n = 0
@@ -138,7 +141,7 @@ class WXShareTask(
                         break
                     }
                 }
-            }
+            }*/
 
 
             if (myNode != null) {

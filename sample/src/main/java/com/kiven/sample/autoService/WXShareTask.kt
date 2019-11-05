@@ -285,8 +285,33 @@ class WXShareTask(
                     } else {
 
                         if (!isSendTags) {// 如果是发送给没有这些标签的好友，需要在这里去勾选
+                            val listViewNode = AccessibilityUtil.findNodeByClass(rootNode, ListView::class.java)
+                            if (listViewNode != null) {
+                                // 获取好友结点（把分组结点也获取到了，但是不影响，也就不单独处理了）
+                                val itemNodes = AccessibilityUtil.findNodesByClass(listViewNode, TextView::class.java)
+                                // 挨个检测是否不在标签好友里面并点击不在标签的好友
+                                itemNodes.forEach {
+                                    var contain = false
+                                    for (ll in tagAndFriends.values){
+                                        for (l in ll) {
+                                            if (TextUtils.equals(l, it.text)) {
+                                                contain = true
+                                                break
+                                            }
+                                        }
+                                        if (contain) break
+                                    }
 
-                            return
+                                    if (!contain) AccessibilityUtil.clickNode(it, true)
+                                }
+                                // 检测是否滚动到底部
+                                val isAll = AccessibilityUtil.checkListViewByTextView(listViewNode)
+
+                                if (!isAll) {
+                                    listViewNode.performAction(AccessibilityNodeInfo.ACTION_SCROLL_FORWARD)
+                                    return
+                                }
+                            }
                         }
                     }
                     // 已经选择完成，下一步
@@ -342,10 +367,10 @@ class WXShareTask(
 //                            AccessibilityUtil.clickNode(nn)
 //                            nn.recycle()
 //                        }
-
-                        AccessibilityUtil.printTree(rootNode)
-
                     }
+                    // // TODO: 2019-11-05 将当前界面置空，否则出现两次回退。原因是 curWXUI = event.className.toString() 并不能及时反映当前界面
+                    // // TODO: 2019-11-05 目前没找到方法获取当前界面，现在的方法有延次。
+                    curWXUI = null
                 } else {
                     lvn.performAction(AccessibilityNodeInfo.ACTION_SCROLL_FORWARD)
                 }

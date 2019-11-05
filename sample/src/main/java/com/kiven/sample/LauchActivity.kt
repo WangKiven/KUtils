@@ -3,7 +3,6 @@ package com.kiven.sample
 import android.Manifest
 import android.content.Context
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -29,21 +28,13 @@ import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.*
 import com.kiven.sample.arch.AHArch
 import com.kiven.sample.autoService.AHAutoService
-import com.kiven.sample.autoService.AccessibilityUtil
-import com.kiven.sample.autoService.AutoInstallService
-import com.kiven.sample.autoService.WXShareTask
-import com.kiven.sample.charCode.AHCharCode
-import com.kiven.sample.charCode.AHUnicodeList
 import com.kiven.sample.floatView.ActivityHFloatView
-import com.kiven.sample.floatView.ServiceFloat
 import com.kiven.sample.gl.AHGL
 import com.kiven.sample.libs.AHLibs
 import com.kiven.sample.media.AHMediaList
 import com.kiven.sample.theme.AHTheme
 import com.kiven.sample.util.showDialog
 import com.kiven.sample.util.showListDialog
-import com.kiven.sample.util.showSnack
-import com.sch.share.WXShareMultiImageHelper
 import kotlinx.android.synthetic.main.activity_lauch.*
 import me.grantland.widget.AutofitHelper
 
@@ -157,6 +148,8 @@ class LauchActivity : KActivity(), LifecycleOwner {
             }
         })
 
+        addView("无障碍", View.OnClickListener { AHAutoService().startActivity(this) })
+        addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
 
         AHAutoService().startActivity(this)

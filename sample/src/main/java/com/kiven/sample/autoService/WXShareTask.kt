@@ -1,7 +1,6 @@
 package com.kiven.sample.autoService
 
 import android.accessibilityservice.AccessibilityService
-import android.graphics.Rect
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.ViewGroup
@@ -11,36 +10,38 @@ import android.widget.*
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KAppTool
 import com.kiven.kutils.tools.KString
-import com.kiven.kutils.util.ArrayMap
 import com.kiven.sample.autoService.WXConst.Page.*
 import com.kiven.sample.autoService.WXConst.logType
 import com.kiven.sample.util.showToast
-import java.util.*
 
-class WXShareTask : AutoInstallService.AccessibilityTask {
+class WXShareTask(
+        // 收信人信息
+        val isSendAll: Boolean = false,// 是否发送给所有好友
+        val isSendTags: Boolean = false,// 是否发送给标签好友，true: 发送给标签好友，false: 发送给不是这些标签的好友
+        val tagForFriends: List<String>? = null, // 对应的标签，null: 不根据标签发送
+        val msgForSend: String = "买车就用省心宝，卖车更要用省心宝，省心宝 你值得拥有，✌️",// 要发送的文案
+
+        val mediaCount: Int = 0 // 要发送的图片数量
+) : AutoInstallService.AccessibilityTask {
     val supportWXVersion = arrayOf(
             "7.0.8"
     )
 
 
-    private val steps = ArrayMap<String, AccessibilityStep>()
+    /*private val steps = ArrayMap<String, AccessibilityStep>()*/
 
-    // 收信人信息
-    var isSendAll = false// 是否发送给所有好友
 
-    var isSendTags = false// 是否发送给标签好友，true: 发送给标签好友，false: 发送给不是这些标签的好友
-    var tagForFriends: List<String>? = null // 对应的标签，null: 不根据标签发送
-    // 用作记录
+    // 用作记录用户选择的标签包含哪些好友
     private val tagAndFriends = mutableMapOf<String, MutableList<String>>()
 
-    var sendFrends: ArrayList<String>? = null //
+//    var sendFrends: ArrayList<String>? = null //
 
-    var msgForSend = "买车就用省心宝，卖车更要用省心宝，省心宝 你值得拥有，✌️"// 要发送的文案
+    // 已发送图片数量
+    private var hasSendMediaCount = 0
 
-    var mediaCount = 0 // 要发送的图片数量
-    private var hasSendMediaCount = 0 // 已发送图片数量
-
+    // 当前所在的界面
     private var curWXUI: String? = null
+
 
 
     // 当前步骤
@@ -48,20 +49,6 @@ class WXShareTask : AutoInstallService.AccessibilityTask {
     // 2 发送文案完成
     // 3 所有操作完成（因为先发送文案，所以发送图片完成就完成所有操作了）
     private var curState = 0
-
-    init {
-        steps.put("toMain", object : AccessibilityStep {
-            override fun isThis(rootNode: AccessibilityNodeInfo): Boolean {
-
-
-                return false
-            }
-
-            override fun deal(rootNode: AccessibilityNodeInfo) {
-
-            }
-        })
-    }
 
     override fun onAccessibilityEvent(service: AccessibilityService, event: AccessibilityEvent?) {
         //        KLog.i("onAccessibilityEvent: " + (event == null ? "null" : event.getPackageName().toString()));
@@ -249,28 +236,26 @@ class WXShareTask : AutoInstallService.AccessibilityTask {
             } else {
                 // 选择标签
                 if (tagForFriends != null && tagForFriends!!.isNotEmpty()) {
-                    // 标签面板, 点击收索框才会出现
-//                    val tagPanlNode = rootNode.findAccessibilityNodeInfosByViewId("com.tencent.mm:id/jx")
-                    val tagPanlNode = AccessibilityUtil.findNodeByClass(rootNode, ViewGroup::class.java)
+                    // 获取还没记录的好友标签
+                    val recorded = tagAndFriends.keys
+                    val nextTags = tagForFriends!!.filter { !recorded.contains(it) }
 
+                    if (nextTags.isNotEmpty()) {
+                        // 标签面板, 点击收索框才会出现
+                        val tagPanlNode = AccessibilityUtil.findNodeByClass(rootNode, ViewGroup::class.java)
 
-                    if (tagPanlNode == null) {
-                        // 搜索框
-//                        val searchNode = rootNode.findAccessibilityNodeInfosByViewId("com.tencent.mm:id/bdl")
-                        val searchNode = AccessibilityUtil.findNodeByClass(rootNode, EditText::class.java)
-                        if (searchNode != null) {
-                            AccessibilityUtil.clickNode(searchNode)
-                        }
-                        // 没找到就不处理
-                        return
-                    } else {
-                        val childCount = tagPanlNode.childCount
-                        if (childCount > 0) {
+                        if (tagPanlNode == null) {
+                            // 搜索框
+                            val searchNode = AccessibilityUtil.findNodeByClass(rootNode, EditText::class.java)
+                            if (searchNode != null) {
+                                AccessibilityUtil.clickNode(searchNode)
+                            }
+                            // 没找到就不处理
+                            return
+                        } else {
+                            val childCount = tagPanlNode.childCount
+                            if (childCount > 0) {
 
-                            // 获取还没记录的好友标签
-                            val recorded = tagAndFriends.keys
-                            val nextTags = tagForFriends!!.filter { !recorded.contains(it) }
-                            if (nextTags.isNotEmpty()) {
                                 // 获取所有标签
                                 val allTag = mutableListOf<String>()
                                 for (i in 0 until childCount) {
@@ -286,18 +271,22 @@ class WXShareTask : AutoInstallService.AccessibilityTask {
                                     AccessibilityUtil.findTxtClick(tagPanlNode, next)
                                     return
                                 }
-                            }
-                            // 已经选择完成，下一步
-                        } else {
-                            showToast("标签【${tagForFriends!!.joinToString()}】不存在")
 
-                            // 一个人都没选，没法下一步
-                            return
+                            } else {
+                                showToast("标签【${tagForFriends!!.joinToString()}】不存在")
+
+                                // 一个人都没选，没法下一步
+                                return
+                            }
+                        }
+                    } else {
+
+                        if (!isSendTags) {// 如果是发送给没有这些标签的好友，需要在这里去勾选
+
                         }
                     }
+                    // 已经选择完成，下一步
                 }
-
-                // 直接选择
             }
 
             // 选择完成 下一步, 走到这一步，说明已经选择完成，不考虑未选的情况，一个都未选择时，按钮是不能点击的
@@ -325,11 +314,12 @@ class WXShareTask : AutoInstallService.AccessibilityTask {
             if (lvn != null) {
 
                 val hasComplete = AccessibilityUtil.checkListViewByTextView(lvn, tagAndFriends[tag]!!)
-                AccessibilityUtil.findNodesByClass(lvn, CheckBox::class.java.name).forEach {
-                    if (!it.isChecked) {
-                        AccessibilityUtil.clickNode(it, true)
+                if (isSendTags)// 如果是发送给有这些标签的好友，就在这里勾选上
+                    AccessibilityUtil.findNodesByClass(lvn, CheckBox::class.java.name).forEach {
+                        if (!it.isChecked) {
+                            AccessibilityUtil.clickNode(it, true)
+                        }
                     }
-                }
 
 
                 if (hasComplete) {
@@ -413,11 +403,11 @@ class WXShareTask : AutoInstallService.AccessibilityTask {
 //        }
     }
 
-    interface AccessibilityStep {
+    /*interface AccessibilityStep {
         fun isThis(rootNode: AccessibilityNodeInfo): Boolean
 
         fun deal(rootNode: AccessibilityNodeInfo)
-    }
+    }*/
 
     override fun onServiceConnected(service: AccessibilityService) {
         KAppTool.startApp(service, "com.tencent.mm")

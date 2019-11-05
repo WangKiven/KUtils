@@ -16,8 +16,6 @@ import android.widget.Toast;
 
 import com.kiven.kutils.tools.KUtil;
 import com.kiven.sample.autoService.WXConst;
-import com.kiven.sample.autoService.WXShareTask;
-import com.kiven.sample.util.UtilsKt;
 
 /**
  * 学习文档：TODO http://blog.csdn.net/stevenhu_223/article/details/8504058

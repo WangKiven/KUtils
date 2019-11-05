@@ -2,6 +2,7 @@ package com.kiven.sample.autoService
 
 import android.accessibilityservice.AccessibilityService
 import android.content.Context
+import android.content.Intent
 import android.os.Handler
 import android.view.WindowManager
 import android.view.accessibility.AccessibilityEvent
@@ -110,19 +111,24 @@ class AutoInstallService : AccessibilityService() {
         mInstance = this
 
         // 退出设置界面，后面再优化
-        performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK)
-        performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK)
+//        performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK)
+//        performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK)
+        val ah = AHAutoService()
+        ah.intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        ah.intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        ah.startActivity(this)
+
         mHandler.postDelayed({
             // 任务处理
             if (task != null) task!!.onServiceConnected(this@AutoInstallService)
-        }, (DELAY_PAGE * 4).toLong())
+        }, DELAY_PAGE)
     }
 
     override fun onInterrupt() {
         KLog.i("onInterrupt: ")
 
-        performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK)
-        mHandler.postDelayed({ performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK) }, DELAY_PAGE.toLong())
+//        performGlobalAction(GLOBAL_ACTION_BACK)
+//        mHandler.postDelayed({ performGlobalAction(GLOBAL_ACTION_BACK) }, DELAY_PAGE)
 
         mInstance = null
     }
@@ -153,7 +159,7 @@ class AutoInstallService : AccessibilityService() {
         val isStarted: Boolean
             get() = mInstance != null
 
-        private val DELAY_PAGE = 320 // 页面切换时间
+        private val DELAY_PAGE = 320L // 页面切换时间
 
         var task: AccessibilityTask? = null
     }

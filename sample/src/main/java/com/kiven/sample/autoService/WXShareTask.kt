@@ -71,21 +71,21 @@ class WXShareTask(
 
         // 拦截滚动和点击
         if (event.eventType == AccessibilityEvent.TYPE_VIEW_CLICKED || event.eventType == AccessibilityEvent.TYPE_VIEW_SCROLLED) {
-            KLog.i("点击或滚动：：：：：：：：：：：：：" + event.source.className)
+//            KLog.i("点击或滚动：：：：：：：：：：：：：" + event.source.className)
             return
         }
 
         if (event.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
             curWXUI = event.className.toString()
+        }
 
-            // 有点系统的微信略过了 MassSendMsgUI 的通知，这里需要手动检测
-            if (curWXUI == MassSendSelectContactUI || curWXUI == SelectLabelContactUI) {
-                val titile = AccessibilityUtil.findNodeById(rootNode, "android:id/text1")
-                if (titile != null && TextUtils.equals(titile.text, "群发")) {
-                    val tts = rootNode.findAccessibilityNodeInfosByText("你将发消息")
-                    if (tts != null && tts.isNotEmpty()) {
-                        curWXUI = MassSendMsgUI
-                    }
+        // 有点系统的微信略过了 MassSendMsgUI 的通知，这里需要手动检测
+        if (curWXUI == MassSendSelectContactUI || curWXUI == SelectLabelContactUI) {
+            val titile = AccessibilityUtil.findNodeById(rootNode, "android:id/text1")
+            if (titile != null && TextUtils.equals(titile.text, "群发")) {
+                val tts = rootNode.findAccessibilityNodeInfosByText("你将发消息")
+                if (tts != null && tts.isNotEmpty()) {
+                    curWXUI = MassSendMsgUI
                 }
             }
         }
@@ -95,7 +95,7 @@ class WXShareTask(
         // 放在 curWXUI 被记录之后
         when (logType % 3) {
             0 -> {
-                KLog.i(String.format("%s %x %x", event.className.toString(), event.eventType, event.action))
+//                KLog.i(String.format("%s %x %x", event.className.toString(), event.eventType, event.action))
                 return
             }
             1 -> {
@@ -103,7 +103,7 @@ class WXShareTask(
                 return
             }
             2 -> {
-                KLog.i(String.format("%s %x %x", event.className.toString(), event.eventType, event.action))
+//                KLog.i(String.format("%s %x %x", event.className.toString(), event.eventType, event.action))
             }
         }
 

@@ -14,7 +14,6 @@ import com.kiven.sample.autoService.WXConst.Page.ContactLabelManagerUI
 import com.kiven.sample.autoService.WXConst.Page.LauncherUI
 import com.kiven.sample.autoService.WXConst.logType
 import com.kiven.sample.util.showToast
-import org.jetbrains.anko.windowManager
 
 /**
  * Created by oukobayashi on 2019-10-31.
@@ -41,14 +40,12 @@ class WXLoadTagTask : AutoInstallService.AccessibilityTask {
 
         // 拦截滚动和点击
         if (event.eventType == AccessibilityEvent.TYPE_VIEW_CLICKED || event.eventType == AccessibilityEvent.TYPE_VIEW_SCROLLED) {
-            KLog.i(String.format("点击或滚动：：：：：%s %x %x", event.className.toString(), event.eventType, event.action))
+//            KLog.i(String.format("点击或滚动：：：：：%s %x %x", event.className.toString(), event.eventType, event.action))
             return
         }
 
         if (event.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
             curWXUI = event.className.toString()
-
-            KLog.i("ddddddd::::: $curWXUI ")
         }
 
         if (curWXUI == null) return
@@ -57,7 +54,7 @@ class WXLoadTagTask : AutoInstallService.AccessibilityTask {
         // 放在 curWXUI 被记录之后
         when (logType % 3) {
             0 -> {
-                KLog.i(String.format("其他：：：：：%s %x %x", event.className.toString(), event.eventType, event.action))
+//                KLog.i(String.format("其他：：：：：%s %x %x", event.className.toString(), event.eventType, event.action))
                 return
             }
             1 -> {
@@ -65,7 +62,7 @@ class WXLoadTagTask : AutoInstallService.AccessibilityTask {
                 return
             }
             2 -> {
-                KLog.i(String.format("%s %x %x", event.className.toString(), event.eventType, event.action))
+//                KLog.i(String.format("%s %x %x", event.className.toString(), event.eventType, event.action))
             }
         }
 

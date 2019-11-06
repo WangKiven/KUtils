@@ -29,7 +29,7 @@ import org.jetbrains.anko.support.v4.nestedScrollView
  * Created by oukobayashi on 2019-10-31.
  */
 class AHAutoService : KActivityHelper() {
-    private val selTags = mutableListOf<String>("窝窝")
+    private val selTags = mutableListOf<String>()
 
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)

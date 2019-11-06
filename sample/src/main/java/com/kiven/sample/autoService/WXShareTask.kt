@@ -8,15 +8,12 @@ import android.view.ViewGroup
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.*
-import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KAppTool
 import com.kiven.kutils.tools.KString
 import com.kiven.sample.autoService.WXConst.Page.*
 import com.kiven.sample.autoService.WXConst.logType
 import com.kiven.sample.util.showToast
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class WXShareTask(
         // 收信人信息
@@ -64,11 +61,14 @@ class WXShareTask(
             while (true) {
                 delay(500)
 
-                if (System.currentTimeMillis() - lashChangeTime > 500) {
-                    service?.rootInActiveWindow?.apply {
-                        deal(this)
+                runBlocking(Dispatchers.Main) {
+                    if (System.currentTimeMillis() - lashChangeTime > 500) {
+                        service?.rootInActiveWindow?.apply {
 
-                        recycle()
+                            deal(this)
+
+                            recycle()
+                        }
                     }
                 }
             }
@@ -92,6 +92,18 @@ class WXShareTask(
 
         if (event.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
             curWXUI = event.className.toString()
+        }
+        // 有点系统的微信略过了 MassSendMsgUI 的通知，这里需要手动检测
+        service.rootInActiveWindow?.apply {
+            if (curWXUI == MassSendSelectContactUI || curWXUI == SelectLabelContactUI) {
+                val titile = AccessibilityUtil.findNodeById(this, "android:id/text1")
+                if (titile != null && TextUtils.equals(titile.text, "群发")) {
+                    val tts = findAccessibilityNodeInfosByText("你将发消息")
+                    if (tts != null && tts.isNotEmpty()) {
+                        curWXUI = MassSendMsgUI
+                    }
+                }
+            }
         }
 
 

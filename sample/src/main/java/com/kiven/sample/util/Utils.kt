@@ -93,7 +93,5 @@ fun Activity.showSnack(word: String) {
 }
 
 fun showToast(word: String){
-    KContext.getInstance().topActivity?.runOnUiThread {
-        Toast.makeText(KContext.getInstance(), word, Toast.LENGTH_SHORT).show()
-    }
+    Toast.makeText(KContext.getInstance(), word, Toast.LENGTH_SHORT).show()
 }

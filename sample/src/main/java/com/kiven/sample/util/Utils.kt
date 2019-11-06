@@ -15,6 +15,8 @@ import com.kiven.kutils.tools.KAlertDialogHelper
 import com.kiven.kutils.tools.KContext
 import com.kiven.kutils.tools.KUtil
 import com.kiven.sample.AppContext
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 /**
  * Created by wangk on 2019/5/14.
@@ -91,5 +93,7 @@ fun Activity.showSnack(word: String) {
 }
 
 fun showToast(word: String){
-    Toast.makeText(KContext.getInstance(), word, Toast.LENGTH_LONG).show()
+    KContext.getInstance().topActivity?.runOnUiThread {
+        Toast.makeText(KContext.getInstance(), word, Toast.LENGTH_SHORT).show()
+    }
 }

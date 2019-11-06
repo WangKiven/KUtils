@@ -14,6 +14,9 @@ import com.kiven.kutils.tools.KString
 import com.kiven.sample.autoService.WXConst.Page.*
 import com.kiven.sample.autoService.WXConst.logType
 import com.kiven.sample.util.showToast
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class WXShareTask(
         // 收信人信息
@@ -50,27 +53,55 @@ class WXShareTask(
     // 3 所有操作完成（因为先发送文案，所以发送图片完成就完成所有操作了）
     private var curState = 0
 
-    override fun onAccessibilityEvent(service: AccessibilityService, event: AccessibilityEvent?) {
-        //        KLog.i("onAccessibilityEvent: " + (event == null ? "null" : event.getPackageName().toString()));
-        if (event == null) return
 
+    private var service: AccessibilityService? = null
+    //    var events = mutableListOf<Pair<String, Int>>()
+    private var lashChangeTime = 0L
+
+    init {
+        GlobalScope.launch {
+
+            while (true) {
+                delay(500)
+
+                if (System.currentTimeMillis() - lashChangeTime > 500) {
+                    service?.rootInActiveWindow?.apply {
+                        deal(this)
+
+                        recycle()
+                    }
+                }
+            }
+        }
+    }
+
+    override fun onAccessibilityEvent(service: AccessibilityService, event: AccessibilityEvent?) {
+        if (event == null) return
 
         val eventNode = event.source ?: return
 
-        //        KLog.i("eventNode:" + eventNode);
+//        val rootNode = service.rootInActiveWindow ?: return //当前窗口根节点
 
-        val rootNode = service.rootInActiveWindow ?: return //当前窗口根节点
+        /*deal(event, rootNode)*/
 
-        deal(event, rootNode)
+        this.service = service
 
-        rootNode.recycle()
+
+//        events.add(Pair(event.className.toString(), event.eventType))
+        lashChangeTime = event.eventTime
+
+        if (event.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
+            curWXUI = event.className.toString()
+        }
+
+
+//        rootNode.recycle()
         eventNode.recycle()
     }
 
-    private fun deal(event: AccessibilityEvent, rootNode: AccessibilityNodeInfo) {
-
+    private suspend fun deal(/*event: AccessibilityEvent, */rootNode: AccessibilityNodeInfo) {
         // 拦截滚动和点击
-        if (event.eventType == AccessibilityEvent.TYPE_VIEW_CLICKED || event.eventType == AccessibilityEvent.TYPE_VIEW_SCROLLED) {
+        /*if (event.eventType == AccessibilityEvent.TYPE_VIEW_CLICKED || event.eventType == AccessibilityEvent.TYPE_VIEW_SCROLLED) {
 //            KLog.i("点击或滚动：：：：：：：：：：：：：" + event.source.className)
             return
         }
@@ -88,7 +119,7 @@ class WXShareTask(
                     curWXUI = MassSendMsgUI
                 }
             }
-        }
+        }*/
 
         if (curWXUI == null) return
 
@@ -120,7 +151,8 @@ class WXShareTask(
 
             var myNode: AccessibilityNodeInfo? = null
 
-            val wxpp = AccessibilityUtil.findNodeByClass(rootNode, "com.tencent.mm.ui.mogic.WxViewPager") ?: return
+            val wxpp = AccessibilityUtil.findNodeByClass(rootNode, "com.tencent.mm.ui.mogic.WxViewPager")
+                    ?: return
             val rootBound = Rect()
             wxpp.getBoundsInScreen(rootBound)
 
@@ -215,13 +247,20 @@ class WXShareTask(
 
             // android.widget.Button(新建群发)(clickable:true)(resourceId:com.tencent.mm:id/di5)(boundsInScreen:Rect(36, 677 - 684, 763))
             // 有记录和没有记录的情况下，'新建群发' 的ID是不一样的，位置也不一样，并且随着版本更新，可能也会变动
-            if (curState < 1 || curState == 2)
+            if (curState < 1 || curState == 2) {
                 if (AccessibilityUtil.findTxtClick(rootNode, "新建群发")) {
                     if (curState < 1)
                         curState = 1
                 }
 
+
+                // 如果是发送给标签好友，需要清空一次，否则进不了标签选择界面
+                if (isSendTags)
+                    tagAndFriends.clear()
+            }
+
             if (TextUtils.equals(curWXUI, MassSendHistoryUI)) curWXUI = null
+
             return
         }
 
@@ -303,28 +342,40 @@ class WXShareTask(
                         if (!isSendTags) {// 如果是发送给没有这些标签的好友，需要在这里去勾选
                             val listViewNode = AccessibilityUtil.findNodeByClass(rootNode, ListView::class.java)
                             if (listViewNode != null) {
-                                // 获取好友结点（把分组结点也获取到了，但是不影响，也就不单独处理了）
-                                val itemNodes = AccessibilityUtil.findNodesByClass(listViewNode, TextView::class.java)
-                                // 挨个检测是否不在标签好友里面并点击不在标签的好友
-                                itemNodes.forEach {
-                                    var contain = false
-                                    for (ll in tagAndFriends.values){
-                                        for (l in ll) {
-                                            if (TextUtils.equals(l, it.text)) {
-                                                contain = true
-                                                break
+
+                                // 检测是否滚动到底部
+                                if (!AccessibilityUtil.checkListViewByTextView(listViewNode)) {
+                                    // 获取好友结点（把分组结点也获取到了，但是不影响，也就不单独处理了）
+//                                    val itemNodes = AccessibilityUtil.findNodesByClass(listViewNode, TextView::class.java)
+                                    val itemNodes = AccessibilityUtil.findNodesByClass(listViewNode, RelativeLayout::class.java)
+                                    // 挨个检测是否不在标签好友里面并点击不在标签的好友
+                                    itemNodes.forEach {
+                                        if (it.childCount > 1) {
+                                            var contain = false
+                                            for (ll in tagAndFriends.values) {
+                                                for (l in ll) {
+                                                    if (TextUtils.equals(l, it.getChild(0).text)) {
+                                                        contain = true
+                                                        break
+                                                    }
+                                                }
+                                                if (contain) break
+                                            }
+
+                                            val hasChecked = it.getChild(1).isChecked
+                                            if (contain) {
+                                                if (hasChecked) AccessibilityUtil.clickNode(it)
+                                            } else {
+                                                if (!hasChecked) AccessibilityUtil.clickNode(it)
                                             }
                                         }
-                                        if (contain) break
+
                                     }
 
-                                    if (!contain) AccessibilityUtil.clickNode(it, true)
-                                }
-                                // 检测是否滚动到底部
-                                val isAll = AccessibilityUtil.checkListViewByTextView(listViewNode)
-
-                                if (!isAll) {
+                                    delay(500)
                                     listViewNode.performAction(AccessibilityNodeInfo.ACTION_SCROLL_FORWARD)
+                                    delay(500)
+
                                     return
                                 }
                             }
@@ -358,32 +409,31 @@ class WXShareTask(
             val lvn = AccessibilityUtil.findNodeByClass(rootNode, ListView::class.java)
             if (lvn != null) {
 
-                val hasComplete = AccessibilityUtil.checkListViewByTextView(lvn, tagAndFriends[tag]!!)
-                if (isSendTags)// 如果是发送给有这些标签的好友，就在这里勾选上
-                    AccessibilityUtil.findNodesByClass(lvn, CheckBox::class.java.name).forEach {
-                        if (!it.isChecked) {
-                            AccessibilityUtil.clickNode(it, true)
+                // 保存标签并判断是否遍历完成
+                if (!AccessibilityUtil.checkListViewByTextView(lvn, tagAndFriends[tag]!!)) {
+
+                    if (isSendTags) {// 如果是发送给有这些标签的好友，就在这里勾选上
+                        AccessibilityUtil.findNodesByClass(lvn, CheckBox::class.java.name).forEach {
+                            if (!it.isChecked) {
+                                AccessibilityUtil.clickNode(it, true)
+                            }
                         }
+
+                        delay(500)
                     }
-
-
-                if (hasComplete) {
-//                    service.performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK)
-//                    AccessibilityUtil.findNodeClickById(rootNode, "com.tencent.mm:id/lm")
+                    lvn.performAction(AccessibilityNodeInfo.ACTION_SCROLL_FORWARD)
+                } else {
                     if (isSendTags) {
                         // 发送标签点击确定
                         val okBtn = AccessibilityUtil.findNodeByClass(rootNode, Button::class.java.name)
                         if (okBtn != null) AccessibilityUtil.clickNode(okBtn)
                     } else {
                         // 发送非标签，点击返回
-                        KLog.i("xxxxxxxxxxxx")
                         AccessibilityUtil.findNodeClickByClass(rootNode, LinearLayout::class.java.name)
                     }
                     // // TODO: 2019-11-05 将当前界面置空，否则出现两次回退。原因是 curWXUI = event.className.toString() 并不能及时反映当前界面
                     // // TODO: 2019-11-05 目前没找到方法获取当前界面，现在的方法有延次。
                     if (TextUtils.equals(curWXUI, SelectLabelContactUI)) curWXUI = null
-                } else {
-                    lvn.performAction(AccessibilityNodeInfo.ACTION_SCROLL_FORWARD)
                 }
             }
             return
@@ -451,7 +501,7 @@ class WXShareTask(
         }
         // step 8-2: 图片剪切界面
         if (TextUtils.equals(curWXUI, CropImageNewUI)) {
-            if (AccessibilityUtil.findTxtClick(rootNode, "完成")){
+            if (AccessibilityUtil.findTxtClick(rootNode, "完成")) {
                 // 与上边相同的问题，不然导致一张图片两次计数
                 if (TextUtils.equals(curWXUI, CropImageNewUI)) curWXUI = null
 

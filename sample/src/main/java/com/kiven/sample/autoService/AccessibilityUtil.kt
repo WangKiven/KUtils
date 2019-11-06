@@ -381,6 +381,7 @@ object AccessibilityUtil {
         // 对比数据，判断是否到底部了
         val curListPageString = txts.joinToString()
         return if (preListPageString == curListPageString) {
+            preListPageString = ""
             true
         } else {
             preListPageString = curListPageString
@@ -418,6 +419,7 @@ object AccessibilityUtil {
         // 对比数据，判断是否到底部了
         val curListPageString = txts.joinToString()
         return if (preListPageString == curListPageString) {
+            preListPageString = ""
             true
         } else {
             preListPageString = curListPageString

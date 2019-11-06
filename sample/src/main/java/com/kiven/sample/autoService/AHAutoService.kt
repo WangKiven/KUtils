@@ -29,7 +29,7 @@ import org.jetbrains.anko.support.v4.nestedScrollView
  * Created by oukobayashi on 2019-10-31.
  */
 class AHAutoService : KActivityHelper() {
-    private val selTags = mutableListOf<String>()
+    private val selTags = mutableListOf<String>("窝窝")
 
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
@@ -112,7 +112,7 @@ class AHAutoService : KActivityHelper() {
             if (selTags.isEmpty()) {
                 mActivity.showSnack("请先选择标签")
             } else {
-                startWXTask(WXShareTask(tagForFriends = selTags, isSendTags = true))
+                startWXTask(WXShareTask(tagForFriends = selTags, isSendTags = true, mediaCount = 1))
             }
         })
 
@@ -122,7 +122,7 @@ class AHAutoService : KActivityHelper() {
             if (selTags.isEmpty()) {
                 mActivity.showSnack("请先选择标签")
             } else {
-                startWXTask(WXShareTask(tagForFriends = selTags, isSendTags = false, mediaCount = 2))
+                startWXTask(WXShareTask(tagForFriends = selTags, isSendTags = false, mediaCount = 0))
             }
         })
 

@@ -1,6 +1,8 @@
 package com.kiven.kutils.widget;
 
 import androidx.annotation.NonNull;
+
+import android.os.Bundle;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -44,11 +46,10 @@ public class RadioGroup implements View.OnClickListener {
     }
 
     /**
-     *
-     * @param isForce   是否不考虑isCanChange，强制触发点击
+     * @param isForce 是否不考虑isCanChange，强制触发点击
      */
     public void onClick(View v, boolean isForce) {
-        if(!isCanChange && !isForce)
+        if (!isCanChange && !isForce)
             return;
         // 选中项是否有改变
         boolean isChange = true;
@@ -74,17 +75,20 @@ public class RadioGroup implements View.OnClickListener {
 
     /**
      * 设置是否可以切换tab
+     *
      * @param isCanChange
      */
-    public void setIsCanChange(boolean isCanChange){
+    public void setIsCanChange(boolean isCanChange) {
         this.isCanChange = isCanChange;
     }
+
     /**
      * 设置选中按钮
      */
     public void setChecked(@NonNull int resId) {
         onClick(rootView.findViewById(resId), true);
     }
+
     /**
      * 清除选中按钮
      */
@@ -112,14 +116,31 @@ public class RadioGroup implements View.OnClickListener {
     /**
      * 获取选中view的下标，位置
      */
-    public int getCheckedPosition(){
-        for (int i = 0; i < radioViews.size(); i++){
+    public int getCheckedPosition() {
+        for (int i = 0; i < radioViews.size(); i++) {
             View view = radioViews.get(i);
-            if (view.isSelected()){
+            if (view.isSelected()) {
                 return i + 1;
             }
         }
         return 0;
+    }
+
+    public void onSaveInstanceState(Bundle outSate, String key) {
+        if (outSate == null) return;
+
+        int selId = getCheckedId();
+        if (selId > 0) {
+            outSate.putInt(key + "_radioGroup", selId);
+        }
+    }
+
+    public void onRestoreInstanceState(Bundle savedInstanceState, String key) {
+        if (savedInstanceState == null) return;
+
+        int selId = savedInstanceState.getInt(key + "_radioGroup", 0);
+        if (selId > 0)
+            setChecked(selId);
     }
 
     public interface RadioGroupListener {

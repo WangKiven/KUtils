@@ -18,6 +18,7 @@ import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
+import androidx.exifinterface.media.ExifInterface
 import androidx.lifecycle.LifecycleOwner
 import com.bumptech.glide.Glide
 import com.kiven.kutils.activityHelper.KFragmentActivity
@@ -149,6 +150,10 @@ class LauchActivity : KActivity(), LifecycleOwner {
             }
         })
 
+        addView("", View.OnClickListener {
+
+        })
+        addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
     }

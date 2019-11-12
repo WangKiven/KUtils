@@ -138,6 +138,40 @@
             android:onClick="onClick"
             app:item_title="ExoPlayer " />
 
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="ExifInterface 获取修改图片信息" />
+
+        <com.kiven.kutils.widget.KNormalItemView
+            android:id="@+id/item_exif_interface_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="onClick"
+            app:item_title="ExifInterface 时间相关信息" />
+
+        <com.kiven.kutils.widget.KNormalItemView
+            android:id="@+id/item_exif_interface_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="onClick"
+            app:item_title="ExifInterface 打印更多信息" />
+
+        <com.kiven.kutils.widget.KNormalItemView
+            android:id="@+id/item_exif_interface_3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="onClick"
+            app:item_title="ExifInterface 修改信息" />
+
     </LinearLayout>
 
 </androidx.core.widget.NestedScrollView>

@@ -162,6 +162,9 @@ dependencies {
     implementation "androidx.emoji:emoji-appcompat:1.0.0"
     implementation "androidx.emoji:emoji-bundled:1.0.0"
 
+    // 图片信息获取修改
+    implementation 'androidx.exifinterface:exifinterface:1.0.0'
+
     // https://github.com/rockerhieu/emojicon
     implementation 'io.github.rockerhieu:emojicon:1.4.2'
 

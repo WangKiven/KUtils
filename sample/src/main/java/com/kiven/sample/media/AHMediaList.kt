@@ -21,6 +21,7 @@ import android.widget.Button
 import android.widget.ImageView
 import androidx.camera.core.*
 import androidx.core.content.FileProvider
+import androidx.exifinterface.media.ExifInterface
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
@@ -38,8 +39,12 @@ import com.kiven.kutils.tools.*
 import com.kiven.sample.R
 import com.kiven.sample.util.Const
 import com.kiven.sample.util.Const.IMAGE_DIR
+import com.kiven.sample.util.showSnack
+import com.kiven.sample.util.showTip
 import com.kiven.sample.util.snackbar
 import java.io.File
+import java.text.DateFormat
+import java.util.*
 
 /**
  *
@@ -61,6 +66,7 @@ open class AHMediaList : KActivityDebugHelper() {
     }
 
     private var cameraPath: String = ""
+    private var selPath = ""
     override fun onClick(view: View?) {
         super.onClick(view)
         when (view?.id) {
@@ -118,7 +124,7 @@ open class AHMediaList : KActivityDebugHelper() {
                 val dataSourceFactory = DefaultHttpDataSourceFactory("userAgent")
                 player.prepare(ExtractorMediaSource(Uri.parse("https://raw.githubusercontent.com/WangKiven/mygit/master/company.mp4"), dataSourceFactory, DefaultExtractorsFactory(), null, null))
 
-                val dialog = object :Dialog(mActivity){
+                val dialog = object : Dialog(mActivity) {
                     init {
                         setContentView(PlayerView(mActivity).apply {
                             setPlayer(player)
@@ -135,6 +141,72 @@ open class AHMediaList : KActivityDebugHelper() {
                 }
 
                 dialog.show()
+            }
+            R.id.item_exif_interface_1 -> {
+                if (KString.isBlank(selPath)) {
+                    mActivity.showSnack("先选择图片")
+                    return
+                }
+
+                val exifInterface = ExifInterface(selPath)
+                KLog.i("时间：\n${exifInterface.getAttribute(ExifInterface.TAG_DATETIME)}" +
+                        "\n${exifInterface.getAttribute(ExifInterface.TAG_DATETIME_DIGITIZED)}" +
+                        "\n${exifInterface.getAttribute(ExifInterface.TAG_DATETIME_ORIGINAL)}" +
+                        "\n${exifInterface.getAttribute(ExifInterface.TAG_EXPOSURE_TIME)}" +
+                        "\n${exifInterface.getAttribute(ExifInterface.TAG_GPS_TIMESTAMP)}" +
+                        "\n${exifInterface.getAttribute(ExifInterface.TAG_SUBSEC_TIME)}" +
+                        "\n${exifInterface.getAttribute(ExifInterface.TAG_SUBSEC_TIME_DIGITIZED)}" +
+                        "\n${exifInterface.getAttribute(ExifInterface.TAG_SUBSEC_TIME_ORIGINAL)}" +
+                        "\n${DateFormat.getInstance().format(Date(File(selPath).lastModified()))}")
+            }
+
+            R.id.item_exif_interface_2 -> {
+                if (KString.isBlank(selPath)) {
+                    mActivity.showSnack("先选择图片")
+                    return
+                }
+
+                val exifInterface = ExifInterface(selPath)
+
+                // 打印更多信息
+                val buildFields = ExifInterface::class.java.fields
+                val builder = StringBuilder("图片信息：\n")
+                for (field in buildFields) {
+                    try {
+                        val value = field.get(Build::class.java)
+
+                        if (value != null && value.javaClass == Class.forName("[Ljava.lang.String;")) {
+                            val ss = "\n" + field.name + ": " + (value as Array<Any>).contentToString()
+                            builder.append(ss)
+                        } else {
+                            val `as` = "\n" + field.name + ": " + value
+                            builder.append(`as`)
+
+                            if (value != null && value is String) {
+                                if (field.name.startsWith("TAG_"))
+                                    builder.append(" ${exifInterface.getAttribute(value)}")
+                            }
+                        }
+
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+
+                }
+                KLog.i(builder.toString())
+                KLog.i(buildFields.joinToString { it.name })
+            }
+
+            R.id.item_exif_interface_3 -> {
+                if (KString.isBlank(selPath)) {
+                    mActivity.showSnack("先选择图片")
+                    return
+                }
+
+                val exifInterface = ExifInterface(selPath)
+
+                exifInterface.setAttribute(ExifInterface.TAG_DATETIME, "2019:11:11 01:55:33")
+                exifInterface.saveAttributes()
             }
         }
     }
@@ -161,17 +233,17 @@ open class AHMediaList : KActivityDebugHelper() {
             345 -> {
                 val uri = data?.data ?: return
 
-                val path = KPath.getPath(mActivity, uri)
-                KLog.i(path)
+                selPath = KPath.getPath(mActivity, uri)
+                KLog.i(selPath)
                 KLog.i(uri.toString())
 
-                if (path.endsWith(".mp4")) {
+                if (selPath.endsWith(".mp4")) {
 
                     val video = VideoSurfaceDemo()
                     video.putExtra("mp4Path", uri)
                     video.startActivity(mActivity)
                 } else {
-                    showImage(path)
+                    showImage(selPath)
                 }
                 /*if (uri.toString().contains("video")) {
                     val video = VideoSurfaceDemo()

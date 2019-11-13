@@ -92,6 +92,16 @@ fun Activity.showSnack(word: String) {
     Log.i("ULog_default", word)
 }
 
+private var preTime = 0L
+/**
+ * toast提示 仅用于无障碍模块
+ */
 fun showToast(word: String){
-    Toast.makeText(KContext.getInstance(), word, Toast.LENGTH_SHORT).show()
+    // Toast.LENGTH_SHORT 4s
+    // Toast.LENGTH_LONG 7s
+    val curTime = System.currentTimeMillis()
+    if (curTime - preTime > 4000L) {
+        Toast.makeText(KContext.getInstance(), word, Toast.LENGTH_SHORT).show()
+        preTime = curTime
+    }
 }

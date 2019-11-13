@@ -33,7 +33,7 @@ class AHSystemImage : KActivityDebugHelper() {
         super.onCreate(activity, savedInstanceState)
         val recyclerView = RecyclerView(mActivity).apply {
             val dpScreenWith = KUtil.getScreenWith(mActivity) / KUtil.getScreenDensity(mActivity)
-            layoutManager = GridLayoutManager(mActivity, max((dpScreenWith / 50).toInt(), 1))
+            layoutManager = GridLayoutManager(mActivity, max((dpScreenWith / 100).toInt(), 1))
             adapter = this@AHSystemImage.adapter
         }
         setContentView(recyclerView)

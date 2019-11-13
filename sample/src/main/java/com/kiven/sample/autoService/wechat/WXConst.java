@@ -1,4 +1,4 @@
-package com.kiven.sample.autoService;
+package com.kiven.sample.autoService.wechat;
 
 import android.content.Context;
 import android.os.Environment;

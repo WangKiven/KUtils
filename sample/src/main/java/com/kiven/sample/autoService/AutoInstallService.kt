@@ -13,6 +13,7 @@ import com.kiven.kutils.tools.KAppTool
 import com.kiven.kutils.tools.KContext
 import com.kiven.kutils.tools.KUtil
 import com.kiven.sample.R
+import com.kiven.sample.autoService.wechat.WXConst
 import com.kiven.sample.floatView.FloatView
 
 /**

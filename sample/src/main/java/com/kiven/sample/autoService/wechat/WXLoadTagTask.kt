@@ -1,4 +1,4 @@
-package com.kiven.sample.autoService
+package com.kiven.sample.autoService.wechat
 
 import android.accessibilityservice.AccessibilityService
 import android.app.ActivityManager
@@ -12,8 +12,10 @@ import android.widget.ListView
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KAppTool
 import com.kiven.sample.R
-import com.kiven.sample.autoService.WXConst.Page.ContactLabelManagerUI
-import com.kiven.sample.autoService.WXConst.Page.LauncherUI
+import com.kiven.sample.autoService.AccessibilityUtil
+import com.kiven.sample.autoService.AutoInstallService
+import com.kiven.sample.autoService.wechat.WXConst.Page.ContactLabelManagerUI
+import com.kiven.sample.autoService.wechat.WXConst.Page.LauncherUI
 import com.kiven.sample.util.showToast
 
 /**
@@ -61,7 +63,8 @@ class WXLoadTagTask : AutoInstallService.AccessibilityTask {
 
             var myNode: AccessibilityNodeInfo? = null
 
-            val wxpp = AccessibilityUtil.findNodeByClass(rootNode, "com.tencent.mm.ui.mogic.WxViewPager") ?: return
+            val wxpp = AccessibilityUtil.findNodeByClass(rootNode, "com.tencent.mm.ui.mogic.WxViewPager")
+                    ?: return
             val rootBound = Rect()
             wxpp.getBoundsInScreen(rootBound)
 

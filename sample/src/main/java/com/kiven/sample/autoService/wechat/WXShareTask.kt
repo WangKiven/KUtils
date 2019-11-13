@@ -1,4 +1,4 @@
-package com.kiven.sample.autoService
+package com.kiven.sample.autoService.wechat
 
 import android.accessibilityservice.AccessibilityService
 import android.graphics.Rect
@@ -11,8 +11,9 @@ import android.widget.*
 import com.kiven.kutils.tools.KAppTool
 import com.kiven.kutils.tools.KString
 import com.kiven.sample.R
-import com.kiven.sample.autoService.WXConst.Page.*
-import com.kiven.sample.autoService.WXConst.logType
+import com.kiven.sample.autoService.AccessibilityUtil
+import com.kiven.sample.autoService.AutoInstallService
+import com.kiven.sample.autoService.wechat.WXConst.Page.*
 import com.kiven.sample.util.showToast
 import kotlinx.coroutines.*
 

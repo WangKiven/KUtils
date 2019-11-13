@@ -13,6 +13,9 @@ import com.google.android.flexbox.FlexboxLayout
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.tools.KGranting
+import com.kiven.sample.autoService.wechat.WXConst
+import com.kiven.sample.autoService.wechat.WXLoadTagTask
+import com.kiven.sample.autoService.wechat.WXShareTask
 import com.kiven.sample.util.showListDialog
 import com.kiven.sample.util.showSnack
 import com.sch.share.WXShareMultiImageHelper
@@ -57,13 +60,6 @@ class AHAutoService : KActivityHelper() {
         }
 
         val startWXTask = fun(task: AutoInstallService.AccessibilityTask) {
-            /*AutoInstallService.task = task
-
-            if (!AutoInstallService.isStarted) {
-                AccessibilityUtil.jumpToSetting(mActivity)
-            } else {
-                KAppTool.startApp(mActivity, "com.tencent.mm")
-            }*/
             AutoInstallService.startWXTask(mActivity, task)
         }
 

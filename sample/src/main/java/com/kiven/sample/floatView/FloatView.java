@@ -15,7 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.kiven.kutils.tools.KUtil;
-import com.kiven.sample.autoService.WXConst;
+import com.kiven.sample.autoService.wechat.WXConst;
 
 /**
  * 学习文档：TODO http://blog.csdn.net/stevenhu_223/article/details/8504058

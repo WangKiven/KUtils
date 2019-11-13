@@ -1,14 +1,18 @@
 package com.kiven.sample.autoService
 
 import android.accessibilityservice.AccessibilityService
+import android.app.Activity
 import android.content.Context
-import android.content.Intent
+import android.os.Build
 import android.os.Handler
 import android.view.WindowManager
 import android.view.accessibility.AccessibilityEvent
-import android.view.accessibility.AccessibilityNodeInfo
-
 import com.kiven.kutils.logHelper.KLog
+import com.kiven.kutils.tools.KAlertDialogHelper
+import com.kiven.kutils.tools.KAppTool
+import com.kiven.kutils.tools.KContext
+import com.kiven.kutils.tools.KUtil
+import com.kiven.sample.R
 import com.kiven.sample.floatView.FloatView
 
 /**
@@ -24,17 +28,58 @@ class AutoInstallService : AccessibilityService() {
     override fun onCreate() {
         super.onCreate()
         // y由于是后台服务，必须是应用外悬浮
-        floatView = FloatView(baseContext, application.getSystemService(Context.WINDOW_SERVICE) as WindowManager, true)
-        floatView!!.showFloat()
+        if (KLog.isDebug()){
+            floatView = FloatView(
+                    baseContext,
+                    application.getSystemService(Context.WINDOW_SERVICE) as WindowManager,
+                    true
+            )
+            floatView?.showFloat()
+        }
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
         /*if (event == null || !event.getPackageName().toString()
-                .contains(getString(R.string.auto_access_service_dist_package)))//不写完整包名，是因为某些手机(如小米)安装器包名是自定义的
+                .contains(getString(R.string.auto_access_service_dist_package)))
             return;*/
 
-        KLog.i(String.format("触发事件：：：：：%s %x %x %x", event.className.toString(), event.eventType, event.action,
-                event.contentChangeTypes))
+        if (KLog.isDebug()) {
+            when (WXConst.logType % 3) {
+                0 -> {}
+                1 -> {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                        KLog.i(
+                                String.format(
+                                        "触发事件：：：：：%s %x %x %x",
+                                        event.className.toString(),
+                                        event.eventType,
+                                        event.action,
+                                        event.contentChangeTypes
+                                )
+                        )
+                    } else {
+                        KLog.i(
+                                String.format(
+                                        "触发事件：：：：：%s %x %x",
+                                        event.className.toString(),
+                                        event.eventType,
+                                        event.action
+                                )
+                        )
+                    }
+                }
+                2 -> {
+                    rootInActiveWindow?.let {
+                        AccessibilityUtil.printTree(it)
+                    }
+                }
+                3 -> {
+                    event.source?.let {
+                        AccessibilityUtil.printTree(it)
+                    }
+                }
+            }
+        }
 
         if (task != null) task!!.onAccessibilityEvent(this, event)
     }
@@ -49,14 +94,35 @@ class AutoInstallService : AccessibilityService() {
         // 退出设置界面，后面再优化
 //        performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK)
 //        performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK)
-        val ah = AHAutoService()
+
+        /*
+        // 这种方法，startActivityForResult 获取不到返回值
+        val ah = AHWXShareTag()
         ah.intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         ah.intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        ah.startActivity(this)
+        ah.startActivity(this)*/
+//        onConnectedCall?.callBack(this)
 
-        mHandler.postDelayed({
+
+        /*mHandler.postDelayed({
+
             // 任务处理
             if (task != null) task!!.onServiceConnected(this@AutoInstallService)
+        }, DELAY_PAGE)*/
+        closeSettingAndNext()
+    }
+
+    private fun closeSettingAndNext() {
+        performGlobalAction(GLOBAL_ACTION_BACK)
+
+        mHandler.postDelayed({
+            if (KContext.getInstance().topActivity == null) {
+                closeSettingAndNext()
+            } else {
+                // 任务处理
+                if (task != null) task!!.onServiceConnected(this@AutoInstallService)
+            }
+
         }, DELAY_PAGE)
     }
 
@@ -78,9 +144,7 @@ class AutoInstallService : AccessibilityService() {
 
         mInstance = null
 
-        if (floatView != null) {
-            floatView!!.hideFloat()
-        }
+        floatView?.hideFloat()
     }
 
     interface AccessibilityTask {
@@ -92,11 +156,42 @@ class AutoInstallService : AccessibilityService() {
     companion object {
         private var mInstance: AutoInstallService? = null
 
-        val isStarted: Boolean
+        private val isStarted: Boolean
             get() = mInstance != null
 
-        private val DELAY_PAGE = 320L // 页面切换时间
+        private const val DELAY_PAGE = 500L // 页面切换时间
 
-        var task: AccessibilityTask? = null
+        private var task: AccessibilityTask? = null
+
+        fun startWXTask(
+                mActivity: Activity,
+                task: AccessibilityTask
+        ) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (!KUtil.canDrawOverlays()) {
+                    KAlertDialogHelper.Show2BDialog(mActivity, "该功能需要【显示在其他应用上层】的权限，请点确定去开启。") {
+                        KUtil.startOverlaySetting()
+                    }
+                    return
+                }
+            }
+
+            AutoInstallService.task = task
+
+            if (!isStarted) {
+                // 请在手机【无障碍】设置中，开启省心宝提供的【微信分享助手】开始获取微信好友标签，点确定去开启。
+                KAlertDialogHelper.Show2BDialog(
+                        mActivity,
+                        "请在手机【无障碍】设置中，开启由【省心宝汽车】提供的【微信分享助手】，点确定去开启。"
+                ) {
+                    AccessibilityUtil.jumpToSetting(mActivity)
+                }
+            } else {
+                KAppTool.startApp(
+                        mActivity,
+                        mActivity.getString(R.string.auto_access_service_dist_package)
+                )
+            }
+        }
     }
 }

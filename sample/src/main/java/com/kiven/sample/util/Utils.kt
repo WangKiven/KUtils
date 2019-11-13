@@ -68,7 +68,7 @@ fun Activity.callPhone(phoneNum: String) {
 }
 
 fun showTip(word: String) {
-    KLog.d(word)
+    KLog.i(word)
 }
 
 fun Activity.showDialog(word: String) {

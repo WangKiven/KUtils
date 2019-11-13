@@ -1,10 +1,7 @@
 package com.kiven.sample.autoService
 
 import android.Manifest
-import android.app.ActivityManager
-import android.content.Context
 import android.graphics.BitmapFactory
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -15,11 +12,7 @@ import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
-import com.kiven.kutils.logHelper.KLog
-import com.kiven.kutils.tools.KAppTool
 import com.kiven.kutils.tools.KGranting
-import com.kiven.kutils.tools.KUtil
-import com.kiven.sample.floatView.ServiceFloat
 import com.kiven.sample.util.showListDialog
 import com.kiven.sample.util.showSnack
 import com.sch.share.WXShareMultiImageHelper
@@ -64,28 +57,17 @@ class AHAutoService : KActivityHelper() {
         }
 
         val startWXTask = fun(task: AutoInstallService.AccessibilityTask) {
-            AutoInstallService.task = task
+            /*AutoInstallService.task = task
 
             if (!AutoInstallService.isStarted) {
                 AccessibilityUtil.jumpToSetting(mActivity)
             } else {
                 KAppTool.startApp(mActivity, "com.tencent.mm")
-            }
-        }
-
-        val checkOverlay = fun(): Boolean {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (!KUtil.canDrawOverlays()) {
-                    KUtil.startOverlaySetting()
-                    return false
-                }
-            }
-            return true
+            }*/
+            AutoInstallService.startWXTask(mActivity, task)
         }
 
         addView("获取微信标签", View.OnClickListener {
-            if (!checkOverlay()) return@OnClickListener
-
             WXConst.frindsTags.clear()
             startWXTask(WXLoadTagTask())
         })
@@ -107,8 +89,6 @@ class AHAutoService : KActivityHelper() {
 
 
         addView("按标签分享", View.OnClickListener {
-            if (!checkOverlay()) return@OnClickListener
-
             if (selTags.isEmpty()) {
                 mActivity.showSnack("请先选择标签")
             } else {
@@ -117,8 +97,6 @@ class AHAutoService : KActivityHelper() {
         })
 
         addView("排除标签分享", View.OnClickListener {
-            if (!checkOverlay()) return@OnClickListener
-
             if (selTags.isEmpty()) {
                 mActivity.showSnack("请先选择标签")
             } else {

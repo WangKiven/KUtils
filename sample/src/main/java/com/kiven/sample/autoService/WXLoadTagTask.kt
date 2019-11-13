@@ -4,23 +4,27 @@ import android.accessibilityservice.AccessibilityService
 import android.app.ActivityManager
 import android.content.Context.ACTIVITY_SERVICE
 import android.graphics.Rect
+import android.os.Build
 import android.text.TextUtils
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.ListView
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KAppTool
+import com.kiven.sample.R
 import com.kiven.sample.autoService.WXConst.Page.ContactLabelManagerUI
 import com.kiven.sample.autoService.WXConst.Page.LauncherUI
-import com.kiven.sample.autoService.WXConst.logType
 import com.kiven.sample.util.showToast
 
 /**
  * Created by oukobayashi on 2019-10-31.
  */
 class WXLoadTagTask : AutoInstallService.AccessibilityTask {
+
+    private var isCompleted = false
+
     override fun onAccessibilityEvent(service: AccessibilityService, event: AccessibilityEvent?) {
-        if (event == null) return
+        if (event == null || isCompleted) return
 
 
         val eventNode = event.source ?: return
@@ -49,22 +53,6 @@ class WXLoadTagTask : AutoInstallService.AccessibilityTask {
         }
 
         if (curWXUI == null) return
-
-
-        // 放在 curWXUI 被记录之后
-        when (logType % 3) {
-            0 -> {
-//                KLog.i(String.format("其他：：：：：%s %x %x", event.className.toString(), event.eventType, event.action))
-                return
-            }
-            1 -> {
-                AccessibilityUtil.printTree(rootNode)
-                return
-            }
-            2 -> {
-//                KLog.i(String.format("%s %x %x", event.className.toString(), event.eventType, event.action))
-            }
-        }
 
         // step 1 : 微信主界面
         if (TextUtils.equals(curWXUI, LauncherUI)) {
@@ -194,18 +182,28 @@ class WXLoadTagTask : AutoInstallService.AccessibilityTask {
 
             }*/
 
+            isCompleted = true
+
             val activityManager =  service.getSystemService(ACTIVITY_SERVICE) as ActivityManager
 
-            val tasks = activityManager.appTasks
-            tasks[0].moveToFront()
-            KLog.i("xxxxxxxxxxxxxx:::::${tasks.size}")
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                val tasks = activityManager.appTasks
+                tasks[0].moveToFront()
+                KLog.i("xxxxxxxxxxxxxx:::::${tasks.size}")
+            }else {
+                showToast("标签获取完成，请回到【省心宝汽车】")
+                service.performGlobalAction(AccessibilityService.GLOBAL_ACTION_RECENTS)
 
 
+//                val tasks = activityManager.getRunningTasks(5)
+//                activityManager.moveTaskToFront(tasks[0].id, 0)
+            }
         }
 
+        if (curWXUI != null && !isCompleted) showToast("请回到微信主界面，自动获取标签")
     }
 
     override fun onServiceConnected(service: AccessibilityService) {
-        KAppTool.startApp(service, "com.tencent.mm")
+        KAppTool.startApp(service, service.getString(R.string.auto_access_service_dist_package))
     }
 }

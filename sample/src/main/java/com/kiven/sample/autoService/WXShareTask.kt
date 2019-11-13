@@ -10,6 +10,7 @@ import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.*
 import com.kiven.kutils.tools.KAppTool
 import com.kiven.kutils.tools.KString
+import com.kiven.sample.R
 import com.kiven.sample.autoService.WXConst.Page.*
 import com.kiven.sample.autoService.WXConst.logType
 import com.kiven.sample.util.showToast
@@ -24,13 +25,6 @@ class WXShareTask(
 
         val mediaCount: Int = 0 // 要发送的图片数量
 ) : AutoInstallService.AccessibilityTask {
-    val supportWXVersion = arrayOf(
-            "7.0.8"
-    )
-
-
-    /*private val steps = ArrayMap<String, AccessibilityStep>()*/
-
 
     // 用作记录用户选择的标签包含哪些好友
     private val tagAndFriends = mutableMapOf<String, MutableList<String>>()
@@ -80,14 +74,9 @@ class WXShareTask(
 
         val eventNode = event.source ?: return
 
-//        val rootNode = service.rootInActiveWindow ?: return //当前窗口根节点
-
-        /*deal(event, rootNode)*/
-
         this.service = service
 
 
-//        events.add(Pair(event.className.toString(), event.eventType))
         lashChangeTime = event.eventTime
 
         if (event.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
@@ -106,8 +95,6 @@ class WXShareTask(
             }
         }
 
-
-//        rootNode.recycle()
         eventNode.recycle()
     }
 
@@ -135,22 +122,11 @@ class WXShareTask(
 
         if (curWXUI == null) return
 
-        // 放在 curWXUI 被记录之后
-        when (logType % 3) {
-            0 -> {
-//                KLog.i(String.format("%s %x %x", event.className.toString(), event.eventType, event.action))
-                return
-            }
-            1 -> {
-                AccessibilityUtil.printTree(rootNode)
-                return
-            }
-            2 -> {
-//                KLog.i(String.format("%s %x %x", event.className.toString(), event.eventType, event.action))
-            }
-        }
-
         if (curState >= 3) {
+
+            // 分享完成，清空缓存图片, 需要退出发送界面后再清空
+            if (curWXUI != MassSendMsgUI)
+                WXConst.clearShareWXTempDir(service!!)
             return
         }
 
@@ -163,7 +139,10 @@ class WXShareTask(
 
             var myNode: AccessibilityNodeInfo? = null
 
-            val wxpp = AccessibilityUtil.findNodeByClass(rootNode, "com.tencent.mm.ui.mogic.WxViewPager")
+            val wxpp = AccessibilityUtil.findNodeByClass(
+                    rootNode,
+                    "com.tencent.mm.ui.mogic.WxViewPager"
+            )
                     ?: return
             val rootBound = Rect()
             wxpp.getBoundsInScreen(rootBound)
@@ -279,6 +258,7 @@ class WXShareTask(
         // 在这里做拦截，防止用户一打开微信就在下边的界面里面
         if (curState < 1) {
             showToast("请回到微信主界面，自动开始群发操作")
+            return
         }
 
         // step 7: 设置->通用->辅助功能->群发助手->点击'开始群发'出现的有'新建群发'按钮的界面->选择收信人界面
@@ -312,11 +292,13 @@ class WXShareTask(
 
                     if (nextTags.isNotEmpty()) {
                         // 标签面板, 点击收索框才会出现
-                        val tagPanlNode = AccessibilityUtil.findNodeByClass(rootNode, ViewGroup::class.java)
+                        val tagPanlNode =
+                                AccessibilityUtil.findNodeByClass(rootNode, ViewGroup::class.java)
 
                         if (tagPanlNode == null) {
                             // 搜索框
-                            val searchNode = AccessibilityUtil.findNodeByClass(rootNode, EditText::class.java)
+                            val searchNode =
+                                    AccessibilityUtil.findNodeByClass(rootNode, EditText::class.java)
                             if (searchNode != null) {
                                 AccessibilityUtil.clickNode(searchNode)
                             }
@@ -352,14 +334,18 @@ class WXShareTask(
                     } else {
 
                         if (!isSendTags) {// 如果是发送给没有这些标签的好友，需要在这里去勾选
-                            val listViewNode = AccessibilityUtil.findNodeByClass(rootNode, ListView::class.java)
+                            val listViewNode =
+                                    AccessibilityUtil.findNodeByClass(rootNode, ListView::class.java)
                             if (listViewNode != null) {
 
                                 // 检测是否滚动到底部
                                 if (!AccessibilityUtil.checkListViewByTextView(listViewNode)) {
                                     // 获取好友结点（把分组结点也获取到了，但是不影响，也就不单独处理了）
 //                                    val itemNodes = AccessibilityUtil.findNodesByClass(listViewNode, TextView::class.java)
-                                    val itemNodes = AccessibilityUtil.findNodesByClass(listViewNode, RelativeLayout::class.java)
+                                    val itemNodes = AccessibilityUtil.findNodesByClass(
+                                            listViewNode,
+                                            RelativeLayout::class.java
+                                    )
                                     // 挨个检测是否不在标签好友里面并点击不在标签的好友
                                     itemNodes.forEach {
                                         if (it.childCount > 1) {
@@ -437,11 +423,15 @@ class WXShareTask(
                 } else {
                     if (isSendTags) {
                         // 发送标签点击确定
-                        val okBtn = AccessibilityUtil.findNodeByClass(rootNode, Button::class.java.name)
+                        val okBtn =
+                                AccessibilityUtil.findNodeByClass(rootNode, Button::class.java.name)
                         if (okBtn != null) AccessibilityUtil.clickNode(okBtn)
                     } else {
                         // 发送非标签，点击返回
-                        AccessibilityUtil.findNodeClickByClass(rootNode, LinearLayout::class.java.name)
+                        AccessibilityUtil.findNodeClickByClass(
+                                rootNode,
+                                LinearLayout::class.java.name
+                        )
                     }
                     // // TODO: 2019-11-05 将当前界面置空，否则出现两次回退。原因是 curWXUI = event.className.toString() 并不能及时反映当前界面
                     // // TODO: 2019-11-05 目前没找到方法获取当前界面，现在的方法有延次。
@@ -455,12 +445,16 @@ class WXShareTask(
         // 注意：这个界面点击发送后，回到'MassSendHistoryUI'界面
         if (TextUtils.equals(curWXUI, MassSendMsgUI)) {
 
+            val editNode = AccessibilityUtil.findNodeByClass(
+                    rootNode,
+                    EditText::class.java.name
+            )
+
             // 发送文案
             if (!KString.isBlank(msgForSend) && curState < 2) {
                 // 操作输入框
 //                val editNode = AccessibilityUtil.findNodeById(rootNode, "com.tencent.mm:id/aqc")
-                val editNode = AccessibilityUtil.findNodeByClass(rootNode, EditText::class.java.name)
-                        ?: return
+                if (editNode == null) return
 
                 if (!TextUtils.equals(editNode.text, msgForSend)) {
                     // 设置输入类容
@@ -485,7 +479,17 @@ class WXShareTask(
 
             // 发送图片视频
             if (mediaCount > 0 && mediaCount > hasSendMediaCount) {
-                val gridView = AccessibilityUtil.findNodeByClass(rootNode, GridView::class.java.name)
+                // 有文案，先清空文案
+                if (editNode != null && !KString.isBlank(editNode.text)) {
+                    val arguments = Bundle()
+                    arguments.putCharSequence(AccessibilityNodeInfo.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE, "")
+                    editNode.performAction(AccessibilityNodeInfo.ACTION_SET_TEXT, arguments)
+                    return
+                }
+
+
+                val gridView =
+                        AccessibilityUtil.findNodeByClass(rootNode, GridView::class.java.name)
                 if (gridView != null) {
                     AccessibilityUtil.findTxtClick(gridView, "相册")
                 }
@@ -537,6 +541,6 @@ class WXShareTask(
     }*/
 
     override fun onServiceConnected(service: AccessibilityService) {
-        KAppTool.startApp(service, "com.tencent.mm")
+        KAppTool.startApp(service, service.getString(R.string.auto_access_service_dist_package))
     }
 }

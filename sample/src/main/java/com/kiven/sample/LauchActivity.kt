@@ -3,11 +3,13 @@ package com.kiven.sample
 import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
+import android.provider.MediaStore
 import android.provider.Settings
 import android.transition.Slide
 import android.view.Gravity
@@ -33,11 +35,18 @@ import com.kiven.sample.floatView.ActivityHFloatView
 import com.kiven.sample.gl.AHGL
 import com.kiven.sample.libs.AHLibs
 import com.kiven.sample.media.AHMediaList
+import com.kiven.sample.systemdata.AHSysgemData
 import com.kiven.sample.theme.AHTheme
 import com.kiven.sample.util.showDialog
 import com.kiven.sample.util.showListDialog
+import com.kiven.sample.util.showTip
 import kotlinx.android.synthetic.main.activity_lauch.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.grantland.widget.AutofitHelper
+import java.text.SimpleDateFormat
 
 class LauchActivity : KActivity(), LifecycleOwner {
 
@@ -149,11 +158,7 @@ class LauchActivity : KActivity(), LifecycleOwner {
                 }
             }
         })
-
-        addView("", View.OnClickListener {
-
-        })
-        addView("", View.OnClickListener { })
+        addView("系统数据", View.OnClickListener { AHSysgemData().startActivity(this) })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
     }

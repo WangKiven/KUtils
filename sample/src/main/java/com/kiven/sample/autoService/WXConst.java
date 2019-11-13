@@ -1,5 +1,14 @@
 package com.kiven.sample.autoService;
 
+import android.content.Context;
+import android.os.Environment;
+import android.provider.MediaStore;
+
+import androidx.annotation.NonNull;
+
+import com.kiven.kutils.tools.KUtil;
+
+import java.io.File;
 import java.util.TreeMap;
 
 public class WXConst {
@@ -29,4 +38,26 @@ public class WXConst {
 
     public static int logType = 0;//控制打印日志, 微信工具用
     public static final TreeMap<String, Integer> frindsTags = new TreeMap<>();
+
+
+    @NonNull
+    public static File getShareWXTempDir() {
+        return new File(KUtil.getAppFileFolderPath("KUTILS_IMAGE_TEMP"));
+    }
+    public static void clearShareWXTempDir(@NonNull Context context) {
+        File tempFile = getShareWXTempDir();
+//       KUtil.addPicture(tempFile.getAbsolutePath(), null);
+//       MediaStore.Images.Media.getContentUri("")
+        if (tempFile.exists() && tempFile.isDirectory()) {
+            File[] childFiles = tempFile.listFiles();
+            if (childFiles != null)
+                for (File file : childFiles) {
+                    // 删除图片
+                    String[] params = new String[]{file.getAbsolutePath()};
+                    context.getContentResolver().delete(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, MediaStore.Images.Media.DATA + " LIKE ?", params);
+                }
+
+            KUtil.deleteFile(tempFile, true);
+        }
+    }
 }

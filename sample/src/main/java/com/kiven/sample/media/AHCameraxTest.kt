@@ -13,6 +13,7 @@ import com.kiven.kutils.tools.KUtil
 import com.kiven.sample.util.Const.IMAGE_DIR
 import org.jetbrains.anko.*
 import java.io.File
+import java.util.concurrent.Executor
 
 /**
  * Created by wangk on 2019/5/17.
@@ -55,7 +56,16 @@ class AHCameraxTest : KActivityDebugHelper() {
 
                 setOnClickListener {
                     val file = getFile(System.currentTimeMillis().toString() + ".jpg")
-                    imageCapture.takePicture(file, object :ImageCapture.OnImageSavedListener{
+                    /*imageCapture.takePicture(file, object :ImageCapture.OnImageSavedListener{
+                        override fun onImageSaved(file: File) {
+                            KUtil.addPicture(file.absolutePath) { _, _ ->
+                            }
+                        }
+
+                        override fun onError(imageCaptureError: ImageCapture.ImageCaptureError, message: String, cause: Throwable?) {
+                        }
+                    })*/
+                    imageCapture.takePicture(file, Executor {  }, object :ImageCapture.OnImageSavedListener{
                         override fun onImageSaved(file: File) {
                             KUtil.addPicture(file.absolutePath) { _, _ ->
                             }
@@ -70,6 +80,7 @@ class AHCameraxTest : KActivityDebugHelper() {
     }
 
     private fun getFile(fileName: String): File {
+        KUtil.getAppFileFolderPath()
         val dir = File(Environment.getExternalStorageDirectory(), IMAGE_DIR)
         if (!dir.exists()) {
             dir.mkdirs()

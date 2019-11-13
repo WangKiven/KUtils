@@ -51,71 +51,7 @@ class AHSysgemData:KActivityDebugHelper() {
         // TODO: 2019-11-12 ----------------------------------------------------------
         val txtTag = addTitle("")
         addView("查询相册", View.OnClickListener {
-            GlobalScope.launch {
-                withContext(Dispatchers.IO) {
-                    val resolver = mActivity.contentResolver
-                    /*resolver.openFileDescriptor(Uri.parse(imags[0]), "rwt")?.use {
-
-                    }*/
-                    val projection = arrayOf(
-                            MediaStore.Images.Media._ID,
-                            MediaStore.Images.Media.DISPLAY_NAME,
-                            MediaStore.Images.Media.SIZE,
-                            MediaStore.Images.Media.DATA
-                    )
-
-                    showTip(MediaStore.Images.Media.EXTERNAL_CONTENT_URI.toString())
-                    /*resolver.query(
-                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                            projection,
-                            MediaStore.Images.Media.MIME_TYPE + "=? or " + MediaStore.Images.Media.MIME_TYPE + "=?",
-                            arrayOf("image/jpeg", "image/png"),
-                            MediaStore.Images.Media.DATE_MODIFIED + " desc"
-                    )*/
-                    resolver.query(
-                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                            null,
-                            null,
-                            null,
-                            MediaStore.Images.Media.DATE_MODIFIED + " desc"
-                    )
-                            ?.use { cusor ->
-                                val names = cusor.columnNames
-                                val indexs = names.map { cusor.getColumnIndex(it) }
-
-                                val types = indexs.map {
-                                    try {
-                                        cusor.getType(it)
-                                    } catch (e: Throwable) {
-                                        Cursor.FIELD_TYPE_NULL
-                                    }
-                                }
-
-                                val getData = fun(index: Int, type: Int): Any? {
-                                    /*return when (type) {
-                                        Cursor.FIELD_TYPE_STRING -> cusor.getString(index)
-                                        Cursor.FIELD_TYPE_INTEGER -> cusor.getInt(index)
-                                        Cursor.FIELD_TYPE_FLOAT -> cusor.getFloat(index)
-                                        else -> null
-                                    }*/
-                                    return cusor.getString(index)
-                                }
-
-                                cusor.moveToFirst()
-                                do {
-                                    val sb = StringBuilder()
-                                    for (i in names.indices) {
-                                        sb.append(names[i]).append(" = ").append(getData(indexs[i], types[i])).append(", ")
-                                    }
-//                                    sb.append(MediaStore.Images.Media.DISPLAY_NAME).append(" = ").append(cusor.getString(cusor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME)))
-                                    showTip(sb.toString())
-                                } while (cusor.moveToNext())
-
-                                cusor.close()
-                            }
-                }
-            }
-
+            AHSystemImage().startActivity(mActivity)
         })
     }
 }

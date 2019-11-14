@@ -1,22 +1,30 @@
 package com.kiven.sample.util
 
 import android.app.Activity
-import android.content.Context
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.ImageDecoder
 import android.net.Uri
+import android.os.Build
+import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import com.flyco.dialog.widget.ActionSheetDialog
 import com.flyco.dialog.widget.NormalListDialog
 import com.google.android.material.snackbar.Snackbar
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KAlertDialogHelper
 import com.kiven.kutils.tools.KContext
-import com.kiven.kutils.tools.KUtil
-import com.kiven.sample.AppContext
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import com.kiven.sample.R
+import java.io.File
+import java.io.FileDescriptor
+import java.io.FileInputStream
 
 /**
  * Created by wangk on 2019/5/14.
@@ -76,15 +84,42 @@ fun Activity.showDialog(word: String) {
     Log.i("ULog_default", word)
 }
 
+fun Activity.showListDialog(list: List<String>, autoClose: Boolean, onClickItem: (Int, String) -> Unit) {
+    showListDialog(list.toTypedArray(), autoClose, onClickItem)
+}
+
 fun Activity.showListDialog(list: List<String>, onClickItem: (Int, String) -> Unit) {
-    showListDialog(list.toTypedArray(), onClickItem)
+    showListDialog(list.toTypedArray(), true, onClickItem)
+}
+
+fun Activity.showListDialog(list: Array<String>, autoClose: Boolean, onClickItem: (Int, String) -> Unit) {
+    val dialog = NormalListDialog(this, list)
+    dialog.isTitleShow(false)
+    dialog.setOnOperItemClickL { _, _, position, _ ->
+        onClickItem(position, list[position])
+
+        if (autoClose)
+            dialog.dismiss()
+    }
+    dialog.show()
 }
 
 fun Activity.showListDialog(list: Array<String>, onClickItem: (Int, String) -> Unit) {
-    val dialog = NormalListDialog(this, list)
-    dialog.isTitleShow(false)
-    dialog.setOnOperItemClickL { _, _, position, _ -> onClickItem(position, list[position]) }
-    dialog.show()
+    showListDialog(list, true, onClickItem)
+}
+
+fun Activity.showBottomSheetDialog(list: List<String>, onClickItem: (Int, String) -> Unit) {
+    showBottomSheetDialog(list.toTypedArray(), onClickItem)
+}
+
+fun Activity.showBottomSheetDialog(list: Array<String>, onClickItem: (Int, String) -> Unit) {
+
+    val sheetDialog = ActionSheetDialog(this, arrayOf("查看大图", "显示详细"), null)
+    sheetDialog.setOnOperItemClickL { _, _, position, _ ->
+        onClickItem(position, list[position])
+        sheetDialog.dismiss()
+    }
+    sheetDialog.show()
 }
 
 fun Activity.showSnack(word: String) {
@@ -92,11 +127,48 @@ fun Activity.showSnack(word: String) {
     Log.i("ULog_default", word)
 }
 
+fun Activity.showImageDialog(path: String?) {
+    val bitmap = BitmapFactory.decodeFile(path ?: "")
+
+    if (bitmap == null) {
+        showDialog("获取图片失败,路径：$path")
+    } else {
+        showImageDialog(bitmap)
+    }
+}
+
+fun Activity.showImageDialog(uri: Uri) {
+    val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        val source = ImageDecoder.createSource(contentResolver, uri)
+        ImageDecoder.decodeBitmap(source)
+    }else{
+        MediaStore.Images.Media.getBitmap(contentResolver, uri)
+    }
+
+    if (bitmap == null) {
+        showDialog("获取图片失败,路径：${uri}")
+    } else {
+        showImageDialog(bitmap)
+    }
+}
+
+fun Activity.showImageDialog(bitmap: Bitmap) {
+    val dialog = object : Dialog(this, R.style.Dialog) {
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            val imageView = ImageView(context)
+            setContentView(imageView)
+            imageView.setImageBitmap(bitmap)
+        }
+    }
+    dialog.show()
+}
+
 private var preTime = 0L
 /**
  * toast提示 仅用于无障碍模块
  */
-fun showToast(word: String){
+fun showToast(word: String) {
     // Toast.LENGTH_SHORT 4s
     // Toast.LENGTH_LONG 7s
     val curTime = System.currentTimeMillis()

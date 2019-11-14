@@ -148,7 +148,6 @@ class LauchActivity : KActivity(), LifecycleOwner {
         })
         addView("arch", View.OnClickListener { AHArch().startActivity(this) })
         addView("KGranting", View.OnClickListener {
-            KGranting.useFragmentRequest = true
 
             KGranting.requestAlbumPermissions(this, 233) {
                 if (it) {

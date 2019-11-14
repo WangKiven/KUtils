@@ -527,7 +527,7 @@ class AHSmallAction : KActivityDebugHelper() {
         addView("Theme", View.OnClickListener { AHThemeDemo().startActivity(mActivity) })
         addView("字符编码测试", View.OnClickListener { AHUnicodeList().startActivity(mActivity) })
         addView("无障碍", View.OnClickListener { AHAutoService().startActivity(mActivity) })
-        addView("", View.OnClickListener { })
+        addView("闹钟demo", View.OnClickListener { AHAlarmDemo().startActivity(mActivity) })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
     }

@@ -1,7 +1,6 @@
 package com.kiven.sample.systemdata
 
 import android.Manifest
-import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle

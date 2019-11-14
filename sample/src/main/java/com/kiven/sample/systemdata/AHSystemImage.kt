@@ -1,7 +1,9 @@
 package com.kiven.sample.systemdata
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.ContentUris
+import android.content.ContentValues
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
@@ -15,7 +17,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.kiven.kutils.activityHelper.KActivityDebugHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
+import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KGranting
+import com.kiven.kutils.tools.KString
 import com.kiven.kutils.tools.KUtil
 import com.kiven.sample.R
 import com.kiven.sample.util.*
@@ -24,6 +28,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.max
 
@@ -128,7 +134,11 @@ class AHSystemImage : KActivityDebugHelper() {
         }
     }
 
+    @SuppressLint("SimpleDateFormat")
     private inner class MyAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+        private val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             holder.itemView.apply {
                 val item = datas[position]
@@ -145,13 +155,13 @@ class AHSystemImage : KActivityDebugHelper() {
                 tv_position.text = position.toString()
 
                 setOnClickListener {
-                    mActivity.showBottomSheetDialog(arrayOf("查看大图", "显示详细")) { index, _ ->
+                    mActivity.showBottomSheetDialog(arrayOf("查看大图", "显示详细", "修改创建时间", "修改添加时间", "修改图片修改时间")) { index, _ ->
                         when (index) {
                             0 -> {
-                                    mActivity.showImageDialog(pathUri)
+                                mActivity.showImageDialog(pathUri)
                             }
                             1 -> {
-                                mActivity.showListDialog(item.toList()
+                                val list = item.toList()
                                         .sortedWith(kotlin.Comparator { o1, o2 ->
                                             val b1 = o1.second.isBlank()
                                             val b2 = o2.second.isBlank()
@@ -162,14 +172,75 @@ class AHSystemImage : KActivityDebugHelper() {
                                                 return@Comparator if (b1) 1 else -1
                                             }
                                         })
-                                        .map {
+                                mActivity.showListDialog(
+                                        list.map {
                                             "${it.first}: ${it.second}"
-                                        }, false) { _, ss -> mActivity.showDialog(ss) }
+                                        }, false)
+                                { _, ss ->
+                                    mActivity.showDialog(ss)
+                                }
                             }
+                            2 -> {
+                                val key = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+                                    MediaStore.Images.ImageColumns.DATE_TAKEN
+                                else
+                                    "datetaken"
+                                val pp = item[key] ?: ""
+
+                                mActivity.getInput(key, format.format(Date(pp.toLongOrNull() ?: 0))){
+                                    try {
+                                        val date = format.parse(it.toString())
+                                        date?.apply {
+                                            update(id.toString(), key, time.toString())
+                                        }
+                                    } catch (e: Exception) {
+                                        KLog.e(e)
+                                        mActivity.showSnack("时间解析错误")
+                                    }
+                                }
+                            }
+                            3 -> {
+                                val key = MediaStore.Images.ImageColumns.DATE_ADDED
+                                val pp = item[key] ?: ""
+
+                                xiugaiDate(id.toString(), key, pp)
+                            }
+                            4 -> {
+                                val key = MediaStore.Images.ImageColumns.DATE_MODIFIED
+                                val pp = item[key] ?: ""
+
+                                xiugaiDate(id.toString(), key, pp)
+                            }
+                            /*5 -> {
+                                mActivity.contentResolver.delete()
+                            }*/
                         }
                     }
                 }
             }
+        }
+
+        private fun xiugaiDate(id:String, key:String, value:String) {
+            mActivity.getInput(key, format.format(Date((value.toLongOrNull() ?: 0) * 1000L))){
+                try {
+                    val date = format.parse(it.toString())
+                    date?.apply {
+                        update(id, key, (time/1000).toString())
+                    }
+                } catch (e: Exception) {
+                    KLog.e(e)
+                    mActivity.showSnack("时间解析错误")
+                }
+            }
+        }
+
+        private fun update(id:String, fieldName:String, value:String) {
+            val cv = ContentValues()
+            cv.put(fieldName, value)
+            mActivity.contentResolver.update(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, cv,
+                    MediaStore.Images.Media._ID + "=?", arrayOf(id))
+
+            loadData()
         }
 
         override fun getItemCount(): Int = datas.size

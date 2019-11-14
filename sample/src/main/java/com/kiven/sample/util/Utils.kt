@@ -114,7 +114,7 @@ fun Activity.showBottomSheetDialog(list: List<String>, onClickItem: (Int, String
 
 fun Activity.showBottomSheetDialog(list: Array<String>, onClickItem: (Int, String) -> Unit) {
 
-    val sheetDialog = ActionSheetDialog(this, arrayOf("查看大图", "显示详细"), null)
+    val sheetDialog = ActionSheetDialog(this, list, null)
     sheetDialog.setOnOperItemClickL { _, _, position, _ ->
         onClickItem(position, list[position])
         sheetDialog.dismiss()

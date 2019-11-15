@@ -1,12 +1,13 @@
 package com.kiven.sample.systemdata
 
 import android.Manifest
+import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.CalendarContract
 import android.provider.ContactsContract
 import android.provider.MediaStore
-import android.provider.Telephony
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -75,22 +76,59 @@ class AHSysgemData : KActivityDebugHelper() {
         })
 
         addView("查询文件", View.OnClickListener {
-            loadData(MediaStore.Files.getContentUri("external"), MediaStore.Files.FileColumns.DATE_MODIFIED)
+            mActivity.showSnack("数据太多，注释掉代码了，不然打印半天")
+//            loadData(MediaStore.Files.getContentUri("external"), MediaStore.Files.FileColumns.DATE_MODIFIED)
         })
         addTitle("通讯录")
         addView("查询通讯录", View.OnClickListener {
             loadData(ContactsContract.Contacts.CONTENT_URI, ContactsContract.Contacts.CONTACT_STATUS_TIMESTAMP)
         })
-        addView("", View.OnClickListener {
-            loadData(Telephony.Carriers.CONTENT_URI, Telephony.Carriers._ID)
+        addTitle("日历: https://www.jianshu.com/p/4820e02b2ee4")
+        addView("查询日历", View.OnClickListener {
+            // CalendarContract.Calendars.ENTERPRISE_CONTENT_URI
+            KGranting.requestPermissions(mActivity, 788,
+                    arrayOf(Manifest.permission.WRITE_CALENDAR, Manifest.permission.READ_CALENDAR),
+                    arrayOf("日历添加", "日历获取")) {
+                if (it) loadData(CalendarContract.Calendars.CONTENT_URI, CalendarContract.Calendars._ID)
+            }
         })
+
+        addView("调用日历功能", View.OnClickListener {
+            val calendar = Calendar.getInstance()
+            calendar.add(Calendar.DAY_OF_YEAR, 7)
+            val begin = calendar.time.time
+            calendar.add(Calendar.DAY_OF_YEAR, 2)
+            val end = calendar.time.time
+
+            val intent = Intent(Intent.ACTION_INSERT).apply {
+                data = CalendarContract.Events.CONTENT_URI
+                putExtra(CalendarContract.Events.TITLE, "日历打磨")
+                putExtra(CalendarContract.Events.EVENT_LOCATION, "福年广场")
+                putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, begin)
+                putExtra(CalendarContract.EXTRA_EVENT_END_TIME, end)
+            }
+            if (intent.resolveActivity(mActivity.packageManager) != null) {
+                mActivity.startActivity(intent)
+            }
+        })
+
+
+        addTitle("其他")
+        addView("APN", View.OnClickListener {
+            mActivity.showSnack("No permission to write APN settings")
+//            loadData(Telephony.Carriers.CONTENT_URI, Telephony.Carriers._ID)
+        })
+        addView("", View.OnClickListener { })
+        addView("", View.OnClickListener { })
+        addView("", View.OnClickListener { })
+        addView("", View.OnClickListener { })
     }
 
     private fun loadData(uri: Uri, sortedKey: String) {
         GlobalScope.launch {
             val iDatas = mutableListOf<TreeMap<String, String>>()
 
-            val hasP = suspendCoroutine<Boolean> {cc ->
+            val hasP = suspendCoroutine<Boolean> { cc ->
                 GlobalScope.launch(Dispatchers.Main) {
                     KGranting.requestPermissions(mActivity, 345,
                             arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS),

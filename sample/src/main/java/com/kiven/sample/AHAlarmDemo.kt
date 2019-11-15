@@ -60,7 +60,7 @@ class AHAlarmDemo : KActivityDebugHelper() {
             calendar.add(Calendar.SECOND, 70)
 
             val alarmIntent = Intent(AlarmClock.ACTION_SET_ALARM).apply {
-                putExtra(AlarmClock.EXTRA_MESSAGE, "测试闹钟⏰")
+                putExtra(AlarmClock.EXTRA_MESSAGE, "测试闹钟 ⏰")
                 putExtra(AlarmClock.EXTRA_HOUR, calendar.get(Calendar.HOUR_OF_DAY))
                 putExtra(AlarmClock.EXTRA_MINUTES, calendar.get(Calendar.MINUTE))
                 putExtra(AlarmClock.EXTRA_SKIP_UI, true)// 不显示设置界面

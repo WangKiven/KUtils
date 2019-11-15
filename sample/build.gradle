@@ -11,7 +11,7 @@ android {
     defaultConfig {
         applicationId "com.kiven.sample"
 //        minSdkVersion 14
-        minSdkVersion 21
+        minSdkVersion 16
         targetSdkVersion parent.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
@@ -180,7 +180,7 @@ dependencies {
     implementation 'androidx.palette:palette-ktx:1.0.0'
 
     // 基于无障碍服务实现微信多图分享: https://github.com/shichaohui/WXShareMultiImage
-    implementation 'com.sch.share:wx-share:1.0.10'
+//    implementation 'com.sch.share:wx-share:1.0.10'
 }
 /*kotlin {
     experimental {

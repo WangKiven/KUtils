@@ -54,6 +54,10 @@
     <!-- 闹钟 -->
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
 
+    <!-- 日历 -->
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+
     <application
         android:name=".AppContext"
         android:allowBackup="true"

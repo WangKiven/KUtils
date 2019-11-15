@@ -49,6 +49,9 @@ object AccessibilityUtil {
     fun jumpToSetting(cxt: Context) {
         val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
         //        intent.setData(Uri.parse("package:" + cxt.getPackageName()));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            intent.putExtra(Intent.EXTRA_PACKAGE_NAME, cxt.packageName)
+        }
 
         try {
             cxt.startActivity(intent)

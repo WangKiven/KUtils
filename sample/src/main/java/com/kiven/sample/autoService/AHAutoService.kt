@@ -1,7 +1,5 @@
 package com.kiven.sample.autoService
 
-import android.Manifest
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -12,13 +10,11 @@ import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
-import com.kiven.kutils.tools.KGranting
 import com.kiven.sample.autoService.wechat.WXConst
 import com.kiven.sample.autoService.wechat.WXLoadTagTask
 import com.kiven.sample.autoService.wechat.WXShareTask
 import com.kiven.sample.util.showListDialog
 import com.kiven.sample.util.showSnack
-import com.sch.share.WXShareMultiImageHelper
 import org.jetbrains.anko.support.v4.nestedScrollView
 
 /**
@@ -101,7 +97,7 @@ class AHAutoService : KActivityHelper() {
         })
 
         addView("微信无障碍lib", View.OnClickListener {
-            KGranting.requestPermissions(mActivity, 899, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), arrayOf("内存")) {
+            /*KGranting.requestPermissions(mActivity, 899, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), arrayOf("内存")) {
                 if (it) {
 //                    val images = listOf(BitmapFactory.decodeResource(resources, R.mipmap.fish))
                     val images = resources.assets.list("wallpaper")!!.map { BitmapFactory.decodeStream(resources.assets.open("wallpaper/$it")) }
@@ -118,7 +114,7 @@ class AHAutoService : KActivityHelper() {
                         }
                     }
                 }
-            }
+            }*/
         })
     }
 }

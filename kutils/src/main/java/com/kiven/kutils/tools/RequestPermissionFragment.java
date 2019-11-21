@@ -106,8 +106,11 @@ public class RequestPermissionFragment extends Fragment {
     }
 
     private void dismiss() {
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.remove(this);
-        ft.commit();
+        FragmentManager fragmentManager = getFragmentManager();
+        if (fragmentManager != null) {
+            FragmentTransaction ft = fragmentManager.beginTransaction();
+            ft.remove(this);
+            ft.commit();
+        }
     }
 }

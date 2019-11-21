@@ -1,10 +1,8 @@
 package com.kiven.kutils.tools;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Application;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
@@ -15,13 +13,10 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
-import android.media.ExifInterface;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.os.Process;
-import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
 
@@ -33,7 +28,6 @@ import com.kiven.kutils.logHelper.KLog;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -44,7 +38,6 @@ import java.net.NetworkInterface;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
-import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
@@ -62,6 +55,18 @@ public class KUtil {
 
     public static void setConfigSharedPreferences(@NonNull String configSharedPreferences) {
         CONFIG_SHARED_PREFERENCES = configSharedPreferences;
+    }
+
+
+    private static String imageDirName = "SXB_IMAGES";
+    public static void setImageDirName(@NonNull String dirName){
+        imageDirName = dirName;
+    }
+
+
+    private static String fileDirName = "SXB_FILES";
+    public static void setFileDirName(@NonNull String dirName){
+        fileDirName = dirName;
     }
 
     /**
@@ -314,26 +319,22 @@ public class KUtil {
     /**
      * 应用图片保存路径
      *
-     * @return
      */
     public static String getAppPictureFolderPath() {
-        return getAppFileFolderPath("SXB_IMAGES");
+        return getAppFileFolderPath(imageDirName);
     }
 
     /**
      * 应用文件保存路径
      *
-     * @return
      */
     public static String getAppFileFolderPath() {
-        return getAppFileFolderPath("SXB_FILES");
+        return getAppFileFolderPath(fileDirName);
     }
 
     /**
      * 文件路径
      *
-     * @param packageName
-     * @return
      */
     public static String getAppFileFolderPath(String packageName) {
         File folder = new File(Environment.getExternalStorageDirectory() + "/" + packageName);
@@ -345,9 +346,6 @@ public class KUtil {
     /**
      * 读取纯文本文件
      *
-     * @param filePath
-     * @return
-     * @throws IOException
      */
     public static String readFile(String filePath) throws IOException {
         InputStreamReader inputReader = null;

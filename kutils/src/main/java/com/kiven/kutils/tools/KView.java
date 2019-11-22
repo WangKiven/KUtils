@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
+
+import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import androidx.annotation.NonNull;
@@ -13,11 +15,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.LinearLayout;
 
 import com.kiven.kutils.callBack.CallBack;
+
+import java.util.ArrayList;
 
 public class KView {
     /**
@@ -186,4 +191,69 @@ public class KView {
     }
 
     private static MutableLiveData<Integer> data = new MutableLiveData<Integer>();
+
+
+
+    /**
+     * 根据坐标获取相对应的子控件<br>
+     * 在Activity使用
+     *
+     * @return 目标View
+     */
+    public static View getViewAtXY(Activity activity, int x, int y) {
+        // 从Activity里获取容器
+        View root = activity.getWindow().getDecorView();
+        return getViewAtXY(root, x, y);
+    }
+
+    /**
+     * 根据坐标获取相对应的子控件<br>
+     * 在重写ViewGroup使用
+     *
+     * @return 目标View
+     */
+    public static View getViewAtXY(View view, int x, int y) {
+        View targetView = null;
+        if (view instanceof ViewGroup) {
+            // 父容器,遍历子控件
+            ViewGroup v = (ViewGroup) view;
+            for (int i = 0; i < v.getChildCount(); i++) {
+                targetView = getTouchViewAtXY(v.getChildAt(i), x, y);
+                if (targetView != null) {
+                    break;
+                } else {
+                    getViewAtXY(v.getChildAt(i), x, y);
+                }
+            }
+        } else {
+            targetView = getTouchViewAtXY(view, x, y);
+        }
+        return targetView;
+    }
+
+    public static View getTouchViewAtXY(View view, int x, int y) {
+        View targetView = null;
+        ArrayList<View> touchableViews = view.getTouchables();
+        for (View child : touchableViews) {
+            if (isPointInView(child, x, y)) {
+                targetView = child;
+                // break;
+            }
+        }
+        return targetView;
+    }
+
+    public static boolean isPointInView(View view, int x, int y) {
+        int[] location = new int[2];
+        view.getLocationOnScreen(location);
+        int left = location[0];
+        int top = location[1];
+        int right = left + view.getMeasuredWidth();
+        int bottom = top + view.getMeasuredHeight();
+        if (view.isClickable() && y >= top && y <= bottom && x >= left
+                && x <= right) {
+            return true;
+        }
+        return false;
+    }
 }

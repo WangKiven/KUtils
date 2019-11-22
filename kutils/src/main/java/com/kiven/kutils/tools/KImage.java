@@ -110,10 +110,28 @@ public class KImage {
 		drawable.getPaint().setStyle(Paint.Style.FILL);*/
 		return getCornerDrawable(0, corners, color, 0, 0);
 	}
+
 	public static ShapeDrawable getCornerDrawable(int type, float[] corners, int fillColor, int rimColor, float rimWidth){
 		ShapeDrawable drawable = new ShapeDrawable(new RoundRectShape(corners, null, null));
 		setPaint(drawable.getPaint(), type, fillColor, rimColor, rimWidth);
 		return drawable;
+	}
+
+	/**
+	 * 圆角矩形线框
+	 */
+	public static ShapeDrawable getRimCornerDrawable(int color, int corner, float rimWidth){
+		float[] corners = new float[8];
+		for (int i = 0; i < corners.length; i++) {
+			corners[i] = corner;
+		}
+		return getRimCornerDrawable(color, corners, rimWidth);
+	}
+	/**
+	 * 圆角矩形线框
+	 */
+	public static ShapeDrawable getRimCornerDrawable(int color, float[] corners, float rimWidth){
+		return getCornerDrawable(2, corners, 0, color, rimWidth);
 	}
 
 	/**

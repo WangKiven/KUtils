@@ -528,6 +528,7 @@ class AHSmallAction : KActivityDebugHelper() {
         addView("字符编码测试", View.OnClickListener { AHUnicodeList().startActivity(mActivity) })
         addView("无障碍", View.OnClickListener { AHAutoService().startActivity(mActivity) })
         addView("闹钟demo", View.OnClickListener { AHAlarmDemo().startActivity(mActivity) })
+        addView("url访问测试", View.OnClickListener { AHUrlTest().startActivity(mActivity) })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
     }

@@ -9,6 +9,7 @@ import com.kiven.kutils.tools.KContext
 import com.kiven.kutils.tools.KGranting
 import com.kiven.kutils.tools.KUtil
 import com.kiven.sample.noti.NotificationClickReceiver
+import com.tencent.smtt.sdk.QbSdk
 import org.xutils.x
 
 /**
@@ -39,5 +40,15 @@ class AppContext : KContext() {
 
 
         KGranting.useFragmentRequest = true
+
+        QbSdk.initX5Environment(this, object : QbSdk.PreInitCallback {
+            override fun onCoreInitFinished() {
+
+            }
+
+            override fun onViewInitFinished(p0: Boolean) {
+                KLog.i("QbSdk.initX5Environment -> onViewInitFinished : $p0")
+            }
+        })
     }
 }

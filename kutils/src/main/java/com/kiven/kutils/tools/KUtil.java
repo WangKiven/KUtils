@@ -38,6 +38,7 @@ import java.net.NetworkInterface;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.Locale;
 import java.util.Properties;
 import java.util.Set;
 
@@ -250,9 +251,26 @@ public class KUtil {
                 .append("\n屏幕宽度(dp):").append(getScreenWith(app) / getScreenDensity(app))
                 .append("\n屏幕高度(dp):").append(getScreenHeight(app) / getScreenDensity(app))
                 .append("\n屏幕宽度(英寸):").append(getScreenWith(app) * 1f / getScreenDensityDpi(app))
-                .append("\n屏幕高度(英寸):").append(getScreenHeight(app) * 1f / getScreenDensityDpi(app));
-        builder.append("\nProduct Model: ").append(Build.BRAND).append(",").append(Build.MODEL).append(",")
+                .append("\n屏幕高度(英寸):").append(getScreenHeight(app) * 1f / getScreenDensityDpi(app))
+                .append("\nProduct Model: ").append(Build.BRAND).append(",").append(Build.MODEL).append(",")
                 .append(Build.VERSION.SDK_INT).append(",").append(Build.VERSION.RELEASE);
+
+        Locale ll;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            ll = app.getResources().getConfiguration().getLocales().get(0);
+        }else {
+            ll = app.getResources().getConfiguration().locale;
+        }
+        if (ll != null){
+            builder.append("\nLocal：").append(ll)
+                    .append(", 语言：").append(ll.getLanguage())
+                    .append(", variant:").append(ll.getVariant())
+                    .append(", country:").append(ll.getCountry());
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                builder.append(", unicodeLocaleKeys: ").append(ll.getUnicodeLocaleKeys());
+            }
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             builder.append("\ncpu_abis = ").append(Arrays.toString(Build.SUPPORTED_ABIS));

@@ -235,7 +235,7 @@ public class KView {
         View targetView = null;
         ArrayList<View> touchableViews = view.getTouchables();
         for (View child : touchableViews) {
-            if (isPointInView(child, x, y)) {
+            if (child.isClickable() && isPointInView(child, x, y)) {
                 targetView = child;
                 // break;
             }
@@ -250,7 +250,7 @@ public class KView {
         int top = location[1];
         int right = left + view.getMeasuredWidth();
         int bottom = top + view.getMeasuredHeight();
-        if (view.isClickable() && y >= top && y <= bottom && x >= left
+        if (y >= top && y <= bottom && x >= left
                 && x <= right) {
             return true;
         }

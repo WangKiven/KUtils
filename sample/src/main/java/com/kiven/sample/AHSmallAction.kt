@@ -468,7 +468,7 @@ class AHSmallAction : KActivityDebugHelper() {
         addView("ConstraintLayout Test", View.OnClickListener {
             AHConstraintLayoutTest().startActivity(activity)
         })
-        addView("通知", View.OnClickListener { AHNotiTest().startActivity(activity) })
+        addView("发送/监听通知", View.OnClickListener { AHNotiTest().startActivity(activity) })
         addView("唯一标识", View.OnClickListener {
             val sb = StringBuilder()
 
@@ -531,7 +531,6 @@ class AHSmallAction : KActivityDebugHelper() {
         addView("闹钟demo", View.OnClickListener { AHAlarmDemo().startActivity(mActivity) })
         addView("系统数据", View.OnClickListener { AHSysgemData().startActivity(mActivity) })
         addView("url访问测试", View.OnClickListener { AHUrlTest().startActivity(mActivity) })
-        addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })

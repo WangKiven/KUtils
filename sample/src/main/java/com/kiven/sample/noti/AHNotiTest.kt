@@ -15,9 +15,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.kiven.kutils.activityHelper.KActivityDebugHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.sample.R
-import com.kiven.sample.util.getInput
-import com.kiven.sample.util.listPicker
-import com.kiven.sample.util.snackbar
+import com.kiven.sample.util.*
 import kotlinx.android.synthetic.main.ah_noti_test.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -266,6 +264,16 @@ class AHNotiTest : KActivityDebugHelper() {
                     intent.putExtra("app_uid", mActivity.applicationInfo.uid)
                     mActivity.startActivity(intent)
                 }
+            }
+
+            btn_noti_listener_setting.setOnClickListener {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+                    val intent = Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
+                    mActivity.startActivity(intent)
+                } else {
+                    mActivity.showSnack("系统版本太小")
+                }
+
             }
 
             btn_app_setting.setOnClickListener {

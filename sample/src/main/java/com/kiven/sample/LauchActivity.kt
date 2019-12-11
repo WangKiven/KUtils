@@ -151,7 +151,7 @@ class LauchActivity : KActivity(), LifecycleOwner {
 
             KGranting.requestAlbumPermissions(this, 233) {
                 if (it) {
-                    showDialog("获取相册权限到了")
+                    showDialog("获取到了相册权限")
                 } else {
                     showDialog("获取相册权限失败")
                 }

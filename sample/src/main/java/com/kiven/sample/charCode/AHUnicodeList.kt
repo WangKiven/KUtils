@@ -137,7 +137,7 @@ class AHUnicodeList : KActivityDebugHelper() {
         val ss = IntArray(maxLength)
         var step = 0
 
-        mActivity.showListDialog(aa) { index, _ ->
+        mActivity.showListDialog(aa, false) { index, _ ->
 
             // 记录选择的数据
             if (step >= maxLength) return@showListDialog

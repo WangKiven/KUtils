@@ -533,6 +533,10 @@ class AHSmallAction : KActivityDebugHelper() {
         addView("url访问测试", View.OnClickListener { AHUrlTest().startActivity(mActivity) })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
+        addView("", View.OnClickListener { })
+        addView("", View.OnClickListener { })
+        addView("", View.OnClickListener { })
+        addView("", View.OnClickListener { })
     }
 
     private suspend fun doSomthing(): Int {

@@ -48,6 +48,7 @@ import com.kiven.sample.mimc.UserManager
 import com.kiven.sample.noti.AHNotiTest
 import com.kiven.sample.service.LiveWallpaper2
 import com.kiven.sample.spss.AHSpssTemple
+import com.kiven.sample.systemdata.AHSysgemData
 import com.kiven.sample.util.EncryptUtils
 import com.kiven.sample.util.WallpaperUtil
 import com.kiven.sample.util.callPhone
@@ -528,6 +529,7 @@ class AHSmallAction : KActivityDebugHelper() {
         addView("字符编码测试", View.OnClickListener { AHUnicodeList().startActivity(mActivity) })
         addView("无障碍", View.OnClickListener { AHAutoService().startActivity(mActivity) })
         addView("闹钟demo", View.OnClickListener { AHAlarmDemo().startActivity(mActivity) })
+        addView("系统数据", View.OnClickListener { AHSysgemData().startActivity(mActivity) })
         addView("url访问测试", View.OnClickListener { AHUrlTest().startActivity(mActivity) })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })

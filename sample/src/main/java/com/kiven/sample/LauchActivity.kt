@@ -157,7 +157,6 @@ class LauchActivity : KActivity(), LifecycleOwner {
                 }
             }
         })
-        addView("系统数据", View.OnClickListener { AHSysgemData().startActivity(this) })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
     }

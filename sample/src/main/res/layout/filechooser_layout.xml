@@ -4,7 +4,9 @@
     android:layout_height="match_parent" >
     <FrameLayout android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:id="@+id/frame_web_video"></FrameLayout>
+        android:id="@+id/frame_web_video">
+
+    </FrameLayout>
     
 
     <com.example.test_webview_demo.utils.X5WebView 

@@ -155,7 +155,7 @@ class AHSystemImage : KActivityDebugHelper() {
                 tv_position.text = position.toString()
 
                 setOnClickListener {
-                    mActivity.showBottomSheetDialog(arrayOf("查看大图", "显示详细", "修改创建时间", "修改添加时间", "修改图片修改时间")) { index, _ ->
+                    mActivity.showBottomSheetDialog(arrayOf("查看大图", "显示详细", "修改拍摄时间", "修改添加时间", "修改图片修改时间")) { index, _ ->
                         when (index) {
                             0 -> {
                                 mActivity.showImageDialog(pathUri)

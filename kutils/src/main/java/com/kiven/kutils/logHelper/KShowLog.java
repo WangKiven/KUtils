@@ -202,9 +202,8 @@ public class KShowLog extends KActivityHelper implements AdapterView.OnItemClick
                     }
                 } else {
                     try {
-                        /*JsonReader jsonReader = new JsonReader(new StringReader(log));
-                        jsonReader.setLenient(true);*/
-                        JsonElement jsonElement = new JsonParser().parse(log.trim());
+                        JsonElement jsonElement = JsonParser.parseString(log.trim());
+
                         if (jsonElement.isJsonArray()) {
                             new KShowLogDetail(new Gson().fromJson(jsonElement, List.class)).startActivity(mActivity);
                         } else if (jsonElement.isJsonObject()) {

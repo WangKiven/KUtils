@@ -85,20 +85,22 @@ public class KActivityHelper {
     }
 
     public KActivityHelper putExtra(String key, Object value) {
-        if (value instanceof Boolean) {
-            getIntent().putExtra(key, (boolean) value);
-        } else if (value instanceof String) {
-            getIntent().putExtra(key, (String) value);
-        } else if (value instanceof Integer) {
-            getIntent().putExtra(key, (int) value);
-        } else if (value instanceof Float) {
-            getIntent().putExtra(key, (float) value);
-        } else if (value instanceof Double) {
-            getIntent().putExtra(key, (double) value);
-        } else if (value instanceof Parcelable) {
-            getIntent().putExtra(key, (Parcelable) value);
-        } else if (value instanceof Serializable) {
-            getIntent().putExtra(key, (Serializable) value);
+        if (value != null) {
+            if (value instanceof Boolean) {
+                getIntent().putExtra(key, (boolean) value);
+            } else if (value instanceof String) {
+                getIntent().putExtra(key, (String) value);
+            } else if (value instanceof Integer) {
+                getIntent().putExtra(key, (int) value);
+            } else if (value instanceof Float) {
+                getIntent().putExtra(key, (float) value);
+            } else if (value instanceof Double) {
+                getIntent().putExtra(key, (double) value);
+            } else if (value instanceof Parcelable) {
+                getIntent().putExtra(key, (Parcelable) value);
+            } else if (value instanceof Serializable) {
+                getIntent().putExtra(key, (Serializable) value);
+            }
         }
         return this;
     }

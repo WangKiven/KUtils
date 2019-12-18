@@ -19,6 +19,9 @@ public class RadioGroup implements View.OnClickListener {
     RadioGroupListener radioGroupListener;
     boolean isCanChange = true;
 
+    // 是否能够取消选中。用户点击已选中tab时触发。因为可以取消，所以结果可能一个都没选中
+    boolean canCancel = false;
+
     public RadioGroup(@NonNull View rootView) {
         this.rootView = rootView;
         radioViews = new ArrayList<>();
@@ -40,6 +43,14 @@ public class RadioGroup implements View.OnClickListener {
         }
     }
 
+    public void setCanCancel(boolean canCancel) {
+        this.canCancel = canCancel;
+    }
+
+    public List<View> getRadioViews() {
+        return radioViews;
+    }
+
     @Override
     public void onClick(View v) {
         onClick(v, false);
@@ -56,8 +67,12 @@ public class RadioGroup implements View.OnClickListener {
         for (View view : radioViews) {
             if (view == v) {
                 if (view.isSelected()) {
-                    // 选中项无改变
-                    isChange = false;
+                    if (canCancel) {
+                        view.setSelected(false);
+                    }else {
+                        // 选中项无改变
+                        isChange = false;
+                    }
                 } else {
                     v.setSelected(true);
                 }

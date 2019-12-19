@@ -531,7 +531,7 @@ class AHSmallAction : KActivityDebugHelper() {
         addView("闹钟demo", View.OnClickListener { AHAlarmDemo().startActivity(mActivity) })
         addView("系统数据", View.OnClickListener { AHSysgemData().startActivity(mActivity) })
         addView("url访问测试", View.OnClickListener { AHUrlTest().startActivity(mActivity) })
-        addView("", View.OnClickListener { })
+        addView("socket", View.OnClickListener { AHSocketTest().startActivity(mActivity) })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })

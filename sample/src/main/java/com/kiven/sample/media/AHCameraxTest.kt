@@ -26,7 +26,7 @@ class AHCameraxTest : KActivityDebugHelper() {
 
 
 
-        val imageCaptureConfig = ImageCaptureConfig.Builder()
+        /*val imageCaptureConfig = ImageCaptureConfig.Builder()
                 .setTargetRotation(mActivity.windowManager.defaultDisplay.rotation)
                 .build()
         val imageCapture = ImageCapture(imageCaptureConfig)
@@ -34,7 +34,7 @@ class AHCameraxTest : KActivityDebugHelper() {
 
         val previewConfig = PreviewConfig.Builder()
                 .build()
-        val preview = Preview(previewConfig)
+        val preview = Preview(previewConfig)*/
 
 
         mActivity.linearLayout {
@@ -42,21 +42,22 @@ class AHCameraxTest : KActivityDebugHelper() {
             gravity = Gravity.CENTER_HORIZONTAL
 
 
-            textureView {
+            /*textureView {
                 layoutParams = ViewGroup.LayoutParams(dip(200), dip(300))
 
                 preview.setOnPreviewOutputUpdateListener { previewOutput ->
                     surfaceTexture = previewOutput.surfaceTexture
                 }
                 CameraX.bindToLifecycle(mActivity as LifecycleOwner, imageCapture, preview)
-            }
+            }*/
+
 
             button {
                 text = "拍照"
 
                 setOnClickListener {
                     val file = getFile(System.currentTimeMillis().toString() + ".jpg")
-                    /*imageCapture.takePicture(file, object :ImageCapture.OnImageSavedListener{
+                    /*imageCapture.takePicture(file, Executor {  }, object :ImageCapture.OnImageSavedListener{
                         override fun onImageSaved(file: File) {
                             KUtil.addPicture(file.absolutePath) { _, _ ->
                             }
@@ -65,15 +66,6 @@ class AHCameraxTest : KActivityDebugHelper() {
                         override fun onError(imageCaptureError: ImageCapture.ImageCaptureError, message: String, cause: Throwable?) {
                         }
                     })*/
-                    imageCapture.takePicture(file, Executor {  }, object :ImageCapture.OnImageSavedListener{
-                        override fun onImageSaved(file: File) {
-                            KUtil.addPicture(file.absolutePath) { _, _ ->
-                            }
-                        }
-
-                        override fun onError(imageCaptureError: ImageCapture.ImageCaptureError, message: String, cause: Throwable?) {
-                        }
-                    })
                 }
             }
         }

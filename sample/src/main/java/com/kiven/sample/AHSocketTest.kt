@@ -10,8 +10,8 @@ import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
 import com.kiven.kutils.activityHelper.KActivityDebugHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
-import com.kiven.kutils.tools.KNetwork
 import com.kiven.sample.util.showSnack
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -20,6 +20,7 @@ import org.jetbrains.anko.support.v4.nestedScrollView
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
+import java.net.MulticastSocket
 
 /**
  * https://www.cnblogs.com/xujian2014/p/5072215.html
@@ -55,7 +56,7 @@ class AHSocketTest : KActivityDebugHelper() {
 
 
         addView("发送广播获取服务器IP", View.OnClickListener {
-            GlobalScope.launch {
+            GlobalScope.launch(IO) {
                 val host = "255.255.255.255" //广播地址
                 val port = 9999 //广播的目的端口
 
@@ -64,23 +65,26 @@ class AHSocketTest : KActivityDebugHelper() {
                 try {
                     // 发送部分
                     val adds: InetAddress = InetAddress.getByName(host)
-                    val message = "test你好".toByteArray() //用于发送的字符串
+                    val message = Datagram(0, "KUtils请求服务").toByteArray() //用于发送的字符串
                     val dp = DatagramPacket(message, message.size, adds, port)
+
                     ds.send(dp)
 
                     // 接收部分
                     val receiveBytes = ByteArray(512)
                     val receivePacket = DatagramPacket(receiveBytes, receiveBytes.size)
-                    val localIp = KNetwork.getIPAddress()
                     ds.soTimeout = 3000 // 3秒超时
+
                     // 需要排除接收到自己发送的数据
+                    var data: Datagram?
+                    val curTime = System.currentTimeMillis()
                     do {
                         ds.receive(receivePacket)
-                    } while (receivePacket.address.hostAddress == localIp)
-
+                        data = Datagram.parse(receivePacket)
+                    } while (data?.type != 1 && System.currentTimeMillis() - 3000 < curTime)
 
                     withContext(Main) {
-                        mActivity.showSnack(String(receivePacket.data, 0, receivePacket.length))
+                        mActivity.showSnack(data.toString())
                     }
 
                 } catch (e: Exception) {
@@ -90,8 +94,89 @@ class AHSocketTest : KActivityDebugHelper() {
                 }
             }
         })
+        addView("组播得IP", View.OnClickListener {
+            GlobalScope.launch(IO) {
+                val maxLength = 1024
+                val port = 8888
+
+                try {
+                    val ms = MulticastSocket(port)
+                    ms.loopbackMode = false // 设置本MulticastSocket发送的数据报会被回送到自身
+                    val address = InetAddress.getByName("239.0.0.255")
+
+                    val message = Datagram(0, "KUtils请求服务").toByteArray()
+                    ms.send(DatagramPacket(message, message.size, address, port))
+
+
+                    val dp = DatagramPacket(ByteArray(maxLength), maxLength)
+
+                    ms.timeToLive = 32 //
+                    ms.soTimeout = 3000 //等待时间
+                    ms.joinGroup(address)// Mac上不行，似乎是ipv4、ipv6的问题, 需要用下面那个方法，不过在安卓上目前可用该方法
+//                    ms.joinGroup(InetSocketAddress(address, port),
+//                            NetworkInterface.getByInetAddress(address))
+
+//                    ms.receive(dp)
+                    // 需要排除接收到自己发送的数据
+                    var data: Datagram?
+                    val curTime = System.currentTimeMillis()
+                    do {
+                        ms.receive(dp)
+                        data = Datagram.parse(dp)
+                    } while (data?.type != 1 && System.currentTimeMillis() - 3000 < curTime)
+
+                    withContext(Main) {
+                        mActivity.showSnack("收到数据包（${dp.address?.hostAddress}:${dp.port}）：$data")
+                    }
+
+                    ms.close()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+
+
+            }
+        })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
-        addView("", View.OnClickListener { })
+    }
+
+    class Datagram(
+            val type: Int = 0,// 0:发送的请求，1：返回的结果, -1：不明
+            val text: String = ""// 请求内容
+    ) {
+        companion object {
+            fun parse(dp: DatagramPacket): Datagram {
+                return parse(dp.data, dp.length)
+            }
+
+            fun parse(data: ByteArray, length: Int): Datagram {
+                val content = String(data, 0, length)
+                var type: Int = -1
+                var text: String = ""
+
+                if (content.isNotEmpty()) {
+                    type = content.substring(0, 1).toIntOrNull() ?: -1
+                    if (type == -1) {
+                        text = content
+                    } else {
+                        if (content.length > 1) {
+                            text = content.substring(1)
+                        }
+                    }
+                }
+                text.toByteArray()
+                return Datagram(type, text)
+            }
+        }
+
+
+        override fun toString(): String {
+            return "${type}${text}"
+        }
+
+        fun toByteArray(): ByteArray {
+            return toString().toByteArray()
+        }
     }
 }

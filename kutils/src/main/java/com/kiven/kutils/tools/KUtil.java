@@ -124,7 +124,7 @@ public class KUtil {
      * 根据 @param context 获取Activity
      */
     public static Activity getActivity(Context context) {
-        KUtil.printClassField(context, null);
+        KUtil.printClassField(context, null, false);
         if (context == null) {
             return null;
         } else if (context instanceof Activity) {
@@ -342,15 +342,19 @@ public class KUtil {
     /**
      * 打印属性
      * obj, cla 传一个就行了。仅有cla就仅获取静态属性值。两个都有则cla = obj.getClass();
+     *
+     * @param isDeclared getFields() or getDeclaredFields()
      */
-    public static void printClassField(Object obj, Class cla) {
+    public static void printClassField(Object obj, Class cla, boolean isDeclared) {
         if (obj == null && cla == null) return;
         if (obj != null)
             cla = obj.getClass();
 
         // getFields()：获得某个类的所有的公共（public）的字段，包括父类中的字段。
         // getDeclaredFields()：获得某个类的所有声明的字段，即包括public、private和proteced，但是不包括父类的申明字段。
-        Field[] fields = cla.getDeclaredFields();
+        Field[] fields;
+        if (isDeclared) fields = cla.getDeclaredFields();
+        else fields = cla.getFields();
 
         StringBuilder sb = new StringBuilder("对象" + cla.getName() + "的属性有(" + fields.length + ")：");
 

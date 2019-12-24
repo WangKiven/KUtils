@@ -124,7 +124,7 @@ public class KUtil {
      * 根据 @param context 获取Activity
      */
     public static Activity getActivity(Context context) {
-        KUtil.printClassField(context, null, false);
+        KUtil.printClassField(context, null, true);
         if (context == null) {
             return null;
         } else if (context instanceof Activity) {
@@ -359,7 +359,7 @@ public class KUtil {
         StringBuilder sb = new StringBuilder("对象" + cla.getName() + "的属性有(" + fields.length + ")：");
 
         for (Field field : fields) {
-            sb.append("\n").append(field.getName()).append(":").append(field.getType().getSimpleName());
+            sb.append("\n").append(field.getName()).append(": ").append(field.getType().getSimpleName());
 
             int modifiers = field.getModifiers();
             if (!Modifier.isPublic(modifiers)) field.setAccessible(true);

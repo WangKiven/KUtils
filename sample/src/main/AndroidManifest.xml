@@ -37,26 +37,21 @@
     <uses-permission android:name="android.permission.WRITE_SETTINGS" /> <!-- 手机定位信息，用来为语义等功能提供定位，提供更精准的服务 -->
     <!-- 定位信息是敏感信息，可通过Setting.setLocationEnable(false)关闭定位请求 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
     <uses-permission android:name="com.huawei.android.launcher.permission.CHANGE_BADGE" />
-
-    <uses-permission android:name="android.permission.CALL_PHONE" />
-
-    <!--指纹识别，低版本需要-->
-    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
-    <!-- 生物识别，高版本需要 -->
-    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
-
-    <!--通讯录-->
+    <uses-permission android:name="android.permission.CALL_PHONE" /> <!-- 指纹识别，低版本需要 -->
+    <uses-permission android:name="android.permission.USE_FINGERPRINT" /> <!-- 生物识别，高版本需要 -->
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" /> <!-- 通讯录 -->
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
-
-    <!-- 闹钟 -->
-    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
-
-    <!-- 日历 -->
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" /> <!-- 闹钟 -->
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" /> <!-- 日历 -->
     <uses-permission android:name="android.permission.READ_CALENDAR" />
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <!-- 保活权限 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.BIND_JOB_SERVICE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
 
     <application
         android:name=".AppContext"
@@ -69,6 +64,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="UnusedAttribute"
         tools:replace="icon,label,theme">
+
         <activity android:name=".noti.ClickNotiActivity" />
 
         <meta-data
@@ -77,31 +73,32 @@
 
         <activity android:name=".LauchActivity">
             <intent-filter>
+
                 <!-- 应用入口, 多个activity都配置了android.intent.action.MAIN的话，启动App的时候那个在清单文件前面，就启动那个 -->
                 <!-- 个人猜测，寻找可能的activity时，按照manifest配置从上到下读取，直到寻找到第一个符合要求的activity -->
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
         <activity android:name=".ActivityDataBinding" />
-
         <activity android:name="com.kiven.kutils.activityHelper.KHelperActivity">
             <intent-filter>
                 <category android:name="guidebee.intent.category.opengl.SAMPLE_CODE" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".dock.ActivityDock"
+            android:icon="@mipmap/ic_launcher_u"
             android:label="KUDock"
-            android:theme="@style/ThemeDemo"
-            android:icon="@mipmap/ic_launcher_u">
+            android:theme="@style/ThemeDemo">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -138,8 +135,7 @@
             <meta-data
                 android:name="android.service.wallpaper"
                 android:resource="@xml/my_wallpaper" />
-        </service>
-        <!-- 无障碍功能 -->
+        </service> <!-- 无障碍功能 -->
         <service
             android:name=".autoService.AutoInstallService"
             android:label="巴拉啦无障碍"
@@ -148,12 +144,13 @@
                 <action android:name="android.accessibilityservice.AccessibilityService" />
             </intent-filter>
 
-            <!--在xml文件配置辅助功能,也可在onServiceConnected()中使用setServiceInfo()动态配置-->
+            <!-- 在xml文件配置辅助功能,也可在onServiceConnected()中使用setServiceInfo()动态配置 -->
             <meta-data
                 android:name="android.accessibilityservice"
                 android:resource="@xml/accessibility_config" />
         </service>
-        <service android:name=".noti.MyNotificationListenerService"
+        <service
+            android:name=".noti.MyNotificationListenerService"
             android:label="KUtils监控通知"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
             <intent-filter>
@@ -194,13 +191,42 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.app.slice.category.SLICE" />
-                <!--<data
+                <!--
+                    <data
                     android:host="ksample.kiven.com"
                     android:pathPrefix="/slice"
-                    android:scheme="http" />-->
+                    android:scheme="http" />
+                -->
             </intent-filter>
         </provider>
+
+        <!-- 保活任务 -->
+        <service
+            android:name=".service.PersistentService"
+            android:enabled="true"
+            android:exported="true"
+            android:priority="1000"
+            android:persistent="true"
+            android:visibleToInstantApps="true">
+        </service>
+        <!-- 周期任务帮助 保活任务 -->
+        <service android:name=".service.PersistentJobService"
+            android:permission="android.permission.BIND_JOB_SERVICE"/>
+
+        <receiver android:name=".service.PersistentReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.ACTION_PACKAGE_ADDED" />
+                <action android:name="android.intent.action.ACTION_PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.ACTION_PACKAGE_CHANGED" />
+                <action android:name="android.intent.action.ACTION_PACKAGE_REMOVED" />
+                <action android:name="android.intent.action.ACTION_PACKAGE_RESTARTED" />
+            </intent-filter>
+        </receiver>
 
     </application>
 

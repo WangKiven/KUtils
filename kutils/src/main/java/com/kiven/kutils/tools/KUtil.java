@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -60,13 +61,15 @@ public class KUtil {
 
 
     private static String imageDirName = "SXB_IMAGES";
-    public static void setImageDirName(@NonNull String dirName){
+
+    public static void setImageDirName(@NonNull String dirName) {
         imageDirName = dirName;
     }
 
 
     private static String fileDirName = "SXB_FILES";
-    public static void setFileDirName(@NonNull String dirName){
+
+    public static void setFileDirName(@NonNull String dirName) {
         fileDirName = dirName;
     }
 
@@ -121,6 +124,7 @@ public class KUtil {
      * 根据 @param context 获取Activity
      */
     public static Activity getActivity(Context context) {
+        KUtil.printClassField(context, null);
         if (context == null) {
             return null;
         } else if (context instanceof Activity) {
@@ -258,10 +262,10 @@ public class KUtil {
         Locale ll;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             ll = app.getResources().getConfiguration().getLocales().get(0);
-        }else {
+        } else {
             ll = app.getResources().getConfiguration().locale;
         }
-        if (ll != null){
+        if (ll != null) {
             builder.append("\nLocal：").append(ll)
                     .append(", 语言：").append(ll.getLanguage())
                     .append(", variant:").append(ll.getVariant())
@@ -334,9 +338,57 @@ public class KUtil {
         KLog.i(new String(builder));
     }
 
+
+    /**
+     * 打印属性
+     * obj, cla 传一个就行了。仅有cla就仅获取静态属性值。两个都有则cla = obj.getClass();
+     */
+    public static void printClassField(Object obj, Class cla) {
+        if (obj == null && cla == null) return;
+        if (obj != null)
+            cla = obj.getClass();
+
+        // getFields()：获得某个类的所有的公共（public）的字段，包括父类中的字段。
+        // getDeclaredFields()：获得某个类的所有声明的字段，即包括public、private和proteced，但是不包括父类的申明字段。
+        Field[] fields = cla.getDeclaredFields();
+
+        StringBuilder sb = new StringBuilder("对象" + cla.getName() + "的属性有(" + fields.length + ")：");
+
+        for (Field field : fields) {
+            sb.append("\n").append(field.getName()).append(":").append(field.getType().getSimpleName());
+            if (Modifier.isStatic(field.getModifiers())) {
+                try {
+                    Object value = field.get(cla);
+                    if (value == null) {
+                        sb.append(" = null");
+                    } else
+                        sb.append(" = ").append(value);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    sb.append(" 值获取异常");
+                }
+            } else {
+                if (obj == null) {
+                    sb.append("不是静态属性");
+                } else {
+                    try {
+                        Object value = field.get(obj);
+                        if (value == null) {
+                            sb.append(" = null");
+                        } else
+                            sb.append(" = ").append(value);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        sb.append(" 值获取异常");
+                    }
+                }
+            }
+        }
+        KLog.i(new String(sb));
+    }
+
     /**
      * 应用图片保存路径
-     *
      */
     public static String getAppPictureFolderPath() {
         return getAppFileFolderPath(imageDirName);
@@ -344,7 +396,6 @@ public class KUtil {
 
     /**
      * 应用文件保存路径
-     *
      */
     public static String getAppFileFolderPath() {
         return getAppFileFolderPath(fileDirName);
@@ -352,7 +403,6 @@ public class KUtil {
 
     /**
      * 文件路径
-     *
      */
     public static String getAppFileFolderPath(String packageName) {
         File folder = new File(Environment.getExternalStorageDirectory() + "/" + packageName);
@@ -363,7 +413,6 @@ public class KUtil {
 
     /**
      * 读取纯文本文件
-     *
      */
     public static String readFile(String filePath) throws IOException {
         InputStreamReader inputReader = null;
@@ -406,8 +455,8 @@ public class KUtil {
                     )
             );
             if (callBack != null)
-            callBack.onScanCompleted(path, null);
-        }else {
+                callBack.onScanCompleted(path, null);
+        } else {
             MediaScannerConnection.scanFile(KContext.getInstance(), new String[]{path}, new String[]{"image/*"},
                     callBack);
         }
@@ -453,7 +502,7 @@ public class KUtil {
 
     public static void addPicture(@NonNull String[] paths) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-            for (String path: paths){
+            for (String path : paths) {
                 app.sendBroadcast(
                         new Intent(
                                 Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
@@ -461,7 +510,7 @@ public class KUtil {
                         )
                 );
             }
-        }else {
+        } else {
             MediaScannerConnection.scanFile(KContext.getInstance(), paths, new String[]{"image/*"},
                     null);
         }

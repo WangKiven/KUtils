@@ -157,7 +157,7 @@ class LauchActivity : KActivity(), LifecycleOwner {
                 }
             }
         })
-        addView("", View.OnClickListener { })
+        addView("服务自启动与保活", View.OnClickListener { AHAutoStartAndLiving().startActivity(this) })
         addView("", View.OnClickListener { })
     }
 

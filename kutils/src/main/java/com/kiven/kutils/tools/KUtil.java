@@ -356,7 +356,11 @@ public class KUtil {
 
         for (Field field : fields) {
             sb.append("\n").append(field.getName()).append(":").append(field.getType().getSimpleName());
-            if (Modifier.isStatic(field.getModifiers())) {
+
+            int modifiers = field.getModifiers();
+            if (!Modifier.isPublic(modifiers)) field.setAccessible(true);
+
+            if (Modifier.isStatic(modifiers)) {
                 try {
                     Object value = field.get(cla);
                     if (value == null) {

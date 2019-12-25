@@ -54,6 +54,9 @@ public class KUtil {
     public static void setApp(Application app) {
         KUtil.app = app;
     }
+    public static Application getApp() {
+        return app;
+    }
 
     public static void setConfigSharedPreferences(@NonNull String configSharedPreferences) {
         CONFIG_SHARED_PREFERENCES = configSharedPreferences;
@@ -124,7 +127,6 @@ public class KUtil {
      * 根据 @param context 获取Activity
      */
     public static Activity getActivity(Context context) {
-        KUtil.printClassField(context, null, true);
         if (context == null) {
             return null;
         } else if (context instanceof Activity) {
@@ -241,158 +243,6 @@ public class KUtil {
         }
 
         return uuId;
-    }
-
-    /**
-     * 打印设备信息
-     */
-    public static void printDeviceInfo() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("\n屏幕密度（0.75 / 1.0 / 1.5）:").append(getScreenDensity(app))
-                .append("\n屏幕密度DPI（120 / 160 / 240）:").append(getScreenDensityDpi(app)).append("  每英寸多少像素")
-                .append("\n屏幕宽度(px):").append(getScreenWith(app))
-                .append("\n屏幕高度(px):").append(getScreenHeight(app))
-                .append("\n屏幕宽度(dp):").append(getScreenWith(app) / getScreenDensity(app))
-                .append("\n屏幕高度(dp):").append(getScreenHeight(app) / getScreenDensity(app))
-                .append("\n屏幕宽度(英寸):").append(getScreenWith(app) * 1f / getScreenDensityDpi(app))
-                .append("\n屏幕高度(英寸):").append(getScreenHeight(app) * 1f / getScreenDensityDpi(app))
-                .append("\nProduct Model: ").append(Build.BRAND).append(",").append(Build.MODEL).append(",")
-                .append(Build.VERSION.SDK_INT).append(",").append(Build.VERSION.RELEASE);
-
-        Locale ll;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            ll = app.getResources().getConfiguration().getLocales().get(0);
-        } else {
-            ll = app.getResources().getConfiguration().locale;
-        }
-        if (ll != null) {
-            builder.append("\nLocal：").append(ll)
-                    .append(", 语言：").append(ll.getLanguage())
-                    .append(", variant:").append(ll.getVariant())
-                    .append(", country:").append(ll.getCountry());
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                builder.append(", unicodeLocaleKeys: ").append(ll.getUnicodeLocaleKeys());
-            }
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            builder.append("\ncpu_abis = ").append(Arrays.toString(Build.SUPPORTED_ABIS));
-        } else {
-            builder.append("\ncpu_abis = ").append(Build.CPU_ABI).append(", ").append(Build.CPU_ABI2);
-        }
-
-        ActivityManager am = (ActivityManager) app.getSystemService(Context.ACTIVITY_SERVICE);
-        if (am != null) {
-            ConfigurationInfo info = am.getDeviceConfigurationInfo();
-            builder.append(String.format("\ngles = %x", info.reqGlEsVersion));
-        }
-
-        builder.append("\n\n>>>>>>>>>>IP");
-        try {
-            Enumeration<NetworkInterface> nets = NetworkInterface.getNetworkInterfaces();
-            while (nets.hasMoreElements()) {
-                NetworkInterface intf = nets.nextElement();
-                Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses();
-
-                builder.append("\n网络(").append(intf.getDisplayName()).append("):");
-                while (enumIpAddr.hasMoreElements()) {
-                    InetAddress inetAddress = enumIpAddr.nextElement();
-                    builder.append("\n----").append(inetAddress.getHostAddress())
-                            .append("(isLoopbackAddress=").append(inetAddress.isLoopbackAddress())
-                            .append(",isIPV6=").append(inetAddress instanceof Inet6Address).append(")");
-                }
-            }
-        } catch (Exception e) {
-            builder.append("\n获取IP异常或没有网络");
-        }
-
-        builder.append("\n\n>>>>>>>>>>Build properties");
-        Field[] buildFields = Build.class.getFields();
-        for (Field field : buildFields) {
-            try {
-                Object value = field.get(Build.class);
-
-                if (value != null && value.getClass() == Class.forName("[Ljava.lang.String;")) {
-                    String as = "\n" + field.getName() + ": " + Arrays.toString((Object[]) value);
-                    builder.append(as);
-                } else {
-                    String as = "\n" + field.getName() + ": " + value;
-                    builder.append(as);
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-
-        Properties properties = System.getProperties();
-        Set<String> set = System.getProperties().stringPropertyNames(); //获取java虚拟机和系统的信息。
-
-        builder.append("\n\n>>>>>>>>>>system properties");
-        for (String name : set) {
-            builder.append("\n").append(name).append(":\t").append(properties.getProperty(name));
-        }
-
-        KLog.i(new String(builder));
-    }
-
-
-    /**
-     * 打印属性
-     * obj, cla 传一个就行了。仅有cla就仅获取静态属性值。两个都有则cla = obj.getClass();
-     *
-     * @param isDeclared getFields() or getDeclaredFields()
-     */
-    public static void printClassField(Object obj, Class cla, boolean isDeclared) {
-        if (obj == null && cla == null) return;
-        if (obj != null)
-            cla = obj.getClass();
-
-        // getFields()：获得某个类的所有的公共（public）的字段，包括父类中的字段。
-        // getDeclaredFields()：获得某个类的所有声明的字段，即包括public、private和proteced，但是不包括父类的申明字段。
-        Field[] fields;
-        if (isDeclared) fields = cla.getDeclaredFields();
-        else fields = cla.getFields();
-
-        StringBuilder sb = new StringBuilder("对象" + cla.getName() + "的属性有(" + fields.length + ")：");
-
-        for (Field field : fields) {
-            sb.append("\n").append(field.getName()).append(": ").append(field.getType().getSimpleName());
-
-            int modifiers = field.getModifiers();
-            if (!Modifier.isPublic(modifiers)) field.setAccessible(true);
-
-            if (Modifier.isStatic(modifiers)) {
-                try {
-                    Object value = field.get(cla);
-                    if (value == null) {
-                        sb.append(" = null");
-                    } else
-                        sb.append(" = ").append(value);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    sb.append(" 值获取异常");
-                }
-            } else {
-                if (obj == null) {
-                    sb.append("不是静态属性");
-                } else {
-                    try {
-                        Object value = field.get(obj);
-                        if (value == null) {
-                            sb.append(" = null");
-                        } else
-                            sb.append(" = ").append(value);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        sb.append(" 值获取异常");
-                    }
-                }
-            }
-        }
-        KLog.i(new String(sb));
     }
 
     /**
@@ -636,7 +486,7 @@ public class KUtil {
     public static void putSharedPreferencesIntValue(String key, int value) {
         Editor editor = getSharedPreferences().edit();
         editor.putInt(key, value);
-        editor.commit();
+        editor.apply();
     }
 
     public static String getSharedPreferencesStringValue(String key, String defaultValue) {
@@ -646,7 +496,7 @@ public class KUtil {
     public static void putSharedPreferencesStringValue(String key, String value) {
         Editor editor = getSharedPreferences().edit();
         editor.putString(key, value);
-        editor.commit();
+        editor.apply();
     }
 
     public static boolean getSharedPreferencesBooleanValue(String key, boolean defaultValue) {
@@ -656,7 +506,7 @@ public class KUtil {
     public static void putSharedPreferencesBooleanValue(String key, boolean value) {
         Editor editor = getSharedPreferences().edit();
         editor.putBoolean(key, value);
-        editor.commit();
+        editor.apply();
     }
 
     public static long getSharedPreferencesLongValue(String key, long defaultValue) {
@@ -666,6 +516,6 @@ public class KUtil {
     public static void putSharedPreferencesLongValue(String key, long value) {
         Editor editor = getSharedPreferences().edit();
         editor.putLong(key, value);
-        editor.commit();
+        editor.apply();
     }
 }

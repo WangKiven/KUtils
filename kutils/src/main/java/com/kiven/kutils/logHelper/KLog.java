@@ -251,7 +251,9 @@ public class KLog {
                         .append(element.getLineNumber()).append(", fileName: ")
                         .append(element.getFileName());
             }
-            Log.i(tag, new String(sb));
+            String ss = new String(sb);
+            Log.i(tag, ss);
+            addLog(ss);
         }
     }
 

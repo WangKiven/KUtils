@@ -22,6 +22,7 @@ import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
@@ -409,12 +410,24 @@ public class KLog {
         }
 
 
-        Properties properties = System.getProperties();
-        Set<String> set = System.getProperties().stringPropertyNames(); //获取java虚拟机和系统的信息。
-
         builder.append("\n\n>>>>>>>>>>system properties");
+        //获取java虚拟机和系统的信息。
+
+        /*Properties properties = System.getProperties();
+        Set<String> set = System.getProperties().stringPropertyNames();
+
         for (String name : set) {
             builder.append("\n").append(name).append(":\t").append(properties.getProperty(name));
+        }*/
+
+        for (Map.Entry entry: System.getProperties().entrySet()) {
+            builder.append("\n").append(entry.getKey()).append(":\t").append(entry.getValue());
+        }
+
+
+        builder.append("\n\n>>>>>>>>>>system env");
+        for (Map.Entry entry: System.getenv().entrySet()) {
+            builder.append("\n").append(entry.getKey()).append(":\t").append(entry.getValue());
         }
 
         KLog.i(new String(builder));

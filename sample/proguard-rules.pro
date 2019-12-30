@@ -183,3 +183,6 @@ public static final int *;
 
 # tbs 上边微信已经做了
 #-keep class com.tencent.**{*;}
+
+# 小米推送
+-dontwarn com.xiaomi.push.**

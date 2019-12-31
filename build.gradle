@@ -10,6 +10,7 @@ buildscript {
         /*jcenter()*/
         maven { url 'https://maven.aliyun.com/repository/jcenter' }
         maven { url 'http://maven.aliyun.com/nexus/content/groups/public' }
+        maven {url 'http://developer.huawei.com/repo/'}
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.3'
@@ -22,6 +23,10 @@ buildscript {
 
         // ARouter, 解决arouter加固问题
         classpath "com.alibaba:arouter-register:1.0.2"
+
+
+        // 华为推送插件
+        classpath 'com.huawei.agconnect:agcp:1.0.0.300'
 
         /*gitbub 仓库*/
 //        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
@@ -51,8 +56,9 @@ allprojects {
     repositories {
         google()
         maven { url 'https://maven.aliyun.com/repository/jcenter' }
-        jcenter()
+        maven {url 'http://developer.huawei.com/repo/'}
         maven { url 'https://jitpack.io' }
+        jcenter()
     }
 }
 

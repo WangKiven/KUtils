@@ -186,3 +186,14 @@ public static final int *;
 
 # 小米推送
 -dontwarn com.xiaomi.push.**
+
+# 华为推送
+#-ignorewarning
+#-keepattributes *Annotation*
+-keepattributes Exceptions
+-keepattributes InnerClasses
+#-keepattributes Signature
+#-keepattributes SourceFile,LineNumberTable
+-keep class com.hianalytics.android.**{*;}
+-keep class com.huawei.updatesdk.**{*;}
+-keep class com.huawei.hms.**{*;}

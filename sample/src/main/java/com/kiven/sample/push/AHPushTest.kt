@@ -19,6 +19,10 @@ import org.jetbrains.anko.support.v4.nestedScrollView
 /**
  * Created by oukobayashi on 2019-12-31.
  * 小米推送文档：https://dev.mi.com/console/doc/detail?pId=41
+ *
+ * 华为推送文档：
+ * https://developer.huawei.com/consumer/cn/doc/development/HMS-Library/push-sdk-integrate
+ * https://developer.huawei.com/consumer/cn/doc/development/HMS-Guides/push-Preparations
  */
 class AHPushTest : KActivityDebugHelper() {
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
@@ -73,6 +77,16 @@ class AHPushTest : KActivityDebugHelper() {
             KLog.i("RegId: ${MiPushClient.getRegId(mActivity)}")
             KLog.i("Region: ${MiPushClient.getAppRegion(mActivity)}")
         })
+
+        addTitle("华为推送")
+        /*
+CP ID                       900086000026482528
+验证公钥                        MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlJaBMPl1UJf20sUfG5iqqtdR1YvWxnlHVd2Ngc87bZPCLn39qb6GjMVMkwd/OTr8lPV9Q/PPPD2qIeFeHw8vLHvbHzZSq47RSkEyZ2/zstq8JSvzuOW5EDCLy4A3Qfh5jvX3p0AexaE2Me394Uoz5HAx0rViW3xzI9CmB+k6nmr276DqnU2U582wPONGiZjHsKkP5fl48XnrUwntSjG95Qmrnko/jGi5RAWqgDuBp6mLz9HNBkfd6HjWp2CVdqZcXfjXhBGFOJJz/3qUSPMxEys/SupE/bItnWxOaGi0MfYLmn6IzaiCg1B8Gxnv3eWLaO8kFZETB4Ma0lRXS4cYXQIDAQAB
+Client ID                   264311861338440768
+Client 密钥                   AE82A87CD99145ABF663860CCDB37964F9A3A9BCF44E9A15AE5AD1EC96624D99
+APP ID                      101560277
+APP SECRET                  dc11929ebd170973da48aeee623b8c3904c134244908ad79c2ffcab23746b8ff
+         */
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })

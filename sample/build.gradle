@@ -4,7 +4,28 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
+// 华为插件
+apply plugin: 'com.huawei.agconnect'
+
+def lpFile = project.rootProject.file("local.properties")
+def inputStream = lpFile.newDataInputStream()
+def properties = new Properties()
+properties.load(inputStream)
+
 android {
+
+    if (properties.containsKey('store.filePath')) {
+
+        signingConfigs {
+            release {
+                storeFile file(properties.getProperty('store.filePath'))
+                storePassword properties.getProperty('store.filePassword')
+                keyAlias properties.getProperty('store.keyAlias')
+                keyPassword properties.getProperty('store.keyPassword')
+            }
+        }
+    }
+
     compileSdkVersion parent.ext.compileSdkVersion
     buildToolsVersion parent.ext.buildToolsVersion
 
@@ -17,13 +38,24 @@ android {
         versionName "1.0"
 
         multiDexEnabled true
+
+
+
+        // 配置了两处，下面还有一处配置，以后检测到底是那一次生效，或者说两处同时配置才生效，海豚车测试是另一处生效
+        if (properties.containsKey('store.filePath'))
+            signingConfig signingConfigs.release
     }
     buildTypes {
-        release {
+        debug {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+
+            // 配置了两处，上面还有一处配置，以后检测到底是那一次生效，或者说两处同时配置才生效, 海豚车测试，是这一处生效
+            if (properties.containsKey('store.filePath'))
+                signingConfig signingConfigs.release
         }
-        debug {
+        release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -186,6 +218,9 @@ dependencies {
 
     // 基于无障碍服务实现微信多图分享: https://github.com/shichaohui/WXShareMultiImage
 //    implementation 'com.sch.share:wx-share:1.0.10'
+
+    // 华为推送
+    implementation 'com.huawei.hms:push:3.0.3.301'
 
 }
 /*kotlin {

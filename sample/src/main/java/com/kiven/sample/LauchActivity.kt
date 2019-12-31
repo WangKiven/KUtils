@@ -3,13 +3,11 @@ package com.kiven.sample
 import android.Manifest
 import android.content.Context
 import android.content.Intent
-import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
-import android.provider.MediaStore
 import android.provider.Settings
 import android.transition.Slide
 import android.view.Gravity
@@ -20,7 +18,6 @@ import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
-import androidx.exifinterface.media.ExifInterface
 import androidx.lifecycle.LifecycleOwner
 import com.bumptech.glide.Glide
 import com.kiven.kutils.activityHelper.KFragmentActivity
@@ -30,23 +27,16 @@ import com.kiven.kutils.file.KFile
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.*
 import com.kiven.sample.arch.AHArch
-import com.kiven.sample.autoService.AHAutoService
 import com.kiven.sample.floatView.ActivityHFloatView
 import com.kiven.sample.gl.AHGL
 import com.kiven.sample.libs.AHLibs
 import com.kiven.sample.media.AHMediaList
-import com.kiven.sample.systemdata.AHSysgemData
+import com.kiven.sample.push.AHPushTest
 import com.kiven.sample.theme.AHTheme
 import com.kiven.sample.util.showDialog
 import com.kiven.sample.util.showListDialog
-import com.kiven.sample.util.showTip
 import kotlinx.android.synthetic.main.activity_lauch.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import me.grantland.widget.AutofitHelper
-import java.text.SimpleDateFormat
 
 class LauchActivity : KActivity(), LifecycleOwner {
 
@@ -54,7 +44,7 @@ class LauchActivity : KActivity(), LifecycleOwner {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lauch)
 
-        KUtil.printDeviceInfo()
+        KLog.printDeviceInfo()
 
         setupWindowAnimations()
 
@@ -158,6 +148,8 @@ class LauchActivity : KActivity(), LifecycleOwner {
             }
         })
         addView("服务自启动与保活", View.OnClickListener { AHAutoStartAndLiving().startActivity(this) })
+        addView("三方平台推送", View.OnClickListener { AHPushTest().startActivity(this) })
+        addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
     }
 

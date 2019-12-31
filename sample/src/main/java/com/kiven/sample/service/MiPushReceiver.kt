@@ -18,7 +18,7 @@ class MiPushReceiver : PushMessageReceiver() {
 
     // 用来接收服务器发来的通知栏消息（用户点击通知栏时触发）
     override fun onNotificationMessageClicked(p0: Context?, p1: MiPushMessage?) {
-        KLog.i("onNotificationMessageClicked 收到消息")
+        KLog.i("onNotificationMessageClicked 点击消息")
         KLog.printClassField(p1, null, true)
     }
 

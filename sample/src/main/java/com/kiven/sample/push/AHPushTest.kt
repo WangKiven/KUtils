@@ -14,6 +14,8 @@ import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KGranting
 import com.xiaomi.mipush.sdk.MiPushClient
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.jetbrains.anko.support.v4.nestedScrollView
 
 /**
@@ -48,6 +50,7 @@ class AHPushTest : KActivityDebugHelper() {
         }
         addTitle("小米推送")
         addView("注册", View.OnClickListener {
+            // 小米手机不需要申请权限
             KGranting.requestPermissions(mActivity, 3344, arrayOf(
                     Manifest.permission.CALL_PHONE, Manifest.permission.WRITE_EXTERNAL_STORAGE
             ), arrayOf("拨号", "存储")) {
@@ -87,8 +90,9 @@ Client 密钥                   AE82A87CD99145ABF663860CCDB37964F9A3A9BCF44E9A15
 APP ID                      101560277
 APP SECRET                  dc11929ebd170973da48aeee623b8c3904c134244908ad79c2ffcab23746b8ff
          */
-        addView("", View.OnClickListener { })
-        addView("", View.OnClickListener { })
+        addView("注册", View.OnClickListener { GlobalScope.launch { HuaWeiPushHelper.initHuaWeiPush(mActivity) } })
+        addView("注销", View.OnClickListener { HuaWeiPushHelper.unregisterPush(mActivity) })
+
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })

@@ -32,7 +32,8 @@ android {
     defaultConfig {
         applicationId "com.kiven.sample"
 //        minSdkVersion 14
-        minSdkVersion 16
+//        minSdkVersion 16
+        minSdkVersion 17 // 华为推送要求17
         targetSdkVersion parent.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"

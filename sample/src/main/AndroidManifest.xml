@@ -90,6 +90,11 @@
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:host="kiven.test.app"
+                    android:path="/main"
+                    android:scheme="sample" />
             </intent-filter>
         </activity>
         <activity android:name=".ActivityDataBinding" />

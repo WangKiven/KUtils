@@ -9,6 +9,7 @@ import android.widget.TextView
 import com.google.android.flexbox.AlignContent
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
+import com.huawei.hms.push.HmsMessaging
 import com.kiven.kutils.activityHelper.KActivityDebugHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
@@ -25,6 +26,12 @@ import org.jetbrains.anko.support.v4.nestedScrollView
  * 华为推送文档：
  * https://developer.huawei.com/consumer/cn/doc/development/HMS-Library/push-sdk-integrate
  * https://developer.huawei.com/consumer/cn/doc/development/HMS-Guides/push-Preparations
+ *
+ * 极光推送：https://docs.jiguang.cn/jpush/client/Android/android_guide/
+ *
+ * iOS推送：https://github.com/notnoop/java-apns
+ *
+ * OPPO推送：https://open.oppomobile.com/wiki/doc#id=10196
  */
 class AHPushTest : KActivityDebugHelper() {
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
@@ -61,11 +68,11 @@ class AHPushTest : KActivityDebugHelper() {
         })
         addView("注销", View.OnClickListener { MiPushClient.unregisterPush(mActivity) })
 
-        addView("禁用推送服务", View.OnClickListener { MiPushClient.disablePush(mActivity)})
+        addView("禁用推送服务", View.OnClickListener { MiPushClient.disablePush(mActivity) })
         addView("启用推送服务", View.OnClickListener { MiPushClient.enablePush(mActivity) })
 
         addView("暂停接收推送", View.OnClickListener { MiPushClient.pausePush(mActivity, null) })
-        addView("恢复接收推送", View.OnClickListener { MiPushClient.resumePush(mActivity, null)})
+        addView("恢复接收推送", View.OnClickListener { MiPushClient.resumePush(mActivity, null) })
 
         addView("设置账号", View.OnClickListener { MiPushClient.setUserAccount(mActivity, "1", null) })
         addView("清除账号", View.OnClickListener { MiPushClient.unsetUserAccount(mActivity, "1", null) })
@@ -93,6 +100,13 @@ APP SECRET                  dc11929ebd170973da48aeee623b8c3904c134244908ad79c2ff
         addView("注册", View.OnClickListener { GlobalScope.launch { HuaWeiPushHelper.initHuaWeiPush(mActivity) } })
         addView("注销", View.OnClickListener { HuaWeiPushHelper.unregisterPush(mActivity) })
 
+        addView("订阅topic", View.OnClickListener { HuaWeiPushHelper.subscribe(mActivity, "topic1") })
+        addView("取消topic", View.OnClickListener { HuaWeiPushHelper.unsubscribe(mActivity, "topic1") })
+
+        addView("不显示通知栏消息", View.OnClickListener { HmsMessaging.getInstance(mActivity).turnOffPush() })
+        addView("显示通知栏消息", View.OnClickListener { HmsMessaging.getInstance(mActivity).turnOnPush() })
+        addView("", View.OnClickListener { })
+        addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })

@@ -3,9 +3,12 @@ package com.kiven.sample.push
 import android.content.Context
 import com.huawei.agconnect.config.AGConnectServicesConfig
 import com.huawei.hms.aaid.HmsInstanceId
+import com.huawei.hms.push.HmsMessaging
 import com.kiven.kutils.logHelper.KLog
 
-
+/**
+ * https://developer.huawei.com/consumer/cn/doc/development/HMS-Guides/push-basic-client
+ */
 object HuaWeiPushHelper {
 
     var token:String? = null
@@ -38,5 +41,32 @@ object HuaWeiPushHelper {
         token?.apply {
             HmsInstanceId.getInstance(context).deleteToken(this, "HCM")
         }
+    }
+
+    /**
+     * 限制：
+     * 一个应用实例不可订阅超过2000个主题。
+     * 该功能仅在EMUI版本不低于10.0的华为设备上支持。
+     * 华为移动服务（APK）的版本不低于3.0.0。
+     */
+    fun subscribe(context: Context, topic:String) {
+        HmsMessaging.getInstance(context).subscribe(topic)
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        KLog.i("华为推送注册主题 $topic 成功")
+                    }else {
+                        KLog.i("华为推送注册主题 $topic 失败，${it.exception.message}")
+                    }
+                }
+    }
+    fun unsubscribe(context: Context, topic:String) {
+        HmsMessaging.getInstance(context).unsubscribe(topic)
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        KLog.i("华为推送注销主题 $topic 成功")
+                    }else {
+                        KLog.i("华为推送注销主题 $topic 失败，${it.exception.message}")
+                    }
+                }
     }
 }

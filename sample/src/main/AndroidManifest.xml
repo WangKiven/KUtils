@@ -60,6 +60,10 @@
         android:protectionLevel="signature" /> <!--这里com.xiaomi.mipushdemo改成app的包名-->
     <uses-permission android:name="com.kiven.sample.permission.MIPUSH_RECEIVE" /><!--这里com.xiaomi.mipushdemo改成app的包名-->
 
+    <!-- OPPO推送 -->
+    <uses-permission android:name="com.coloros.mcs.permission.RECIEVE_MCS_MESSAGE"/>
+    <uses-permission android:name="com.heytap.mcs.permission.RECIEVE_MCS_MESSAGE"/>
+
     <application
         android:name=".AppContext"
         android:allowBackup="true"
@@ -296,6 +300,9 @@
                 <action android:name="com.huawei.push.action.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
+        <!-- OPPO推送 -->
+
 
     </application>
 

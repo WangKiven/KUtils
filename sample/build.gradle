@@ -222,6 +222,8 @@ dependencies {
 
     // 华为推送
     implementation 'com.huawei.hms:push:3.0.3.301'
+    // OPPO推送
+//    implementation 'com.heytap.mcssdk:mcssdk:2.0.0'
 
 }
 /*kotlin {

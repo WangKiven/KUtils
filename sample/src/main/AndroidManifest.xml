@@ -227,7 +227,9 @@
             android:exported="true"
             android:persistent="true"
             android:priority="1000"
-            android:visibleToInstantApps="true"></service>
+            android:visibleToInstantApps="true">
+
+        </service>
         <!-- 周期任务帮助 保活任务 -->
         <service
             android:name=".service.PersistentJobService"

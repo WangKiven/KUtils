@@ -1,6 +1,7 @@
 package com.kiven.sample.push
 
 import android.Manifest
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -10,15 +11,12 @@ import com.google.android.flexbox.AlignContent
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
 import com.heytap.mcssdk.PushManager
-import com.heytap.mcssdk.callback.PushAdapter
-import com.heytap.mcssdk.callback.PushCallback
-import com.heytap.mcssdk.mode.ErrorCode
 import com.huawei.hms.push.HmsMessaging
 import com.kiven.kutils.activityHelper.KActivityDebugHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KGranting
-import com.kiven.sample.util.showToast
+import com.vivo.push.PushClient
 import com.xiaomi.mipush.sdk.MiPushClient
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -37,6 +35,8 @@ import org.jetbrains.anko.support.v4.nestedScrollView
  * iOS推送：https://github.com/notnoop/java-apns
  *
  * OPPO推送：https://open.oppomobile.com/wiki/doc#id=10196
+ *
+ * vivo推送：https://dev.vivo.com.cn/documentCenter/doc/233
  */
 class AHPushTest : KActivityDebugHelper() {
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
@@ -122,13 +122,26 @@ APP SECRET                  dc11929ebd170973da48aeee623b8c3904c134244908ad79c2ff
         addView("注册", View.OnClickListener {
             if (PushManager.isSupportPush(mActivity)) {
                 OPPOPushHelper.initOPPOPush(mActivity)
-            }else{
+            } else {
                 KLog.i("不支持oppo推送")
             }
         })
         addView("注销", View.OnClickListener { PushManager.getInstance().unRegister() })
-        addView("", View.OnClickListener { })
-        addView("", View.OnClickListener { })
+
+
+        addTitle("vivo推送")
+        /**
+         * Cp-ID：929e0b035b2f1f1b05cb
+         * App-ID：103781430
+         */
+        addView("注册/开启推送", View.OnClickListener {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                KLog.i("vivo推送仅支持6.0及以上安卓系统")
+            } else {
+                VivoPushHelper.turnOnPush(mActivity)
+            }
+        })
+        addView("关闭推送", View.OnClickListener { VivoPushHelper.turnOffPush(mActivity) })
         addView("", View.OnClickListener { })
     }
 }

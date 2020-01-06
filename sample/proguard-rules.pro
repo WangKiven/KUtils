@@ -200,3 +200,8 @@ public static final int *;
 
 # oppo推送
 #-keep public class * extends android.app.Service
+
+# vivo推送
+-dontwarn com.vivo.push.**
+-keep class com.vivo.push.**{*; }
+-keep class com.vivo.vms.**{*; }

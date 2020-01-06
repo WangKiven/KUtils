@@ -327,6 +327,26 @@
             </intent-filter>
         </service>
 
+        <!-- vivo推送 -->
+        <service
+            android:name="com.vivo.push.sdk.service.CommandClientService"
+            android:exported="true"/>
+
+        <receiver android:name=".service.VivoPushReceiver">
+            <intent-filter>
+                <!-- 接收push消息 -->
+                <action   android:name="com.vivo.pushclient.action.RECEIVE" />
+            </intent-filter>
+        </receiver>
+
+        <!--Vivo Push开放平台中应用的appid 和api key-->
+        <meta-data
+            android:name="com.vivo.push.api_key"
+            android:value="xxxxxxxx"/>
+
+        <meta-data
+            android:name="com.vivo.push.app_id"
+            android:value="103781430"/>
     </application>
 
 </manifest>

@@ -71,7 +71,7 @@ android {
                 res.srcDirs = ['res']
                 assets.srcDirs = ['assets']*/
 //            res.srcDirs = ['src/main/res', 'src/main/res/layout']// 有这句代码的话，布局文件改变，不能实时运行到手机，必须clean project 后运行，才有效果
-            jniLibs.srcDirs = ['xunfeiLibs', 'zxingLibs', 'mimcLibs', 'libs', 'tbsLibs', 'miPush', 'oppoPush']
+            jniLibs.srcDirs = ['xunfeiLibs', 'zxingLibs', 'mimcLibs', 'libs', 'tbsLibs', 'miPush', 'oppoPush', 'vivoPush']
         }
     }
     packagingOptions {
@@ -109,6 +109,8 @@ dependencies {
     implementation fileTree(dir: 'miPush', include: ['*.jar', '*.bak'])
     // OPPO推送
     implementation fileTree(dir: 'oppoPush', include: ['*.jar', '*.bak'])
+    // vivo推送
+    implementation fileTree(dir: 'vivoPush', include: ['*.jar', '*.bak', '*.aar'])
 
     testImplementation 'junit:junit:4.12'
     implementation project(':kutils')

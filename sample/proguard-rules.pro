@@ -197,3 +197,6 @@ public static final int *;
 -keep class com.hianalytics.android.**{*;}
 -keep class com.huawei.updatesdk.**{*;}
 -keep class com.huawei.hms.**{*;}
+
+# oppo推送
+#-keep public class * extends android.app.Service

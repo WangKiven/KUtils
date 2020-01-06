@@ -9,11 +9,16 @@ import android.widget.TextView
 import com.google.android.flexbox.AlignContent
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
+import com.heytap.mcssdk.PushManager
+import com.heytap.mcssdk.callback.PushAdapter
+import com.heytap.mcssdk.callback.PushCallback
+import com.heytap.mcssdk.mode.ErrorCode
 import com.huawei.hms.push.HmsMessaging
 import com.kiven.kutils.activityHelper.KActivityDebugHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KGranting
+import com.kiven.sample.util.showToast
 import com.xiaomi.mipush.sdk.MiPushClient
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -105,8 +110,23 @@ APP SECRET                  dc11929ebd170973da48aeee623b8c3904c134244908ad79c2ff
 
         addView("不显示通知栏消息", View.OnClickListener { HmsMessaging.getInstance(mActivity).turnOffPush() })
         addView("显示通知栏消息", View.OnClickListener { HmsMessaging.getInstance(mActivity).turnOnPush() })
-        addView("", View.OnClickListener { })
-        addView("", View.OnClickListener { })
+
+        addTitle("OPPO推送")
+        /**
+         * https://open.oppomobile.com/wiki/doc#id=10196
+         * appid: 30236357
+         * appkey:09e71d4db52046768cf431af43f11579
+         * appsecret:a1b2d2c0564d46e3b5319241bdeba7c1
+         * appserversecret:aad0545c1b52498e98f3f3cc5e329d6a
+         */
+        addView("注册", View.OnClickListener {
+            if (PushManager.isSupportPush(mActivity)) {
+                OPPOPushHelper.initOPPOPush(mActivity)
+            }else{
+                KLog.i("不支持oppo推送")
+            }
+        })
+        addView("注销", View.OnClickListener { PushManager.getInstance().unRegister() })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })

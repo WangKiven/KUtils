@@ -76,7 +76,17 @@
         tools:ignore="UnusedAttribute"
         tools:replace="icon,label,theme">
 
-        <activity android:name=".noti.ClickNotiActivity" />
+        <activity android:name=".noti.ClickNotiActivity" >
+            <intent-filter>
+                <!--指定在浏览器中的动作。当 Intent 在浏览器中被引发，都会被指定成 BROWSABLE 种类。 -->
+                <!-- 有这个的话，就不能在桌面上显示了 -->
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:host="kiven.test.app"
+                    android:path="/main"
+                    android:scheme="sample" />
+            </intent-filter>
+        </activity>
 
         <meta-data
             android:name="roboguice.annotations.packages"
@@ -88,19 +98,13 @@
                 <!-- 应用入口, 多个activity都配置了android.intent.action.MAIN的话，启动App的时候那个在清单文件前面，就启动那个 -->
                 <!-- 个人猜测，寻找可能的activity时，按照manifest配置从上到下读取，直到寻找到第一个符合要求的activity -->
                 <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-
+                <!-- 用于显示用户的数据。比较通用，会根据用户的数据类型打开相应的Activity。比如 tel:13400010001打开拨号程序。 -->
                 <action android:name="android.intent.action.VIEW" />
 
+                <!-- LAUNCHER 表示目标Activity是应用程序中最优先被执行的Activity。有这一个，桌面才会有入口。  -->
+                <category android:name="android.intent.category.LAUNCHER" />
+                <!-- 可以隐式启动，如果有android.intent.category.LAUNCHER ，可不用android.intent.category.DEFAULT -->
                 <category android:name="android.intent.category.DEFAULT" />
-
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="kiven.test.app"
-                    android:path="/main"
-                    android:scheme="sample" />
             </intent-filter>
         </activity>
         <activity android:name=".ActivityDataBinding" />
@@ -116,8 +120,7 @@
             android:theme="@style/ThemeDemo">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
+                <!-- 设置为系统桌面 -->
                 <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>

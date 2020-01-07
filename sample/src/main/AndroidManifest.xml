@@ -342,11 +342,11 @@
         <!--Vivo Push开放平台中应用的appid 和api key-->
         <meta-data
             android:name="com.vivo.push.api_key"
-            android:value="xxxxxxxx"/>
+            android:value="0a596c9e-3810-4529-8d0f-f1b42e1caa3a"/>
 
         <meta-data
             android:name="com.vivo.push.app_id"
-            android:value="103781430"/>
+            android:value="18387"/>
     </application>
 
 </manifest>

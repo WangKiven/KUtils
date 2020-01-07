@@ -135,6 +135,11 @@ APP SECRET                  dc11929ebd170973da48aeee623b8c3904c134244908ad79c2ff
          * App-ID：103781430
          */
         addView("注册/开启推送", View.OnClickListener {
+            if (mActivity.packageName != "com.jeeinc.save.worry"){
+                KLog.i("由于vivo平台的原因没有注册包名，使用的省心宝包名，需要先修改包名")
+                return@OnClickListener
+            }
+
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
                 KLog.i("vivo推送仅支持6.0及以上安卓系统")
             } else {

@@ -1,6 +1,8 @@
 package com.kiven.sample.push
 
 import android.Manifest
+import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -16,6 +18,7 @@ import com.kiven.kutils.activityHelper.KActivityDebugHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KGranting
+import com.kiven.sample.LauchActivity
 import com.vivo.push.PushClient
 import com.xiaomi.mipush.sdk.MiPushClient
 import kotlinx.coroutines.GlobalScope
@@ -60,6 +63,13 @@ class AHPushTest : KActivityDebugHelper() {
             btn.setOnClickListener(click)
             flexboxLayout.addView(btn)
         }
+
+
+
+
+
+
+
         addTitle("小米推送")
         addView("注册", View.OnClickListener {
             // 小米手机不需要申请权限
@@ -93,6 +103,14 @@ class AHPushTest : KActivityDebugHelper() {
             KLog.i("Region: ${MiPushClient.getAppRegion(mActivity)}")
         })
 
+
+
+
+
+
+
+
+
         addTitle("华为推送")
         /*
 CP ID                       900086000026482528
@@ -111,6 +129,11 @@ APP SECRET                  dc11929ebd170973da48aeee623b8c3904c134244908ad79c2ff
         addView("不显示通知栏消息", View.OnClickListener { HmsMessaging.getInstance(mActivity).turnOffPush() })
         addView("显示通知栏消息", View.OnClickListener { HmsMessaging.getInstance(mActivity).turnOnPush() })
 
+
+
+
+
+
         addTitle("OPPO推送")
         /**
          * https://open.oppomobile.com/wiki/doc#id=10196
@@ -127,6 +150,13 @@ APP SECRET                  dc11929ebd170973da48aeee623b8c3904c134244908ad79c2ff
             }
         })
         addView("注销", View.OnClickListener { PushManager.getInstance().unRegister() })
+
+
+
+
+
+
+
 
 
         addTitle("vivo推送")
@@ -147,6 +177,36 @@ APP SECRET                  dc11929ebd170973da48aeee623b8c3904c134244908ad79c2ff
             }
         })
         addView("关闭推送", View.OnClickListener { VivoPushHelper.turnOffPush(mActivity) })
+
+
+
+
+
+        addTitle("构建App页面链接, 各平台应该是可以通用的")
+        addView("华为", View.OnClickListener {
+            // intent://kiven.test.app/main?#Intent;scheme=sample;launchFlags=0x4000000;end
+            val ii = Intent(Intent.ACTION_VIEW)
+                    .apply {
+                        data = Uri.parse("sample://kiven.test.app/main?name=abc&age=180")
+                        putExtra("aa", 100)
+                        putExtra("bb", "rr")
+                        addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    }
+
+            KLog.i("ii = ${ii.toUri(Intent.URI_INTENT_SCHEME)}")
+        })
+        addView("vivo", View.OnClickListener {
+            // intent://kiven.test.app/main?xxy=123#Intent;scheme=sample;launchFlags=0x10000000;component=com.kiven.sample/.LauchActivity;d.aa=10.5;S.bb=rr%E5%B0%8F%E9%9B%A8%E7%9C%9F%E5%A5%BD;end
+            val ii = Intent(mActivity, LauchActivity::class.java)
+                    .apply {
+                        data = Uri.parse("sample://kiven.test.app/main?xxy=123")
+                        putExtra("aa", 10.5)
+                        putExtra("bb", "rr小雨真好")
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    }
+
+            KLog.i("ii = ${ii.toUri(Intent.URI_INTENT_SCHEME)}")
+        })
         addView("", View.OnClickListener { })
     }
 }

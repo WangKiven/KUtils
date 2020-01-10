@@ -116,6 +116,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     implementation project(':kutils')
     implementation project(':kutils-ktx')
+    implementation project(':pushlibrary')
     //    compile project(':EveryshereLibrary')
 
     implementation 'androidx.multidex:multidex:2.0.1'

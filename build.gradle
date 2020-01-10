@@ -10,7 +10,7 @@ buildscript {
         /*jcenter()*/
         maven { url 'https://maven.aliyun.com/repository/jcenter' }
         maven { url 'http://maven.aliyun.com/nexus/content/groups/public' }
-        maven {url 'http://developer.huawei.com/repo/'}
+        maven { url 'http://developer.huawei.com/repo/' }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.3'
@@ -56,7 +56,7 @@ allprojects {
     repositories {
         google()
         maven { url 'https://maven.aliyun.com/repository/jcenter' }
-        maven {url 'http://developer.huawei.com/repo/'}
+        maven { url 'http://developer.huawei.com/repo/' }
         maven { url 'https://jitpack.io' }
         mavenLocal()
         mavenCentral()

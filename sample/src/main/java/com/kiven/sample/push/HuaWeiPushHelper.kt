@@ -7,7 +7,8 @@ import com.huawei.hms.push.HmsMessaging
 import com.kiven.kutils.logHelper.KLog
 
 /**
- * https://developer.huawei.com/consumer/cn/doc/development/HMS-Guides/push-basic-client
+ * 集成SDK：https://developer.huawei.com/consumer/cn/doc/development/HMS-Library/push-sdk-integrate
+ * api：https://developer.huawei.com/consumer/cn/doc/development/HMS-Guides/push-basic-client
  */
 object HuaWeiPushHelper {
 

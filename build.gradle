@@ -56,8 +56,8 @@ allprojects {
     repositories {
         google()
         maven { url 'https://maven.aliyun.com/repository/jcenter' }
-        maven { url 'http://developer.huawei.com/repo/' }
         maven { url 'https://jitpack.io' }
+        maven { url 'http://developer.huawei.com/repo/' }
         mavenLocal()
         mavenCentral()
         jcenter()

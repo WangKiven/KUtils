@@ -107,7 +107,7 @@ dependencies {
     // tbs
     implementation fileTree(dir: 'tbsLibs', include: ['*.jar', '*.bak'])
 //    implementation 'com.tencent.tbs.tbssdk:sdk:43697'
-    implementation fileTree(dir: 'miPush', include: ['*.jar', '*.bak'])
+//    implementation fileTree(dir: 'miPush', include: ['*.jar', '*.bak'])
     // OPPO推送
     implementation fileTree(dir: 'oppoPush', include: ['*.jar', '*.bak'])
     // vivo推送

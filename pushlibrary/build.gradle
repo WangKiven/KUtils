@@ -30,4 +30,14 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "com.google.android.material:material:1.0.0"
     implementation 'androidx.core:core-ktx:1.1.0'
+
+
+    // okhttp
+    implementation 'com.squareup.okhttp3:okhttp:4.2.2'
+
+
+    implementation project(':kutils')
+    implementation project(':kutils-ktx')
+
+    api fileTree(dir: 'miPush', include: ['*.jar', '*.bak'])
 }

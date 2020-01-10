@@ -1,4 +1,4 @@
-package com.kiven.sample.push
+package com.kiven.pushlibrary.mi
 
 import android.content.Context
 import com.kiven.kutils.logHelper.KLog
@@ -7,7 +7,8 @@ import com.xiaomi.mipush.sdk.Logger
 import com.xiaomi.mipush.sdk.MiPushClient
 
 /**
- * https://dev.mi.com/console/doc/detail?pId=41
+ * 接入指南：https://dev.mi.com/console/doc/detail?pId=100
+ * SDK使用指南：https://dev.mi.com/console/doc/detail?pId=41
  */
 object MiPushHelper {
     fun initMiPush(context: Context){

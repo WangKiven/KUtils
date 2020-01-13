@@ -77,7 +77,10 @@ class AHPushTest : KActivityDebugHelper() {
                     Manifest.permission.CALL_PHONE, Manifest.permission.WRITE_EXTERNAL_STORAGE
             ), arrayOf("拨号", "存储")) {
                 if (it) {
-                    MiPushHelper().initPush(mActivity)
+                    MiPushHelper().initPush(mActivity, mapOf(
+                            "mi_app_id" to "2882303761518292808",
+                            "mi_app_key" to "5681829285808"
+                    ))
                 }
             }
         })

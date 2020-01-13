@@ -6,7 +6,7 @@ import com.kiven.pushlibrary.mi.MiPushHelper
 
 object PushClient {
     private var pushHelper: PushHelper? = null
-    fun initPush(context: Context) {
+    fun initPush(context: Context, config:Map<String, String>) {
         val deviceName = Build.BRAND.toLowerCase()
         when(deviceName) {
             "huawei","honor" -> {
@@ -18,7 +18,7 @@ object PushClient {
 
         if (pushHelper == null) pushHelper = MiPushHelper()
 
-        pushHelper?.initPush(context)
+        pushHelper?.initPush(context, config)
     }
 
     fun setTags(context: Context, tags: Set<String>) {

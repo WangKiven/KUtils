@@ -2,6 +2,7 @@ package com.kiven.pushlibrary.mi
 
 import android.content.Context
 import com.kiven.kutils.logHelper.KLog
+import com.kiven.pushlibrary.Web
 import com.xiaomi.mipush.sdk.*
 
 
@@ -46,11 +47,7 @@ class MiPushReceiver : PushMessageReceiver() {
         if (MiPushClient.COMMAND_REGISTER == command) {
             if (p1.resultCode.toInt() == ErrorCode.SUCCESS) {
                 KLog.i("小米推送注册成功 regId = $cmdArg1 , cmdArg2 = $cmdArg2")
-
-
-
-
-
+                Web.snycDeviceInfo()
             }
         }
     }

@@ -1,18 +1,40 @@
 package com.sxb.kutils_ktx.util
 
+import android.net.Uri
 import java.net.ConnectException
 import java.net.HttpURLConnection
 import java.net.URL
 
 object KWeb {
+
     /**
-     * requestProperty与body仅传一个，两个同时传可能会出错
+     * @param requestProperty 请求头
      */
     fun request(
             url: String,
             param: Map<String, Any?>? = null,
             requestProperty: Map<String, String?>? = null,
+            requestMethod: String = "POST"
+    ): String {
+        // 请求参数
+        var body:String? = null
+                param?.apply {
+            filter { it.value != null }.apply {
+                if (size > 0) {
+                    body = toList().joinToString("&") { "${Uri.encode(it.first)}=${Uri.encode(it.second!!.toString())}" }
+                }
+            }
+        }
+
+        return request(url, body, requestProperty, requestMethod)
+    }
+    /**
+     * @param requestProperty 请求头
+     */
+    fun request(
+            url: String,
             body:String? = null,
+            requestProperty: Map<String, String?>? = null,
             requestMethod: String = "POST"
     ): String {
         try {
@@ -27,7 +49,7 @@ object KWeb {
 
 
             // 请求参数
-            param?.apply {
+            /*param?.apply {
                 filter { it.value != null }.apply {
                     if (size > 0) {
                         connect.doOutput = true // 使用outputStream前，先确保 doOutput = true
@@ -36,7 +58,7 @@ object KWeb {
                         os.close()
                     }
                 }
-            }
+            }*/
             // 请求体
             if (body != null) {
                 connect.doOutput = true // 使用outputStream前，先确保 doOutput = true

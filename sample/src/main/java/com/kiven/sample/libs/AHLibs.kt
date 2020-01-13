@@ -34,6 +34,10 @@ import com.kiven.sample.xutils.net.AHNetDemo
 import com.koushikdutta.async.http.AsyncHttpClient
 import com.koushikdutta.async.http.server.AsyncHttpServer
 import com.stfalcon.chatkit.dialogs.DialogsList
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import okhttp3.FormBody
+import okhttp3.OkHttpClient
 import org.jetbrains.anko.support.v4.nestedScrollView
 import java.net.Inet4Address
 import java.net.NetworkInterface
@@ -156,6 +160,43 @@ class AHLibs : KActivityDebugHelper() {
 
             volley("https://github.com/google/volley")
             volley("http://blog.csdn.net/linmiansheng/article/details/21646753")
+        })
+        addTitle("OkHttp")
+        addBtn("OkHttp", View.OnClickListener {
+            GlobalScope.launch {
+                val httpUrl = "https://www.baidu.com"
+                val method ="/s"
+                val param = mapOf(
+                        "ie" to "UTF-8",
+                        "wd" to "美女"
+                )
+
+                // 请求参数
+                val requestBody = FormBody.Builder()
+
+                for ((key, value) in param) {
+                    requestBody.add(key, value)
+                }
+
+                // 请求配置
+                val uri = "$httpUrl${method}"
+
+                val request = okhttp3.Request.Builder()
+                        .url(uri)
+                        .post(requestBody.build())
+                /*if (isLogin) {
+                    request.addHeader("Client-User-Id", appUser.value!!.id!!)
+                    request.addHeader("Client-Token", appSecret!!.token)
+                }*/
+
+                // 请求
+                try {
+                    val result = OkHttpClient().newCall(request.build()).execute().body?.string()
+                    KLog.i("OkHttp请求结果: $result")
+                }catch (e:Exception) {
+                    KLog.e(e)
+                }
+            }
         })
 
 

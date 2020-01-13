@@ -77,7 +77,7 @@ class AHPushTest : KActivityDebugHelper() {
                     Manifest.permission.CALL_PHONE, Manifest.permission.WRITE_EXTERNAL_STORAGE
             ), arrayOf("拨号", "存储")) {
                 if (it) {
-                    MiPushHelper.initMiPush(mActivity)
+                    MiPushHelper().initPush(mActivity)
                 }
             }
         })

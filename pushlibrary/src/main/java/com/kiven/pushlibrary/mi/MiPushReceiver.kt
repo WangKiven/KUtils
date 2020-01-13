@@ -47,7 +47,9 @@ class MiPushReceiver : PushMessageReceiver() {
         if (MiPushClient.COMMAND_REGISTER == command) {
             if (p1.resultCode.toInt() == ErrorCode.SUCCESS) {
                 KLog.i("小米推送注册成功 regId = $cmdArg1 , cmdArg2 = $cmdArg2")
-                Web.snycDeviceInfo()
+
+
+                Web.syncDeviceInfo(cmdArg1!!, 5)
             }
         }
     }

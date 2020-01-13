@@ -2,6 +2,7 @@ package com.kiven.pushlibrary.mi
 
 import android.content.Context
 import com.kiven.kutils.logHelper.KLog
+import com.kiven.pushlibrary.PushHelper
 import com.xiaomi.channel.commonutils.logger.LoggerInterface
 import com.xiaomi.mipush.sdk.Logger
 import com.xiaomi.mipush.sdk.MiPushClient
@@ -10,8 +11,8 @@ import com.xiaomi.mipush.sdk.MiPushClient
  * 接入指南：https://dev.mi.com/console/doc/detail?pId=100
  * SDK使用指南：https://dev.mi.com/console/doc/detail?pId=41
  */
-object MiPushHelper {
-    fun initMiPush(context: Context){
+class MiPushHelper : PushHelper {
+    override fun initPush(context: Context) {
 //        if (!shouldInitMiPush()) return
 
         //初始化push推送服务
@@ -35,5 +36,25 @@ object MiPushHelper {
         Logger.setLogger(context, newLogger)
     }
 
+    override fun setTags(context: Context, tags: Set<String>) {
+        tags.forEach {
+            MiPushClient.subscribe(context, it, null)
+        }
+    }
 
+    override fun clearTags(context: Context) {
+        MiPushClient.getAllTopic(context).forEach {
+            MiPushClient.unsubscribe(context, it, null)
+        }
+    }
+
+    override fun setAccount(context: Context, account: String) {
+        MiPushClient.setUserAccount(context, account, null)
+    }
+
+    override fun removeAccount(context: Context) {
+        MiPushClient.getAllUserAccount(context).forEach {
+            MiPushClient.unsetUserAccount(context, it, null)
+        }
+    }
 }

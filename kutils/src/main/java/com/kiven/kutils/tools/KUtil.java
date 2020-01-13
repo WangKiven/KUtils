@@ -39,6 +39,7 @@ import java.net.NetworkInterface;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.Set;
@@ -516,6 +517,16 @@ public class KUtil {
     public static void putSharedPreferencesLongValue(String key, long value) {
         Editor editor = getSharedPreferences().edit();
         editor.putLong(key, value);
+        editor.apply();
+    }
+
+    public static Set<String> getSharedPreferencesStringSet(String key, Set<String> defaultValue) {
+        return getSharedPreferences().getStringSet(key, defaultValue);
+    }
+
+    public static void putSharedPreferencesStringSet(String key, Set<String> value) {
+        Editor editor = getSharedPreferences().edit();
+        editor.putStringSet(key, value);
         editor.apply();
     }
 }

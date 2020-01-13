@@ -13,7 +13,8 @@
         android:protectionLevel="signature" />这里com.xiaomi.mipushdemo改成app的包名
     <uses-permission android:name="com.xiaomi.mipushdemo.permission.MIPUSH_RECEIVE" />这里com.xiaomi.mipushdemo改成app的包名-->
 
-
+    <!-- vivo推送 -->
+    <!--<uses-permission   android:name="android.permission.INTERNET"/>-->
 
     <application>
         <!-- 小米推送 -->
@@ -65,5 +66,25 @@
                 <action android:name="com.xiaomi.mipush.ERROR" />
             </intent-filter>
         </receiver>
+
+        <!-- vivo推送 -->
+        <!-- vivo推送 -->
+        <service
+            android:name="com.vivo.push.sdk.service.CommandClientService"
+            android:exported="true"/>
+
+        <receiver android:name=".vivo.VivoPushReceiver">
+            <intent-filter>
+                <!-- 接收push消息 -->
+                <action   android:name="com.vivo.pushclient.action.RECEIVE" />
+            </intent-filter>
+        </receiver>
+        <!--<meta-data
+            android:name="com.vivo.push.api_key"
+            android:value="0a596c9e-3810-4529-8d0f-f1b42e1caa3a"/>
+
+        <meta-data
+            android:name="com.vivo.push.app_id"
+            android:value="18387"/>-->
     </application>
 </manifest>

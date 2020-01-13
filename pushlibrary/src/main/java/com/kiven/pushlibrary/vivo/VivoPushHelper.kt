@@ -1,4 +1,4 @@
-package com.kiven.sample.push
+package com.kiven.pushlibrary.vivo
 
 import android.content.Context
 import com.kiven.kutils.logHelper.KLog

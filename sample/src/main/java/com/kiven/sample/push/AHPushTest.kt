@@ -19,6 +19,7 @@ import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KGranting
 import com.kiven.pushlibrary.mi.MiPushHelper
+import com.kiven.pushlibrary.vivo.VivoPushHelper
 import com.kiven.sample.LauchActivity
 import com.xiaomi.mipush.sdk.MiPushClient
 import kotlinx.coroutines.GlobalScope

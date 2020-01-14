@@ -297,6 +297,14 @@
         <meta-data
             android:name="com.vivo.push.app_id"
             android:value="18387"/>
+
+        <meta-data
+            android:name="mi_app_id"
+            android:value="2882303761518292808"/>
+
+        <meta-data
+            android:name="mi_app_key"
+            android:value="5681829285808"/>
     </application>
 
 </manifest>

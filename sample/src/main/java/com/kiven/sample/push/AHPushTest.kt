@@ -18,6 +18,7 @@ import com.kiven.kutils.activityHelper.KActivityDebugHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KGranting
+import com.kiven.pushlibrary.PushClient
 import com.kiven.pushlibrary.mi.MiPushHelper
 import com.kiven.pushlibrary.vivo.VivoPushHelper
 import com.kiven.sample.LauchActivity
@@ -78,10 +79,7 @@ class AHPushTest : KActivityDebugHelper() {
                     Manifest.permission.CALL_PHONE, Manifest.permission.WRITE_EXTERNAL_STORAGE
             ), arrayOf("拨号", "存储")) {
                 if (it) {
-                    MiPushHelper().initPush(mActivity, mapOf(
-                            "mi_app_id" to "2882303761518292808",
-                            "mi_app_key" to "5681829285808"
-                    ))
+                    MiPushHelper().initPush(mActivity)
                 }
             }
         })
@@ -177,10 +175,10 @@ APP SECRET                  dc11929ebd170973da48aeee623b8c3904c134244908ad79c2ff
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
                 KLog.i("vivo推送仅支持6.0及以上安卓系统")
             } else {
-                VivoPushHelper.turnOnPush(mActivity)
+                VivoPushHelper().initPush(mActivity, mapOf())
             }
         })
-        addView("关闭推送", View.OnClickListener { VivoPushHelper.turnOffPush(mActivity) })
+        addView("关闭推送", View.OnClickListener { VivoPushHelper().turnOffPush(mActivity) })
 
 
 
@@ -211,6 +209,11 @@ APP SECRET                  dc11929ebd170973da48aeee623b8c3904c134244908ad79c2ff
 
             KLog.i("ii = ${ii.toUri(Intent.URI_INTENT_SCHEME)}")
         })
+        addView("", View.OnClickListener {  })
+        addView("", View.OnClickListener { })
+        addView("", View.OnClickListener { })
+        addView("", View.OnClickListener { })
+        addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
     }
 }

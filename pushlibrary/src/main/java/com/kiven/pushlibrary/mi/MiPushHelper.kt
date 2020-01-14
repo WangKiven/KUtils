@@ -1,6 +1,7 @@
 package com.kiven.pushlibrary.mi
 
 import android.content.Context
+import android.content.pm.PackageManager
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.pushlibrary.PushHelper
 import com.xiaomi.channel.commonutils.logger.LoggerInterface
@@ -12,11 +13,14 @@ import com.xiaomi.mipush.sdk.MiPushClient
  * SDK使用指南：https://dev.mi.com/console/doc/detail?pId=41
  */
 class MiPushHelper : PushHelper {
-    override fun initPush(context: Context, config:Map<String, String>) {
+    override fun initPush(context: Context) {
 //        if (!shouldInitMiPush()) return
 
-        val appId = config["mi_app_id"] ?: throw Throwable("小米AppID为空")
-        val appKey = config["mi_app_key"] ?: throw Throwable("小米APPKey为空")
+        val manifest = context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
+        val bundleData = manifest.metaData ?: throw Throwable("manifest中小米配置信息为空")
+
+        val appId = bundleData.getString("mi_app_id") ?: throw Throwable("小米AppID为空")
+        val appKey = bundleData.getString("mi_app_key") ?: throw Throwable("小米APPKey为空")
 
         //初始化push推送服务
         // TODO: 2019-12-31  在非MIUI平台下，如果targetSdkVersion>=23，需要动态申请电话和存储权限，请在申请权限后再调用注册接口，否则会注册失败。

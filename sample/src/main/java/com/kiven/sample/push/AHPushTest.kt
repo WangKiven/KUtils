@@ -12,14 +12,13 @@ import android.widget.TextView
 import com.google.android.flexbox.AlignContent
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
-import com.heytap.mcssdk.PushManager
 import com.huawei.hms.push.HmsMessaging
 import com.kiven.kutils.activityHelper.KActivityDebugHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KGranting
-import com.kiven.pushlibrary.PushClient
 import com.kiven.pushlibrary.mi.MiPushHelper
+import com.kiven.pushlibrary.oppo.OPPOPushHelper
 import com.kiven.pushlibrary.vivo.VivoPushHelper
 import com.kiven.sample.LauchActivity
 import com.xiaomi.mipush.sdk.MiPushClient
@@ -145,13 +144,9 @@ APP SECRET                  dc11929ebd170973da48aeee623b8c3904c134244908ad79c2ff
          * appserversecret:aad0545c1b52498e98f3f3cc5e329d6a
          */
         addView("注册", View.OnClickListener {
-            if (PushManager.isSupportPush(mActivity)) {
-                OPPOPushHelper.initOPPOPush(mActivity)
-            } else {
-                KLog.i("不支持oppo推送")
-            }
+            OPPOPushHelper().initPush(mActivity)
         })
-        addView("注销", View.OnClickListener { PushManager.getInstance().unRegister() })
+        addView("注销", View.OnClickListener { /*PushManager.getInstance().unRegister()*/ })
 
 
 

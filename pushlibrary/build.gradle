@@ -46,4 +46,6 @@ dependencies {
     api fileTree(dir: 'miPush', include: ['*.jar', '*.bak'])
     // vivo推送
     implementation fileTree(dir: 'vivoPush', include: ['*.jar', '*.bak', '*.aar'])
+    // OPPO推送
+    implementation fileTree(dir: 'oppoPush', include: ['*.jar', '*.bak'])
 }

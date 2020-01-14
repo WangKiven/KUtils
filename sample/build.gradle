@@ -5,7 +5,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 // 华为插件
-//apply plugin: 'com.huawei.agconnect'
+apply plugin: 'com.huawei.agconnect'
 
 def lpFile = project.rootProject.file("local.properties")
 def inputStream = lpFile.newDataInputStream()
@@ -30,8 +30,8 @@ android {
     buildToolsVersion parent.ext.buildToolsVersion
 
     defaultConfig {
-//        applicationId "com.kiven.sample"
-        applicationId "com.jeeinc.save.worry"
+        applicationId "com.kiven.sample"
+//        applicationId "com.jeeinc.save.worry"
 //        minSdkVersion 14
 //        minSdkVersion 16
         minSdkVersion 17 // 华为推送要求17
@@ -109,7 +109,7 @@ dependencies {
 //    implementation 'com.tencent.tbs.tbssdk:sdk:43697'
 //    implementation fileTree(dir: 'miPush', include: ['*.jar', '*.bak'])
     // OPPO推送
-    implementation fileTree(dir: 'oppoPush', include: ['*.jar', '*.bak'])
+//    implementation fileTree(dir: 'oppoPush', include: ['*.jar', '*.bak'])
     // vivo推送
 //    implementation fileTree(dir: 'vivoPush', include: ['*.jar', '*.bak', '*.aar'])
 

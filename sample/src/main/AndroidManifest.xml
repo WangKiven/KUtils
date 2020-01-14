@@ -75,7 +75,7 @@
         tools:ignore="UnusedAttribute"
         tools:replace="icon,label,theme">
 
-        <activity android:name=".noti.ClickNotiActivity" >
+        <activity android:name=".noti.ClickNotiActivity">
             <intent-filter>
                 <!--指定在浏览器中的动作。当 Intent 在浏览器中被引发，都会被指定成 BROWSABLE 种类。 -->
                 <!-- 有这个的话，就不能在桌面上显示了 -->
@@ -275,27 +275,27 @@
         <!--Vivo Push开放平台中应用的appid 和api key-->
         <meta-data
             android:name="com.vivo.push.api_key"
-            android:value="0a596c9e-3810-4529-8d0f-f1b42e1caa3a"/>
+            android:value="0a596c9e-3810-4529-8d0f-f1b42e1caa3a" />
 
         <meta-data
             android:name="com.vivo.push.app_id"
-            android:value="18387"/>
+            android:value="18387" />
 
         <meta-data
             android:name="mi_app_id"
-            android:value="2882303761518292808"/>
+            android:value="2882303761518292808" />
 
         <meta-data
             android:name="mi_app_key"
-            android:value="5681829285808"/>
+            android:value="5681829285808" />
 
         <meta-data
             android:name="oppo_app_key"
-            android:value="09e71d4db52046768cf431af43f11579"/>
+            android:value="09e71d4db52046768cf431af43f11579" />
 
         <meta-data
             android:name="oppo_app_secret"
-            android:value="a1b2d2c0564d46e3b5319241bdeba7c1"/>
+            android:value="a1b2d2c0564d46e3b5319241bdeba7c1" />
     </application>
 
 </manifest>

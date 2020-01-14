@@ -1,4 +1,4 @@
-package com.kiven.sample.push
+package com.kiven.pushlibrary.hw
 
 import android.content.Context
 import com.huawei.agconnect.config.AGConnectServicesConfig

@@ -227,7 +227,7 @@ dependencies {
 //    implementation 'com.sch.share:wx-share:1.0.10'
 
     // 华为推送
-    implementation 'com.huawei.hms:push:3.0.3.301'
+//    implementation 'com.huawei.hms:push:3.0.3.301'
 
 }
 /*kotlin {

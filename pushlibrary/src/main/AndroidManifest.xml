@@ -106,6 +106,14 @@
             </intent-filter>
         </service>
 
+        <!-- 华为推送 -->
+        <service
+            android:name="com.kiven.pushlibrary.hw.HuaWeiPushService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.huawei.push.action.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
 
     </application>
 </manifest>

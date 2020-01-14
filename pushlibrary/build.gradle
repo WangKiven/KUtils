@@ -42,6 +42,10 @@ dependencies {
 
     implementation project(':kutils')
     implementation project(':kutils-ktx')
+
+
+    // 华为推送
+    implementation 'com.huawei.hms:push:3.0.3.301'
     // 小米推送
     api fileTree(dir: 'miPush', include: ['*.jar', '*.bak'])
     // vivo推送

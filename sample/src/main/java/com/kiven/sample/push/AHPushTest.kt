@@ -12,11 +12,11 @@ import android.widget.TextView
 import com.google.android.flexbox.AlignContent
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
-import com.huawei.hms.push.HmsMessaging
 import com.kiven.kutils.activityHelper.KActivityDebugHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KGranting
+import com.kiven.pushlibrary.hw.HuaWeiPushHelper
 import com.kiven.pushlibrary.mi.MiPushHelper
 import com.kiven.pushlibrary.oppo.OPPOPushHelper
 import com.kiven.pushlibrary.vivo.VivoPushHelper
@@ -127,8 +127,8 @@ APP SECRET                  dc11929ebd170973da48aeee623b8c3904c134244908ad79c2ff
         addView("订阅topic", View.OnClickListener { HuaWeiPushHelper.subscribe(mActivity, "topic1") })
         addView("取消topic", View.OnClickListener { HuaWeiPushHelper.unsubscribe(mActivity, "topic1") })
 
-        addView("不显示通知栏消息", View.OnClickListener { HmsMessaging.getInstance(mActivity).turnOffPush() })
-        addView("显示通知栏消息", View.OnClickListener { HmsMessaging.getInstance(mActivity).turnOnPush() })
+        /*addView("不显示通知栏消息", View.OnClickListener { HmsMessaging.getInstance(mActivity).turnOffPush() })
+        addView("显示通知栏消息", View.OnClickListener { HmsMessaging.getInstance(mActivity).turnOnPush() })*/
 
 
 

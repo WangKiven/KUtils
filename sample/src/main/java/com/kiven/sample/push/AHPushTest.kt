@@ -175,7 +175,7 @@ APP SECRET                  dc11929ebd170973da48aeee623b8c3904c134244908ad79c2ff
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
                 KLog.i("vivo推送仅支持6.0及以上安卓系统")
             } else {
-                VivoPushHelper().initPush(mActivity, mapOf())
+                VivoPushHelper().initPush(mActivity)
             }
         })
         addView("关闭推送", View.OnClickListener { VivoPushHelper().turnOffPush(mActivity) })

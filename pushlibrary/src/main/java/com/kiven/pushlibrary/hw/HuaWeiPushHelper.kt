@@ -5,14 +5,22 @@ import com.huawei.agconnect.config.AGConnectServicesConfig
 import com.huawei.hms.aaid.HmsInstanceId
 import com.huawei.hms.push.HmsMessaging
 import com.kiven.kutils.logHelper.KLog
+import com.kiven.pushlibrary.PushHelper
 
 /**
  * 集成SDK：https://developer.huawei.com/consumer/cn/doc/development/HMS-Library/push-sdk-integrate
  * api：https://developer.huawei.com/consumer/cn/doc/development/HMS-Guides/push-basic-client
+ *
+ * 主题问题：
+ *      华为客户端SDK进提供了添加主题、取消主题两个api，所以无法取消之前设置的主题，因为根本不知道之前设置了什么主题
+ *      解决方案：调用我们自己的服务器设置主题，服务器可以通过华为提供的接口查询到之前设置过的主题，从而判断添加什么主题，取消什么主题
  */
-object HuaWeiPushHelper {
+class HuaWeiPushHelper:PushHelper {
 
-    var token:String? = null
+    companion object {
+        var token:String? = null
+    }
+
     /**
      * 可能耗时，需异步
      *
@@ -22,20 +30,20 @@ object HuaWeiPushHelper {
      *
      * 华为测试机token: 0865265045829291300005487100CN01
      */
-    fun initHuaWeiPush(context: Context):Boolean {
-        return try {
-            val appId = AGConnectServicesConfig.fromContext(context).getString("client/app_id")
-            KLog.i("华为appId: $appId")
+    override fun initPush(context: Context) {
+        Thread{
+            try {
+                val appId = AGConnectServicesConfig.fromContext(context).getString("client/app_id")
+                KLog.i("华为appId: $appId")
 
-            // TODO Token发生变化时或者EMUI版本低于10.0以 onNewToken 方法返回
-            token = HmsInstanceId.getInstance(context).getToken(appId, "HCM")
-            KLog.i("HmsInstanceId获取华为token: $token")
+                // TODO Token发生变化时或者EMUI版本低于10.0以 onNewToken 方法返回
+                token = HmsInstanceId.getInstance(context).getToken(appId, "HCM")
+                KLog.i("HmsInstanceId获取华为token: $token")
 
-            true
-        } catch (e: Exception) {
-            KLog.e(e)
-            false
-        }
+            } catch (e: Exception) {
+                KLog.e(e)
+            }
+        }.start()
     }
 
     fun unregisterPush(context: Context) {
@@ -69,5 +77,31 @@ object HuaWeiPushHelper {
                         KLog.i("华为推送注销主题 $topic 失败，${it.exception.message}")
                     }
                 }
+    }
+
+    override fun setTags(context: Context, tags: Set<String>) {
+        HmsMessaging.getInstance(context).apply {
+            tags.forEach {tag ->
+                subscribe(tag).addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        KLog.i("华为推送注册主题 $tag 成功")
+                    }else {
+                        KLog.i("华为推送注册主题 $tag 失败，${it.exception.message}")
+                    }
+                }
+            }
+        }
+    }
+
+    override fun clearTags(context: Context) {
+        /*HmsMessaging.getInstance(context).apply {
+
+        }*/
+    }
+
+    override fun setAccount(context: Context, account: String) {
+    }
+
+    override fun removeAccount(context: Context) {
     }
 }

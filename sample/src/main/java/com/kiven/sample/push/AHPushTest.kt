@@ -121,11 +121,11 @@ Client 密钥                   AE82A87CD99145ABF663860CCDB37964F9A3A9BCF44E9A15
 APP ID                      101560277
 APP SECRET                  dc11929ebd170973da48aeee623b8c3904c134244908ad79c2ffcab23746b8ff
          */
-        addView("注册", View.OnClickListener { GlobalScope.launch { HuaWeiPushHelper.initHuaWeiPush(mActivity) } })
-        addView("注销", View.OnClickListener { HuaWeiPushHelper.unregisterPush(mActivity) })
+        addView("注册", View.OnClickListener { GlobalScope.launch { HuaWeiPushHelper().initPush(mActivity) } })
+        /*addView("注销", View.OnClickListener { HuaWeiPushHelper.unregisterPush(mActivity) })
 
         addView("订阅topic", View.OnClickListener { HuaWeiPushHelper.subscribe(mActivity, "topic1") })
-        addView("取消topic", View.OnClickListener { HuaWeiPushHelper.unsubscribe(mActivity, "topic1") })
+        addView("取消topic", View.OnClickListener { HuaWeiPushHelper.unsubscribe(mActivity, "topic1") })*/
 
         /*addView("不显示通知栏消息", View.OnClickListener { HmsMessaging.getInstance(mActivity).turnOffPush() })
         addView("显示通知栏消息", View.OnClickListener { HmsMessaging.getInstance(mActivity).turnOnPush() })*/

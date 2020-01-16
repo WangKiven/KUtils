@@ -47,24 +47,40 @@ class MiPushHelper : PushHelper {
     }
 
     override fun setTags(context: Context, tags: Set<String>) {
-        tags.forEach {
-            MiPushClient.subscribe(context, it, null)
-        }
-    }
+        val oldTags = MiPushClient.getAllTopic(context)
 
-    override fun clearTags(context: Context) {
-        MiPushClient.getAllTopic(context).forEach {
-            MiPushClient.unsubscribe(context, it, null)
+        val addTags = mutableSetOf<String>()
+        val delTags = mutableSetOf<String>()
+
+
+        if (oldTags == null || oldTags.isEmpty()) {
+            addTags.addAll(tags)
+        } else {
+            oldTags.forEach {
+                if (!tags.contains(it)) delTags.add(it)
+            }
+
+            tags.forEach {
+                if (!oldTags.contains(it)) addTags.add(it)
+            }
+        }
+
+        addTags.forEach { tag ->
+            MiPushClient.subscribe(context, tag, null)
+        }
+
+        delTags.forEach { tag ->
+            MiPushClient.unsubscribe(context, tag, null)
         }
     }
 
     override fun setAccount(context: Context, account: String) {
-        MiPushClient.setUserAccount(context, account, null)
-    }
-
-    override fun removeAccount(context: Context) {
-        MiPushClient.getAllUserAccount(context).forEach {
-            MiPushClient.unsetUserAccount(context, it, null)
+        if (account.isBlank()) {
+            MiPushClient.getAllUserAccount(context).forEach {
+                MiPushClient.unsetUserAccount(context, it, null)
+            }
+        }else {
+            MiPushClient.setUserAccount(context, account, null)
         }
     }
 }

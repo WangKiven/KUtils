@@ -121,15 +121,7 @@ class HuaWeiPushHelper:PushHelper {
 
     }
 
-    override fun clearTags(context: Context) {
-        /*HmsMessaging.getInstance(context).apply {
-
-        }*/
-    }
-
     override fun setAccount(context: Context, account: String) {
-    }
 
-    override fun removeAccount(context: Context) {
     }
 }

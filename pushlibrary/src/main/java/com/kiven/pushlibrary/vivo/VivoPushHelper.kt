@@ -72,7 +72,7 @@ class VivoPushHelper : PushHelper {
                 }
             }
 
-            tags.forEach { tag ->
+            addTags.forEach { tag ->
                 addTagTaskName = System.currentTimeMillis().toString()
                 addTag(context, tag, addTagTaskName)
             }
@@ -99,7 +99,7 @@ class VivoPushHelper : PushHelper {
         }
     }
 
-    override fun clearTags(context: Context) {
+    private fun clearTags(context: Context) {
         PushClient.getInstance(context).apply {
             topics?.forEach { tag ->
                 delTagTaskName = System.currentTimeMillis().toString()
@@ -123,12 +123,8 @@ class VivoPushHelper : PushHelper {
         }
     }
 
-    private var bindAccountTaskName = ""
     override fun setAccount(context: Context, account: String) {
 
-    }
-
-    override fun removeAccount(context: Context) {
     }
 
 }

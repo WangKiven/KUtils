@@ -26,6 +26,8 @@ class OPPOPushHelper : PushHelper {
             override fun onRegister(responseCode: Int, registerID: String?) {
                 if (responseCode == ErrorCode.SUCCESS) {
                     KLog.i("OPPO推送注册成功, registerID = $registerID")
+
+                    Web.register(registerID!!, 4)//设备类型 0 不明，1 iOS, 2 华为, 3 vivo, 4 oppo, 5 小米
                 } else {
                     KLog.i("OPPO推送注册失败，responseCode = $responseCode")
                 }

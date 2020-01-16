@@ -5,7 +5,7 @@ import com.sxb.kutils_ktx.util.KWeb
 import org.json.JSONObject
 
 object Web {
-    const val httpPre = "http://localhost:8080/api/"
+    const val httpPre = "http://192.168.0.108:8080/api/"
     private const val registerUrl = "${httpPre}open/push/register"
     private const val bindAccountUrl = "${httpPre}open/push/bindAccount"
     private const val setTagsUrl = "${httpPre}open/push/setTags"

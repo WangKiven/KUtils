@@ -49,7 +49,7 @@ class MiPushReceiver : PushMessageReceiver() {
                 KLog.i("小米推送注册成功 regId = $cmdArg1 , cmdArg2 = $cmdArg2")
 
 
-                Web.register(cmdArg1!!, 5)
+                Web.register(cmdArg1!!, 5)//设备类型 0 不明，1 iOS, 2 华为, 3 vivo, 4 oppo, 5 小米
             }
         }
     }

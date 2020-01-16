@@ -5,9 +5,12 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import com.google.android.flexbox.AlignContent
 import com.google.android.flexbox.FlexWrap
@@ -16,6 +19,7 @@ import com.kiven.kutils.activityHelper.KActivityDebugHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KGranting
+import com.kiven.pushlibrary.PushClient
 import com.kiven.pushlibrary.hw.HuaWeiPushHelper
 import com.kiven.pushlibrary.mi.MiPushHelper
 import com.kiven.pushlibrary.oppo.OPPOPushHelper
@@ -162,7 +166,7 @@ APP SECRET                  dc11929ebd170973da48aeee623b8c3904c134244908ad79c2ff
          * App-ID：103781430
          */
         addView("注册/开启推送", View.OnClickListener {
-            if (mActivity.packageName != "com.jeeinc.save.worry"){
+            if (mActivity.packageName != "com.jeeinc.save.worry") {
                 KLog.i("由于vivo平台的原因没有注册包名，使用的省心宝包名，需要先修改包名")
                 return@OnClickListener
             }
@@ -204,9 +208,53 @@ APP SECRET                  dc11929ebd170973da48aeee623b8c3904c134244908ad79c2ff
 
             KLog.i("ii = ${ii.toUri(Intent.URI_INTENT_SCHEME)}")
         })
-        addView("", View.OnClickListener {  })
-        addView("", View.OnClickListener { })
-        addView("", View.OnClickListener { })
+
+
+
+
+
+
+        addTitle("封装库测试")
+        addView("注册", View.OnClickListener {
+            PushClient.initPush(mActivity)
+        })
+
+        var account = "18780296428"
+        flexboxLayout.addView(EditText(activity).apply {
+            setText(account)
+            hint = "请输入账号"
+            layoutParams = ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.MATCH_PARENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT)
+            addTextChangedListener(object : TextWatcher {
+                override fun afterTextChanged(s: Editable?) {
+                    account = s?.toString() ?: ""
+                }
+
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            })
+        })
+        addView("绑定账号", View.OnClickListener {
+            PushClient.setAccount(mActivity, account)
+        })
+
+
+        var tag = "sea,dog"
+        flexboxLayout.addView(EditText(activity).apply {
+            setText(tag)
+            hint = "请标签，英文逗号隔开多标签"
+            layoutParams = ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.MATCH_PARENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT)
+            addTextChangedListener(object : TextWatcher {
+                override fun afterTextChanged(s: Editable?) {
+                    tag = s?.toString() ?: ""
+                }
+
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            })
+        })
+        addView("设置标签", View.OnClickListener {
+            PushClient.setTags(mActivity, tag.split(",").filter { it.isNotBlank() }.toSet())
+        })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })

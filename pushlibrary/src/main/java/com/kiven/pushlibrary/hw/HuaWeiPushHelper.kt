@@ -18,10 +18,11 @@ import org.json.JSONObject
  *      华为客户端SDK进提供了添加主题、取消主题两个api，所以无法取消之前设置的主题，因为根本不知道之前设置了什么主题
  *      解决方案：调用我们自己的服务器设置主题，服务器可以通过华为提供的接口查询到之前设置过的主题，从而判断添加什么主题，取消什么主题
  */
-class HuaWeiPushHelper:PushHelper {
+class HuaWeiPushHelper : PushHelper {
 
     companion object {
-        var token:String? = null
+        val token: String
+            get() = Web.tokenOrId
     }
 
     /**
@@ -34,14 +35,17 @@ class HuaWeiPushHelper:PushHelper {
      * 华为测试机token: 0865265045829291300005487100CN01
      */
     override fun initPush(context: Context) {
-        Thread{
+        Thread {
             try {
                 val appId = AGConnectServicesConfig.fromContext(context).getString("client/app_id")
                 KLog.i("华为appId: $appId")
 
                 // TODO Token发生变化时或者EMUI版本低于10.0以 onNewToken 方法返回
-                token = HmsInstanceId.getInstance(context).getToken(appId, "HCM")
-                KLog.i("HmsInstanceId获取华为token: $token")
+                val token = HmsInstanceId.getInstance(context).getToken(appId, "HCM")
+                if (!token.isNullOrBlank()) {
+                    KLog.i("HmsInstanceId获取华为token: $token")
+                    Web.register(token, 2)//设备类型 0 不明，1 iOS, 2 华为, 3 vivo, 4 oppo, 5 小米
+                }
 
             } catch (e: Exception) {
                 KLog.e(e)
@@ -62,7 +66,7 @@ class HuaWeiPushHelper:PushHelper {
      * 华为移动服务（APK）的版本不低于3.0.0。
      */
     override fun setTags(context: Context, tags: Set<String>) {
-        Thread{
+        Thread {
             while (token.isNullOrBlank()) {
                 Thread.sleep(10000)
             }
@@ -93,27 +97,27 @@ class HuaWeiPushHelper:PushHelper {
 
 
                 HmsMessaging.getInstance(context).apply {
-                    addTags.forEach {tag ->
+                    addTags.forEach { tag ->
                         subscribe(tag).addOnCompleteListener {
                             if (it.isSuccessful) {
                                 KLog.i("华为推送注册主题 $tag 成功")
-                            }else {
+                            } else {
                                 KLog.i("华为推送注册主题 $tag 失败，${it.exception.message}")
                             }
                         }
                     }
 
-                    delTags.forEach {tag ->
+                    delTags.forEach { tag ->
                         unsubscribe(tag).addOnCompleteListener {
                             if (it.isSuccessful) {
                                 KLog.i("华为推送注销主题 $tag 成功")
-                            }else {
+                            } else {
                                 KLog.i("华为推送注销主题 $tag 失败，${it.exception.message}")
                             }
                         }
                     }
                 }
-            } catch (e:Throwable) {
+            } catch (e: Throwable) {
                 KLog.e(e)
                 setTags(context, tags)
             }

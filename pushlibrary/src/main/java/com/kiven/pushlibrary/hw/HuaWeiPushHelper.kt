@@ -70,7 +70,7 @@ class HuaWeiPushHelper : PushHelper {
      */
     override fun setTags(context: Context, tags: Set<String>) {
         // 由于测试机设置华为主题，返回码是 907122049 当前系统EMUI版本过低导致能力不可使用。
-        // 猜测很多华为设备都不行，所有只有自己来管理了。
+        // 猜测很多华为设备都不行，所以只有自己来管理了。
         // 测试机是符合华为文档说的使用主题的限制的：https://developer.huawei.com/consumer/cn/doc/development/HMS-Guides/push-topic
         Web.setTags(tags.joinToString(","))
         /*Thread {

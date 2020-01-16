@@ -1,6 +1,7 @@
 package com.sxb.kutils_ktx.util
 
 import android.net.Uri
+import com.kiven.kutils.logHelper.KLog
 import java.net.ConnectException
 import java.net.HttpURLConnection
 import java.net.URL
@@ -87,6 +88,8 @@ object KWeb {
             inputStream.close()
 
             val result = String(datas.toByteArray())
+
+            KLog.i("网络请求：$url, 参数：$body, 结果：$responseCode $result")
             if (isError) {
                 throw ConnectException("响应异常，异常码 = $responseCode, 错误信息：$result")
             } else return result

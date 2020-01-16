@@ -49,7 +49,7 @@ class MiPushReceiver : PushMessageReceiver() {
                 KLog.i("小米推送注册成功 regId = $cmdArg1 , cmdArg2 = $cmdArg2")
 
 
-                Web.syncDeviceInfo(cmdArg1!!, 5)
+                Web.register(cmdArg1!!, 5)
             }
         }
     }

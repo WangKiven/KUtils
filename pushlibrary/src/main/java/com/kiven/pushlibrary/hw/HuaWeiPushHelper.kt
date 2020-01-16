@@ -6,6 +6,9 @@ import com.huawei.hms.aaid.HmsInstanceId
 import com.huawei.hms.push.HmsMessaging
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.pushlibrary.PushHelper
+import com.kiven.pushlibrary.Web
+import com.sxb.kutils_ktx.util.KWeb
+import org.json.JSONObject
 
 /**
  * 集成SDK：https://developer.huawei.com/consumer/cn/doc/development/HMS-Library/push-sdk-integrate
@@ -58,39 +61,64 @@ class HuaWeiPushHelper:PushHelper {
      * 该功能仅在EMUI版本不低于10.0的华为设备上支持。
      * 华为移动服务（APK）的版本不低于3.0.0。
      */
-    fun subscribe(context: Context, topic:String) {
-        HmsMessaging.getInstance(context).subscribe(topic)
-                .addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        KLog.i("华为推送注册主题 $topic 成功")
-                    }else {
-                        KLog.i("华为推送注册主题 $topic 失败，${it.exception.message}")
-                    }
-                }
-    }
-    fun unsubscribe(context: Context, topic:String) {
-        HmsMessaging.getInstance(context).unsubscribe(topic)
-                .addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        KLog.i("华为推送注销主题 $topic 成功")
-                    }else {
-                        KLog.i("华为推送注销主题 $topic 失败，${it.exception.message}")
-                    }
-                }
-    }
-
     override fun setTags(context: Context, tags: Set<String>) {
-        HmsMessaging.getInstance(context).apply {
-            tags.forEach {tag ->
-                subscribe(tag).addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        KLog.i("华为推送注册主题 $tag 成功")
-                    }else {
-                        KLog.i("华为推送注册主题 $tag 失败，${it.exception.message}")
+        Thread{
+            while (token.isNullOrBlank()) {
+                Thread.sleep(10000)
+            }
+
+            try {
+                val result = KWeb.request("${Web.httpPre}open/push/getDeviceInfo", mapOf("tokenOrId" to token))
+
+                val json = JSONObject(result)
+
+                if (json.getInt("status") != 200) {
+                    Thread.sleep(20000)
+                    return@Thread
+                }
+
+                val jsonTopics = json.optString("tagOrTopics")
+                val oldTopics = jsonTopics.split(",").filter { !it.isBlank() }
+
+                val addTags = mutableSetOf<String>()
+                val delTags = mutableSetOf<String>()
+
+                oldTopics.forEach {
+                    if (!tags.contains(it)) delTags.add(it)
+                }
+
+                tags.forEach {
+                    if (!oldTopics.contains(it)) addTags.add(it)
+                }
+
+
+                HmsMessaging.getInstance(context).apply {
+                    addTags.forEach {tag ->
+                        subscribe(tag).addOnCompleteListener {
+                            if (it.isSuccessful) {
+                                KLog.i("华为推送注册主题 $tag 成功")
+                            }else {
+                                KLog.i("华为推送注册主题 $tag 失败，${it.exception.message}")
+                            }
+                        }
+                    }
+
+                    delTags.forEach {tag ->
+                        unsubscribe(tag).addOnCompleteListener {
+                            if (it.isSuccessful) {
+                                KLog.i("华为推送注销主题 $tag 成功")
+                            }else {
+                                KLog.i("华为推送注销主题 $tag 失败，${it.exception.message}")
+                            }
+                        }
                     }
                 }
+            } catch (e:Throwable) {
+                KLog.e(e)
+                setTags(context, tags)
             }
-        }
+        }.start()
+
     }
 
     override fun clearTags(context: Context) {

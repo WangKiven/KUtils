@@ -13,6 +13,7 @@ import org.json.JSONObject
 /**
  * 集成SDK：https://developer.huawei.com/consumer/cn/doc/development/HMS-Library/push-sdk-integrate
  * api：https://developer.huawei.com/consumer/cn/doc/development/HMS-Guides/push-basic-client
+ * 客户端错误码：https://developer.huawei.com/consumer/cn/doc/development/HMS-References/push-ErrorEnum4
  *
  * 主题问题：
  *      华为客户端SDK进提供了添加主题、取消主题两个api，所以无法取消之前设置的主题，因为根本不知道之前设置了什么主题
@@ -64,9 +65,15 @@ class HuaWeiPushHelper : PushHelper {
      * 一个应用实例不可订阅超过2000个主题。
      * 该功能仅在EMUI版本不低于10.0的华为设备上支持。
      * 华为移动服务（APK）的版本不低于3.0.0。
+     *
+     * 测试机错误码：907122049 当前系统EMUI版本过低导致能力不可使用。
      */
     override fun setTags(context: Context, tags: Set<String>) {
-        Thread {
+        // 由于测试机设置华为主题，返回码是 907122049 当前系统EMUI版本过低导致能力不可使用。
+        // 猜测很多华为设备都不行，所有只有自己来管理了。
+        // 测试机是符合华为文档说的使用主题的限制的：https://developer.huawei.com/consumer/cn/doc/development/HMS-Guides/push-topic
+        Web.setTags(tags.joinToString(","))
+        /*Thread {
             while (token.isNullOrBlank()) {
                 Thread.sleep(10000)
             }
@@ -121,7 +128,7 @@ class HuaWeiPushHelper : PushHelper {
                 KLog.e(e)
                 setTags(context, tags)
             }
-        }.start()
+        }.start()*/
 
     }
 

@@ -16,6 +16,12 @@
     <!-- vivo推送 -->
     <!--<uses-permission   android:name="android.permission.INTERNET"/>-->
 
+    <!-- OPPO推送 -->
+    <uses-permission android:name="com.coloros.mcs.permission.RECIEVE_MCS_MESSAGE" />
+    <uses-permission android:name="com.heytap.mcs.permission.RECIEVE_MCS_MESSAGE" />
+
+
+
     <application>
         <!-- 小米推送 -->
         <service

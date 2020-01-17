@@ -216,7 +216,15 @@ APP SECRET                  dc11929ebd170973da48aeee623b8c3904c134244908ad79c2ff
 
         addTitle("封装库测试")
         addView("注册", View.OnClickListener {
-            PushClient.initPush(mActivity)
+            // 文档说小米手机不需要申请权限， 但测试还是出问题了，所已小米还是要权限
+            // 权限只是小米推送需要
+            KGranting.requestPermissions(mActivity, 3344, arrayOf(
+                    Manifest.permission.CALL_PHONE, Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ), arrayOf("拨号", "存储")) {
+                if (it) {
+                    PushClient.initPush(mActivity)
+                }
+            }
         })
 
         var account = "18780296428"

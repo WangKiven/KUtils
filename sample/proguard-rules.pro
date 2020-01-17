@@ -184,10 +184,11 @@ public static final int *;
 # tbs 上边微信已经做了
 #-keep class com.tencent.**{*;}
 
-# 小米推送
+# 小米推送 https://dev.mi.com/console/doc/detail?pId=41#_1_3
+#-keep class com.xiaomi.mipush.sdk.DemoMessageReceiver {*;} #这里com.xiaomi.mipushdemo.DemoMessageRreceiver改成app中定义的完整类名
 -dontwarn com.xiaomi.push.**
 
-# 华为推送
+# 华为推送 https://developer.huawei.com/consumer/cn/doc/development/HMS-Guides/Preparations
 #-ignorewarning
 #-keepattributes *Annotation*
 -keepattributes Exceptions
@@ -205,3 +206,4 @@ public static final int *;
 -dontwarn com.vivo.push.**
 -keep class com.vivo.push.**{*; }
 -keep class com.vivo.vms.**{*; }
+#-keep class   xxx.xxx.xxx.PushMessageReceiverImpl{*;}

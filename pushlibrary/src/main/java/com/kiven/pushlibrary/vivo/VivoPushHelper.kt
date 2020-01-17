@@ -3,6 +3,7 @@ package com.kiven.pushlibrary.vivo
 import android.content.Context
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.pushlibrary.PushHelper
+import com.kiven.pushlibrary.Web
 import com.vivo.push.PushClient
 
 /**
@@ -43,7 +44,8 @@ class VivoPushHelper : PushHelper {
             }
             turnOnPush {
                 if (it == 0 || it == 1) {
-                    KLog.i("操作成功，id = $regId")
+                    if (regId.isNotBlank())
+                        Web.register(regId, 3)//设备类型 0 不明，1 iOS, 2 华为, 3 vivo, 4 oppo, 5 小米
                 } else KLog.i("操作失败")
             }
         }

@@ -48,7 +48,7 @@ class ClickNotiActivity : AppCompatActivity() {
             sb.append("Intent 的data(${this}): \n")
             try {
                 queryParameterNames.forEach {
-                    sb.append(" $it : ${getQueryParameter(it)}")
+                    sb.append(" $it : ${getQueryParameter(it)}\n")
                 }
             }catch (e:Exception) {
                 sb.append(" 参数异常：${e.message}\n")

@@ -77,6 +77,8 @@
 
         <activity android:name=".noti.ClickNotiActivity">
             <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
                 <!--指定在浏览器中的动作。当 Intent 在浏览器中被引发，都会被指定成 BROWSABLE 种类。 -->
                 <!-- 有这个的话，就不能在桌面上显示了 -->
                 <category android:name="android.intent.category.BROWSABLE" />

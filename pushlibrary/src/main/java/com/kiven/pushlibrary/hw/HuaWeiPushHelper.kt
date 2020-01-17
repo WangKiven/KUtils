@@ -3,12 +3,9 @@ package com.kiven.pushlibrary.hw
 import android.content.Context
 import com.huawei.agconnect.config.AGConnectServicesConfig
 import com.huawei.hms.aaid.HmsInstanceId
-import com.huawei.hms.push.HmsMessaging
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.pushlibrary.PushHelper
 import com.kiven.pushlibrary.Web
-import com.sxb.kutils_ktx.util.KWeb
-import org.json.JSONObject
 
 /**
  * 集成SDK：https://developer.huawei.com/consumer/cn/doc/development/HMS-Library/push-sdk-integrate
@@ -55,9 +52,10 @@ class HuaWeiPushHelper : PushHelper {
     }
 
     fun unregisterPush(context: Context) {
-        token?.apply {
-            HmsInstanceId.getInstance(context).deleteToken(this, "HCM")
-        }
+        if (token.isNotBlank())
+            token.apply {
+                HmsInstanceId.getInstance(context).deleteToken(this, "HCM")
+            }
     }
 
     /**

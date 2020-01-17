@@ -79,8 +79,8 @@ class AHPushTest : KActivityDebugHelper() {
         addView("注册", View.OnClickListener {
             // 小米手机不需要申请权限
             KGranting.requestPermissions(mActivity, 3344, arrayOf(
-                    Manifest.permission.CALL_PHONE, Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ), arrayOf("拨号", "存储")) {
+                    Manifest.permission.READ_PHONE_STATE, Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ), arrayOf("识别码", "存储")) {
                 if (it) {
                     MiPushHelper().initPush(mActivity)
                 }

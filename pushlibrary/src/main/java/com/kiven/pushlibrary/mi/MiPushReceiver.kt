@@ -1,7 +1,11 @@
 package com.kiven.pushlibrary.mi
 
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import com.kiven.kutils.logHelper.KLog
+import com.kiven.kutils.tools.KAppTool
 import com.kiven.pushlibrary.Web
 import com.xiaomi.mipush.sdk.*
 
@@ -17,9 +21,35 @@ class MiPushReceiver : PushMessageReceiver() {
     }
 
     // 用来接收服务器发来的通知栏消息（用户点击通知栏时触发）
-    override fun onNotificationMessageClicked(p0: Context?, p1: MiPushMessage?) {
+    override fun onNotificationMessageClicked(context: Context?, p1: MiPushMessage?) {
         KLog.i("小米推送 onNotificationMessageClicked 点击消息")
         KLog.printClassField(p1, null, true)
+
+        context ?: return
+
+        val arguUrl = p1?.extra?.get("arguUrl")
+
+        if (!arguUrl.isNullOrBlank()) {
+            try {
+                val uri = Uri.parse(arguUrl)
+
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.data = uri
+
+                val list = context.packageManager.queryIntentActivities(intent, PackageManager.GET_RESOLVED_FILTER)
+
+                //URL Scheme是否有效
+                if (list.isNotEmpty()) {
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    context.startActivity(intent)
+                    return
+                }
+            }catch (e:Throwable) {
+                KLog.e(e)
+            }
+
+            KAppTool.startApp(context, context.packageName)
+        }
     }
 
     // 用来接收服务器发来的通知栏消息（消息到达客户端时触发，并且可以接收应用在前台时不弹出通知的通知消息）
@@ -37,7 +67,7 @@ class MiPushReceiver : PushMessageReceiver() {
     // 用来接受客户端向服务器发送注册命令消息后返回的响应
     override fun onReceiveRegisterResult(p0: Context?, p1: MiPushCommandMessage?) {
         KLog.i("小米推送 onReceiveRegisterResult 注册完成")
-        p1?:return
+        p1 ?: return
         KLog.printClassField(p1, null, true)
 
         val command = p1.command

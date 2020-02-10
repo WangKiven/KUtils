@@ -209,60 +209,11 @@ APP SECRET                  dc11929ebd170973da48aeee623b8c3904c134244908ad79c2ff
             KLog.i("ii = ${ii.toUri(Intent.URI_INTENT_SCHEME)}")
         })
 
+        addTitle("")
+        addView("封装库测试", View.OnClickListener { AHSxbPush().startActivity(activity) })
 
-
-
-
-
-        addTitle("封装库测试")
-        addView("注册", View.OnClickListener {
-            // 文档说小米手机不需要申请权限， 但测试还是出问题了，所已小米还是要权限
-            // 权限只是小米推送需要
-            KGranting.requestPermissions(mActivity, 3344, arrayOf(
-                    Manifest.permission.READ_PHONE_STATE, Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ), arrayOf("识别码", "存储")) {
-                if (it) {
-                    PushClient.initPush(mActivity)
-                }
-            }
-        })
-
-        var account = "18780296428"
-        flexboxLayout.addView(EditText(activity).apply {
-            setText(account)
-            hint = "请输入账号"
-            layoutParams = ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.MATCH_PARENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT)
-            addTextChangedListener(object : TextWatcher {
-                override fun afterTextChanged(s: Editable?) {
-                    account = s?.toString() ?: ""
-                }
-
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            })
-        })
-        addView("绑定账号", View.OnClickListener {
-            PushClient.setAccount(mActivity, account)
-        })
-
-
-        var tag = "sea,dog"
-        flexboxLayout.addView(EditText(activity).apply {
-            setText(tag)
-            hint = "请标签，英文逗号隔开多标签"
-            layoutParams = ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.MATCH_PARENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT)
-            addTextChangedListener(object : TextWatcher {
-                override fun afterTextChanged(s: Editable?) {
-                    tag = s?.toString() ?: ""
-                }
-
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            })
-        })
-        addView("设置标签", View.OnClickListener {
-            PushClient.setTags(mActivity, tag.split(",").filter { it.isNotBlank() }.toSet())
-        })
+        addView("", View.OnClickListener { })
+        addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })

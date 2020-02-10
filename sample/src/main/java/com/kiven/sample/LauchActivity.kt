@@ -33,6 +33,7 @@ import com.kiven.sample.libs.AHLibs
 import com.kiven.sample.media.AHMediaList
 import com.kiven.sample.noti.ClickNotiActivity
 import com.kiven.sample.push.AHPushTest
+import com.kiven.sample.push.AHSxbPush
 import com.kiven.sample.theme.AHTheme
 import com.kiven.sample.util.showDialog
 import com.kiven.sample.util.showListDialog
@@ -155,6 +156,9 @@ class LauchActivity : KActivity(), LifecycleOwner {
 
         /*startActivity(Intent(this, ClickNotiActivity::class.java))
         finish()*/
+
+        AHSxbPush().startActivity(this)
+        finish()
     }
 
     private fun setupWindowAnimations() {

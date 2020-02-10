@@ -117,6 +117,9 @@ class AHSxbPush : KActivityDebugHelper() {
         addView("设置标签", View.OnClickListener {
             PushClient.setTags(mActivity, tag.split(",").filter { it.isNotBlank() }.toSet())
         })
-        addView("", View.OnClickListener { })
+
+
+        addTitle("")
+        addTitle("账号只能有一个，标签可以有多个。多个标签用','隔开，不要出现空格")
     }
 }

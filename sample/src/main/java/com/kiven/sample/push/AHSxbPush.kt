@@ -50,6 +50,10 @@ class AHSxbPush : KActivityDebugHelper() {
 
 
         addTitle("封装库测试")
+        addTitle("")
+        addTitle("projectKey = ${Web.projectKey}")
+        addTitle("")
+
         flexboxLayout.addView(EditText(activity).apply {
             val spKey = "ah_sxb_push_http_pre"
             Web.httpPre = KUtil.getSharedPreferencesStringValue(spKey, Web.httpPre)

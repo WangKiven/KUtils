@@ -10,6 +10,8 @@ object Web {
     private const val bindAccountUrl = "${httpPre}open/push/bindAccount"
     private const val setTagsUrl = "${httpPre}open/push/setTags"*/
 
+    var projectKey = "projectKey_sample"
+
     var httpPre = "http://192.168.101.105:8080/api/"
     private val registerUrl
         get() = "${httpPre}open/push/register"
@@ -46,6 +48,7 @@ object Web {
         Thread {
             try {
                 val result = KWeb.request(registerUrl, mapOf(
+                        "projectKey" to projectKey,
                         "tokenOrId" to tokenOrId,
                         "platform" to platformN
                 ))
@@ -85,6 +88,7 @@ object Web {
 
             try {
                 val result = KWeb.request(bindAccountUrl, mapOf(
+                        "projectKey" to projectKey,
                         "tokenOrId" to tokenOrId,
                         "account" to account
                 ))
@@ -123,6 +127,7 @@ object Web {
 
             try {
                 val result = KWeb.request(setTagsUrl, mapOf(
+                        "projectKey" to projectKey,
                         "tokenOrId" to tokenOrId,
                         "tagOrTopics" to tagOrTopics
                 ))

@@ -19,9 +19,6 @@ import com.kiven.kutils.tools.KGranting
 import com.kiven.kutils.tools.KUtil
 import com.kiven.pushlibrary.PushClient
 import com.kiven.pushlibrary.Web
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import okhttp3.*
 import okio.ByteString
 import org.jetbrains.anko.support.v4.nestedScrollView
@@ -148,7 +145,15 @@ class AHSxbPush : KActivityDebugHelper() {
                     .hostnameVerifier(HostnameVerifier { p0, p1 -> true }) // todo websocket使用wss时需要这个配置
                     .build()
 
-            val request: Request = Request.Builder().url("wss://192.168.101.105:443/socket").build()
+            val request: Request = Request.Builder()
+                    .url("ws://192.168.101.105:8080/socket?ie=xxy&wd=hhhh")
+                    /*.post(FormBody.Builder().apply {
+                        mapOf(
+                                "ie" to "UTF-8",
+                                "wd" to "美女"
+                        ).forEach { add(it.key, it.value) }
+                    }.build())*/
+                    .build()
             val socketListener = object : WebSocketListener() {
                 override fun onOpen(webSocket: WebSocket, response: Response) {
                     mSocket = webSocket
@@ -181,12 +186,12 @@ class AHSxbPush : KActivityDebugHelper() {
 
             // 刚进入界面，就开启心跳检测
             // 刚进入界面，就开启心跳检测
-            GlobalScope.launch {
+            /*GlobalScope.launch {
                 repeat(Int.MAX_VALUE) {
                     mSocket?.send("大大，我来啦。。。")
                     delay(1000 * 60)
                 }
-            }
+            }*/
 
             mOkHttpClient.newWebSocket(request, socketListener)
             mOkHttpClient.dispatcher.executorService.shutdown()

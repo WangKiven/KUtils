@@ -14,11 +14,20 @@ import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
 import com.kiven.kutils.activityHelper.KActivityDebugHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
+import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KGranting
 import com.kiven.kutils.tools.KUtil
 import com.kiven.pushlibrary.PushClient
 import com.kiven.pushlibrary.Web
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import okhttp3.*
+import okio.ByteString
 import org.jetbrains.anko.support.v4.nestedScrollView
+import java.util.concurrent.TimeUnit
+import javax.net.ssl.HostnameVerifier
+
 
 class AHSxbPush : KActivityDebugHelper() {
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
@@ -125,5 +134,83 @@ class AHSxbPush : KActivityDebugHelper() {
 
         addTitle("")
         addTitle("账号只能有一个，标签可以有多个。多个标签用','隔开，不要出现空格")
+
+
+        addTitle("")
+        addTitle("webSocket")
+        var mSocket: WebSocket? = null
+        addView("连接", View.OnClickListener {
+
+            val mOkHttpClient = OkHttpClient.Builder()
+                    .readTimeout(3, TimeUnit.SECONDS) //设置读取超时时间
+                    .writeTimeout(3, TimeUnit.SECONDS) //设置写的超时时间
+                    .connectTimeout(3, TimeUnit.SECONDS) //设置连接超时时间
+                    .hostnameVerifier(HostnameVerifier { p0, p1 -> true }) // todo websocket使用wss时需要这个配置
+                    .build()
+
+            val request: Request = Request.Builder().url("wss://192.168.101.105:443/socket").build()
+            val socketListener = object : WebSocketListener() {
+                override fun onOpen(webSocket: WebSocket, response: Response) {
+                    mSocket = webSocket
+                    KLog.i("webSocket 连接成功")
+                }
+
+                override fun onMessage(webSocket: WebSocket, bytes: ByteString) {
+                    KLog.i("webSocket 收到消息 $bytes")
+                }
+
+                override fun onMessage(webSocket: WebSocket, text: String) {
+                    KLog.i("webSocket 收到消息 $text")
+                }
+
+                override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
+                    mSocket = null
+                    KLog.i("webSocket 已关闭")
+                }
+
+                override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
+                    mSocket = null
+                    KLog.i("webSocket 正在关闭")
+                }
+
+                override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
+                    KLog.e(t)
+                    KLog.i("webSocket 连接异常")
+                }
+            }
+
+            // 刚进入界面，就开启心跳检测
+            // 刚进入界面，就开启心跳检测
+            GlobalScope.launch {
+                repeat(Int.MAX_VALUE) {
+                    mSocket?.send("大大，我来啦。。。")
+                    delay(1000 * 60)
+                }
+            }
+
+            mOkHttpClient.newWebSocket(request, socketListener)
+            mOkHttpClient.dispatcher.executorService.shutdown()
+        })
+
+        var message = "Hello 大宝"
+        flexboxLayout.addView(EditText(activity).apply {
+            setText(message)
+            layoutParams = ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.MATCH_PARENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT)
+            addTextChangedListener(object : TextWatcher {
+                override fun afterTextChanged(s: Editable?) {
+                    message = s?.toString() ?: ""
+                }
+
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            })
+        })
+        addView("发送消息", View.OnClickListener {
+            mSocket?.send(message)
+        })
+        addView("", View.OnClickListener { })
+        addView("", View.OnClickListener { })
+        addView("", View.OnClickListener { })
+        addView("", View.OnClickListener { })
     }
 }

@@ -23,6 +23,9 @@
 
 
     <application>
+        <service android:name=".PushService"
+            android:enabled="true"/>
+
         <!-- 小米推送 -->
         <service
             android:name="com.xiaomi.push.service.XMPushService"

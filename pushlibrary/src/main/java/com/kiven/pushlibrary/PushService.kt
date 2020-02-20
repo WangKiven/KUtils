@@ -35,6 +35,7 @@ class PushService : Service() {
                 url = u
                 Thread {
                     mSocket?.close(1000, null)//Code must be in range [1000,5000)
+                    mSocket = null
                     connWebSocket()
                 }.start()
             }

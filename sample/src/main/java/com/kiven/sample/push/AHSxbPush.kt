@@ -1,6 +1,7 @@
 package com.kiven.sample.push
 
 import android.Manifest
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -22,6 +23,7 @@ import com.kiven.pushlibrary.Web
 import okhttp3.*
 import okio.ByteString
 import org.jetbrains.anko.support.v4.nestedScrollView
+import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.net.ssl.HostnameVerifier
 
@@ -150,8 +152,13 @@ class AHSxbPush : KActivityDebugHelper() {
 
         addTitle("")
         addTitle("webSocket")
-        var mSocket: WebSocket? = null
-        addView("连接", View.OnClickListener {
+
+        val mSockets = mutableListOf<WebSocket>()
+        var count = 0
+        val newSocket = fun() {
+            count++
+
+            val tokenOrId = "xxxxxxid$count"
 
             val mOkHttpClient = OkHttpClient.Builder()
                     .readTimeout(3, TimeUnit.SECONDS) //设置读取超时时间
@@ -161,7 +168,7 @@ class AHSxbPush : KActivityDebugHelper() {
                     .build()
 
             val request: Request = Request.Builder()
-                    .url("ws://192.168.101.107:8080/socket?ie=xxy&wd=hhhh")
+                    .url("ws://192.168.101.107:8080/socket?projectKey=${Uri.encode("projectKey_sample")}&tokenOrId=${tokenOrId}")
                     /*.post(FormBody.Builder().apply {
                         mapOf(
                                 "ie" to "UTF-8",
@@ -171,8 +178,8 @@ class AHSxbPush : KActivityDebugHelper() {
                     .build()
             val socketListener = object : WebSocketListener() {
                 override fun onOpen(webSocket: WebSocket, response: Response) {
-                    mSocket = webSocket
-                    KLog.i("webSocket 连接成功")
+                    optionList(mSockets, webSocket, true)
+                    KLog.i("webSocket 连接成功 ${mSockets.size}")
                 }
 
                 override fun onMessage(webSocket: WebSocket, bytes: ByteString) {
@@ -184,32 +191,36 @@ class AHSxbPush : KActivityDebugHelper() {
                 }
 
                 override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
-                    mSocket = null
-                    KLog.i("webSocket 已关闭")
+                    optionList(mSockets, webSocket, false)
+                    KLog.i("webSocket 已关闭 ${mSockets.size}")
                 }
 
                 override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
-                    mSocket = null
-                    KLog.i("webSocket 正在关闭")
+                    optionList(mSockets, webSocket, false)
+                    KLog.i("webSocket 正在关闭 ${mSockets.size}")
                 }
 
                 override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
+                    optionList(mSockets, webSocket, false)
                     KLog.e(t)
-                    KLog.i("webSocket 连接异常")
+                    KLog.i("webSocket 连接异常 ${mSockets.size}")
                 }
             }
 
-            // 刚进入界面，就开启心跳检测
-            // 刚进入界面，就开启心跳检测
-            /*GlobalScope.launch {
-                repeat(Int.MAX_VALUE) {
-                    mSocket?.send("大大，我来啦。。。")
-                    delay(1000 * 60)
-                }
-            }*/
-
             mOkHttpClient.newWebSocket(request, socketListener)
             mOkHttpClient.dispatcher.executorService.shutdown()
+        }
+        addView("连接1个", View.OnClickListener {
+            newSocket()
+        })
+        addView("连接10个", View.OnClickListener {
+            repeat(10) { newSocket() }
+        })
+        addView("连接100个", View.OnClickListener {
+            repeat(100) { newSocket() }
+        })
+        addView("连接1000个", View.OnClickListener {
+            repeat(1000) { newSocket() }
         })
 
         var message = "Hello 大宝"
@@ -226,11 +237,39 @@ class AHSxbPush : KActivityDebugHelper() {
             })
         })
         addView("发送消息", View.OnClickListener {
-            mSocket?.send(message)
+            mSockets.forEach { it.send(message) }
         })
-        addView("close", View.OnClickListener { mSocket?.close(1000, null) })
-        addView("cancel", View.OnClickListener { mSocket?.cancel()})
+        addView("close", View.OnClickListener {
+//            mSockets.forEach { it.close(1000, null) }
+            val nn = mutableListOf<WebSocket>()
+            nn.addAll(mSockets)
+            nn.forEach { it.close(1000, null) }
+            mSockets.clear()
+        })
+        addView("cancel", View.OnClickListener {
+//            mSockets.forEach { it.cancel() }
+            val nn = mutableListOf<WebSocket>()
+            nn.addAll(mSockets)
+            nn.forEach { it.cancel() }
+            mSockets.clear()
+        })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
+    }
+
+    @Synchronized
+    fun <T> optionList(list: MutableList<T>, i: T, isAdd: Boolean) {
+        /*if (list.contains(i)) {
+            list.remove(i)
+        }*/
+        if (isAdd) {
+            list.add(i)
+        }else {
+            /*val it = list.iterator()
+            if (it.hasNext() && it.next() == i) {
+                it.remove()
+            }*/
+            list.remove(i)
+        }
     }
 }

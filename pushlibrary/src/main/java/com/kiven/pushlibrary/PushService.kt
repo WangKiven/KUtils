@@ -49,6 +49,8 @@ class PushService : Service() {
     @Synchronized
     private fun connWebSocket() {
 
+        val curUrl = url
+
         val mOkHttpClient = OkHttpClient.Builder()
                 .readTimeout(3, TimeUnit.SECONDS) //设置读取超时时间
                 .writeTimeout(3, TimeUnit.SECONDS) //设置写的超时时间
@@ -58,12 +60,13 @@ class PushService : Service() {
 
 
         val request: Request = Request.Builder()
-                .url(url)
+                .url(curUrl)
                 .build()
 
         val socketListener = object : WebSocketListener() {
             override fun onOpen(webSocket: WebSocket, response: Response) {
-                mSocket = webSocket
+                if (curUrl == url) mSocket = webSocket
+                else webSocket.close(1000, null)
                 KLog.i("webSocket 连接成功")
             }
 
@@ -91,6 +94,7 @@ class PushService : Service() {
                 KLog.i("webSocket 连接异常")
 
                 Thread {
+                    Thread.sleep(1000 * 60)
                     connWebSocket()
                 }.start()
             }

@@ -1,5 +1,8 @@
 package com.kiven.pushlibrary
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import com.kiven.kutils.logHelper.KLog
 import com.sxb.kutils_ktx.util.KWeb
 import org.json.JSONObject
@@ -10,15 +13,24 @@ object Web {
     private const val bindAccountUrl = "${httpPre}open/push/bindAccount"
     private const val setTagsUrl = "${httpPre}open/push/setTags"*/
 
+    var context: Context? = null
+
     var projectKey = "projectKey_sample"
 
-    var httpPre = "http://192.168.101.105:8080/api/"
+    var ishttps = false
+    var host = "192.168.101.105:8080"
+
+    private val httpPre
+        get() = "${if (ishttps) "https" else "http"}://$host/api/"
     private val registerUrl
         get() = "${httpPre}open/push/register"
     private val bindAccountUrl
         get() = "${httpPre}open/push/bindAccount"
     private val setTagsUrl
         get() = "${httpPre}open/push/setTags"
+
+    private val wsPre
+        get() = "${if (ishttps) "wss" else "ws"}://$host/socket"
 
     var tokenOrId: String = ""
         private set
@@ -57,6 +69,17 @@ object Web {
                 if (json.getInt("status") != 200) {
                     Thread.sleep(1000 * 30)
                     register(taskId, platformN)
+                } else {
+                    context?.apply {
+
+
+                        startService(Intent(this, PushService::class.java).apply {
+                            /*putExtra("projectKey", projectKey)
+                            putExtra("tokenOrId", tokenOrId)
+                            putExtra("platform", platformN)*/
+                            putExtra("url", "${wsPre}?projectKey=${Uri.encode(projectKey)}&tokenOrId=${Uri.encode(tokenOrId)}")
+                        })
+                    }
                 }
 
             } catch (e: Throwable) {

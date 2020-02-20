@@ -35,18 +35,20 @@ class AHSxbPush : KActivityDebugHelper() {
 
         mActivity.nestedScrollView { addView(flexboxLayout) }
 
-        val addTitle = fun(text: String) {
+        val addTitle = fun(text: String): TextView {
             val tv = TextView(activity)
             tv.text = text
             tv.layoutParams = ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.MATCH_PARENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT)
             flexboxLayout.addView(tv)
+            return tv
         }
 
-        val addView = fun(text: String, click: View.OnClickListener) {
+        val addView = fun(text: String, click: View.OnClickListener): Button {
             val btn = Button(activity)
             btn.text = text
             btn.setOnClickListener(click)
             flexboxLayout.addView(btn)
+            return btn
         }
 
 
@@ -61,23 +63,36 @@ class AHSxbPush : KActivityDebugHelper() {
         addTitle("")
 
         flexboxLayout.addView(EditText(activity).apply {
-            val spKey = "ah_sxb_push_http_pre"
-            Web.httpPre = KUtil.getSharedPreferencesStringValue(spKey, Web.httpPre)
+            val spKey = "ah_sxb_push_host"
+            Web.host = KUtil.getSharedPreferencesStringValue(spKey, Web.host)
 
-            setText(Web.httpPre)
+            setText(Web.host)
             hint = "请输入账号"
             layoutParams = ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.MATCH_PARENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT)
             addTextChangedListener(object : TextWatcher {
                 override fun afterTextChanged(s: Editable?) {
-                    Web.httpPre = s?.toString() ?: ""
+                    Web.host = s?.toString() ?: ""
 
-                    KUtil.putSharedPreferencesStringValue(spKey, Web.httpPre)
+                    KUtil.putSharedPreferencesStringValue(spKey, Web.host)
                 }
 
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             })
         })
+
+        flexboxLayout.addView(Button(activity).apply {
+            val spKey = "ah_sxb_push_is_https"
+            Web.ishttps = KUtil.getSharedPreferencesBooleanValue(spKey, Web.ishttps)
+            text = "当前使用http${if (Web.ishttps) "s" else ""}"
+            setOnClickListener {
+                Web.ishttps = !Web.ishttps
+                KUtil.putSharedPreferencesBooleanValue(spKey, Web.ishttps)
+                text = "当前使用http${if (Web.ishttps) "s" else ""}"
+            }
+        })
+
+        addTitle("")
 
         addView("注册设备", View.OnClickListener {
             // 文档说小米手机不需要申请权限， 但测试还是出问题了，所已小米还是要权限
@@ -146,7 +161,7 @@ class AHSxbPush : KActivityDebugHelper() {
                     .build()
 
             val request: Request = Request.Builder()
-                    .url("ws://192.168.101.105:8080/socket?ie=xxy&wd=hhhh")
+                    .url("ws://192.168.101.107:8080/socket?ie=xxy&wd=hhhh")
                     /*.post(FormBody.Builder().apply {
                         mapOf(
                                 "ie" to "UTF-8",
@@ -213,8 +228,8 @@ class AHSxbPush : KActivityDebugHelper() {
         addView("发送消息", View.OnClickListener {
             mSocket?.send(message)
         })
-        addView("", View.OnClickListener { })
-        addView("", View.OnClickListener { })
+        addView("close", View.OnClickListener { mSocket?.close(1000, null) })
+        addView("cancel", View.OnClickListener { mSocket?.cancel()})
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
     }

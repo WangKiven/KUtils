@@ -12,6 +12,8 @@ import com.vivo.push.PushClient
 object PushClient {
     private var pushHelper: PushHelper? = null
     fun initPush(context: Context) {
+        Web.context = context.applicationContext
+
         when (Build.BRAND.toLowerCase()) {
             "huawei", "honor" -> {
                 pushHelper = HuaWeiPushHelper()

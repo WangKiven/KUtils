@@ -1,12 +1,20 @@
 package com.kiven.pushlibrary
 
-import android.app.Service
+import android.app.*
 import android.content.ComponentCallbacks2
+import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.net.Uri
+import android.os.Build
 import android.os.IBinder
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import com.kiven.kutils.logHelper.KLog
+import com.kiven.kutils.tools.KContext
 import okhttp3.*
 import okio.ByteString
+import org.json.JSONObject
 import java.util.concurrent.TimeUnit
 import javax.net.ssl.HostnameVerifier
 
@@ -77,6 +85,33 @@ class PushService : Service() {
 
             override fun onMessage(webSocket: WebSocket, text: String) {
                 KLog.i("webSocket 收到text消息 $text")
+
+                try {
+                    val jsonObject = JSONObject(text)
+                    jsonObject.optString("path").also { path ->
+                        if (path == "push/notification") {
+                            jsonObject.optJSONObject("data")?.also { dataObj ->
+                                val messageId = dataObj.optString("id")
+                                val title = dataObj.optString("title")
+                                val subTitle = dataObj.optString("subTitle")
+                                val argument = dataObj.optString("argument")
+
+                                if (!messageId.isNullOrBlank())
+                                    webSocket.send("{\"path\":\"push/notification_received\",\"data\":\"$messageId\"}")
+
+                                /*val context = KContext.getInstance().topActivity
+                                context?.runOnUiThread {
+
+                                }*/
+
+                                PushUtil.notification(this@PushService, title, subTitle, argument)
+                            }
+
+                        }
+                    }
+                } catch (e: Throwable) {
+                    KLog.e(e)
+                }
             }
 
             override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {

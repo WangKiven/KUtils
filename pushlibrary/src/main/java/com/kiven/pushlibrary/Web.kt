@@ -18,7 +18,7 @@ object Web {
     var projectKey = "projectKey_sample"
 
     var ishttps = false
-    var host = "192.168.101.105:8080"
+    var host = "192.168.101.106:8080"
 
     private val httpPre
         get() = "${if (ishttps) "https" else "http"}://$host/api/"

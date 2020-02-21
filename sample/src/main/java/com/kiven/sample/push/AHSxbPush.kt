@@ -19,7 +19,9 @@ import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KGranting
 import com.kiven.kutils.tools.KUtil
 import com.kiven.pushlibrary.PushClient
+import com.kiven.pushlibrary.PushUtil
 import com.kiven.pushlibrary.Web
+import com.kiven.sample.noti.AHNotiTest
 import okhttp3.*
 import okio.ByteString
 import org.jetbrains.anko.support.v4.nestedScrollView
@@ -252,6 +254,10 @@ class AHSxbPush : KActivityDebugHelper() {
             nn.addAll(mSockets)
             nn.forEach { it.cancel() }
             mSockets.clear()
+        })
+        addView("AHNotiTest", View.OnClickListener { AHNotiTest().startActivity(activity) })
+        addView("xx", View.OnClickListener {
+            PushUtil.notification(activity, "title", "subtitle", "argusss")
         })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })

@@ -1,6 +1,7 @@
 package com.kiven.sample.noti
 
 import android.app.*
+import android.content.ComponentName
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
@@ -276,6 +277,22 @@ class AHNotiTest : KActivityDebugHelper() {
 
             }
 
+            btn_noti_listener_setting_check.setOnClickListener {
+                val flat = Settings.Secure.getString(activity.contentResolver, "enabled_notification_listeners")
+
+                var result = false
+                if (!flat.isNullOrBlank()) {
+                    val names = flat.split(":")
+                    names.forEach {
+                        val cn = ComponentName.unflattenFromString(it)
+                        if (cn != null && cn.packageName == activity.packageName)
+                            result = true
+                    }
+                }
+
+                mActivity.showSnack(if (result) "当前状态：开启" else "当前状态：关闭")
+            }
+
             btn_app_setting.setOnClickListener {
 
                 val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
@@ -284,22 +301,4 @@ class AHNotiTest : KActivityDebugHelper() {
             }
         }
     }
-
-    /*fun getInput(inputName: String, action: (CharSequence) -> Unit) {
-        val et = EditText(mActivity)
-        AlertDialog.Builder(mActivity)
-                .setTitle(inputName)
-                .setView(et)
-                .setNegativeButton("取消") { dialog, _ -> dialog.cancel() }
-                .setPositiveButton("确定") { dialog, _ ->
-                    val teamName = et.text.trim()
-                    if (teamName.isNotBlank()) {
-                        action(teamName)
-                    } else {
-                        mActivity.toast("$inputName 不能为空")
-                    }
-                    dialog.dismiss()
-                }
-                .show()
-    }*/
 }

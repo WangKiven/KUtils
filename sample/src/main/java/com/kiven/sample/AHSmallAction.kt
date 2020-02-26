@@ -165,11 +165,11 @@ class AHSmallAction : KActivityDebugHelper() {
         })
 
         // TODO: 2018/3/28 ----------------------------------------------------------
-        addTitle("语音识别")
+        addTitle("语音识别与合成")
 
         // http://doc.xfyun.cn/msc_android/%E9%A2%84%E5%A4%87%E5%B7%A5%E4%BD%9C.html
-        addView("讯飞识别", View.OnClickListener {
-            com.kiven.sample.AHXunfeiTest().startActivity(mActivity)
+        addView("讯飞", View.OnClickListener {
+            AHXunfeiTest().startActivity(mActivity)
         })
 
         // TODO: 2018/6/4 ----------------------------------------------------------

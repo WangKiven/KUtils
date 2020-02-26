@@ -14,57 +14,165 @@ import com.kiven.kutils.activityHelper.KActivityDebugHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KGranting
+import com.kiven.kutils.tools.KString
+import com.kiven.kutils.tools.KUtil
+import com.kiven.kutils.util.ArrayMap
+import com.kiven.sample.util.getInput
+import com.kiven.sample.util.showBottomSheetDialog
+import kotlinx.android.synthetic.main.ah_xunfei_test.*
 import org.jetbrains.anko.support.v4.nestedScrollView
 
 /**
  * Created by wangk on 2019/5/17.
+ * 集成文档：https://www.xfyun.cn/doc/
+ * api: http://mscdoc.xfyun.cn/android/api/
  */
 class AHXunfeiTest : KActivityDebugHelper() {
+    val text = """
+        北国风光，千里冰封，万里雪飘。
+        望长城内外，惟余莽莽；大河上下，顿失滔滔。
+        山舞银蛇，原驰蜡象，欲与天公试比高。
+        须晴日，看红装素裹，分外妖娆。
+        江山如此多娇，引无数英雄竞折腰。
+        惜秦皇汉武，略输文采；唐宗宋祖，稍逊风骚。
+        一代天骄，成吉思汗，只识弯弓射大雕。
+        俱往矣，数风流人物，还看今朝。
+    """
+
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
 
-        val flexboxLayout = FlexboxLayout(activity)
-        flexboxLayout.flexWrap = FlexWrap.WRAP
-        flexboxLayout.alignContent = AlignContent.FLEX_START
+        setContentView(R.layout.ah_xunfei_test)
 
-        mActivity.nestedScrollView { addView(flexboxLayout) }
+        activity.apply {
+            var voiceName = "xiaoyan"
+            btn_voice_name.text = "发音人($voiceName)"
+            btn_voice_name.setOnClickListener {
+                activity.showBottomSheetDialog(listOf(
+                        "讯飞小燕",
+                        "讯飞许久",
+                        "讯飞小萍",
+                        "讯飞小婧",
+                        "讯飞许小宝",
+                        "讯飞马叔(3-12后需续费)"
+                )) { index, _ ->
+                    voiceName = listOf("xiaoyan", "aisjiuxu", "aisxping", "aisjinger", "aisbabyxu", "x_laoma")[index]
+                    btn_voice_name.text = "发音人($voiceName)"
+                }
+            }
 
-        val addTitle = fun(text: String) {
-            val tv = TextView(activity)
-            tv.text = text
-            tv.layoutParams = ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.MATCH_PARENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT)
-            flexboxLayout.addView(tv)
-        }
+            var voiceSpeed = 50
+            btn_voice_speed.text = "语速($voiceSpeed)"
+            btn_voice_speed.setOnClickListener {
+                activity.getInput("语速 0~100", voiceSpeed.toString()) {
+                    voiceSpeed = KString.toInt(it.toString(), voiceSpeed)
+                    btn_voice_speed.text = "语速($voiceSpeed)"
+                }
+            }
 
-        val addView = fun(text: String, click: View.OnClickListener) {
-            val btn = Button(activity)
-            btn.text = text
-            btn.setOnClickListener(click)
-            flexboxLayout.addView(btn)
-        }
+            var voiceVolume = 50
+            btn_voice_volume.text = "语调($voiceVolume)"
+            btn_voice_volume.setOnClickListener {
+                activity.getInput("语调 0~100", voiceVolume.toString()) {
+                    voiceVolume = KString.toInt(it.toString(), voiceVolume)
+                    btn_voice_volume.text = "语调($voiceVolume)"
+                }
+            }
+
+            var voicePitch = 50
+            btn_voice_pitch.text = "语调($voiceName)"
+            btn_voice_pitch.setOnClickListener {
+                activity.getInput("语调 0~100", voicePitch.toString()) {
+                    voicePitch = KString.toInt(it.toString(), voicePitch)
+                    btn_voice_pitch.text = "语调($voiceName)"
+                }
+            }
+
+            var voiceBg = 0
+            btn_voice_bg.text = "背景音乐($voiceBg)"
+            btn_voice_bg.setOnClickListener {
+                voiceBg = if (voiceBg == 0) 1 else 0
+                btn_voice_bg.text = "背景音乐($voiceBg)"
+            }
+
+            var voiceFading = false
+            btn_voice_fading.text = "淡入淡出($voiceFading)"
+            btn_voice_fading.setOnClickListener {
+                voiceFading = !voiceFading
+                btn_voice_fading.text = "淡入淡出($voiceFading)"
+            }
 
 
-        // http://doc.xfyun.cn/msc_android/%E9%A2%84%E5%A4%87%E5%B7%A5%E4%BD%9C.html
-        val mAsr = getXunfei()
-        addView("讯飞识别", View.OnClickListener { _ ->
-            KGranting.requestPermissions(activity, 377, Manifest.permission.RECORD_AUDIO,
-                    "录音") {
-                if (it) {
-                    val ret = mAsr.startListening(mRecognizerListener)
-                    if (ret != ErrorCode.SUCCESS) {
-                        showTip("听写失败,错误码：$ret")
+            // 识别语音
+            val mAsr = getXunfei()
+            btn_listen_voice.setOnClickListener {
+                KGranting.requestPermissions(activity, 377, Manifest.permission.RECORD_AUDIO,
+                        "录音") {
+                    if (it) {
+                        val ret = mAsr.startListening(mRecognizerListener)
+                        if (ret != ErrorCode.SUCCESS) {
+                            showTip("听写失败,错误码：$ret")
+                        }
                     }
                 }
             }
-        })
+            // 语音合成
+            val mSpeechSynthesizer = SpeechSynthesizer.createSynthesizer(activity) {}
+            btn_create_voice.setOnClickListener {
+                KGranting.requestPermissions(activity, 377, Manifest.permission.RECORD_AUDIO,
+                        "录音") {
+                    if (it) {
+                        mapOf(
+                                SpeechConstant.VOICE_NAME to voiceName,// 合成发音人, 默认值：xiaoyan
+                                SpeechConstant.SPEED to "$voiceSpeed",// 语速, 默认值50, 值范围：[0, 100]
+                                SpeechConstant.VOLUME to "$voiceVolume",// 音量, 默认值50, 值范围：[0, 100]
+                                SpeechConstant.PITCH to "$voicePitch",// 语调, 默认值50, 值范围：[0, 100]
+                                SpeechConstant.BACKGROUND_SOUND to "$voiceBg",// 背景音乐, 默认值0, 值范围：{ null, 0, 1 }
+                                SpeechConstant.TTS_FADING to "$voiceFading"// 是否在合成播放开始、暂停和恢复时，进行声音的淡入淡出。 默认值false, 值范围：{ null, true，false }
+                        ).forEach {
+                            mSpeechSynthesizer.setParameter(it.key, it.value)
+                        }
+                        mSpeechSynthesizer.startSpeaking(text, object : SynthesizerListener {
+                            override fun onBufferProgress(p0: Int, p1: Int, p2: Int, p3: String?) {
+                            }
+                            override fun onSpeakBegin() {
+                            }
+                            override fun onSpeakProgress(p0: Int, p1: Int, p2: Int) {
+                            }
+                            override fun onEvent(p0: Int, p1: Int, p2: Int, p3: Bundle?) {
+                            }
+                            override fun onSpeakPaused() {
+                            }
+                            override fun onSpeakResumed() {
+                            }
+
+                            override fun onCompleted(p0: SpeechError?) {
+                            }
+                        })
+                    }
+                }
+            }
+
+            // 声纹识别
+            btn_read_voice.setOnClickListener {
+
+            }
+        }
     }
 
     /**
      * 初始讯飞
+     */
+    private fun initXunfei() {
+        SpeechUtility.createUtility(mActivity, SpeechConstant.APPID + "=5a15147f")
+    }
+
+    /**
+     * 获取识别接口
      * http://doc.xfyun.cn/msc_android/%E9%A2%84%E5%A4%87%E5%B7%A5%E4%BD%9C.html
      */
     private fun getXunfei(): SpeechRecognizer {
-        SpeechUtility.createUtility(mActivity, SpeechConstant.APPID + "=5a15147f")
+        initXunfei()
 
         val mAsr = SpeechRecognizer.createRecognizer(mActivity) { code ->
             KLog.i("SpeechRecognizer init() code = $code")

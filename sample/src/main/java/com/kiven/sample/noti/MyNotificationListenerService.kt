@@ -23,6 +23,8 @@ class MyNotificationListenerService : NotificationListenerService() {
 
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
         sbn?.apply {
+            KLog.printClassField(notification, null, true)
+
             val text = notification.tickerText
 
             showTip("监听到通知：${text}")

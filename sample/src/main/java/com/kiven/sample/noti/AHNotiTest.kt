@@ -1,7 +1,6 @@
 package com.kiven.sample.noti
 
 import android.app.*
-import android.content.ComponentName
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
@@ -16,13 +15,15 @@ import com.google.android.material.snackbar.Snackbar
 import com.kiven.kutils.activityHelper.KActivityDebugHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.sample.R
-import com.kiven.sample.util.*
+import com.kiven.sample.util.getInput
+import com.kiven.sample.util.listPicker
+import com.kiven.sample.util.showSnack
+import com.kiven.sample.util.snackbar
 import kotlinx.android.synthetic.main.ah_noti_test.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.lang.Exception
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -202,7 +203,8 @@ class AHNotiTest : KActivityDebugHelper() {
                                 channel.description = "这是一个测试用的通知分类" // 描述
                                 try {
                                     channel.setAllowBubbles(true) // 小红点显示。华为崩了，所以放try里面
-                                }catch (e:NoSuchMethodError){}
+                                } catch (e: NoSuchMethodError) {
+                                }
                                 channel.setBypassDnd(true) // 免打扰模式下，允许响铃或震动
 
                                 notiManager.createNotificationChannel(channel)
@@ -278,7 +280,11 @@ class AHNotiTest : KActivityDebugHelper() {
             }
 
             btn_noti_listener_setting_check.setOnClickListener {
-                val flat = Settings.Secure.getString(activity.contentResolver, "enabled_notification_listeners")
+                // 网上找到两种方式
+
+                // Settings.Secure.ENABLED_NOTIFICATION_LISTENERS = "enabled_notification_listeners"
+                // ENABLED_NOTIFICATION_LISTENERS 已被标记 @Deprecated @UnsupportedAppUsage
+                /*val flat = Settings.Secure.getString(activity.contentResolver, "enabled_notification_listeners")
 
                 var result = false
                 if (!flat.isNullOrBlank()) {
@@ -288,7 +294,14 @@ class AHNotiTest : KActivityDebugHelper() {
                         if (cn != null && cn.packageName == activity.packageName)
                             result = true
                     }
-                }
+                }*/
+
+                var result = false
+                NotificationManagerCompat.getEnabledListenerPackages(activity)
+                        .forEach {
+                            if (it == activity.packageName)
+                                result = true
+                        }
 
                 mActivity.showSnack(if (result) "当前状态：开启" else "当前状态：关闭")
             }

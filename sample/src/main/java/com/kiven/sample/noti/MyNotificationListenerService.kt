@@ -54,7 +54,7 @@ class MyNotificationListenerService : NotificationListenerService() {
                 }
 
                 // QUEUE_ADD 添加新的，QUEUE_FLUSH 刷新(即清除之前的，会打断正在播放的)
-                text2speech?.speak(text.toString(), TextToSpeech.QUEUE_FLUSH, null)
+                text2speech?.speak(text.toString(), TextToSpeech.QUEUE_ADD, null)
             }
         }
     }

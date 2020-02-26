@@ -71,11 +71,11 @@ class AHXunfeiTest : KActivityDebugHelper() {
             }
 
             var voiceVolume = 50
-            btn_voice_volume.text = "语调($voiceVolume)"
+            btn_voice_volume.text = "音量($voiceVolume)"
             btn_voice_volume.setOnClickListener {
-                activity.getInput("语调 0~100", voiceVolume.toString()) {
+                activity.getInput("音量 0~100", voiceVolume.toString()) {
                     voiceVolume = KString.toInt(it.toString(), voiceVolume)
-                    btn_voice_volume.text = "语调($voiceVolume)"
+                    btn_voice_volume.text = "音量($voiceVolume)"
                 }
             }
 
@@ -84,7 +84,7 @@ class AHXunfeiTest : KActivityDebugHelper() {
             btn_voice_pitch.setOnClickListener {
                 activity.getInput("语调 0~100", voicePitch.toString()) {
                     voicePitch = KString.toInt(it.toString(), voicePitch)
-                    btn_voice_pitch.text = "语调($voiceName)"
+                    btn_voice_pitch.text = "语调($voicePitch)"
                 }
             }
 

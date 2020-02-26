@@ -70,6 +70,7 @@ class MyNotificationListenerService : NotificationListenerService() {
                         KLog.i("不支持当前语言！")
                     }
                 }
+                // TODO utteranceId即为 textToSpeech.speak("","",null,i)最后一个参数i
                 text2speech?.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
                     override fun onDone(utteranceId: String?) {
 

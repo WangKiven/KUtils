@@ -32,7 +32,7 @@ class MyNotificationListenerService : NotificationListenerService() {
                 return
             }
             GlobalScope.launch {
-                if (text2speech == null){
+                if (text2speech == null) {
                     val result = suspendCoroutine<Boolean> {
                         text2speech = TextToSpeech(this@MyNotificationListenerService, TextToSpeech.OnInitListener { status ->
                             if (status == TextToSpeech.SUCCESS) {

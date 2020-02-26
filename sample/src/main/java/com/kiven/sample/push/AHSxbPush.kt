@@ -25,7 +25,6 @@ import com.kiven.sample.noti.AHNotiTest
 import okhttp3.*
 import okio.ByteString
 import org.jetbrains.anko.support.v4.nestedScrollView
-import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.net.ssl.HostnameVerifier
 
@@ -242,21 +241,21 @@ class AHSxbPush : KActivityDebugHelper() {
             mSockets.forEach { it.send(message) }
         })
         addView("close", View.OnClickListener {
-//            mSockets.forEach { it.close(1000, null) }
+            //            mSockets.forEach { it.close(1000, null) }
             val nn = mutableListOf<WebSocket>()
             nn.addAll(mSockets)
             nn.forEach { it.close(1000, null) }
             mSockets.clear()
         })
         addView("cancel", View.OnClickListener {
-//            mSockets.forEach { it.cancel() }
+            //            mSockets.forEach { it.cancel() }
             val nn = mutableListOf<WebSocket>()
             nn.addAll(mSockets)
             nn.forEach { it.cancel() }
             mSockets.clear()
         })
         addView("AHNotiTest", View.OnClickListener { AHNotiTest().startActivity(activity) })
-        addView("xx", View.OnClickListener {
+        addView("notify", View.OnClickListener {
             PushUtil.notification(activity, "title", "subtitle", "argusss")
         })
         addView("", View.OnClickListener { })
@@ -270,7 +269,7 @@ class AHSxbPush : KActivityDebugHelper() {
         }*/
         if (isAdd) {
             list.add(i)
-        }else {
+        } else {
             /*val it = list.iterator()
             if (it.hasNext() && it.next() == i) {
                 it.remove()

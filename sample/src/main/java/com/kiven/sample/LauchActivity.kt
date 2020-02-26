@@ -157,8 +157,8 @@ class LauchActivity : KActivity(), LifecycleOwner {
         /*startActivity(Intent(this, ClickNotiActivity::class.java))
         finish()*/
 
-        /*AHSxbPush().startActivity(this)
-        finish()*/
+        AHSxbPush().startActivity(this)
+        finish()
     }
 
     private fun setupWindowAnimations() {

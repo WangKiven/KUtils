@@ -14,12 +14,6 @@
         app:flexWrap="wrap">
 
         <TextView
-            android:id="@+id/tv_count"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:text="讯飞功能" />
-
-        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="\n设置语音合成参数：" />
@@ -63,7 +57,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="\n功能：" />
+            android:text="\n讯飞功能：" />
 
         <Button
             android:id="@+id/btn_listen_voice"
@@ -82,6 +76,33 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="声纹识别" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="\n系统功能：" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="语音识别，华为测试成功，小米测试失败" />
+
+        <Button
+            android:id="@+id/btn_system_listen_voice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="识别语音" />
+        <Button
+            android:id="@+id/btn_system_listen_voice_stop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="停止识别语音" />
+
+        <Button
+            android:id="@+id/btn_system_create_voice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="语音合成" />
     </com.google.android.flexbox.FlexboxLayout>
 
 </androidx.core.widget.NestedScrollView>

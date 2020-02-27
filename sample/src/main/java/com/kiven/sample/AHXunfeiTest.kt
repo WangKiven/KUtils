@@ -1,26 +1,23 @@
 package com.kiven.sample
 
 import android.Manifest
+import android.content.ComponentName
+import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
-import com.google.android.flexbox.AlignContent
-import com.google.android.flexbox.FlexWrap
-import com.google.android.flexbox.FlexboxLayout
+import android.provider.Settings
+import android.speech.RecognitionListener
+import android.speech.RecognitionService
+import android.speech.RecognizerIntent
 import com.iflytek.cloud.*
 import com.kiven.kutils.activityHelper.KActivityDebugHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KGranting
 import com.kiven.kutils.tools.KString
-import com.kiven.kutils.tools.KUtil
-import com.kiven.kutils.util.ArrayMap
 import com.kiven.sample.util.getInput
 import com.kiven.sample.util.showBottomSheetDialog
+import com.kiven.sample.util.snackbar
 import kotlinx.android.synthetic.main.ah_xunfei_test.*
-import org.jetbrains.anko.support.v4.nestedScrollView
 
 /**
  * Created by wangk on 2019/5/17.
@@ -106,56 +103,86 @@ class AHXunfeiTest : KActivityDebugHelper() {
             // 识别语音
             val mAsr = getXunfei()
             btn_listen_voice.setOnClickListener {
-                KGranting.requestPermissions(activity, 377, Manifest.permission.RECORD_AUDIO,
-                        "录音") {
-                    if (it) {
-                        val ret = mAsr.startListening(mRecognizerListener)
-                        if (ret != ErrorCode.SUCCESS) {
-                            showTip("听写失败,错误码：$ret")
-                        }
-                    }
+                val ret = mAsr.startListening(mRecognizerListener)
+                if (ret != ErrorCode.SUCCESS) {
+                    showTip("听写失败,错误码：$ret")
                 }
             }
             // 语音合成
             val mSpeechSynthesizer = SpeechSynthesizer.createSynthesizer(activity) {}
             btn_create_voice.setOnClickListener {
-                KGranting.requestPermissions(activity, 377, Manifest.permission.RECORD_AUDIO,
-                        "录音") {
-                    if (it) {
-                        mapOf(
-                                SpeechConstant.VOICE_NAME to voiceName,// 合成发音人, 默认值：xiaoyan
-                                SpeechConstant.SPEED to "$voiceSpeed",// 语速, 默认值50, 值范围：[0, 100]
-                                SpeechConstant.VOLUME to "$voiceVolume",// 音量, 默认值50, 值范围：[0, 100]
-                                SpeechConstant.PITCH to "$voicePitch",// 语调, 默认值50, 值范围：[0, 100]
-                                SpeechConstant.BACKGROUND_SOUND to "$voiceBg",// 背景音乐, 默认值0, 值范围：{ null, 0, 1 }
-                                SpeechConstant.TTS_FADING to "$voiceFading"// 是否在合成播放开始、暂停和恢复时，进行声音的淡入淡出。 默认值false, 值范围：{ null, true，false }
-                        ).forEach {
-                            mSpeechSynthesizer.setParameter(it.key, it.value)
-                        }
-                        mSpeechSynthesizer.startSpeaking(text, object : SynthesizerListener {
-                            override fun onBufferProgress(p0: Int, p1: Int, p2: Int, p3: String?) {
-                            }
-                            override fun onSpeakBegin() {
-                            }
-                            override fun onSpeakProgress(p0: Int, p1: Int, p2: Int) {
-                            }
-                            override fun onEvent(p0: Int, p1: Int, p2: Int, p3: Bundle?) {
-                            }
-                            override fun onSpeakPaused() {
-                            }
-                            override fun onSpeakResumed() {
-                            }
-
-                            override fun onCompleted(p0: SpeechError?) {
-                            }
-                        })
-                    }
+                mapOf(
+                        SpeechConstant.VOICE_NAME to voiceName,// 合成发音人, 默认值：xiaoyan
+                        SpeechConstant.SPEED to "$voiceSpeed",// 语速, 默认值50, 值范围：[0, 100]
+                        SpeechConstant.VOLUME to "$voiceVolume",// 音量, 默认值50, 值范围：[0, 100]
+                        SpeechConstant.PITCH to "$voicePitch",// 语调, 默认值50, 值范围：[0, 100]
+                        SpeechConstant.BACKGROUND_SOUND to "$voiceBg",// 背景音乐, 默认值0, 值范围：{ null, 0, 1 }
+                        SpeechConstant.TTS_FADING to "$voiceFading"// 是否在合成播放开始、暂停和恢复时，进行声音的淡入淡出。 默认值false, 值范围：{ null, true，false }
+                ).forEach {
+                    mSpeechSynthesizer.setParameter(it.key, it.value)
                 }
+                mSpeechSynthesizer.startSpeaking(text, object : SynthesizerListener {
+                    override fun onBufferProgress(p0: Int, p1: Int, p2: Int, p3: String?) {}
+                    override fun onSpeakBegin() {}
+                    override fun onSpeakProgress(p0: Int, p1: Int, p2: Int) {}
+                    override fun onEvent(p0: Int, p1: Int, p2: Int, p3: Bundle?) {}
+                    override fun onSpeakPaused() {}
+                    override fun onSpeakResumed() {}
+                    override fun onCompleted(p0: SpeechError?) {}
+                })
             }
 
             // 声纹识别
             btn_read_voice.setOnClickListener {
 
+            }
+
+            /*val component = Settings.Secure.getString(contentResolver, "voice_recognition_service")
+            val mSystemSr = android.speech.SpeechRecognizer.createSpeechRecognizer(activity,
+                    ComponentName.unflattenFromString(component))*/
+            val mSystemSr = android.speech.SpeechRecognizer.createSpeechRecognizer(activity)
+            mSystemSr.setRecognitionListener(object : RecognitionListener {
+                override fun onReadyForSpeech(params: Bundle?) {}
+                override fun onRmsChanged(rmsdB: Float) {}
+                override fun onBufferReceived(buffer: ByteArray?) {}
+                override fun onPartialResults(partialResults: Bundle?) {}
+                override fun onEvent(eventType: Int, params: Bundle?) {}
+                override fun onBeginningOfSpeech() {
+                    showTip("开始说话")
+                }
+
+                override fun onEndOfSpeech() {
+                    showTip("结束说话")
+                }
+
+                override fun onError(error: Int) {
+                    showTip("系统语音识别异常 $error")
+                }
+                override fun onResults(results: Bundle?) {
+                    KLog.i("系统语音识别结果：")
+                    results?.keySet()?.forEach {
+                        KLog.i("  $it = ${results.get(it)}")
+                    }
+                }
+            })
+            btn_system_listen_voice.setOnClickListener {
+                if (!android.speech.SpeechRecognizer.isRecognitionAvailable(activity)) {
+                    snackbar("系统说没有语言识别服务")
+                    return@setOnClickListener
+                }
+
+                mSystemSr.startListening(
+                        Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+                            putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+                            putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)
+                            putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3)
+                            //putExtra(RecognizerIntent.EXTRA_LANGUAGE, )
+                        }
+                )
+            }
+            btn_system_listen_voice_stop.setOnClickListener {
+                mSystemSr.stopListening()// 停止监听
+//                mSystemSr.cancel()// 取消服务
             }
         }
     }

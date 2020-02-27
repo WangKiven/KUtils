@@ -31,9 +31,7 @@ import com.kiven.sample.floatView.ActivityHFloatView
 import com.kiven.sample.gl.AHGL
 import com.kiven.sample.libs.AHLibs
 import com.kiven.sample.media.AHMediaList
-import com.kiven.sample.noti.ClickNotiActivity
 import com.kiven.sample.push.AHPushTest
-import com.kiven.sample.push.AHSxbPush
 import com.kiven.sample.theme.AHTheme
 import com.kiven.sample.util.showDialog
 import com.kiven.sample.util.showListDialog

@@ -184,6 +184,10 @@ class AHXunfeiTest : KActivityDebugHelper() {
                 mSystemSr.stopListening()// 停止监听
 //                mSystemSr.cancel()// 取消服务
             }
+
+            btn_system_create_voice.setOnClickListener {
+                snackbar("在监听通知的类MyNotificationListenerService有使用，这里就不写了")
+            }
         }
     }
 

@@ -306,6 +306,11 @@ class AHNotiTest : KActivityDebugHelper() {
                 mActivity.showSnack(if (result) "当前状态：开启" else "当前状态：关闭")
             }
 
+            btn_noti_listener_voice_status.setOnClickListener {
+                MyNotificationListenerService.isReadNoti = !MyNotificationListenerService.isReadNoti
+                activity.snackbar("已设置状态(isReadNoti) = ${MyNotificationListenerService.isReadNoti}")
+            }
+
             btn_app_setting.setOnClickListener {
 
                 val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)

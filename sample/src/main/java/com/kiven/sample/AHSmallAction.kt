@@ -168,7 +168,7 @@ class AHSmallAction : KActivityDebugHelper() {
         addTitle("语音识别与合成")
 
         // http://doc.xfyun.cn/msc_android/%E9%A2%84%E5%A4%87%E5%B7%A5%E4%BD%9C.html
-        addView("讯飞", View.OnClickListener {
+        addView("语音识别与合成", View.OnClickListener {
             // 在里面请求权限太麻烦，由于有多个地方都需要权限，所以在入口出先请求
             KGranting.requestPermissions(activity, 377, Manifest.permission.RECORD_AUDIO,
                     "录音") {

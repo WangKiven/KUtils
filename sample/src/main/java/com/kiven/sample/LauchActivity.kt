@@ -31,8 +31,6 @@ import com.kiven.sample.floatView.ActivityHFloatView
 import com.kiven.sample.gl.AHGL
 import com.kiven.sample.libs.AHLibs
 import com.kiven.sample.media.AHMediaList
-import com.kiven.sample.noti.ClickNotiActivity
-import com.kiven.sample.push.AHPushTest
 import com.kiven.sample.push.AHSxbPush
 import com.kiven.sample.theme.AHTheme
 import com.kiven.sample.util.showDialog
@@ -150,15 +148,15 @@ class LauchActivity : KActivity(), LifecycleOwner {
             }
         })
         addView("服务自启动与保活", View.OnClickListener { AHAutoStartAndLiving().startActivity(this) })
-        addView("三方平台推送", View.OnClickListener { AHPushTest().startActivity(this) })
+        addView("三方平台推送", View.OnClickListener { AHSxbPush().startActivity(this) })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
 
         /*startActivity(Intent(this, ClickNotiActivity::class.java))
         finish()*/
 
-        AHSxbPush().startActivity(this)
-        finish()
+        /*AHSxbPush().startActivity(this)
+        finish()*/
     }
 
     private fun setupWindowAnimations() {

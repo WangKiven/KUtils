@@ -28,7 +28,22 @@ import org.jetbrains.anko.support.v4.nestedScrollView
 import java.util.concurrent.TimeUnit
 import javax.net.ssl.HostnameVerifier
 
-
+/**
+ * Created by oukobayashi on 2019-12-31.
+ * 小米推送文档：https://dev.mi.com/console/doc/detail?pId=41
+ *
+ * 华为推送文档：
+ * https://developer.huawei.com/consumer/cn/doc/development/HMS-Library/push-sdk-integrate
+ * https://developer.huawei.com/consumer/cn/doc/development/HMS-Guides/push-Preparations
+ *
+ * 极光推送：https://docs.jiguang.cn/jpush/client/Android/android_guide/
+ *
+ * iOS推送：https://github.com/notnoop/java-apns
+ *
+ * OPPO推送：https://open.oppomobile.com/wiki/doc#id=10196
+ *
+ * vivo推送：https://dev.vivo.com.cn/documentCenter/doc/233
+ */
 class AHSxbPush : KActivityDebugHelper() {
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)

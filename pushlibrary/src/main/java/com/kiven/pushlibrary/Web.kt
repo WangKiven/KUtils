@@ -7,7 +7,7 @@ import com.kiven.kutils.logHelper.KLog
 import com.sxb.kutils_ktx.util.KWeb
 import org.json.JSONObject
 
-object Web {
+internal object Web {
     /*const val httpPre = "http://192.168.101.105:8080/api/"
     private const val registerUrl = "${httpPre}open/push/register"
     private const val bindAccountUrl = "${httpPre}open/push/bindAccount"

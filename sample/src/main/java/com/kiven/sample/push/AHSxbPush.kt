@@ -114,13 +114,17 @@ class AHSxbPush : KActivityDebugHelper() {
         addView("注册设备", View.OnClickListener {
             // 文档说小米手机不需要申请权限， 但测试还是出问题了，所已小米还是要权限
             // 权限只是小米推送需要
-            KGranting.requestPermissions(mActivity, 3344, arrayOf(
-                    Manifest.permission.READ_PHONE_STATE, Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ), arrayOf("识别码", "存储")) {
-                if (it) {
-                    if (!PushClient.isInit)
-                        PushClient.initPush(mActivity)
+            if (PushClient.shouldRequestPermission(activity)) {
+                KGranting.requestPermissions(mActivity, 3344, arrayOf(
+                        Manifest.permission.READ_PHONE_STATE, Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ), arrayOf("识别码", "存储")) {
+                    if (it) {
+                        if (!PushClient.hasInit)
+                            PushClient.initPush(mActivity)
+                    }
                 }
+            } else {
+                PushClient.initPush(mActivity)
             }
         })
 

@@ -20,7 +20,6 @@ import com.kiven.kutils.tools.KGranting
 import com.kiven.kutils.tools.KUtil
 import com.kiven.pushlibrary.PushClient
 import com.kiven.pushlibrary.PushUtil
-import com.kiven.pushlibrary.Web
 import com.kiven.sample.noti.AHNotiTest
 import okhttp3.*
 import okio.ByteString
@@ -28,7 +27,22 @@ import org.jetbrains.anko.support.v4.nestedScrollView
 import java.util.concurrent.TimeUnit
 import javax.net.ssl.HostnameVerifier
 
-
+/**
+ * Created by oukobayashi on 2019-12-31.
+ * 小米推送文档：https://dev.mi.com/console/doc/detail?pId=41
+ *
+ * 华为推送文档：
+ * https://developer.huawei.com/consumer/cn/doc/development/HMS-Library/push-sdk-integrate
+ * https://developer.huawei.com/consumer/cn/doc/development/HMS-Guides/push-Preparations
+ *
+ * 极光推送：https://docs.jiguang.cn/jpush/client/Android/android_guide/
+ *
+ * iOS推送：https://github.com/notnoop/java-apns
+ *
+ * OPPO推送：https://open.oppomobile.com/wiki/doc#id=10196
+ *
+ * vivo推送：https://dev.vivo.com.cn/documentCenter/doc/233
+ */
 class AHSxbPush : KActivityDebugHelper() {
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
@@ -62,21 +76,21 @@ class AHSxbPush : KActivityDebugHelper() {
 
         addTitle("封装库测试")
         addTitle("")
-        addTitle("projectKey = ${Web.projectKey}")
+        addTitle("projectKey = ${PushClient.projectKey}")
         addTitle("")
 
         flexboxLayout.addView(EditText(activity).apply {
             val spKey = "ah_sxb_push_host"
-            Web.host = KUtil.getSharedPreferencesStringValue(spKey, Web.host)
+            PushClient.host = KUtil.getSharedPreferencesStringValue(spKey, PushClient.host)
 
-            setText(Web.host)
-            hint = "请输入账号"
+            setText(PushClient.host)
+            hint = "请输入主机地址及端口"
             layoutParams = ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.MATCH_PARENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT)
             addTextChangedListener(object : TextWatcher {
                 override fun afterTextChanged(s: Editable?) {
-                    Web.host = s?.toString() ?: ""
+                    PushClient.host = s?.toString() ?: ""
 
-                    KUtil.putSharedPreferencesStringValue(spKey, Web.host)
+                    KUtil.putSharedPreferencesStringValue(spKey, PushClient.host)
                 }
 
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -86,12 +100,12 @@ class AHSxbPush : KActivityDebugHelper() {
 
         flexboxLayout.addView(Button(activity).apply {
             val spKey = "ah_sxb_push_is_https"
-            Web.ishttps = KUtil.getSharedPreferencesBooleanValue(spKey, Web.ishttps)
-            text = "当前使用http${if (Web.ishttps) "s" else ""}"
+            PushClient.ishttps = KUtil.getSharedPreferencesBooleanValue(spKey, PushClient.ishttps)
+            text = "当前使用http${if (PushClient.ishttps) "s" else ""}"
             setOnClickListener {
-                Web.ishttps = !Web.ishttps
-                KUtil.putSharedPreferencesBooleanValue(spKey, Web.ishttps)
-                text = "当前使用http${if (Web.ishttps) "s" else ""}"
+                PushClient.ishttps = !PushClient.ishttps
+                KUtil.putSharedPreferencesBooleanValue(spKey, PushClient.ishttps)
+                text = "当前使用http${if (PushClient.ishttps) "s" else ""}"
             }
         })
 
@@ -100,12 +114,17 @@ class AHSxbPush : KActivityDebugHelper() {
         addView("注册设备", View.OnClickListener {
             // 文档说小米手机不需要申请权限， 但测试还是出问题了，所已小米还是要权限
             // 权限只是小米推送需要
-            KGranting.requestPermissions(mActivity, 3344, arrayOf(
-                    Manifest.permission.READ_PHONE_STATE, Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ), arrayOf("识别码", "存储")) {
-                if (it) {
-                    PushClient.initPush(mActivity)
+            if (PushClient.shouldRequestPermission(activity)) {
+                KGranting.requestPermissions(mActivity, 3344, arrayOf(
+                        Manifest.permission.READ_PHONE_STATE, Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ), arrayOf("识别码", "存储")) {
+                    if (it) {
+                        if (!PushClient.hasInit)
+                            PushClient.initPush(mActivity)
+                    }
                 }
+            } else {
+                PushClient.initPush(mActivity)
             }
         })
 

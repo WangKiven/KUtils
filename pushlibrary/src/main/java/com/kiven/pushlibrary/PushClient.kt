@@ -1,7 +1,10 @@
 package com.kiven.pushlibrary
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Build
+import androidx.core.content.ContextCompat
 import com.heytap.mcssdk.PushManager
 import com.kiven.pushlibrary.hw.HuaWeiPushHelper
 import com.kiven.pushlibrary.mi.MiPushHelper
@@ -11,6 +14,42 @@ import com.vivo.push.PushClient
 
 object PushClient {
     private var pushHelper: PushHelper? = null
+
+    val hasInit: Boolean
+        get() = pushHelper != null
+
+    var projectKey: String
+        get() = Web.projectKey
+        set(value) {
+            Web.projectKey = value
+        }
+
+    var host: String
+        get() = Web.host
+        set(value) {
+            Web.host = value
+        }
+
+    var ishttps: Boolean
+        get() = Web.ishttps
+        set(value) {
+            Web.ishttps = value
+        }
+
+    fun shouldRequestPermission(context: Context): Boolean {
+        return when (Build.BRAND.toLowerCase()) {
+            "huawei", "honor", "oppo", "vivo", "xiaomi", "redmi" -> false
+            else -> {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    ContextCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED
+                            && ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                } else {
+                    false
+                }
+            }
+        }
+    }
+
     fun initPush(context: Context) {
         Web.context = context.applicationContext
 

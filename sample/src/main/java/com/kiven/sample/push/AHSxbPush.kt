@@ -76,21 +76,23 @@ class AHSxbPush : KActivityDebugHelper() {
 
         addTitle("封装库测试")
         addTitle("")
-        addTitle("projectKey = ${PushClient.projectKey}")
+        val projectKey = "projectKey_sample"
+        addTitle("projectKey = $projectKey")
         addTitle("")
 
+        var host = "192.168.101.106:8080"
         flexboxLayout.addView(EditText(activity).apply {
             val spKey = "ah_sxb_push_host"
-            PushClient.host = KUtil.getSharedPreferencesStringValue(spKey, PushClient.host)
+            host = KUtil.getSharedPreferencesStringValue(spKey, host)
 
-            setText(PushClient.host)
+            setText(host)
             hint = "请输入主机地址及端口"
             layoutParams = ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.MATCH_PARENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT)
             addTextChangedListener(object : TextWatcher {
                 override fun afterTextChanged(s: Editable?) {
-                    PushClient.host = s?.toString() ?: ""
+                    host = s?.toString() ?: ""
 
-                    KUtil.putSharedPreferencesStringValue(spKey, PushClient.host)
+                    KUtil.putSharedPreferencesStringValue(spKey, host)
                 }
 
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -98,14 +100,15 @@ class AHSxbPush : KActivityDebugHelper() {
             })
         })
 
+        var ishttps = false
         flexboxLayout.addView(Button(activity).apply {
             val spKey = "ah_sxb_push_is_https"
-            PushClient.ishttps = KUtil.getSharedPreferencesBooleanValue(spKey, PushClient.ishttps)
-            text = "当前使用http${if (PushClient.ishttps) "s" else ""}"
+            ishttps = KUtil.getSharedPreferencesBooleanValue(spKey, ishttps)
+            text = "当前使用http${if (ishttps) "s" else ""}"
             setOnClickListener {
-                PushClient.ishttps = !PushClient.ishttps
-                KUtil.putSharedPreferencesBooleanValue(spKey, PushClient.ishttps)
-                text = "当前使用http${if (PushClient.ishttps) "s" else ""}"
+                ishttps = !ishttps
+                KUtil.putSharedPreferencesBooleanValue(spKey, ishttps)
+                text = "当前使用http${if (ishttps) "s" else ""}"
             }
         })
 
@@ -120,11 +123,11 @@ class AHSxbPush : KActivityDebugHelper() {
                 ), arrayOf("识别码", "存储")) {
                     if (it) {
                         if (!PushClient.hasInit)
-                            PushClient.initPush(mActivity)
+                            PushClient.initPush(mActivity, projectKey, host, ishttps)
                     }
                 }
             } else {
-                PushClient.initPush(mActivity)
+                PushClient.initPush(mActivity, projectKey, host, ishttps)
             }
         })
 

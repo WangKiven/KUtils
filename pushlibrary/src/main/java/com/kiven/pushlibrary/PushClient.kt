@@ -18,24 +18,6 @@ object PushClient {
     val hasInit: Boolean
         get() = pushHelper != null
 
-    var projectKey: String
-        get() = Web.projectKey
-        set(value) {
-            Web.projectKey = value
-        }
-
-    var host: String
-        get() = Web.host
-        set(value) {
-            Web.host = value
-        }
-
-    var ishttps: Boolean
-        get() = Web.ishttps
-        set(value) {
-            Web.ishttps = value
-        }
-
     fun shouldRequestPermission(context: Context): Boolean {
         return when (Build.BRAND.toLowerCase()) {
             "huawei", "honor", "oppo", "vivo", "xiaomi", "redmi" -> false
@@ -50,7 +32,7 @@ object PushClient {
         }
     }
 
-    fun initPush(context: Context) {
+    fun initPush(context: Context, projectKey: String, host: String, ishttps: Boolean) {
         Web.context = context.applicationContext
 
         when (Build.BRAND.toLowerCase()) {

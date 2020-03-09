@@ -33,7 +33,7 @@ object PushUtil {
                 channel.description = "显示重要通知消息" // 描述
                 try {
                     channel.setAllowBubbles(true) // 小红点显示。华为崩了，所以放try里面
-                } catch (e: NoSuchMethodError) {
+                } catch (e: Throwable) {
                 }
                 channel.setBypassDnd(true) // 免打扰模式下，允许响铃或震动
 

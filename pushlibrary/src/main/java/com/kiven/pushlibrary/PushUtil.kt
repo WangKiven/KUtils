@@ -12,6 +12,8 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 
 object PushUtil {
+
+
     fun notification(context: Context, title: String, subTitle: String, argument: String) {
         val notiManager = NotificationManagerCompat.from(context)
         val channelId = "sxbChannelId"
@@ -41,7 +43,8 @@ object PushUtil {
             }
         }
 
-        val ii = Intent(context, Class.forName("com.kiven.sample.noti.ClickNotiActivity"))
+//        val ii = Intent(context, Class.forName("com.kiven.sample.noti.ClickNotiActivity"))
+        val ii = Intent(context, Class.forName("com.kiven.pushlibrary.ClickNotiActivity"))
         ii.putExtra("argu", argument)
         val pendingIntent = PendingIntent.getActivity(context, 110, ii, PendingIntent.FLAG_UPDATE_CURRENT)
 

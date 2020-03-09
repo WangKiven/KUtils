@@ -38,7 +38,7 @@ dependencies {
 
 
     // okhttp https://github.com/square/okhttp
-    compileOnly 'com.squareup.okhttp3:okhttp:4.3.1'
+    compileOnly 'com.squareup.okhttp3:okhttp:4.4.0'
 
 
     implementation project(':kutils')

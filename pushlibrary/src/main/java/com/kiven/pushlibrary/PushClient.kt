@@ -24,8 +24,8 @@ object PushClient {
             "huawei", "honor", "oppo", "vivo", "xiaomi", "redmi" -> false
             else -> {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    ContextCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED
-                            && ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                    ContextCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED
+                            && ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
                 } else {
                     false
                 }

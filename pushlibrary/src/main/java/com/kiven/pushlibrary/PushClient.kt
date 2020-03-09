@@ -34,6 +34,9 @@ object PushClient {
 
     fun initPush(context: Context, projectKey: String, host: String, ishttps: Boolean) {
         Web.context = context.applicationContext
+        Web.projectKey = projectKey
+        Web.host = host
+        Web.ishttps = ishttps
 
         when (Build.BRAND.toLowerCase()) {
             "huawei", "honor" -> {

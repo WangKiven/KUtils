@@ -1,19 +1,24 @@
 package com.kiven.pushlibrary
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import java.lang.Exception
+import com.kiven.kutils.logHelper.KLog
 
 class ClickNotiActivity : AppCompatActivity() {
 
-    private lateinit var textView: TextView
+    //    private lateinit var textView: TextView
+    companion object {
+        internal var onClickNotiListener = fun (activity:Activity, contxt:String?) {
+            activity.finish()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        textView = TextView(this)
-        setContentView(textView)
+//        textView = TextView(this)
+//        setContentView(textView)
 
         reloveIntent(intent)
     }
@@ -32,10 +37,15 @@ class ClickNotiActivity : AppCompatActivity() {
         else
             sb.appendln("没有收到Intent")
 
-        textView.text = sb.toString()
+//        textView.text = sb.toString()
+        KLog.i(sb.toString())
+
+        val argu = intent?.data?.getQueryParameter("argu") ?: intent?.extras?.getString("argu")
+
+        onClickNotiListener(this, argu)
     }
 
-    private fun showIntent(newIntent: Intent, sb:StringBuilder) {
+    private fun showIntent(newIntent: Intent, sb: StringBuilder) {
 
         newIntent.data?.apply {
             sb.append("Intent 的data(${this}): \n")
@@ -43,13 +53,13 @@ class ClickNotiActivity : AppCompatActivity() {
                 queryParameterNames.forEach {
                     sb.append(" $it : ${getQueryParameter(it)}\n")
                 }
-            }catch (e:Exception) {
+            } catch (e: Exception) {
                 sb.append(" 参数异常：${e.message}\n")
             }
         } ?: sb.append("Intent 没有data\n")
 
         newIntent.extras?.apply {
-            sb.append("Intent 的extras: \n")
+            sb.append("\nIntent 的extras: \n")
 
             keySet().forEach {
                 sb.append(" $it : ${get(it)}\n")

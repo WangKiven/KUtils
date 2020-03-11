@@ -33,11 +33,12 @@ object PushClient {
         }
     }
 
-    fun initPush(context: Context, projectKey: String, host: String, ishttps: Boolean) {
+    fun initPush(context: Context, projectKey: String, host: String, ishttps: Boolean, isDebug:Boolean) {
         Web.context = context.applicationContext
         Web.projectKey = projectKey
         Web.host = host
         Web.ishttps = ishttps
+        Web.isDebug = isDebug
 
         when (Build.BRAND.toLowerCase()) {
             "huawei", "honor" -> {
@@ -62,6 +63,8 @@ object PushClient {
 
     fun setTags(context: Context, tags: Set<String>) {
         pushHelper?.setTags(context, tags)
+
+        Web.setTags(tags.joinToString(","))
     }
 
     fun setAccount(context: Context, account: String) {

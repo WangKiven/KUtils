@@ -92,7 +92,7 @@ class MiPushHelper : PushHelper {
         }
     }
 
-    override fun setAccount(context: Context, account: String) {
+    /*fun setAccount(context: Context, account: String) {
         if (account.isBlank()) {
             MiPushClient.getAllUserAccount(context).forEach {
                 MiPushClient.unsetUserAccount(context, it, null)
@@ -100,5 +100,5 @@ class MiPushHelper : PushHelper {
         } else {
             MiPushClient.setUserAccount(context, account, null)
         }
-    }
+    }*/
 }

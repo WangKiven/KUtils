@@ -19,6 +19,7 @@ internal object Web {
 
     var ishttps = false
     var host = "192.168.101.106:8080"
+    var isDebug = true
 
     private val httpPre
         get() = "${if (ishttps) "https" else "http"}://$host/api/"
@@ -60,11 +61,14 @@ internal object Web {
 
         Thread {
             try {
-                val result = KWeb.request(registerUrl, mapOf(
+                val result = KWeb.request(
+                    registerUrl, mapOf(
                         "projectKey" to projectKey,
                         "tokenOrId" to tokenOrId,
-                        "platform" to platformN
-                ))
+                        "platform" to platformN,
+                        "isDebug" to isDebug
+                    )
+                )
 
                 val json = JSONObject(result)
                 if (json.getInt("status") != 200) {
@@ -78,7 +82,12 @@ internal object Web {
                             /*putExtra("projectKey", projectKey)
                             putExtra("tokenOrId", tokenOrId)
                             putExtra("platform", platformN)*/
-                            putExtra("url", "${wsPre}?projectKey=${Uri.encode(projectKey)}&tokenOrId=${Uri.encode(tokenOrId)}")
+                            putExtra(
+                                "url",
+                                "${wsPre}?projectKey=${Uri.encode(projectKey)}&tokenOrId=${Uri.encode(
+                                    tokenOrId
+                                )}"
+                            )
                         })
                     }
                 }
@@ -111,11 +120,13 @@ internal object Web {
             }
 
             try {
-                val result = KWeb.request(bindAccountUrl, mapOf(
+                val result = KWeb.request(
+                    bindAccountUrl, mapOf(
                         "projectKey" to projectKey,
                         "tokenOrId" to tokenOrId,
                         "account" to account
-                ))
+                    )
+                )
 
                 val json = JSONObject(result)
                 if (json.getInt("status") != 200) {
@@ -150,11 +161,13 @@ internal object Web {
             }
 
             try {
-                val result = KWeb.request(setTagsUrl, mapOf(
+                val result = KWeb.request(
+                    setTagsUrl, mapOf(
                         "projectKey" to projectKey,
                         "tokenOrId" to tokenOrId,
                         "tagOrTopics" to tagOrTopics
-                ))
+                    )
+                )
 
                 val json = JSONObject(result)
                 if (json.getInt("status") != 200) {

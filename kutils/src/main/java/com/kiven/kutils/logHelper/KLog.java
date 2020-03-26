@@ -435,7 +435,7 @@ public class KLog {
             builder.append("\n").append(entry.getKey()).append(":\t").append(entry.getValue());
         }
 
-        
+
         String msg = new String(builder);
         for (String burst : burstLog(msg + findLog())) {
             Log.i(tag, burst);

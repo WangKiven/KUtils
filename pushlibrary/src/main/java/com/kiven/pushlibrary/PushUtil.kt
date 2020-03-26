@@ -7,6 +7,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.media.RingtoneManager
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -30,8 +31,9 @@ object PushUtil {
                 }*/
 //                        channel.setSound()
                 channel.enableVibration(true) // 震动
-                channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC // 锁屏可见
+                //channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC // 锁屏可见
                 channel.setShowBadge(true)
+                channel.importance = NotificationManager.IMPORTANCE_DEFAULT//重要性，不重要的通知可能没声音，也可能被收纳起来导致用户看不到
                 channel.description = "显示重要通知消息" // 描述
                 try {
                     channel.setAllowBubbles(true) // 小红点显示。华为崩了，所以放try里面
@@ -50,15 +52,18 @@ object PushUtil {
 
         val mBuilder = NotificationCompat.Builder(context, channelId)
                 .setSmallIcon(context.applicationContext.applicationInfo.icon)
-                .setTicker(subTitle) // 通知响起时，状态栏显示的内容
+//                .setTicker(subTitle) // 通知响起时，状态栏显示的内容
                 .setContentTitle(title)
                 .setContentText(subTitle)
-                .setNumber(12)
-                .setContentInfo(subTitle)//在通知的右侧设置大文本。
+//                .setNumber(12)
+//                .setContentInfo(subTitle)//在通知的右侧设置大文本。
                 .setAutoCancel(true)
                 .setBadgeIconType(NotificationCompat.BADGE_ICON_SMALL)//图标类型
                 .setContentIntent(pendingIntent)
 
+        // Notification#DEFAULT_SOUND Notification#DEFAULT_VIBRATE
+        // Notification#DEFAULT_LIGHTS Notification#DEFAULT_ALL
+        mBuilder.setDefaults(Notification.DEFAULT_ALL)
 
         val cid = System.currentTimeMillis() % (1000 * 60 * 60 * 24 * 365)
         notiManager.notify(cid.toInt(), mBuilder.build())

@@ -9,16 +9,19 @@ import android.content.Intent
 import android.graphics.Color
 import android.media.RingtoneManager
 import android.os.Build
+import android.os.Bundle
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 
 object PushUtil {
 
 
+    val channelId = "sxbChannelId"
+    val channelName = "重要通知"
+
     fun notification(context: Context, title: String, subTitle: String, argument: String) {
         val notiManager = NotificationManagerCompat.from(context)
-        val channelId = "sxbChannelId"
-        val channelName = "重要通知"
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channels = notiManager.notificationChannels
@@ -35,9 +38,12 @@ object PushUtil {
                 channel.setShowBadge(true)
                 channel.importance = NotificationManager.IMPORTANCE_DEFAULT//重要性，不重要的通知可能没声音，也可能被收纳起来导致用户看不到
                 channel.description = "显示重要通知消息" // 描述
-                try {
-                    channel.setAllowBubbles(true) // 小红点显示。华为崩了，所以放try里面
-                } catch (e: Throwable) {
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    try {
+                        channel.setAllowBubbles(true) // 小红点显示。华为崩了，所以放try里面
+                    } catch (e: Throwable) {
+                    }
                 }
                 channel.setBypassDnd(true) // 免打扰模式下，允许响铃或震动
 
@@ -68,4 +74,6 @@ object PushUtil {
         val cid = System.currentTimeMillis() % (1000 * 60 * 60 * 24 * 365)
         notiManager.notify(cid.toInt(), mBuilder.build())
     }
+
+
 }

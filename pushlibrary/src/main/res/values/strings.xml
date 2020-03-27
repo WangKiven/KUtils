@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">PushLibrary</string>
+    <string name="push_notification_listener_service_name">PushLibrary通知监听程序</string>
 </resources>

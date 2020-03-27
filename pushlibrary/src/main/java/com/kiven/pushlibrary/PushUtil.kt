@@ -36,7 +36,7 @@ object PushUtil {
                 channel.enableVibration(true) // 震动
                 //channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC // 锁屏可见
                 channel.setShowBadge(true)
-                channel.importance = NotificationManager.IMPORTANCE_DEFAULT//重要性，不重要的通知可能没声音，也可能被收纳起来导致用户看不到
+                channel.importance = NotificationManager.IMPORTANCE_HIGH//重要性，不重要的通知可能没声音，也可能被收纳起来导致用户看不到
                 channel.description = "显示重要通知消息" // 描述
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {

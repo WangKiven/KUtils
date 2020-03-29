@@ -1,17 +1,10 @@
 package com.kiven.pushlibrary
 
-import android.app.*
+import android.app.Service
 import android.content.ComponentCallbacks2
-import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import android.net.Uri
-import android.os.Build
 import android.os.IBinder
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import com.kiven.kutils.logHelper.KLog
-import com.kiven.kutils.tools.KContext
 import okhttp3.*
 import okio.ByteString
 import org.json.JSONObject
@@ -42,8 +35,13 @@ class PushService : Service() {
             if (u != url) {
                 url = u
                 Thread {
-                    mSocket?.close(1000, null)//Code must be in range [1000,5000)
+                    try {
+                        mSocket?.close(1000, null)//Code must be in range [1000,5000)
+                    } catch (e: Throwable) {
+                        KLog.e(e)
+                    }
                     mSocket = null
+                    Thread.sleep(3000)
                     connWebSocket()
                 }.start()
             }
@@ -55,22 +53,24 @@ class PushService : Service() {
     private var mSocket: WebSocket? = null
 
     private var url: String = ""
+
     @Synchronized
     private fun connWebSocket() {
 
         val curUrl = url
+        if (curUrl.isBlank()) return
 
         val mOkHttpClient = OkHttpClient.Builder()
-                .readTimeout(3, TimeUnit.SECONDS) //设置读取超时时间
-                .writeTimeout(3, TimeUnit.SECONDS) //设置写的超时时间
-                .connectTimeout(3, TimeUnit.SECONDS) //设置连接超时时间
-                .hostnameVerifier(HostnameVerifier { _, _ -> true }) // todo websocket使用wss时需要这个配置
-                .build()
+            .readTimeout(3, TimeUnit.SECONDS) //设置读取超时时间
+            .writeTimeout(3, TimeUnit.SECONDS) //设置写的超时时间
+            .connectTimeout(3, TimeUnit.SECONDS) //设置连接超时时间
+            .hostnameVerifier(HostnameVerifier { _, _ -> true }) // todo websocket使用wss时需要这个配置
+            .build()
 
 
         val request: Request = Request.Builder()
-                .url(curUrl)
-                .build()
+            .url(curUrl)
+            .build()
 
         val socketListener = object : WebSocketListener() {
             override fun onOpen(webSocket: WebSocket, response: Response) {
@@ -117,11 +117,15 @@ class PushService : Service() {
             override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
                 mSocket = null
                 KLog.i("webSocket 已关闭")
+
+                reConnect()
             }
 
             override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
                 mSocket = null
                 KLog.i("webSocket 正在关闭")
+
+                reConnect()
             }
 
             override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
@@ -129,10 +133,15 @@ class PushService : Service() {
                 KLog.e(t)
                 KLog.i("webSocket 连接异常")
 
-                Thread {
-                    Thread.sleep(1000 * 60)
-                    connWebSocket()
-                }.start()
+                reConnect()
+            }
+
+            fun reConnect() {
+                if (curUrl == url)
+                    Thread {
+                        Thread.sleep(1000 * 60)
+                        connWebSocket()
+                    }.start()
             }
         }
 

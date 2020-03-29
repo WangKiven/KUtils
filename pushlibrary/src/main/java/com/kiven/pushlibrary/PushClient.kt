@@ -1,6 +1,7 @@
 package com.kiven.pushlibrary
 
 import android.Manifest
+import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
@@ -18,31 +19,13 @@ object PushClient {
     val hasInit: Boolean
         get() = pushHelper != null
 
-    var projectKey: String
-        get() = Web.projectKey
-        set(value) {
-            Web.projectKey = value
-        }
-
-    var host: String
-        get() = Web.host
-        set(value) {
-            Web.host = value
-        }
-
-    var ishttps: Boolean
-        get() = Web.ishttps
-        set(value) {
-            Web.ishttps = value
-        }
-
     fun shouldRequestPermission(context: Context): Boolean {
         return when (Build.BRAND.toLowerCase()) {
             "huawei", "honor", "oppo", "vivo", "xiaomi", "redmi" -> false
             else -> {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    ContextCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED
-                            && ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                    ContextCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED
+                            && ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
                 } else {
                     false
                 }
@@ -50,8 +33,12 @@ object PushClient {
         }
     }
 
-    fun initPush(context: Context) {
+    fun initPush(context: Context, projectKey: String, host: String, ishttps: Boolean, isDebug:Boolean) {
         Web.context = context.applicationContext
+        Web.projectKey = projectKey
+        Web.host = host
+        Web.ishttps = ishttps
+        Web.isDebug = isDebug
 
         when (Build.BRAND.toLowerCase()) {
             "huawei", "honor" -> {
@@ -76,6 +63,8 @@ object PushClient {
 
     fun setTags(context: Context, tags: Set<String>) {
         pushHelper?.setTags(context, tags)
+
+        Web.setTags(tags.joinToString(","))
     }
 
     fun setAccount(context: Context, account: String) {
@@ -83,4 +72,7 @@ object PushClient {
         Web.bindAccount(account)
     }
 
+    fun setOnClickNotiListener(listener: (Activity, String?) -> Unit) {
+        ClickNotiActivity.onClickNotiListener = listener
+    }
 }

@@ -38,7 +38,7 @@ dependencies {
 
 
     // okhttp https://github.com/square/okhttp
-    compileOnly 'com.squareup.okhttp3:okhttp:4.3.1'
+    compileOnly 'com.squareup.okhttp3:okhttp:4.4.0'
 
 
     implementation project(':kutils')
@@ -46,7 +46,7 @@ dependencies {
 
 
     // 华为推送
-    implementation 'com.huawei.hms:push:3.0.3.301'
+    implementation 'com.huawei.hms:push:4.0.2.300'
     // 小米推送
     api fileTree(dir: 'miPush', include: ['*.jar', '*.bak'])
     // vivo推送

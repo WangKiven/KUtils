@@ -319,7 +319,12 @@ public class KLog {
                 }
             }
         }
-        Log.i(tag, new String(sb));
+
+        String msg = new String(sb);
+        for (String burst : burstLog(msg + findLog())) {
+            Log.i(tag, burst);
+        }
+        addLog(msg);
     }
 
     /**
@@ -430,6 +435,11 @@ public class KLog {
             builder.append("\n").append(entry.getKey()).append(":\t").append(entry.getValue());
         }
 
-        KLog.i(new String(builder));
+
+        String msg = new String(builder);
+        for (String burst : burstLog(msg + findLog())) {
+            Log.i(tag, burst);
+        }
+        addLog(msg);
     }
 }

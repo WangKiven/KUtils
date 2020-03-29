@@ -125,8 +125,4 @@ class VivoPushHelper : PushHelper {
         }
     }
 
-    override fun setAccount(context: Context, account: String) {
-
-    }
-
 }

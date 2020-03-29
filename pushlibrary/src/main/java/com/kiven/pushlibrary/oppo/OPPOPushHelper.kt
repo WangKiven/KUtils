@@ -45,9 +45,5 @@ class OPPOPushHelper : PushHelper {
     }
 
     override fun setTags(context: Context, tags: Set<String>) {
-        Web.setTags(tags.joinToString(","))
-    }
-
-    override fun setAccount(context: Context, account: String) {
     }
 }

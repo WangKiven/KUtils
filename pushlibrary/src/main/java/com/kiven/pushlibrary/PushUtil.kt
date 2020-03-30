@@ -17,7 +17,7 @@ object PushUtil {
 
 
     val channelId = "sxbChannelId"
-    val channelName = "重要通知"
+    val channelName = "推送通知"
 
     fun notification(context: Context, title: String, subTitle: String, argument: String) {
         val notiManager = NotificationManagerCompat.from(context)
@@ -37,7 +37,7 @@ object PushUtil {
                 //channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC // 锁屏可见
                 channel.setShowBadge(true)
                 channel.importance = NotificationManager.IMPORTANCE_HIGH//重要性，不重要的通知可能没声音，也可能被收纳起来导致用户看不到
-                channel.description = "显示重要通知消息" // 描述
+                channel.description = "推送通知" // 描述
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     try {

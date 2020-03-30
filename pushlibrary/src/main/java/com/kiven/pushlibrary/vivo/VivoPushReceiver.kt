@@ -24,6 +24,9 @@ class VivoPushReceiver : OpenClientPushMessageReceiver() {
         KLog.printClassField(p1, null, true)
 
         val skipType = p1.skipType//1：打开APP首页 2：打开链接 3：自定义 4：打开app内指定页面
+        // 跳转内容 跳转类型为2时，跳转内容最大1000个字符，跳转类型为3或4时，跳转内容最大1024个字符，
+        // skipType传3需要在onNotificationMessageClicked回调函数中自己写处理逻辑。
+        val skipContext = p1.skipContent
         /*try {
             val skipContent = p1.skipContent
             p0.startActivity(Intent.parseUri(skipContent, Intent.URI_INTENT_SCHEME))

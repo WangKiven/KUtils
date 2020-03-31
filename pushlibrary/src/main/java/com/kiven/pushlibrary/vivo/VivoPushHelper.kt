@@ -17,7 +17,7 @@ import com.vivo.push.PushClient
  */
 class VivoPushHelper : PushHelper {
     // 是否初始化
-    private var isInit = false
+    override var hasInitSuccess: Boolean = false
 
     fun turnOffPush(context: Context) {
         PushClient.getInstance(context).turnOffPush {
@@ -38,9 +38,9 @@ class VivoPushHelper : PushHelper {
     override fun initPush(context: Context) {
         PushClient.getInstance(context).apply {
 
-            if (!isInit) {
+            if (!hasInitSuccess) {
                 initialize()
-                isInit = true
+                hasInitSuccess = true
             }
             turnOnPush {
                 if (it == 0 || it == 1) {

@@ -17,6 +17,7 @@ import com.kiven.pushlibrary.Web
  *      解决方案：调用我们自己的服务器设置主题，服务器可以通过华为提供的接口查询到之前设置过的主题，从而判断添加什么主题，取消什么主题
  */
 class HuaWeiPushHelper : PushHelper {
+    override var hasInitSuccess: Boolean = false
 
     companion object {
         val token: String
@@ -45,6 +46,7 @@ class HuaWeiPushHelper : PushHelper {
                     Web.register(token, 2)//设备类型 0 不明，1 iOS, 2 华为, 3 vivo, 4 oppo, 5 小米
                 }
 
+                hasInitSuccess = true
             } catch (e: Exception) {
                 KLog.e(e)
             }

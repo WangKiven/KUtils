@@ -17,7 +17,7 @@ object PushClient {
     private var pushHelper: PushHelper? = null
 
     val hasInit: Boolean
-        get() = pushHelper != null
+        get() = pushHelper != null && pushHelper?.hasInitSuccess == true
 
     fun shouldRequestPermission(context: Context): Boolean {
         return when (Build.BRAND.toLowerCase()) {

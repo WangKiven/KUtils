@@ -15,6 +15,8 @@ import com.xiaomi.mipush.sdk.PushConfiguration
  * SDK使用指南：https://dev.mi.com/console/doc/detail?pId=41
  */
 class MiPushHelper : PushHelper {
+    override var hasInitSuccess: Boolean = false
+
     override fun initPush(context: Context) {
 //        if (!shouldInitMiPush()) return
 
@@ -28,6 +30,7 @@ class MiPushHelper : PushHelper {
         // TODO: 2019-12-31  在非MIUI平台下，如果targetSdkVersion>=23，需要动态申请电话和存储权限，请在申请权限后再调用注册接口，否则会注册失败。
 //        MiPushClient.registerPush(context, "2882303761518292808", "5681829285808")
         MiPushClient.registerPush(context, "$appId", "$appKey")
+        hasInitSuccess = true
 
         /*uploadRegId(context.applicationContext)*/
 

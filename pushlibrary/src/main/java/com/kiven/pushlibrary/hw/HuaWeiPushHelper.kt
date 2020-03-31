@@ -3,8 +3,10 @@ package com.kiven.pushlibrary.hw
 import android.content.Context
 import com.huawei.agconnect.config.AGConnectServicesConfig
 import com.huawei.hms.aaid.HmsInstanceId
+import com.huawei.hms.push.HmsMessaging
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.pushlibrary.PushHelper
+import com.kiven.pushlibrary.PushUtil
 import com.kiven.pushlibrary.Web
 
 /**
@@ -45,8 +47,9 @@ class HuaWeiPushHelper : PushHelper {
                     KLog.i("HmsInstanceId获取华为token: $token")
                     Web.register(token, 2)//设备类型 0 不明，1 iOS, 2 华为, 3 vivo, 4 oppo, 5 小米
                 }
-
                 hasInitSuccess = true
+
+                PushUtil.initChannel(context)
             } catch (e: Exception) {
                 KLog.e(e)
             }

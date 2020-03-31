@@ -16,12 +16,14 @@ import androidx.core.app.NotificationManagerCompat
 object PushUtil {
 
 
+    /**
+     * 这个不要动，华为推送，服务器用了这个channelId
+     */
     val channelId = "sxbChannelId"
     val channelName = "推送通知"
 
-    fun notification(context: Context, title: String, subTitle: String, argument: String) {
+    fun initChannel(context: Context){
         val notiManager = NotificationManagerCompat.from(context)
-
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channels = notiManager.notificationChannels
@@ -50,6 +52,13 @@ object PushUtil {
                 notiManager.createNotificationChannel(channel)
             }
         }
+    }
+
+    fun notification(context: Context, title: String, subTitle: String, argument: String) {
+        // 先初始通道
+        initChannel(context)
+
+        val notiManager = NotificationManagerCompat.from(context)
 
 //        val ii = Intent(context, Class.forName("com.kiven.sample.noti.ClickNotiActivity"))
         val ii = Intent(context, Class.forName("com.kiven.pushlibrary.ClickNotiActivity"))

@@ -30,15 +30,15 @@ uploadArchives {
 dependencies {
 //    implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    compileOnly "com.google.android.material:material:1.0.0"
+    compileOnly "com.google.android.material:material:1.1.0"
+    compileOnly 'androidx.appcompat:appcompat:1.1.0'
     compileOnly "androidx.recyclerview:recyclerview:1.1.0"
-
     // ViewModel and LiveData
-    compileOnly 'androidx.lifecycle:lifecycle-extensions:2.1.0'
+    compileOnly 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 //    annotationProcessor "android.arch.lifecycle:compiler:1.0.0"
 
     compileOnly 'com.google.code.gson:gson:2.8.6'
-    compileOnly 'com.google.android:flexbox:1.0.0'
+    compileOnly 'com.google.android:flexbox:2.0.0'
 //    compileOnly project(':xutils')
 }
 //apply from: 'jcenerUpload.gradle'

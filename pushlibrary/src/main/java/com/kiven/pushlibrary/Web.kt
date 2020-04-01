@@ -14,6 +14,7 @@ internal object Web {
     private const val setTagsUrl = "${httpPre}open/push/setTags"*/
 
     var context: Context? = null
+    var shouldWebSocket: Boolean = false
 
     var projectKey = "projectKey_sample"
 
@@ -74,14 +75,9 @@ internal object Web {
                 if (json.getInt("status") != 200) {
                     Thread.sleep(1000 * 30)
                     register(taskId, platformN)
-                } else {
+                } else if (shouldWebSocket) {
                     context?.apply {
-
-
                         startService(Intent(this, PushService::class.java).apply {
-                            /*putExtra("projectKey", projectKey)
-                            putExtra("tokenOrId", tokenOrId)
-                            putExtra("platform", platformN)*/
                             putExtra(
                                 "url",
                                 "${wsPre}?projectKey=${Uri.encode(projectKey)}&tokenOrId=${Uri.encode(

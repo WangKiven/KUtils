@@ -36,6 +36,8 @@ internal object Web {
 
     var tokenOrId: String = ""
         private set
+    var platform: Int = 5
+        private set
     var account: String = ""
         private set
     var tagOrTopics: String = ""
@@ -51,6 +53,7 @@ internal object Web {
         }
 
         tokenOrId = tokenOrIdN
+        platform = platformN
 
         registerTaskId = System.currentTimeMillis()
         register(registerTaskId, platformN)

@@ -12,6 +12,7 @@ import android.os.Build
 import android.os.Bundle
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.kiven.kutils.logHelper.KLog
 
 object PushUtil {
 
@@ -19,12 +20,21 @@ object PushUtil {
     /**
      * 这个不要动，华为推送，服务器用了这个channelId
      */
-    val channelId = "sxbChannelId"
+//    val channelId = "sxbChannelId"
+    fun getChannelId(context: Context):String {
+        when(Web.platform) {//设备类型 0 不明，1 iOS, 2 华为, 3 vivo, 4 oppo, 5 小米
+            2 -> {}
+            3 -> return "vivo_push_channel"
+            4 -> {}
+        }
+        return "sxbChannelId"
+    }
     val channelName = "推送通知"
 
     fun initChannel(context: Context){
         val notiManager = NotificationManagerCompat.from(context)
-
+        val channelId = getChannelId(context)
+KLog.i("创建$channelName")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channels = notiManager.notificationChannels
             if (channels.filter { it.id == channelId }.isNullOrEmpty()) {
@@ -65,7 +75,7 @@ object PushUtil {
         ii.putExtra("argu", argument)
         val pendingIntent = PendingIntent.getActivity(context, 110, ii, PendingIntent.FLAG_UPDATE_CURRENT)
 
-        val mBuilder = NotificationCompat.Builder(context, channelId)
+        val mBuilder = NotificationCompat.Builder(context, getChannelId(context))
                 .setSmallIcon(context.applicationContext.applicationInfo.icon)
 //                .setTicker(subTitle) // 通知响起时，状态栏显示的内容
                 .setContentTitle(title)

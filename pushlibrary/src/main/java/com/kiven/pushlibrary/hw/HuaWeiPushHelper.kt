@@ -49,11 +49,9 @@ class HuaWeiPushHelper : PushHelper {
                 val token = HmsInstanceId.getInstance(context).getToken(appId, "HCM")
                 if (!token.isNullOrBlank()) {
                     KLog.i("HmsInstanceId获取华为token: $token")
-                    Web.register(token, 2)//设备类型 0 不明，1 iOS, 2 华为, 3 vivo, 4 oppo, 5 小米
+                    Web.register(context, token, 2)//设备类型 0 不明，1 iOS, 2 华为, 3 vivo, 4 oppo, 5 小米
                 }
                 hasInitSuccess = true
-
-                PushUtil.initChannel(context)
             } catch (e: Exception) {
                 KLog.e(e)
             }

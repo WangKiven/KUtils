@@ -45,7 +45,7 @@ class VivoPushHelper : PushHelper {
             turnOnPush {
                 if (it == 0 || it == 1) {
                     if (regId.isNotBlank())
-                        Web.register(regId, 3)//设备类型 0 不明，1 iOS, 2 华为, 3 vivo, 4 oppo, 5 小米
+                        Web.register(context, regId, 3)//设备类型 0 不明，1 iOS, 2 华为, 3 vivo, 4 oppo, 5 小米
                 } else KLog.i("操作失败")
             }
         }

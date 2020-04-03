@@ -26,7 +26,7 @@ class HuaWeiPushService : HmsMessageService() {
     override fun onNewToken(p0: String?) {
         super.onNewToken(p0)
         if (p0 != null)
-            Web.register(p0, 2)//设备类型 0 不明，1 iOS, 2 华为, 3 vivo, 4 oppo, 5 小米
+            Web.register(this, p0, 2)//设备类型 0 不明，1 iOS, 2 华为, 3 vivo, 4 oppo, 5 小米
         KLog.i("华为 HmsMessageService接收的华为token: $p0")
     }
 }

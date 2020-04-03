@@ -67,6 +67,7 @@ class MiPushReceiver : PushMessageReceiver() {
     // 用来接受客户端向服务器发送注册命令消息后返回的响应
     override fun onReceiveRegisterResult(p0: Context?, p1: MiPushCommandMessage?) {
         KLog.i("小米推送 onReceiveRegisterResult 注册完成")
+        p0 ?: return
         p1 ?: return
         KLog.printClassField(p1, null, true)
 
@@ -79,7 +80,7 @@ class MiPushReceiver : PushMessageReceiver() {
                 KLog.i("小米推送注册成功 regId = $cmdArg1 , cmdArg2 = $cmdArg2")
 
 
-                Web.register(cmdArg1!!, 5)//设备类型 0 不明，1 iOS, 2 华为, 3 vivo, 4 oppo, 5 小米
+                Web.register(p0, cmdArg1!!, 5)//设备类型 0 不明，1 iOS, 2 华为, 3 vivo, 4 oppo, 5 小米
             }
         }
     }

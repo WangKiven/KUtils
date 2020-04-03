@@ -1,18 +1,10 @@
 package com.kiven.pushlibrary.vivo
 
 import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.Uri
-import android.os.Handler
 import com.kiven.kutils.logHelper.KLog
-import com.kiven.kutils.tools.KAppTool
-import com.kiven.kutils.tools.KUtil
-import com.kiven.pushlibrary.ClickNotiActivity
 import com.kiven.pushlibrary.Web
 import com.vivo.push.model.UPSNotificationMessage
 import com.vivo.push.sdk.OpenClientPushMessageReceiver
-import java.lang.Exception
 
 /**
  * Created by oukobayashi on 2020-01-06.
@@ -69,7 +61,9 @@ class VivoPushReceiver : OpenClientPushMessageReceiver() {
     override fun onReceiveRegId(p0: Context?, p1: String?) {
         KLog.i("vivo 注册获得id: $p1")
 
-        if (p1 != null)
-            Web.register(p1, 3)//设备类型 0 不明，1 iOS, 2 华为, 3 vivo, 4 oppo, 5 小米
+        p0 ?: return
+        p1 ?: return
+
+        Web.register(p0, p1, 3)//设备类型 0 不明，1 iOS, 2 华为, 3 vivo, 4 oppo, 5 小米
     }
 }

@@ -3,7 +3,9 @@ package com.kiven.pushlibrary
 import android.app.Service
 import android.content.ComponentCallbacks2
 import android.content.Intent
+import android.os.Build
 import android.os.IBinder
+import androidx.core.app.NotificationManagerCompat
 import com.kiven.kutils.logHelper.KLog
 import okhttp3.*
 import okio.ByteString
@@ -59,6 +61,22 @@ class PushService : Service() {
 
         val curUrl = url
         if (curUrl.isBlank()) return
+
+        // TODO vivo 远程推送的channel,本地也可以使用。远程推送时创建的channel默认是开启的, 本地创建的默认是关闭的。
+        //  所以等待远程推送并创建好channel后再，使用webSocket推送
+        if (Web.platform == 3 && Build.VERSION.SDK_INT >= 26) {
+            val notiChannel = NotificationManagerCompat.from(this)
+                .getNotificationChannel(PushUtil.getChannelId(this))
+            if (notiChannel == null) {
+                KLog.i("notiChannel == null")
+                Thread {
+                    Thread.sleep(1000 * 60)
+                    if (curUrl == url)
+                        connWebSocket()
+                }.start()
+                return
+            }
+        }
 
         val mOkHttpClient = OkHttpClient.Builder()
             .readTimeout(3, TimeUnit.SECONDS) //设置读取超时时间

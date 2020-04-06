@@ -22,8 +22,9 @@ class PushNotificationListenerService : NotificationListenerService() {
 
         sbn?.apply {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                if (packageName == appPackageName && notification.channelId == PushUtil.channelId) {
-                    KUtil.putSharedPreferencesLongValue(PushUtil.channelId, System.currentTimeMillis())
+                val channelId = PushUtil.getChannelId(this@PushNotificationListenerService)
+                if (packageName == appPackageName && notification.channelId == channelId) {
+                    KUtil.putSharedPreferencesLongValue(channelId, System.currentTimeMillis())
                 }
             }
         }

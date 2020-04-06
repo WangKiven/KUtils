@@ -17,7 +17,7 @@ object PushClient {
     private var pushHelper: PushHelper? = null
 
     val hasInit: Boolean
-        get() = pushHelper != null
+        get() = pushHelper != null && pushHelper?.hasInitSuccess == true
 
     fun shouldRequestPermission(context: Context): Boolean {
         return when (Build.BRAND.toLowerCase()) {
@@ -42,21 +42,31 @@ object PushClient {
 
         when (Build.BRAND.toLowerCase()) {
             "huawei", "honor" -> {
+                Web.shouldWebSocket = false
                 pushHelper = HuaWeiPushHelper()
             }
             "oppo" -> {
                 if (PushManager.isSupportPush(context)) {
+                    Web.shouldWebSocket = true
                     pushHelper = OPPOPushHelper()
                 }
             }
             "vivo" -> {
                 if (PushClient.getInstance(context).isSupport) {
+                    Web.shouldWebSocket = true
                     pushHelper = VivoPushHelper()
                 }
             }
+            "xiaomi", "redmi" -> {
+                Web.shouldWebSocket = false
+                pushHelper = MiPushHelper()
+            }
         }
 
-        if (pushHelper == null) pushHelper = MiPushHelper()
+        if (pushHelper == null) {
+            Web.shouldWebSocket = true
+            pushHelper = MiPushHelper()
+        }
 
         pushHelper?.initPush(context)
     }

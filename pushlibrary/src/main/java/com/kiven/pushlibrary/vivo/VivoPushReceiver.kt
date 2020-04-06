@@ -1,18 +1,10 @@
 package com.kiven.pushlibrary.vivo
 
 import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.Uri
-import android.os.Handler
 import com.kiven.kutils.logHelper.KLog
-import com.kiven.kutils.tools.KAppTool
-import com.kiven.kutils.tools.KUtil
-import com.kiven.pushlibrary.ClickNotiActivity
 import com.kiven.pushlibrary.Web
 import com.vivo.push.model.UPSNotificationMessage
 import com.vivo.push.sdk.OpenClientPushMessageReceiver
-import java.lang.Exception
 
 /**
  * Created by oukobayashi on 2020-01-06.
@@ -24,6 +16,9 @@ class VivoPushReceiver : OpenClientPushMessageReceiver() {
         KLog.printClassField(p1, null, true)
 
         val skipType = p1.skipType//1：打开APP首页 2：打开链接 3：自定义 4：打开app内指定页面
+        // 跳转内容 跳转类型为2时，跳转内容最大1000个字符，跳转类型为3或4时，跳转内容最大1024个字符，
+        // skipType传3需要在onNotificationMessageClicked回调函数中自己写处理逻辑。
+        val skipContext = p1.skipContent
         /*try {
             val skipContent = p1.skipContent
             p0.startActivity(Intent.parseUri(skipContent, Intent.URI_INTENT_SCHEME))
@@ -66,7 +61,9 @@ class VivoPushReceiver : OpenClientPushMessageReceiver() {
     override fun onReceiveRegId(p0: Context?, p1: String?) {
         KLog.i("vivo 注册获得id: $p1")
 
-        if (p1 != null)
-            Web.register(p1, 3)//设备类型 0 不明，1 iOS, 2 华为, 3 vivo, 4 oppo, 5 小米
+        p0 ?: return
+        p1 ?: return
+
+        Web.register(p0, p1, 3)//设备类型 0 不明，1 iOS, 2 华为, 3 vivo, 4 oppo, 5 小米
     }
 }

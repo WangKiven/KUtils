@@ -14,6 +14,7 @@ internal object Web {
     private const val setTagsUrl = "${httpPre}open/push/setTags"*/
 
     var context: Context? = null
+    var shouldWebSocket: Boolean = false
 
     var projectKey = "projectKey_sample"
 
@@ -35,6 +36,8 @@ internal object Web {
 
     var tokenOrId: String = ""
         private set
+    var platform: Int = 5
+        private set
     var account: String = ""
         private set
     var tagOrTopics: String = ""
@@ -44,12 +47,23 @@ internal object Web {
      * @param platformN 设备类型 0 不明，1 iOS, 2 华为, 3 vivo, 4 oppo, 5 小米
      */
     @Synchronized
-    fun register(tokenOrIdN: String, platformN: Int) {
+    fun register(context: Context, tokenOrIdN: String, platformN: Int) {
         if (tokenOrId == tokenOrIdN) {
             return
         }
 
         tokenOrId = tokenOrIdN
+        platform = platformN
+
+        when(platformN) {
+            2 -> {
+                // 提前生成channel，可防止系统生成默认channel的相关参数，如名称，说明，等级等。系统默认的chnnelId为"com.huawei.android.pushagent.low"
+                // 测试后发现，当有系统推送时，会将"com.huawei.android.pushagent.low"的参数重置。但是之前是关闭的话，系统不会重置。
+                PushUtil.initChannel(context)
+            }
+            3 -> {}
+            4 -> {}
+        }
 
         registerTaskId = System.currentTimeMillis()
         register(registerTaskId, platformN)
@@ -74,14 +88,9 @@ internal object Web {
                 if (json.getInt("status") != 200) {
                     Thread.sleep(1000 * 30)
                     register(taskId, platformN)
-                } else {
+                } else if (shouldWebSocket) {
                     context?.apply {
-
-
                         startService(Intent(this, PushService::class.java).apply {
-                            /*putExtra("projectKey", projectKey)
-                            putExtra("tokenOrId", tokenOrId)
-                            putExtra("platform", platformN)*/
                             putExtra(
                                 "url",
                                 "${wsPre}?projectKey=${Uri.encode(projectKey)}&tokenOrId=${Uri.encode(

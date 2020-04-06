@@ -3,8 +3,10 @@ package com.kiven.pushlibrary.hw
 import android.content.Context
 import com.huawei.agconnect.config.AGConnectServicesConfig
 import com.huawei.hms.aaid.HmsInstanceId
+import com.huawei.hms.push.HmsMessaging
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.pushlibrary.PushHelper
+import com.kiven.pushlibrary.PushUtil
 import com.kiven.pushlibrary.Web
 
 /**
@@ -17,6 +19,7 @@ import com.kiven.pushlibrary.Web
  *      解决方案：调用我们自己的服务器设置主题，服务器可以通过华为提供的接口查询到之前设置过的主题，从而判断添加什么主题，取消什么主题
  */
 class HuaWeiPushHelper : PushHelper {
+    override var hasInitSuccess: Boolean = false
 
     companion object {
         val token: String
@@ -38,13 +41,17 @@ class HuaWeiPushHelper : PushHelper {
                 val appId = AGConnectServicesConfig.fromContext(context).getString("client/app_id")
                 KLog.i("华为appId: $appId")
 
-                // TODO Token发生变化时或者EMUI版本低于10.0以 onNewToken 方法返回
+                // TODO Token发生变化时或者EMUI版本低于10.0以 onNewToken 方法返回。
+                //  集成HMS SDK最新版本需要满足HMS Core（APK）的版本不低于3.0.0。
+                //  如果低于3.0.0版本，当应用有前台界面时HMS SDK会提示用户升级HMS Core（APK）为最新版本，
+                //  此时 HmsInstanceId.getInstance 的入参必须传入Activity类实例；当应用是后台应用时，
+                //  如果开发者不想弹出引导升级的页面时，可以传入非Activity类型的Context类实例。
                 val token = HmsInstanceId.getInstance(context).getToken(appId, "HCM")
                 if (!token.isNullOrBlank()) {
                     KLog.i("HmsInstanceId获取华为token: $token")
-                    Web.register(token, 2)//设备类型 0 不明，1 iOS, 2 华为, 3 vivo, 4 oppo, 5 小米
+                    Web.register(context, token, 2)//设备类型 0 不明，1 iOS, 2 华为, 3 vivo, 4 oppo, 5 小米
                 }
-
+                hasInitSuccess = true
             } catch (e: Exception) {
                 KLog.e(e)
             }
@@ -61,8 +68,8 @@ class HuaWeiPushHelper : PushHelper {
     /**
      * 限制：
      * 一个应用实例不可订阅超过2000个主题。
-     * 该功能仅在EMUI版本不低于10.0的华为设备上支持。
-     * 华为移动服务（APK）的版本不低于3.0.0。
+     * 该功能仅在EMUI版本不低于8.1的华为设备上支持。
+     * HMS Core（APK）的版本不低于4.0.0。
      *
      * 测试机错误码：907122049 当前系统EMUI版本过低导致能力不可使用。
      */

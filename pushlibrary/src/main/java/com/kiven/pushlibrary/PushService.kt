@@ -44,7 +44,11 @@ class PushService : Service() {
                     }
                     mSocket = null
                     Thread.sleep(3000)
-                    connWebSocket()
+                    try {
+                        connWebSocket()
+                    } catch (t: Throwable) {
+                        t.printStackTrace()
+                    }
                 }.start()
             }
         }

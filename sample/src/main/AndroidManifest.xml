@@ -59,6 +59,10 @@
         android:protectionLevel="signature" /> <!--这里com.xiaomi.mipushdemo改成app的包名-->
     <uses-permission android:name="com.kiven.sample.permission.MIPUSH_RECEIVE" /><!--这里com.xiaomi.mipushdemo改成app的包名-->
 
+    <!-- ARCore 权限 -->
+    <!--<uses-permission android:name="android.permission.CAMERA" />-->
+    <uses-feature android:name="android.hardware.camera" />
+
     <application
         android:name=".AppContext"
         android:allowBackup="true"
@@ -70,6 +74,8 @@
         android:theme="@style/AppTheme"
         tools:ignore="UnusedAttribute"
         tools:replace="icon,label,theme">
+
+        <meta-data android:name="com.google.ar.core" android:value="optional" /><!-- ARCore 配置 optional：可选AR，required:必须AR-->
 
         <activity android:name=".noti.ClickNotiActivity">
             <intent-filter>

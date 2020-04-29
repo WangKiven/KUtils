@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.google.android.flexbox.FlexboxLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:alignContent="flex_start"
+        app:flexWrap="wrap">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="\n设置语音合成参数：" />
+
+        <Button
+            android:id="@+id/btn_voice_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="发音人" />
+
+        <Button
+            android:id="@+id/btn_voice_speed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="语速" />
+
+        <Button
+            android:id="@+id/btn_voice_volume"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="音量" />
+
+        <Button
+            android:id="@+id/btn_voice_pitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="语调" />
+
+        <Button
+            android:id="@+id/btn_voice_bg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="背景音乐" />
+
+        <Button
+            android:id="@+id/btn_voice_fading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="淡入淡出" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="\n讯飞功能：" />
+
+        <Button
+            android:id="@+id/btn_listen_voice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="识别语音" />
+
+        <Button
+            android:id="@+id/btn_create_voice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="语音合成" />
+
+        <Button
+            android:id="@+id/btn_read_voice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="声纹识别" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="\n系统功能：" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="语音识别，华为测试成功，小米测试失败" />
+
+        <Button
+            android:id="@+id/btn_system_listen_voice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="识别语音" />
+        <Button
+            android:id="@+id/btn_system_listen_voice_stop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="停止识别语音" />
+
+        <Button
+            android:id="@+id/btn_system_create_voice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="语音合成" />
+    </com.google.android.flexbox.FlexboxLayout>
+
+</androidx.core.widget.NestedScrollView>

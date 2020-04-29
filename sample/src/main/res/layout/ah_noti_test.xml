@@ -185,6 +185,12 @@
             android:layout_height="wrap_content"
             android:text="检测通知监听当前状态" />
 
+        <Button
+            android:id="@+id/btn_noti_listener_voice_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="通知监听语音播放状态" />
+
 
         <Button
             android:id="@+id/btn_app_setting"

@@ -165,11 +165,17 @@ class AHSmallAction : KActivityDebugHelper() {
         })
 
         // TODO: 2018/3/28 ----------------------------------------------------------
-        addTitle("语音识别")
+        addTitle("语音识别与合成")
 
         // http://doc.xfyun.cn/msc_android/%E9%A2%84%E5%A4%87%E5%B7%A5%E4%BD%9C.html
-        addView("讯飞识别", View.OnClickListener {
-            com.kiven.sample.AHXunfeiTest().startActivity(mActivity)
+        addView("语音识别与合成", View.OnClickListener {
+            // 在里面请求权限太麻烦，由于有多个地方都需要权限，所以在入口出先请求
+            KGranting.requestPermissions(activity, 377, Manifest.permission.RECORD_AUDIO,
+                    "录音") {
+                if (it) {
+                    AHXunfeiTest().startActivity(mActivity)
+                }
+            }
         })
 
         // TODO: 2018/6/4 ----------------------------------------------------------

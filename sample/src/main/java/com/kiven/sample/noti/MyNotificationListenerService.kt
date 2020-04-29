@@ -7,6 +7,7 @@ import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import androidx.annotation.RequiresApi
 import com.kiven.kutils.logHelper.KLog
+import com.kiven.kutils.tools.KUtil
 import com.kiven.sample.util.showTip
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.GlobalScope
@@ -21,6 +22,12 @@ import kotlin.coroutines.suspendCoroutine
  */
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 class MyNotificationListenerService : NotificationListenerService() {
+    companion object {
+        private val isReadNotiKey = "MyNotificationListenerService_isReadNoti"
+        var isReadNoti:Boolean
+        set(value) = KUtil.putSharedPreferencesBooleanValue(isReadNotiKey, value)
+        get() = KUtil.getSharedPreferencesBooleanValue(isReadNotiKey, true)
+    }
     var text2speech: TextToSpeech? = null
 
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
@@ -32,7 +39,7 @@ class MyNotificationListenerService : NotificationListenerService() {
             showTip("监听到通知：${text}")
 
             // 不判空华为崩溃，小米没有崩溃
-            if (text.isNullOrBlank()) {
+            if (text.isNullOrBlank() || !isReadNoti) {
                 return
             }
 
@@ -70,6 +77,7 @@ class MyNotificationListenerService : NotificationListenerService() {
                         KLog.i("不支持当前语言！")
                     }
                 }
+                // TODO utteranceId即为 textToSpeech.speak("","",null,i)最后一个参数i
                 text2speech?.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
                     override fun onDone(utteranceId: String?) {
 

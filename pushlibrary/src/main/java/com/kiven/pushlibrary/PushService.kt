@@ -118,7 +118,10 @@ class PushService : Service() {
                                 val subTitle = dataObj.optString("subTitle")
                                 val argument = dataObj.optString("argument")
 
-                                if (!messageId.isNullOrBlank())
+                                val temporaryKey = jsonObject.optString("temporaryKey")
+                                if (temporaryKey.isNotEmpty()) {
+                                    webSocket.send("{\"path\":\"push/notification_received\",\"data\":\"$temporaryKey\"}")
+                                } else if (!messageId.isNullOrBlank())// 这是以前的方式，留着是为了防止服务器没及时跟新
                                     webSocket.send("{\"path\":\"push/notification_received\",\"data\":\"$messageId\"}")
 
                                 /*val context = KContext.getInstance().topActivity

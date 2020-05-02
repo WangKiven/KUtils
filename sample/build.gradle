@@ -6,6 +6,7 @@ apply plugin: 'kotlin-kapt'
 
 // 华为插件
 apply plugin: 'com.huawei.agconnect'
+apply plugin: 'com.google.ar.sceneform.plugin'
 
 def lpFile = project.rootProject.file("local.properties")
 def inputStream = lpFile.newDataInputStream()
@@ -228,4 +229,6 @@ dependencies {
 
     // ARCore https://developers.google.cn/ar/develop/java/enable-arcore
     implementation 'com.google.ar:core:1.16.0'
+    implementation 'com.google.ar.sceneform.ux:sceneform-ux:1.15.0'
+    implementation 'com.google.ar.sceneform:core:1.15.0'
 }

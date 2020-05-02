@@ -1,0 +1,25 @@
+{
+  materials: [
+    {
+      name: 'DefaultMaterial',
+      parameters: [
+        {
+          texture: 'MISSING_PATH',
+        },
+      ],
+      source: 'sampledata/sceneform_face_mesh_material.mat',
+    },
+  ],
+  model: {
+    attributes: [
+      'Position',
+      'TexCoord',
+      'Orientation',
+    ],
+    collision: {},
+    file: 'sampledata/sceneform_face_mesh.obj',
+    name: 'sceneform_face_mesh',
+    recenter: 'root',
+  },
+  version: '0.54:2',
+}

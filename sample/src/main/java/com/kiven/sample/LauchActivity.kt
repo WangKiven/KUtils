@@ -27,7 +27,7 @@ import com.kiven.kutils.file.KFile
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.*
 import com.kiven.sample.arch.AHArch
-import com.kiven.sample.arcore.AHARCore
+import com.kiven.sample.arcore.AHARCoreInlet
 import com.kiven.sample.floatView.ActivityHFloatView
 import com.kiven.sample.gl.AHGL
 import com.kiven.sample.libs.AHLibs
@@ -150,7 +150,7 @@ class LauchActivity : KActivity(), LifecycleOwner {
         })
         addView("服务自启动与保活", View.OnClickListener { AHAutoStartAndLiving().startActivity(this) })
         addView("三方平台推送", View.OnClickListener { AHSxbPush().startActivity(this) })
-        addView("ARCore", View.OnClickListener { AHARCore().startActivity(this) })
+        addView("ARCore", View.OnClickListener { AHARCoreInlet().startActivity(this) })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })

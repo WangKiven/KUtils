@@ -27,6 +27,8 @@ buildscript {
 
         // 华为推送插件
         classpath 'com.huawei.agconnect:agcp:1.0.0.300'
+
+
         classpath 'com.google.ar.sceneform:plugin:1.15.0'
 
         /*gitbub 仓库*/

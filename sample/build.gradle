@@ -6,7 +6,14 @@ apply plugin: 'kotlin-kapt'
 
 // 华为插件
 apply plugin: 'com.huawei.agconnect'
+
 apply plugin: 'com.google.ar.sceneform.plugin'
+sceneform.asset(
+        "sampledata/sceneform_face_mesh.obj",
+        "sampledata/sceneform_face_mesh_material.mat",
+        "sampledata/sceneform_face_mesh.sfa",
+        "src/main/res/raw/sceneform_face_mesh"
+)
 
 def lpFile = project.rootProject.file("local.properties")
 def inputStream = lpFile.newDataInputStream()

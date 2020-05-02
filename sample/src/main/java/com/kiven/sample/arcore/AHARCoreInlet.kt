@@ -1,7 +1,6 @@
 package com.kiven.sample.arcore
 
 import android.Manifest
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
@@ -14,31 +13,16 @@ import com.google.android.flexbox.FlexboxLayout
 import com.google.ar.core.ArCoreApk
 import com.google.ar.core.Session
 import com.google.ar.core.exceptions.UnavailableUserDeclinedInstallationException
-import com.google.ar.sceneform.AnchorNode
-import com.google.ar.sceneform.math.Vector3
-import com.google.ar.sceneform.rendering.Color
-import com.google.ar.sceneform.rendering.MaterialFactory
-import com.google.ar.sceneform.rendering.ModelRenderable
-import com.google.ar.sceneform.rendering.ShapeFactory
-import com.google.ar.sceneform.ux.ArFragment
-import com.google.ar.sceneform.ux.TransformableNode
 import com.kiven.kutils.activityHelper.KActivityDebugHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
-import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KGranting
-import com.kiven.sample.R
 import com.kiven.sample.util.snackbar
-import org.jetbrains.anko.frameLayout
 import org.jetbrains.anko.support.v4.nestedScrollView
 
-/**
- * https://developers.google.cn/ar/develop/java/enable-arcore
- */
-class AHARCore : KActivityDebugHelper() {
+class AHARCoreInlet : KActivityDebugHelper() {
     var supportARCoreTextView: TextView? = null
     var isSupport = -1
 
-    val arFragment = ArFragment()
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
 
@@ -47,44 +31,8 @@ class AHARCore : KActivityDebugHelper() {
         flexboxLayout.alignContent = AlignContent.FLEX_START
 
 
-
-        var modelRenderable:ModelRenderable? = null
-        ModelRenderable.builder()
-//                .setSource(activity, Uri.parse("sceneform_face_mesh.sfb"))R.raw.sceneform_face_mesh
-                .setSource(activity, R.raw.sceneform_face_mesh)
-                .build()
-                .thenAccept({renderable ->  modelRenderable = renderable})
-                .exceptionally {
-                    KLog.e(it)
-                    return@exceptionally null
-                }
-        arFragment.setOnTapArPlaneListener { hitResult, plane, motionEvent ->
-            if (modelRenderable == null) return@setOnTapArPlaneListener
-
-            val anchor = hitResult.createAnchor()
-            val anchorNode = AnchorNode(anchor)
-            anchorNode.setParent(arFragment.arSceneView.scene)
-
-            val mode = TransformableNode(arFragment.transformationSystem)
-                    .apply {
-                        setParent(anchorNode)
-                        renderable = modelRenderable
-                        select()
-                    }
-        }
-
-
-
-
-
-        activity.frameLayout {
-            id = R.id.ll_root
-
-            activity.supportFragmentManager.beginTransaction().add(R.id.ll_root, arFragment, null).commit()
-
-            nestedScrollView {
-                addView(flexboxLayout)
-            }
+        activity.nestedScrollView {
+            addView(flexboxLayout)
         }
 
         val addTitle = fun(text: String): TextView {
@@ -109,30 +57,35 @@ class AHARCore : KActivityDebugHelper() {
         supportARCoreTextView = addTitle("ARCore检测中")
         checkARCore()
 
-        var session:Session? = null
+        var session: Session? = null
         addView("go", View.OnClickListener {
             if (session != null) return@OnClickListener
 
             KGranting.requestPermissions(activity, 233, Manifest.permission.CAMERA) {
                 if (it) {
                     try {
-                        when(ArCoreApk.getInstance().requestInstall(activity, true)) {
+                        when (ArCoreApk.getInstance().requestInstall(activity, true)) {
                             ArCoreApk.InstallStatus.INSTALLED -> {
-                                session = Session(activity)
+//                                session = Session(activity)
 
-                                /*MaterialFactory.makeOpaqueWithColor(activity, Color(android.graphics.Color.RED))
-                                        .thenAccept {
-                                            val redSphereRenderable = ShapeFactory.makeSphere(0.1f, Vector3(0.0f, 0.15f, 0.0f), it)
-                                        }*/
+//                                MaterialFactory.makeOpaqueWithColor(activity, Color(android.graphics.Color.RED))
+//                                        .thenAccept {
+//                                            val redSphereRenderable = ShapeFactory.makeSphere(0.1f, Vector3(0.0f, 0.15f, 0.0f), it)
+//                                        }
+
+                                AHARCore().startActivity(activity)
                             }
                             ArCoreApk.InstallStatus.INSTALL_REQUESTED -> {
                                 //如果 requestInstall() 返回 INSTALL_REQUESTED，则当前 Activity 将暂停，并提示用户安装或更新 ARCore：
+                                activity.snackbar("INSTALL_REQUESTED 需安装或更新 ARCore")
                             }
-                            else -> {}
+                            else -> {
+                                activity.snackbar("else")
+                            }
                         }
-                    }catch (e: UnavailableUserDeclinedInstallationException) {
+                    } catch (e: UnavailableUserDeclinedInstallationException) {
                         activity.snackbar("不可用异常")
-                    }catch (e:Throwable) {
+                    } catch (e: Throwable) {
                         activity.snackbar("不明异常 ：${e.message}")
                         e.printStackTrace()
                     }
@@ -153,10 +106,10 @@ class AHARCore : KActivityDebugHelper() {
         }
 
         if (availability.isSupported) {
-            supportARCoreTextView?.text = "检测结果：支持ARCore ${availability.isTransient}"
+            supportARCoreTextView?.text = "检测结果：支持ARCore。isTransient = ${availability.isTransient}"
             isSupport = 1
         } else {
-            supportARCoreTextView?.text = "检测结果：不支持ARCore ${availability.isTransient}"
+            supportARCoreTextView?.text = "检测结果：不支持ARCore。isTransient =${availability.isTransient}"
             isSupport = 0
         }
     }

@@ -34,6 +34,7 @@ internal object Web {
     private val wsPre
         get() = "${if (ishttps) "wss" else "ws"}://$host/socket"
 
+    // TODO: 2020/5/15  拿取这些值的时候需要注意，不是设置后马上就能拿到正确的值，需要等待与服务器同步完成后才能拿到正确的值
     var tokenOrId: String = ""
         private set
     var platform: Int = 5
@@ -52,25 +53,27 @@ internal object Web {
             return
         }
 
-        tokenOrId = tokenOrIdN
+//        tokenOrId = tokenOrIdN
         platform = platformN
 
-        when(platformN) {
+        when (platformN) {
             2 -> {
                 // 提前生成channel，可防止系统生成默认channel的相关参数，如名称，说明，等级等。系统默认的chnnelId为"com.huawei.android.pushagent.low"
                 // 测试后发现，当有系统推送时，会将"com.huawei.android.pushagent.low"的参数重置。但是之前是关闭的话，系统不会重置。
                 PushUtil.initChannel(context)
             }
-            3 -> {}
-            4 -> {}
+            3 -> {
+            }
+            4 -> {
+            }
         }
 
         registerTaskId = System.currentTimeMillis()
-        register(registerTaskId, platformN)
+        register(registerTaskId, tokenOrIdN, platformN)
     }
 
     private var registerTaskId = 0L
-    private fun register(taskId: Long, platformN: Int) {
+    private fun register(taskId: Long, tokenOrIdN: String, platformN: Int) {
         if (registerTaskId != taskId) return
 
         Thread {
@@ -78,7 +81,7 @@ internal object Web {
                 val result = KWeb.request(
                     registerUrl, mapOf(
                         "projectKey" to projectKey,
-                        "tokenOrId" to tokenOrId,
+                        "tokenOrId" to tokenOrIdN,
                         "platform" to platformN,
                         "isDebug" to isDebug
                     )
@@ -87,107 +90,141 @@ internal object Web {
                 val json = JSONObject(result)
                 if (json.getInt("status") != 200) {
                     Thread.sleep(1000 * 30)
-                    register(taskId, platformN)
-                } else if (shouldWebSocket) {
-                    context?.apply {
-                        startService(Intent(this, PushService::class.java).apply {
-                            putExtra(
-                                "url",
-                                "${wsPre}?projectKey=${Uri.encode(projectKey)}&tokenOrId=${Uri.encode(
-                                    tokenOrId
-                                )}"
-                            )
-                        })
+                    register(taskId, tokenOrIdN, platformN)
+                } else {
+
+                    try {
+                        json.optJSONObject("data")?.apply {
+                            account = optString("account")
+
+                            var tags = optString("tagOrTopics")
+                            if (tags.startsWith(",")) {
+                                tags = tags.substring(1)
+                            }
+                            if (tags.endsWith(",")) {
+                                tags = tags.substring(0, tags.length - 1)
+                            }
+
+                            tagOrTopics = tags
+                        }
+                    } catch (t: Throwable) {
+                        KLog.e(t)
+                    }
+                    // 在标签和账号设置完成后，再设置token和平台，防止bindAccount()和setTags()两个方法判断失误
+                    tokenOrId = tokenOrIdN
+                    platform = platformN
+
+
+                    if (shouldWebSocket) {
+                        context?.apply {
+                            startService(Intent(this, PushService::class.java).apply {
+                                putExtra(
+                                    "url",
+                                    "${wsPre}?projectKey=${Uri.encode(projectKey)}&tokenOrId=${Uri.encode(
+                                        tokenOrId
+                                    )}"
+                                )
+                            })
+                        }
                     }
                 }
 
             } catch (e: Throwable) {
                 KLog.e(e)
                 Thread.sleep(1000 * 30)
-                register(taskId, platformN)
+                register(taskId, tagOrTopics, platformN)
             }
         }.start()
     }
 
+    @Synchronized
     fun bindAccount(accountN: String) {
-        if (account == accountN) {
+        if (account.isNotEmpty() && account == accountN) {
             return
         }
-        account = accountN
+//        account = accountN
 
         accountTaskId = System.currentTimeMillis()
-        bindAccount(accountTaskId)
+        bindAccount(accountTaskId, accountN)
     }
 
     private var accountTaskId = 0L
-    private fun bindAccount(taskId: Long) {
+    private fun bindAccount(taskId: Long, accountN: String) {
         if (accountTaskId != taskId) return
 
         Thread {
             while (tokenOrId.isBlank()) {
                 Thread.sleep(10000)
             }
+            // 设备注册完成后，得知已绑定该账号
+            if (account == accountN) return@Thread
 
             try {
                 val result = KWeb.request(
                     bindAccountUrl, mapOf(
                         "projectKey" to projectKey,
                         "tokenOrId" to tokenOrId,
-                        "account" to account
+                        "account" to accountN
                     )
                 )
 
                 val json = JSONObject(result)
                 if (json.getInt("status") != 200) {
                     Thread.sleep(1000 * 30)
-                    bindAccount(taskId)
+                    bindAccount(taskId, accountN)
+                } else {
+                    account = accountN
                 }
 
             } catch (e: Throwable) {
                 KLog.e(e)
                 Thread.sleep(1000 * 30)
-                bindAccount(taskId)
+                bindAccount(taskId, accountN)
             }
         }.start()
     }
 
-
+    @Synchronized
     fun setTags(tagOrTopicsN: String) {
-        if (tagOrTopics == tagOrTopicsN) return
-        tagOrTopics = tagOrTopicsN
+        if (tagOrTopics.isNotEmpty() && tagOrTopics == tagOrTopicsN) return
+//        tagOrTopics = tagOrTopicsN
 
         tagsTaskId = System.currentTimeMillis()
-        setTags(tagsTaskId)
+        setTags(tagsTaskId, tagOrTopicsN)
     }
 
     private var tagsTaskId = 0L
-    private fun setTags(taskId: Long) {
+    private fun setTags(taskId: Long, tagOrTopicsN: String) {
         if (tagsTaskId != taskId) return
 
         Thread {
             while (tokenOrId.isBlank()) {
                 Thread.sleep(10000)
             }
+            // 设备注册完成后，得知已绑定该标签
+            if (tagOrTopics == tagOrTopicsN) return@Thread
 
             try {
                 val result = KWeb.request(
                     setTagsUrl, mapOf(
                         "projectKey" to projectKey,
                         "tokenOrId" to tokenOrId,
-                        "tagOrTopics" to tagOrTopics
+                        "tagOrTopics" to tagOrTopicsN
                     )
                 )
 
                 val json = JSONObject(result)
                 if (json.getInt("status") != 200) {
                     Thread.sleep(1000 * 30)
-                    setTags(taskId)
+                    setTags(taskId, tagOrTopicsN)
+                }else {
+                    tagOrTopics = tagOrTopicsN
                 }
 
             } catch (e: Throwable) {
                 KLog.e(e)
                 Thread.sleep(1000 * 30)
-                setTags(taskId)
+                setTags(taskId, tagOrTopicsN)
             }
         }.start()
     }

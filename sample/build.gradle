@@ -238,4 +238,7 @@ dependencies {
     implementation 'com.google.ar:core:1.16.0'
     implementation 'com.google.ar.sceneform.ux:sceneform-ux:1.15.0'
     implementation 'com.google.ar.sceneform:core:1.15.0'
+
+    // tensorFlow: https://www.tensorflow.org/lite/guide/android?hl=zh_cn
+    implementation 'org.tensorflow:tensorflow-lite:2.2.0'
 }

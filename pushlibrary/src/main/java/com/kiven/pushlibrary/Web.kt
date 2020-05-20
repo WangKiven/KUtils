@@ -84,7 +84,7 @@ internal object Web {
                         "tokenOrId" to tokenOrIdN,
                         "platform" to platformN,
                         "isDebug" to isDebug
-                    )
+                    ), hostnameVerifier = !host.startsWith("192.168.")// 本地电脑不验证
                 )
 
                 val json = JSONObject(result)
@@ -165,7 +165,7 @@ internal object Web {
                         "projectKey" to projectKey,
                         "tokenOrId" to tokenOrId,
                         "account" to accountN
-                    )
+                    ), hostnameVerifier = !host.startsWith("192.168.")// 本地电脑不验证
                 )
 
                 val json = JSONObject(result)
@@ -210,14 +210,14 @@ internal object Web {
                         "projectKey" to projectKey,
                         "tokenOrId" to tokenOrId,
                         "tagOrTopics" to tagOrTopicsN
-                    )
+                    ), hostnameVerifier = !host.startsWith("192.168.")// 本地电脑不验证
                 )
 
                 val json = JSONObject(result)
                 if (json.getInt("status") != 200) {
                     Thread.sleep(1000 * 30)
                     setTags(taskId, tagOrTopicsN)
-                }else {
+                } else {
                     tagOrTopics = tagOrTopicsN
                 }
 

@@ -5,6 +5,7 @@ import com.kiven.kutils.logHelper.KLog
 import java.net.ConnectException
 import java.net.HttpURLConnection
 import java.net.URL
+import javax.net.ssl.HttpsURLConnection
 
 object KWeb {
 
@@ -12,35 +13,44 @@ object KWeb {
      * @param requestProperty 请求头
      */
     fun request(
-            url: String,
-            param: Map<String, Any?>? = null,
-            requestProperty: Map<String, String?>? = null,
-            requestMethod: String = "POST"
+        url: String,
+        param: Map<String, Any?>? = null,
+        requestProperty: Map<String, String?>? = null,
+        requestMethod: String = "POST",
+        hostnameVerifier: Boolean = true
     ): String {
         // 请求参数
-        var body:String? = null
-                param?.apply {
+        var body: String? = null
+        param?.apply {
             filter { it.value != null }.apply {
                 if (size > 0) {
-                    body = toList().joinToString("&") { "${Uri.encode(it.first)}=${Uri.encode(it.second!!.toString())}" }
+                    body =
+                        toList().joinToString("&") { "${Uri.encode(it.first)}=${Uri.encode(it.second!!.toString())}" }
                 }
             }
         }
 
-        return request(url, body, requestProperty, requestMethod)
+        return request(url, body, requestProperty, requestMethod, hostnameVerifier)
     }
+
     /**
      * @param requestProperty 请求头
+     * @param hostnameVerifier 是否验证。默认true: https服务器如果使用了错误服务器，请报错并停止请求
      */
     fun request(
-            url: String,
-            body:String? = null,
-            requestProperty: Map<String, String?>? = null,
-            requestMethod: String = "POST"
+        url: String,
+        body: String? = null,
+        requestProperty: Map<String, String?>? = null,
+        requestMethod: String = "POST",
+        hostnameVerifier: Boolean = true
     ): String {
         try {
             val connect = URL(url)
-                    .openConnection() as HttpURLConnection
+                .openConnection() as HttpURLConnection
+            if (!hostnameVerifier)
+                if (connect is HttpsURLConnection) {
+                    connect.setHostnameVerifier { _, _ -> true }
+                }
             connect.requestMethod = requestMethod
 
             // 请求头

@@ -35,15 +35,19 @@ object PushUtil {
         return "sxbChannelId"
     }
 
-    private val channelName = "推送通知"
+    private const val channelName = "推送通知"
 
-    fun initChannel(context: Context) {
+    /**
+     * @return 该频道的 importance，-1:表示未知，是来自低版本系统
+     */
+    fun initChannel(context: Context): Int {
         val notiManager = NotificationManagerCompat.from(context)
         val channelId = getChannelId(context)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channels = notiManager.notificationChannels
-            if (channels.filter { it.id == channelId }.isNullOrEmpty()) {
+            val oldChannel = channels.firstOrNull { it.id == channelId }
+            if (oldChannel == null) {
                 val channel = NotificationChannel(
                     channelId,
                     channelName,
@@ -71,13 +75,22 @@ object PushUtil {
                 channel.setBypassDnd(true) // 免打扰模式下，允许响铃或震动
 
                 notiManager.createNotificationChannel(channel)
+
+                return channel.importance
+            } else {
+                return oldChannel.importance
             }
         }
+
+        return -1
     }
 
-    fun notification(context: Context, title: String, subTitle: String, argument: String) {
+    /**
+     * @return 该频道的 importance，-1:表示未知，是来自低版本系统
+     */
+    fun notification(context: Context, title: String, subTitle: String, argument: String): Int {
         // 先初始通道
-        initChannel(context)
+        val importance = initChannel(context)
 
         val notiManager = NotificationManagerCompat.from(context)
 
@@ -102,8 +115,10 @@ object PushUtil {
         // Notification#DEFAULT_LIGHTS Notification#DEFAULT_ALL
         mBuilder.setDefaults(Notification.DEFAULT_ALL)
 
-        val cid = System.currentTimeMillis() % (1000 * 60 * 60 * 24 * 365)
+        val cid = System.currentTimeMillis() % (1000 * 60 * 60 * 24 * 365L)
         notiManager.notify(cid.toInt(), mBuilder.build())
+
+        return importance
     }
 
 

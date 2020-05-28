@@ -19,6 +19,10 @@ import javax.net.ssl.HostnameVerifier
  * http://blog.sina.com.cn/s/blog_3fe961ae0100xhsl.html
  */
 class PushService : Service() {
+    val notiManager:NotificationManagerCompat by lazy {
+        NotificationManagerCompat.from(this)
+    }
+
     override fun onBind(intent: Intent?): IBinder? {
         KLog.i("PushService-onBind")
         return null
@@ -69,8 +73,7 @@ class PushService : Service() {
         // TODO vivo 远程推送的channel,本地也可以使用。远程推送时创建的channel默认是开启的, 本地创建的默认是关闭的。
         //  所以等待远程推送并创建好channel后再，使用webSocket推送
         if (Web.platform == 3 && Build.VERSION.SDK_INT >= 26) {
-            val notiChannel = NotificationManagerCompat.from(this)
-                .getNotificationChannel(PushUtil.getChannelId(this))
+            val notiChannel = notiManager.getNotificationChannel(PushUtil.getChannelId(this))
             if (notiChannel == null) {
                 KLog.i("notiChannel == null")
                 Thread {
@@ -118,18 +121,15 @@ class PushService : Service() {
                                 val subTitle = dataObj.optString("subTitle")
                                 val argument = dataObj.optString("argument")
 
+
+                                val importance = PushUtil.notification(this@PushService, title, subTitle, argument)
+                                val isShow = notiManager.areNotificationsEnabled() && importance != 0 // 未知的情况就当做显示了
+
                                 val temporaryKey = jsonObject.optString("temporaryKey")
                                 if (temporaryKey.isNotEmpty()) {
-                                    webSocket.send("{\"path\":\"push/notification_received\",\"data\":\"$temporaryKey\"}")
+                                    webSocket.send("{\"path\":\"push/notification_received\",\"data\":\"$temporaryKey\",\"isShow\":$isShow}")
                                 } else if (!messageId.isNullOrBlank())// 这是以前的方式，留着是为了防止服务器没及时跟新
-                                    webSocket.send("{\"path\":\"push/notification_received\",\"data\":\"$messageId\"}")
-
-                                /*val context = KContext.getInstance().topActivity
-                                context?.runOnUiThread {
-
-                                }*/
-
-                                PushUtil.notification(this@PushService, title, subTitle, argument)
+                                    webSocket.send("{\"path\":\"push/notification_received\",\"data\":\"$messageId\",\"isShow\":$isShow}")
                             }
 
                         }

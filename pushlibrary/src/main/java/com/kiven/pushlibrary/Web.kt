@@ -30,6 +30,8 @@ internal object Web {
         get() = "${httpPre}open/push/bindAccount"
     private val setTagsUrl
         get() = "${httpPre}open/push/setTags"
+    private val msgCallBack
+        get() = "${httpPre}open/push/msgCallBack"
 
     private val wsPre
         get() = "${if (ishttps) "wss" else "ws"}://$host/socket"
@@ -229,7 +231,7 @@ internal object Web {
         }.start()
     }
 
-    fun onClick(msgUnicode: String, isDebug: Boolean) {
+    fun onClick(msgUnicode: String, isDebug: Boolean, serverKey: String) {
         Thread {
             while (tokenOrId.isBlank()) {
                 Thread.sleep(5000)
@@ -242,26 +244,27 @@ internal object Web {
 
             try {
                 val result = KWeb.request(
-                    setTagsUrl, mapOf(
+                    msgCallBack, mapOf(
                         "projectKey" to projectKey,
                         "tokenOrId" to tokenOrId,
                         "platform" to platform,
                         "msgUnicode" to msgUnicode,
                         "isDebug" to isDebug,
-                        "type" to 3
+                        "type" to 3,
+                        "serverKey" to serverKey
                     ), hostnameVerifier = !host.startsWith("192.168.")// 本地电脑不验证
                 )
 
                 val json = JSONObject(result)
                 if (json.getInt("status") != 200) {
                     Thread.sleep(1000 * 30)
-                    onClick(msgUnicode, isDebug)
+                    onClick(msgUnicode, isDebug, serverKey)
                 }
 
             } catch (e: Throwable) {
                 KLog.e(e)
                 Thread.sleep(1000 * 10)
-                onClick(msgUnicode, isDebug)
+                onClick(msgUnicode, isDebug, serverKey)
             }
         }.start()
     }

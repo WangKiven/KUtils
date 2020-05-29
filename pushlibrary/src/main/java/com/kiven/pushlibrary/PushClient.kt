@@ -95,7 +95,7 @@ object PushClient {
         sArgu?.also {
             try {
                 val jsonObject = JSONObject(it)
-                Web.onClick(jsonObject.getString("msgUnicode"), jsonObject.getBoolean("isDebug"))
+                Web.onClick(jsonObject.getString("msgUnicode"), jsonObject.getBoolean("isDebug"), jsonObject.getString("serverKey"))
             } catch (t: Throwable) {
                 t.printStackTrace()
             }

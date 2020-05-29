@@ -88,7 +88,13 @@ object PushUtil {
     /**
      * @return 该频道的 importance，-1:表示未知，是来自低版本系统
      */
-    fun notification(context: Context, title: String, subTitle: String, argument: String): Int {
+    fun notification(
+        context: Context,
+        title: String,
+        subTitle: String,
+        argument: String,
+        sArgument: String
+    ): Int {
         // 先初始通道
         val importance = initChannel(context)
 
@@ -97,6 +103,7 @@ object PushUtil {
 //        val ii = Intent(context, Class.forName("com.kiven.sample.noti.ClickNotiActivity"))
         val ii = Intent(context, Class.forName("com.kiven.pushlibrary.ClickNotiActivity"))
         ii.putExtra("argu", argument)
+        ii.putExtra("sArgu", sArgument)
         val pendingIntent =
             PendingIntent.getActivity(context, 110, ii, PendingIntent.FLAG_UPDATE_CURRENT)
 

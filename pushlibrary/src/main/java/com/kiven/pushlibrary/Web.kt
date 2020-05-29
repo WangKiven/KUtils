@@ -228,4 +228,41 @@ internal object Web {
             }
         }.start()
     }
+
+    fun onClick(msgUnicode: String, isDebug: Boolean) {
+        Thread {
+            while (tokenOrId.isBlank()) {
+                Thread.sleep(5000)
+            }
+
+            if (platform == 5) {
+                // 小米系统有点击回调，这里就不上传了
+                return@Thread
+            }
+
+            try {
+                val result = KWeb.request(
+                    setTagsUrl, mapOf(
+                        "projectKey" to projectKey,
+                        "tokenOrId" to tokenOrId,
+                        "platform" to platform,
+                        "msgUnicode" to msgUnicode,
+                        "isDebug" to isDebug,
+                        "type" to 3
+                    ), hostnameVerifier = !host.startsWith("192.168.")// 本地电脑不验证
+                )
+
+                val json = JSONObject(result)
+                if (json.getInt("status") != 200) {
+                    Thread.sleep(1000 * 30)
+                    onClick(msgUnicode, isDebug)
+                }
+
+            } catch (e: Throwable) {
+                KLog.e(e)
+                Thread.sleep(1000 * 10)
+                onClick(msgUnicode, isDebug)
+            }
+        }.start()
+    }
 }

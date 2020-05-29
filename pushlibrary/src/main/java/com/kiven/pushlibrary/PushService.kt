@@ -116,20 +116,19 @@ class PushService : Service() {
                     jsonObject.optString("path").also { path ->
                         if (path == "push/notification") {
                             jsonObject.optJSONObject("data")?.also { dataObj ->
-                                val messageId = dataObj.optString("id")
                                 val title = dataObj.optString("title")
                                 val subTitle = dataObj.optString("subTitle")
                                 val argument = dataObj.optString("argument")
+                                val sArgument = dataObj.optString("sArgument")
 
 
-                                val importance = PushUtil.notification(this@PushService, title, subTitle, argument)
+                                val importance = PushUtil.notification(this@PushService, title, subTitle, argument, sArgument)
                                 val isShow = notiManager.areNotificationsEnabled() && importance != 0 // 未知的情况就当做显示了
 
                                 val temporaryKey = jsonObject.optString("temporaryKey")
                                 if (temporaryKey.isNotEmpty()) {
                                     webSocket.send("{\"path\":\"push/notification_received\",\"data\":\"$temporaryKey\",\"isShow\":$isShow}")
-                                } else if (!messageId.isNullOrBlank())// 这是以前的方式，留着是为了防止服务器没及时跟新
-                                    webSocket.send("{\"path\":\"push/notification_received\",\"data\":\"$messageId\",\"isShow\":$isShow}")
+                                }
                             }
 
                         }

@@ -40,9 +40,10 @@ class ClickNotiActivity : AppCompatActivity() {
 //        textView.text = sb.toString()
         KLog.i(sb.toString())
 
-        val argu = intent?.data?.getQueryParameter("argu") ?: intent?.extras?.getString("argu")
+        /*val argu = intent?.data?.getQueryParameter("argu") ?: intent?.extras?.getString("argu")
 
-        onClickNotiListener(this, argu)
+        onClickNotiListener(this, argu)*/
+        onClickNotiListener(this, PushClient.findData(intent))
     }
 
     private fun showIntent(newIntent: Intent, sb: StringBuilder) {

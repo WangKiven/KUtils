@@ -237,10 +237,10 @@ internal object Web {
                 Thread.sleep(5000)
             }
 
-            if (platform == 5) {
-                // 小米系统有点击回调，这里就不上传了
-                return@Thread
-            }
+//            if (platform == 5) {
+//                // 小米系统有点击回调，这里就不上传了, 但是标签推送好像没有回调
+//                return@Thread
+//            }
 
             try {
                 val result = KWeb.request(

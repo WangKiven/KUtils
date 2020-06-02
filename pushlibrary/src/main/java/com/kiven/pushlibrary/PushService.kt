@@ -123,7 +123,9 @@ class PushService : Service() {
 
 
                                 val importance = PushUtil.notification(this@PushService, title, subTitle, argument, sArgument)
-                                val isShow = notiManager.areNotificationsEnabled() && importance != 0 // 未知的情况就当做显示了
+                                val isShow = notiManager.areNotificationsEnabled() && importance > 0 // 未知的情况就当做显示了
+
+                                KLog.i("notiManager.areNotificationsEnabled() = ${notiManager.areNotificationsEnabled()}, importance = $importance")
 
                                 val temporaryKey = jsonObject.optString("temporaryKey")
                                 if (temporaryKey.isNotEmpty()) {

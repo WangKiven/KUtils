@@ -134,7 +134,7 @@ internal object Web {
             } catch (e: Throwable) {
                 KLog.e(e)
                 Thread.sleep(1000 * 30)
-                register(taskId, tagOrTopics, platformN)
+                register(taskId, tokenOrIdN, platformN)
             }
         }.start()
     }

@@ -29,30 +29,15 @@ buildscript {
         // 华为推送插件
         classpath 'com.huawei.agconnect:agcp:1.0.0.300'
 
-
+        // google ar
         classpath 'com.google.ar.sceneform:plugin:1.17.0'
-
-        /*gitbub 仓库*/
-//        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
     }
 
     project.ext {
-        /*compileSdkVersion = 28
-        buildToolsVersion = "28.0.3"
-        minSdkVersion = 14
-        targetSdkVersion = 28
-
-        libraryVersion = "28.0.0"*/
-
         compileSdkVersion = 29
         buildToolsVersion = "29.0.2"
         minSdkVersion = 14
         targetSdkVersion = 28
-
-//        libraryVersion = "28.0.1"
     }
 }
 // todo 阿里提供的各种厂库替代链接 https://maven.aliyun.com/mvn/view

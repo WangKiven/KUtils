@@ -158,7 +158,7 @@ dependencies {
 //    compile 'org.roboguice:roboguice:3.0.1'
 //    compile 'org.roboguice:roboblender:3.0.1'
     implementation 'com.google.code.gson:gson:2.8.6'
-    implementation('com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:0.10.3@aar') {
+    implementation('com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:0.11.0@aar') {
         transitive = true
     }
     implementation 'com.jcodecraeer:xrecyclerview:1.5.9'
@@ -236,9 +236,9 @@ dependencies {
 //    implementation 'com.huawei.hms:push:3.0.3.301'
 
     // ARCore https://developers.google.cn/ar/develop/java/enable-arcore
-    implementation 'com.google.ar:core:1.16.0'
-    implementation 'com.google.ar.sceneform.ux:sceneform-ux:1.15.0'
-    implementation 'com.google.ar.sceneform:core:1.15.0'
+    implementation 'com.google.ar:core:1.17.0'
+    implementation 'com.google.ar.sceneform.ux:sceneform-ux:1.17.0'
+    implementation 'com.google.ar.sceneform:core:1.17.0'
 
     // tensorFlow: https://www.tensorflow.org/lite/guide/android?hl=zh_cn
     implementation 'org.tensorflow:tensorflow-lite:2.2.0'

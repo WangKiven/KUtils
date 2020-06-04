@@ -30,7 +30,7 @@ buildscript {
         classpath 'com.huawei.agconnect:agcp:1.0.0.300'
 
 
-        classpath 'com.google.ar.sceneform:plugin:1.15.0'
+        classpath 'com.google.ar.sceneform:plugin:1.17.0'
 
         /*gitbub 仓库*/
 //        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'

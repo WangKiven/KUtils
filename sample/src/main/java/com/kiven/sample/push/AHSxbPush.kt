@@ -278,7 +278,7 @@ class AHSxbPush : KActivityDebugHelper() {
         })
         addView("AHNotiTest", View.OnClickListener { AHNotiTest().startActivity(activity) })
         addView("notify", View.OnClickListener {
-            PushUtil.notification(activity, "title", "subtitle", "argusss")
+            PushUtil.notification(activity, "title", "subtitle", "argusss", "sArgument")
         })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })

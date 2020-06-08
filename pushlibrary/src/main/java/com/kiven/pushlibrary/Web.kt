@@ -18,9 +18,9 @@ internal object Web {
 
     var projectKey = "projectKey_sample"
 
-    var ishttps = false
-    var host = "192.168.101.106:8080"
-    var isDebug = true
+    var ishttps = true
+    var host = "push.sxbcar.com"
+    var isDebug = false
 
     private val httpPre
         get() = "${if (ishttps) "https" else "http"}://$host/api/"

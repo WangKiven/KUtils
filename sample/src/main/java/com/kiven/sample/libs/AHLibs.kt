@@ -23,7 +23,6 @@ import com.google.android.flexbox.AlignContent
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
 import com.kiven.kutils.activityHelper.KActivityDebugHelper
-import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KToast
@@ -33,16 +32,24 @@ import com.kiven.sample.xutils.db.AHDbDemo
 import com.kiven.sample.xutils.net.AHNetDemo
 import com.koushikdutta.async.http.AsyncHttpClient
 import com.koushikdutta.async.http.server.AsyncHttpServer
-import com.stfalcon.chatkit.dialogs.DialogsList
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import okhttp3.FormBody
-import okhttp3.OkHttpClient
+import okhttp3.*
 import org.jetbrains.anko.support.v4.nestedScrollView
+import java.io.IOException
+import java.io.InputStream
 import java.net.Inet4Address
 import java.net.NetworkInterface
+import java.security.*
+import java.security.cert.CertificateException
+import java.security.cert.CertificateFactory
+import java.security.cert.X509Certificate
 import java.text.DateFormat
 import java.util.*
+import javax.net.ssl.KeyManagerFactory
+import javax.net.ssl.SSLContext
+import javax.net.ssl.TrustManagerFactory
+import javax.net.ssl.X509TrustManager
 
 /**
  * Created by wangk on 2018/3/27.
@@ -150,7 +157,7 @@ class AHLibs : KActivityDebugHelper() {
         addTitle("volley")
         addBtn("volley", View.OnClickListener {
             var queue: RequestQueue? = null
-            val volley = fun (http: String) {
+            val volley = fun(http: String) {
                 if (queue == null) {
                     queue = Volley.newRequestQueue(mActivity)
                 }
@@ -162,10 +169,10 @@ class AHLibs : KActivityDebugHelper() {
             volley("http://blog.csdn.net/linmiansheng/article/details/21646753")
         })
         addTitle("OkHttp")
-        addBtn("OkHttp", View.OnClickListener {
+        addBtn("同步", View.OnClickListener {
             GlobalScope.launch {
                 val httpUrl = "https://www.baidu.com"
-                val method ="/s"
+                val method = "/s"
                 val param = mapOf(
                         "ie" to "UTF-8",
                         "wd" to "美女"
@@ -191,12 +198,30 @@ class AHLibs : KActivityDebugHelper() {
 
                 // 请求
                 try {
-                    val result = OkHttpClient().newCall(request.build()).execute().body?.string()
-                    KLog.i("OkHttp请求结果: $result")
-                }catch (e:Exception) {
+                    val response = OkHttpClient().newCall(request.build()).execute()
+                    val result = response.body?.string()
+                    KLog.i("OkHttp请求结果(${response.protocol}): $result")
+                } catch (e: Exception) {
                     KLog.e(e)
                 }
             }
+        })
+
+        addBtn("异步", View.OnClickListener {
+            val client = OkHttpClient.Builder().build()
+
+            val request = okhttp3.Request.Builder().url("https://www.yimizi.xyz:18080/api/open/push/register")
+                    .build()
+
+            client.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    KLog.e(e.message)
+                }
+
+                override fun onResponse(call: Call, response: okhttp3.Response) {
+                    KLog.e("(${response.protocol.name})\n" + response.body?.string())
+                }
+            })
         })
 
 
@@ -257,4 +282,47 @@ class AHLibs : KActivityDebugHelper() {
 
         return null
     }
+
+    private var sslContext: SSLContext? = null
+    private fun getSSLContext(): SSLContext {
+        if (sslContext != null) return sslContext!!
+
+        try {
+            // 生成SSLContext对象
+            val mSslContext: SSLContext = SSLContext.getInstance("TLS")
+            // 从assets中加载证书
+            val inStream: InputStream = mActivity.getAssets().open("1_www.yimizi.xyz_bundle.crt")
+
+
+            // 密钥库
+            val kStore: KeyStore = KeyStore.getInstance("PKCS12") //如果是运行在PC端，这里需要将PKCS12替换成JKS
+            kStore.load(null, null)
+            kStore.setCertificateEntry("trust", certificate) // 加载证书到密钥库中
+
+            // 密钥管理器
+            val keyFactory: KeyManagerFactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm())
+            keyFactory.init(kStore, null) // 加载密钥库到管理器
+
+            // 信任管理器
+            val tFactory: TrustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
+            tFactory.init(kStore) // 加载密钥库到信任管理器
+
+            // 初始化
+            mSslContext.init(keyFactory.keyManagers, tFactory.trustManagers, SecureRandom())
+
+            sslContext = mSslContext
+            return sslContext!!
+        } catch (e: Throwable) {
+            throw e
+        }
+    }
+
+    private val certificate: X509Certificate by lazy {
+        CertificateFactory.getInstance("X.509")
+                .generateCertificate(mActivity.assets.open("1_www.yimizi.xyz_bundle.crt")) as X509Certificate
+    }
+//    private fun getX509Certificate():X509Certificate {
+//        return CertificateFactory.getInstance("X.509")
+//                .generateCertificate(mActivity.assets.open("1_www.yimizi.xyz_bundle.crt")) as X509Certificate
+//    }
 }

@@ -467,10 +467,6 @@ class AHSmallAction : KActivityDebugHelper() {
             UserManager.getInstance().newUser("123", mdir.absolutePath)?.login()
 
         })
-        addView("Dialog", View.OnClickListener { AHDialogTest().startActivity(activity) })
-        addView("ConstraintLayout Test", View.OnClickListener {
-            AHConstraintLayoutTest().startActivity(activity)
-        })
         addView("发送/监听通知", View.OnClickListener { AHNotiTest().startActivity(activity) })
         addView("唯一标识", View.OnClickListener {
             val sb = StringBuilder()

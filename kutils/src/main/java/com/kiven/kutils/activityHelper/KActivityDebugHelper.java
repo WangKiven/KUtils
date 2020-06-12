@@ -34,7 +34,7 @@ public class KActivityDebugHelper extends KActivityHelper implements SensorEvent
             showLogTime = System.currentTimeMillis();
             sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
 
-            if (Build.MODEL.contains("Android SDK built for")) showDebugView();
+            if (Build.MODEL.contains("Android SDK built for") || Build.MODEL.contains("Emulator")) showDebugView();
         }
     }
 

@@ -168,7 +168,7 @@ private var preTime = 0L
 /**
  * toast提示 仅用于无障碍模块
  */
-fun showToast(word: String) {
+fun showToast(word: String = "还没做") {
     // Toast.LENGTH_SHORT 4s
     // Toast.LENGTH_LONG 7s
     val curTime = System.currentTimeMillis()

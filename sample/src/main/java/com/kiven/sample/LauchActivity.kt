@@ -91,6 +91,9 @@ class LauchActivity : KActivity(), LifecycleOwner {
         addView("cpu、内存管理", View.OnClickListener { AHCPUMemory().startActivity(this) })
         addView("测试KActivityHelper", View.OnClickListener { ActivityHTestBase().startActivity(this) })
         addView("三方库", View.OnClickListener { AHLibs().startActivity(this) })
+        addView("原生控件", View.OnClickListener {
+            AHNativeWidget().startActivity(this)
+        })
         addView("liveData控制界面展示", View.OnClickListener {
             val handler = Handler(Handler.Callback {
                 KView.runUI(this@LauchActivity, CallBack { KAlertDialogHelper.Show1BDialog(this@LauchActivity, "LiveData 行不行？") })

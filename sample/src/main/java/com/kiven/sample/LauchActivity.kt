@@ -154,7 +154,7 @@ class LauchActivity : KActivity(), LifecycleOwner {
         addView("服务自启动与保活", View.OnClickListener { AHAutoStartAndLiving().startActivity(this) })
         addView("三方平台推送", View.OnClickListener { AHSxbPush().startActivity(this) })
         addView("ARCore", View.OnClickListener { AHARCoreInlet().startActivity(this) })
-        addView("", View.OnClickListener { })
+        addView("VPN", View.OnClickListener { })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
 

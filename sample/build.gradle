@@ -112,8 +112,6 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation fileTree(dir: 'xunfeiLibs', include: ['*.jar', '*.bak'])
     implementation fileTree(dir: 'mimcLibs', include: ['*.jar', '*.bak'])
-    // tbs
-    implementation fileTree(dir: 'tbsLibs', include: ['*.jar', '*.bak'])
 //    implementation 'com.tencent.tbs.tbssdk:sdk:43697'
 //    implementation fileTree(dir: 'miPush', include: ['*.jar', '*.bak'])
     // OPPO推送
@@ -122,7 +120,7 @@ dependencies {
 //    implementation fileTree(dir: 'vivoPush', include: ['*.jar', '*.bak', '*.aar'])
     implementation fileTree(dir: 'agoraLibs', include: ['*.jar', '*.bak'])
 
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13'
     implementation project(':kutils')
     implementation project(':kutils-ktx')
     implementation project(':pushlibrary')
@@ -243,4 +241,7 @@ dependencies {
 
     // tensorFlow: https://www.tensorflow.org/lite/guide/android?hl=zh_cn
     implementation 'org.tensorflow:tensorflow-lite:2.2.0'
+
+    // tbs
+    implementation 'com.tencent.tbs.tbssdk:sdk:43903'
 }

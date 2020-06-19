@@ -57,13 +57,12 @@ class AHUrlTest : KActivityDebugHelper() {
             }
 
             btn_change.setOnClickListener {
-//                viewSwitcher.displayedChild = (viewSwitcher.displayedChild + 1) % viewSwitcher.childCount
                 viewFlipper.displayedChild = (viewFlipper.displayedChild + 1) % viewFlipper.childCount
             }
         }
     }
 
-    fun initX5WebView(webview: WebView) {
+    private fun initX5WebView(webview: WebView) {
         /*webview.setWebViewClient(object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
                 return false
@@ -77,11 +76,7 @@ class AHUrlTest : KActivityDebugHelper() {
             }
         })*/
 
-        webview.setWebChromeClient(object : WebChromeClient() {
-            override fun onJsConfirm(arg0: WebView, arg1: String, arg2: String,
-                                     arg3: JsResult): Boolean {
-                return super.onJsConfirm(arg0, arg1, arg2, arg3)
-            }
+        webview.webChromeClient = object : WebChromeClient() {
 
             var myVideoView: View? = null
             var myNormalView: View? = null
@@ -121,9 +116,9 @@ class AHUrlTest : KActivityDebugHelper() {
                  */
                 return super.onJsAlert(null, arg1, arg2, arg3)
             }
-        })
+        }
 
-        webview.setDownloadListener(DownloadListener { arg0, arg1, arg2, arg3, arg4 ->
+        webview.setDownloadListener { arg0, arg1, arg2, arg3, arg4 ->
             KLog.i("url: $arg0")
             AlertDialog.Builder(mActivity)
                     .setTitle("allow to download？")
@@ -149,7 +144,7 @@ class AHUrlTest : KActivityDebugHelper() {
                                 "fake message: refuse download...",
                                 Toast.LENGTH_SHORT).show()
                     }.show()
-        })
+        }
 
         val webSetting: WebSettings = webview.getSettings()
         webSetting.allowFileAccess = true

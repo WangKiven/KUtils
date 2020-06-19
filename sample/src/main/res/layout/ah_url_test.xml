@@ -48,7 +48,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="xxx"/>
+            android:text="第一个是webview，第二个是x5"/>
 
 
     </ViewFlipper>

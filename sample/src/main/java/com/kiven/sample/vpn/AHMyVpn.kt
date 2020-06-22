@@ -1,26 +1,19 @@
 package com.kiven.sample.vpn
 
 import android.app.Activity
-import android.app.Activity.RESULT_OK
-import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.net.VpnService
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.RadioButton
 import android.widget.TextView
 import com.google.android.flexbox.AlignContent
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
 import com.kiven.kutils.activityHelper.KActivityDebugHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
-import com.kiven.sample.R
 import org.jetbrains.anko.support.v4.nestedScrollView
-import org.jetbrains.anko.toast
-import java.util.stream.Collectors
 
 
 /**
@@ -60,7 +53,7 @@ class AHMyVpn:KActivityDebugHelper() {
             }
         })
         addView("ToyVpn", View.OnClickListener {
-            ToyVpnClient().startActivity(mActivity)
+            AHToyVpn().startActivity(mActivity)
         })
         addView("", View.OnClickListener {})
         addView("", View.OnClickListener {})

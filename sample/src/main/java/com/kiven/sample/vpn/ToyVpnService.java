@@ -67,7 +67,7 @@ public class ToyVpnService extends VpnService implements Handler.Callback {
         }
 
         // Create the intent to "configure" the connection (just start ToyVpnClient).
-        mConfigureIntent = PendingIntent.getActivity(this, 0, new Intent(this, ToyVpnClient.class),
+        mConfigureIntent = PendingIntent.getActivity(this, 0, new Intent(this, AHToyVpn.class),
                 PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
@@ -103,15 +103,15 @@ public class ToyVpnService extends VpnService implements Handler.Callback {
         mHandler.sendEmptyMessage(R.string.connecting);
 
         // Extract information from the shared preferences.
-        final SharedPreferences prefs = getSharedPreferences(ToyVpnClient.Prefs.NAME, MODE_PRIVATE);
-        final String server = prefs.getString(ToyVpnClient.Prefs.SERVER_ADDRESS, "");
-        final byte[] secret = prefs.getString(ToyVpnClient.Prefs.SHARED_SECRET, "").getBytes();
-        final boolean allow = prefs.getBoolean(ToyVpnClient.Prefs.ALLOW, true);
+        final SharedPreferences prefs = getSharedPreferences(AHToyVpn.Prefs.NAME, MODE_PRIVATE);
+        final String server = prefs.getString(AHToyVpn.Prefs.SERVER_ADDRESS, "");
+        final byte[] secret = prefs.getString(AHToyVpn.Prefs.SHARED_SECRET, "").getBytes();
+        final boolean allow = prefs.getBoolean(AHToyVpn.Prefs.ALLOW, true);
         final Set<String> packages =
-                prefs.getStringSet(ToyVpnClient.Prefs.PACKAGES, Collections.emptySet());
-        final int port = prefs.getInt(ToyVpnClient.Prefs.SERVER_PORT, 0);
-        final String proxyHost = prefs.getString(ToyVpnClient.Prefs.PROXY_HOSTNAME, "");
-        final int proxyPort = prefs.getInt(ToyVpnClient.Prefs.PROXY_PORT, 0);
+                prefs.getStringSet(AHToyVpn.Prefs.PACKAGES, Collections.emptySet());
+        final int port = prefs.getInt(AHToyVpn.Prefs.SERVER_PORT, 0);
+        final String proxyHost = prefs.getString(AHToyVpn.Prefs.PROXY_HOSTNAME, "");
+        final int proxyPort = prefs.getInt(AHToyVpn.Prefs.PROXY_PORT, 0);
         startConnection(new ToyVpnConnection(
                 this, mNextConnectionId.getAndIncrement(), server, port, secret,
                 proxyHost, proxyPort, allow, packages));

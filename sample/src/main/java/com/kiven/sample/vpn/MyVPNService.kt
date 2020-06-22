@@ -67,7 +67,7 @@ class MyVPNService: VpnService() {
 
 
 
-        val ds = DatagramSocket(8097)
+        /*val ds = DatagramSocket(8097)
 
         val protect = protect(ds)
         if (protect) {
@@ -76,7 +76,7 @@ class MyVPNService: VpnService() {
                 addRoute("0.0.0.0", 0)
                 addDnsServer("192.168.0.23")
             }.establish()
-        }
+        }*/
     }
 
 

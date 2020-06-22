@@ -11,12 +11,13 @@ import android.widget.TextView
 import com.kiven.kutils.activityHelper.KActivityDebugHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.sample.R
+import kotlinx.android.synthetic.main.ah_toy_vpn.*
 import org.jetbrains.anko.toast
 
 /**
  * Created by oukobayashi on 2020/6/22.
  */
-class ToyVpnClient : KActivityDebugHelper() {
+class AHToyVpn : KActivityDebugHelper() {
     class Prefs {
         companion object {
             const val NAME = "connection"
@@ -32,7 +33,7 @@ class ToyVpnClient : KActivityDebugHelper() {
 
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
-        setContentView(R.layout.ah_my_vpn)
+        setContentView(R.layout.ah_toy_vpn)
 
         val serverAddress = findViewById<TextView>(R.id.address)
         val serverPort = findViewById<TextView>(R.id.port)
@@ -55,6 +56,7 @@ class ToyVpnClient : KActivityDebugHelper() {
         allowed.isChecked = prefs.getBoolean(Prefs.ALLOW, true)
         packages.text = prefs.getStringSet(Prefs.PACKAGES, setOf())?.joinToString() ?: ""
 
+        mActivity.test.setOnClickListener {  }
         findViewById<View>(R.id.connect).setOnClickListener { v: View? ->
             if (!checkProxyConfigs(proxyHost.text.toString(),
                             proxyPort.text.toString())) {

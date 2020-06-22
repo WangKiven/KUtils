@@ -22,6 +22,7 @@ import java.nio.channels.DatagramChannel
  *
  * https://developer.android.google.cn/guide/topics/connectivity/vpn
  * https://github.com/pencil-box/NetKnight
+ * https://github.com/mightofcode/android-vpnservice
  */
 class MyVPNService: VpnService() {
     private val channelId = "vpnChannel"

@@ -36,6 +36,7 @@ import com.kiven.sample.push.AHSxbPush
 import com.kiven.sample.theme.AHTheme
 import com.kiven.sample.util.showDialog
 import com.kiven.sample.util.showListDialog
+import com.kiven.sample.vpn.AHMyVpn
 import kotlinx.android.synthetic.main.activity_lauch.*
 import me.grantland.widget.AutofitHelper
 
@@ -154,7 +155,7 @@ class LauchActivity : KActivity(), LifecycleOwner {
         addView("服务自启动与保活", View.OnClickListener { AHAutoStartAndLiving().startActivity(this) })
         addView("三方平台推送", View.OnClickListener { AHSxbPush().startActivity(this) })
         addView("ARCore", View.OnClickListener { AHARCoreInlet().startActivity(this) })
-        addView("VPN", View.OnClickListener { })
+        addView("VPN", View.OnClickListener { AHMyVpn().startActivity(this) })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
 

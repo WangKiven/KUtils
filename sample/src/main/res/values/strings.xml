@@ -24,4 +24,6 @@
     <string name="auto_access_service_dist_package3">com.sxb.caraide</string>
 
     <string name="wx_share_multi_image_service_label">ShareDemo【多图分享】</string>
+    <string name="connecting">ToyVPN正在连接。。。</string>
+    <string name="connected">ToyVPN已连接</string>
 </resources>

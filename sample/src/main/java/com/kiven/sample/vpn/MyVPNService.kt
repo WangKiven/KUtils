@@ -7,10 +7,15 @@ import android.content.Intent
 import android.net.VpnService
 import android.os.Build
 import android.os.IBinder
+import android.os.ParcelFileDescriptor
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.kiven.kutils.logHelper.KLog
 import com.kiven.sample.R
 import java.net.DatagramSocket
+import java.net.InetSocketAddress
+import java.nio.channels.DatagramChannel
+
 
 /**
  * Created by oukobayashi on 2020/6/19.
@@ -18,6 +23,14 @@ import java.net.DatagramSocket
  * https://developer.android.google.cn/guide/topics/connectivity/vpn
  */
 class MyVPNService: VpnService() {
+    companion object {
+        private val TAG: String = com.kiven.sample.vpn.MyVPNService::class.java.getSimpleName()
+
+        val ACTION_CONNECT = "com.example.android.toyvpn.START"
+        val ACTION_DISCONNECT = "com.example.android.toyvpn.STOP"
+    }
+
+
     private val channelId = "vpnChannel"
     private val channelName = "KUtils VPN通知服务"
 
@@ -31,6 +44,10 @@ class MyVPNService: VpnService() {
                 .setSmallIcon(R.drawable.ic_launcher)
                 .setContentTitle("KUtils VPN已开启")
         startForeground(System.currentTimeMillis().toInt(), mBuilder.build())
+
+        Thread {
+            open()
+        }.start()
     }
 
     override fun onBind(intent: Intent?): IBinder? {
@@ -38,8 +55,18 @@ class MyVPNService: VpnService() {
     }
 
     private fun open() {
-        val prepare = prepare(this)
-//        prepare.putExtra()
+        val tunnel = DatagramChannel.open()
+        if (!protect(tunnel.socket())) {
+            KLog.e("不能保持socket")
+            return
+        }
+
+        tunnel.connect(InetSocketAddress("148.70.34.25", 9000))
+        tunnel.configureBlocking(false)
+
+
+
+
         val ds = DatagramSocket(8097)
 
         val protect = protect(ds)
@@ -73,7 +100,7 @@ class MyVPNService: VpnService() {
             channel.enableVibration(false) // 震动
             channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC // 锁屏可见
             channel.setShowBadge(true)
-            channel.description = "这是一个测试用的通知分类" // 描述
+            channel.description = "这是VPN分类" // 描述
             try {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     channel.setAllowBubbles(true)// 小红点显示。华为崩了，所以放try里面

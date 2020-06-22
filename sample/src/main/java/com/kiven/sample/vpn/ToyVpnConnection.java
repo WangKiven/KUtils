@@ -168,7 +168,7 @@ class ToyVpnConnection implements Runnable {
             // writing. Here we put the tunnel into non-blocking mode.
             tunnel.configureBlocking(false);
 
-            // Authenticate and configure the virtual network interface.
+            // 验证并配置虚拟网络接口。
             iface = handshake(tunnel);
 
             // Now we are connected. Set the flag.

@@ -4,6 +4,7 @@ import android.app.PendingIntent;
 import android.content.pm.PackageManager;
 import android.net.ProxyInfo;
 import android.net.VpnService;
+import android.os.Build;
 import android.os.ParcelFileDescriptor;
 import android.text.TextUtils;
 import android.util.Log;
@@ -16,10 +17,9 @@ import java.net.SocketAddress;
 import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
+import java.nio.charset.Charset;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-
-import static java.nio.charset.StandardCharsets.US_ASCII;
 
 class ToyVpnConnection implements Runnable {
     /**
@@ -30,25 +30,32 @@ class ToyVpnConnection implements Runnable {
         void onEstablish(ParcelFileDescriptor tunInterface);
     }
 
-    /** Maximum packet size is constrained by the MTU, which is given as a signed short. */
+    /**
+     * Maximum packet size is constrained by the MTU, which is given as a signed short.
+     */
     private static final int MAX_PACKET_SIZE = Short.MAX_VALUE;
 
-    /** Time to wait in between losing the connection and retrying. */
+    /**
+     * Time to wait in between losing the connection and retrying.
+     */
     private static final long RECONNECT_WAIT_MS = TimeUnit.SECONDS.toMillis(3);
 
-    /** Time between keepalives if there is no traffic at the moment.
-     *
+    /**
+     * Time between keepalives if there is no traffic at the moment.
+     * <p>
      * TODO: don't do this; it's much better to let the connection die and then reconnect when
-     *       necessary instead of keeping the network hardware up for hours on end in between.
+     * necessary instead of keeping the network hardware up for hours on end in between.
      **/
     private static final long KEEPALIVE_INTERVAL_MS = TimeUnit.SECONDS.toMillis(15);
 
-    /** Time to wait without receiving any response before assuming the server is gone. */
+    /**
+     * Time to wait without receiving any response before assuming the server is gone.
+     */
     private static final long RECEIVE_TIMEOUT_MS = TimeUnit.SECONDS.toMillis(20);
 
     /**
      * Time between polling the VPN interface for new traffic, since it's non-blocking.
-     *
+     * <p>
      * TODO: really don't do this; a blocking read on another thread is much cleaner.
      */
     private static final long IDLE_INTERVAL_MS = TimeUnit.MILLISECONDS.toMillis(100);
@@ -56,7 +63,7 @@ class ToyVpnConnection implements Runnable {
     /**
      * Number of periods of length {@IDLE_INTERVAL_MS} to wait before declaring the handshake a
      * complete and abject failure.
-     *
+     * <p>
      * TODO: use a higher-level protocol; hand-rolling is a fun but pointless exercise.
      */
     private static final int MAX_HANDSHAKE_ATTEMPTS = 50;
@@ -87,7 +94,7 @@ class ToyVpnConnection implements Runnable {
         mConnectionId = connectionId;
 
         mServerName = serverName;
-        mServerPort= serverPort;
+        mServerPort = serverPort;
         mSharedSecret = sharedSecret;
 
         if (!TextUtils.isEmpty(proxyHostName)) {
@@ -281,7 +288,7 @@ class ToyVpnConnection implements Runnable {
             // byte is 0 as expected.
             int length = tunnel.read(packet);
             if (length > 0 && packet.get(0) == 0) {
-                return configure(new String(packet.array(), 1, length - 1, US_ASCII).trim());
+                return configure(new String(packet.array(), 1, length - 1, Charset.forName("US-ASCII")).trim());
             }
         }
         throw new IOException("Timed out");
@@ -317,21 +324,28 @@ class ToyVpnConnection implements Runnable {
 
         // Create a new interface using the builder and save the parameters.
         final ParcelFileDescriptor vpnInterface;
-        for (String packageName : mPackages) {
-            try {
-                if (mAllow) {
-                    builder.addAllowedApplication(packageName);
-                } else {
-                    builder.addDisallowedApplication(packageName);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            for (String packageName : mPackages) {
+                try {
+                    if (mAllow) {
+                        builder.addAllowedApplication(packageName);
+                    } else {
+                        builder.addDisallowedApplication(packageName);
+                    }
+                } catch (PackageManager.NameNotFoundException e) {
+                    Log.w(getTag(), "Package not available: " + packageName, e);
                 }
-            } catch (PackageManager.NameNotFoundException e){
-                Log.w(getTag(), "Package not available: " + packageName, e);
             }
         }
+
         builder.setSession(mServerName).setConfigureIntent(mConfigureIntent);
-        if (!TextUtils.isEmpty(mProxyHostName)) {
-            builder.setHttpProxy(ProxyInfo.buildDirectProxy(mProxyHostName, mProxyHostPort));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (!TextUtils.isEmpty(mProxyHostName)) {
+                builder.setHttpProxy(ProxyInfo.buildDirectProxy(mProxyHostName, mProxyHostPort));
+            }
         }
+
         synchronized (mService) {
             vpnInterface = builder.establish();
             if (mOnEstablishListener != null) {

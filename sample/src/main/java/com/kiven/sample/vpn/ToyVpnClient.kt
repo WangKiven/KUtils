@@ -68,8 +68,7 @@ class ToyVpnClient : KActivityDebugHelper() {
             if (!checkPackages(packageSet)) {
                 return@setOnClickListener
             }
-            val serverPortNum: Int
-            serverPortNum = try {
+            val serverPortNum: Int = try {
                 serverPort.text.toString().toInt()
             } catch (e: NumberFormatException) {
                 0

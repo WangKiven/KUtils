@@ -10,8 +10,10 @@ import android.widget.RadioButton
 import android.widget.TextView
 import com.kiven.kutils.activityHelper.KActivityDebugHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
+import com.kiven.kutils.logHelper.KLog
 import com.kiven.sample.R
 import kotlinx.android.synthetic.main.ah_toy_vpn.*
+import okhttp3.OkHttpClient
 import org.jetbrains.anko.toast
 
 /**
@@ -56,7 +58,25 @@ class AHToyVpn : KActivityDebugHelper() {
         allowed.isChecked = prefs.getBoolean(Prefs.ALLOW, true)
         packages.text = prefs.getStringSet(Prefs.PACKAGES, setOf())?.joinToString() ?: ""
 
-        mActivity.test.setOnClickListener {  }
+        mActivity.test.setOnClickListener {
+            Thread {
+                val request = okhttp3.Request.Builder()
+                        .url("https://www.baidu.com")
+                // 请求
+                try {
+                    val response = OkHttpClient().newCall(request.build()).execute()
+                    if (response.isSuccessful) {
+                        val result = response.body?.string()
+                        KLog.i("OkHttp请求结果(${response.protocol}): $result")
+                    } else {
+                        response.message
+                        KLog.e("连接失败：${response.code} ${response.message}")
+                    }
+                } catch (e: Exception) {
+                    KLog.e(e)
+                }
+            }.start()
+        }
         findViewById<View>(R.id.connect).setOnClickListener { v: View? ->
             if (!checkProxyConfigs(proxyHost.text.toString(),
                             proxyPort.text.toString())) {
@@ -93,10 +113,10 @@ class AHToyVpn : KActivityDebugHelper() {
             if (intent != null) {
                 mActivity.startActivityForResult(intent, 988)
             } else {
-                onActivityResult(0, Activity.RESULT_OK, null)
+                onActivityResult(988, Activity.RESULT_OK, null)
             }
         }
-        findViewById<View>(R.id.disconnect).setOnClickListener { v: View? -> mActivity.startService(getServiceIntent().setAction(MyVPNService.ACTION_DISCONNECT)) }
+        findViewById<View>(R.id.disconnect).setOnClickListener { v: View? -> mActivity.startService(getServiceIntent().setAction(ToyVpnService.ACTION_DISCONNECT)) }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -104,7 +124,7 @@ class AHToyVpn : KActivityDebugHelper() {
         if (resultCode != Activity.RESULT_OK) return
 
         if (requestCode == 988) {
-            mActivity.startService(Intent(mActivity, MyVPNService::class.java))
+            mActivity.startService(getServiceIntent().setAction(ToyVpnService.ACTION_CONNECT))
         }
     }
 
@@ -134,6 +154,6 @@ class AHToyVpn : KActivityDebugHelper() {
     }*/
 
     private fun getServiceIntent(): Intent {
-        return Intent(mActivity, MyVPNService::class.java)
+        return Intent(mActivity, ToyVpnService::class.java)
     }
 }

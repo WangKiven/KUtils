@@ -26,4 +26,5 @@
     <string name="wx_share_multi_image_service_label">ShareDemo【多图分享】</string>
     <string name="connecting">ToyVPN正在连接。。。</string>
     <string name="connected">ToyVPN已连接</string>
+    <string name="disconnected">ToyVPN 已断开!</string>
 </resources>

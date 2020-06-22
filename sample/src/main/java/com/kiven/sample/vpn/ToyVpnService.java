@@ -24,6 +24,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.VpnService;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.os.ParcelFileDescriptor;
 import android.util.Log;
@@ -80,6 +81,11 @@ public class ToyVpnService extends VpnService implements Handler.Callback {
             connect();
             return START_STICKY;
         }
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return super.onBind(intent);
     }
 
     @Override
@@ -153,7 +159,7 @@ public class ToyVpnService extends VpnService implements Handler.Callback {
     }
 
     private void disconnect() {
-        mHandler.sendEmptyMessage(100);
+        mHandler.sendEmptyMessage(R.string.disconnected);
         setConnectingThread(null);
         setConnection(null);
         stopForeground(true);

@@ -23,14 +23,6 @@ import java.nio.channels.DatagramChannel
  * https://developer.android.google.cn/guide/topics/connectivity/vpn
  */
 class MyVPNService: VpnService() {
-    companion object {
-        private val TAG: String = com.kiven.sample.vpn.MyVPNService::class.java.getSimpleName()
-
-        val ACTION_CONNECT = "com.example.android.toyvpn.START"
-        val ACTION_DISCONNECT = "com.example.android.toyvpn.STOP"
-    }
-
-
     private val channelId = "vpnChannel"
     private val channelName = "KUtils VPN通知服务"
 
@@ -50,8 +42,8 @@ class MyVPNService: VpnService() {
         }.start()
     }
 
-    override fun onBind(intent: Intent?): IBinder? {
-        return super.onBind(intent)
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        return super.onStartCommand(intent, flags, startId)
     }
 
     private fun open() {

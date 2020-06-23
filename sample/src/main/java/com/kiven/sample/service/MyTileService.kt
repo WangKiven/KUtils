@@ -20,6 +20,9 @@ class MyTileService: TileService() {
      */
     override fun onStartListening() {
         qsTile.state = if (active) Tile.STATE_ACTIVE else Tile.STATE_INACTIVE
+//        qsTile.icon = Icon.createWithResource(this, R.drawable.ic_vpn)
+//        qsTile.label = "Hahha"
+//        qsTile.subtitle = "lalal"
         qsTile.updateTile()
     }
 
@@ -33,5 +36,8 @@ class MyTileService: TileService() {
                 .create()
 
         showDialog(dailog)
+
+//        startActivityAndCollapse()
+//        startActivity()
     }
 }

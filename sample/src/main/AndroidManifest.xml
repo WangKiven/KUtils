@@ -239,6 +239,15 @@
             </intent-filter>
             <meta-data android:name="android.net.VpnService.SUPPORTS_ALWAYS_ON" android:value="false" />
         </service>
+        <!-- TileService -->
+        <service android:name=".service.MyTileService"
+            android:label="kiven"
+            android:icon="@drawable/ic_vpn"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE"/>
+            </intent-filter>
+        </service>
 
         <!-- 保活任务 -->
         <service

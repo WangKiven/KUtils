@@ -5,6 +5,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
 import android.content.Intent
+import android.net.ProxyInfo
 import android.net.VpnService
 import android.os.Build
 import androidx.core.app.NotificationCompat
@@ -78,18 +79,20 @@ class MyVPNService: VpnService() {
 
         val vpnFileDescriptor = Builder().apply {
             // 添加至少一个 IPv4 或 IPv6 地址以及系统指定为本地 TUN 接口地址的子网掩码。您的应用通常会在握手过程中收到来自 VPN 网关的 IP 地址和子网掩码。
-            addAddress("192.168.2.2", 24)
+            addAddress("10.0.0.2", 32)
             // 如果您希望系统通过 VPN 接口发送流量，请至少添加一个路由。路由按目标地址过滤。要接受所有流量，请设置开放路由，例如 0.0.0.0/0 或 ::/0。
                 addRoute("0.0.0.0", 0)
+            addRoute("0:0:0:0:0:0:0:0", 0)
 //                addDnsServer("192.168.0.23")
+//            setHttpProxy(ProxyInfo.buildDirectProxy("192.168.0.105", 1087))
         }.establish() ?: return
 
-        val vpnInput = FileInputStream(vpnFileDescriptor.fileDescriptor)
-        val vpnOutput = FileOutputStream(vpnFileDescriptor.fileDescriptor)
+//        val vpnInput = FileInputStream(vpnFileDescriptor.fileDescriptor)
+//        val vpnOutput = FileOutputStream(vpnFileDescriptor.fileDescriptor)
 
 
 
-
+/*
         // Allocate the buffer for a single packet.
 
         // Allocate the buffer for a single packet.
@@ -160,7 +163,7 @@ class MyVPNService: VpnService() {
                     "Timed out"
                 }
             }
-        }
+        }*/
     }
 
 

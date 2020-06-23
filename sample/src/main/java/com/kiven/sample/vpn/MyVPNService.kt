@@ -12,7 +12,8 @@ import androidx.core.app.NotificationManagerCompat
 import com.kiven.sample.R
 import java.io.FileInputStream
 import java.io.FileOutputStream
-import java.net.DatagramSocket
+import java.net.InetSocketAddress
+import java.net.SocketAddress
 import java.nio.ByteBuffer
 import java.nio.channels.DatagramChannel
 
@@ -39,13 +40,15 @@ class MyVPNService: VpnService() {
                 .setContentTitle("KUtils VPN已开启")
         startForeground(System.currentTimeMillis().toInt(), mBuilder.build())
 
-        Thread {
-            open()
-        }.start()
+//        Thread {
+//            open()
+//        }.start()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        open()
+        Thread {
+            open()
+        }.start()
         return Service.START_STICKY
     }
 
@@ -69,9 +72,14 @@ class MyVPNService: VpnService() {
 
         if (!protect) return
 
+        val serverAddress: SocketAddress = InetSocketAddress("192.168.2.2", 24)
+        tunnel.connect(serverAddress)
+
         val vpnFileDescriptor = Builder().apply {
-            addAddress("192.168.0.105", 16)
-//                addRoute("0.0.0.0", 0)
+            // 添加至少一个 IPv4 或 IPv6 地址以及系统指定为本地 TUN 接口地址的子网掩码。您的应用通常会在握手过程中收到来自 VPN 网关的 IP 地址和子网掩码。
+            addAddress("192.168.2.2", 24)
+            // 如果您希望系统通过 VPN 接口发送流量，请至少添加一个路由。路由按目标地址过滤。要接受所有流量，请设置开放路由，例如 0.0.0.0/0 或 ::/0。
+                addRoute("0.0.0.0", 0)
 //                addDnsServer("192.168.0.23")
         }.establish() ?: return
 

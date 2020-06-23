@@ -29,6 +29,7 @@ import com.kiven.kutils.tools.*
 import com.kiven.sample.arch.AHArch
 import com.kiven.sample.arcore.AHARCoreInlet
 import com.kiven.sample.floatView.ActivityHFloatView
+import com.kiven.sample.font.AHFont
 import com.kiven.sample.gl.AHGL
 import com.kiven.sample.libs.AHLibs
 import com.kiven.sample.media.AHMediaList
@@ -156,6 +157,8 @@ class LauchActivity : KActivity(), LifecycleOwner {
         addView("三方平台推送", View.OnClickListener { AHSxbPush().startActivity(this) })
         addView("ARCore", View.OnClickListener { AHARCoreInlet().startActivity(this) })
         addView("VPN", View.OnClickListener { AHMyVpn().startActivity(this) })
+        addView("遍历字体", View.OnClickListener { AHFont().startActivity(this) })
+        addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
 

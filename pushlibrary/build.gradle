@@ -50,8 +50,11 @@ dependencies {
     implementation 'com.huawei.hms:push:4.0.2.300'
     // 小米推送
     api fileTree(dir: 'miPush', include: ['*.jar', '*.bak'])
-    // vivo推送
-    implementation fileTree(dir: 'vivoPush', include: ['*.jar', '*.bak', '*.aar'])
+    // todo vivo推送,fileTree方式编译时要报错，但是能运行。zipTree仅导入了aar中的jar包。
+    //  解压AAR后，查看除了jar有用，其他文件都没用，所有使用zipTree
+    //  解压命令：unzip -n vivo_pushsdk-v2.9.0.0.aar -d tmp/
+//    implementation fileTree(dir: 'vivoPush', include: ['*.jar', '*.bak', '*.aar'])
+    implementation zipTree('vivoPush/vivo_pushsdk-v2.9.0.0.aar')
     // OPPO推送
     implementation fileTree(dir: 'oppoPush', include: ['*.jar', '*.bak'])
 }

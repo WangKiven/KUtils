@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationManagerCompat
 import com.kiven.kutils.logHelper.KLog
+import com.kiven.kutils.tools.KContext
 import okhttp3.*
 import okio.ByteString
 import org.json.JSONObject
@@ -38,6 +39,10 @@ class PushService : Service() {
 
         intent?.apply {
             val u = getStringExtra("url")
+            // PushService 有可能不在主线程，所以一些需要用到的参数，需要传过来。
+            PushUtil.platform = getIntExtra("platform", 0)
+            KLog.i("xxxxxxxxxxxxx ${PushUtil.platform} ${KContext.getInstance().processName_}")
+
             if (u != url) {
                 url = u
                 Thread {
@@ -72,7 +77,7 @@ class PushService : Service() {
 
         // TODO vivo 远程推送的channel,本地也可以使用。远程推送时创建的channel默认是开启的, 本地创建的默认是关闭的。
         //  所以等待远程推送并创建好channel后再，使用webSocket推送
-        if (Web.platform == 3 && Build.VERSION.SDK_INT >= 26) {
+        if (PushUtil.platform == 3 && Build.VERSION.SDK_INT >= 26) {
             val notiChannel = notiManager.getNotificationChannel(PushUtil.getChannelId(this))
             if (notiChannel == null) {
                 KLog.i("notiChannel == null")

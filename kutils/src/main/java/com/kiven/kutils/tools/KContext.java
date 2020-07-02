@@ -5,6 +5,8 @@ import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
+import android.os.Process;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -60,6 +62,24 @@ public class KContext extends Application {
             }
 
         return true;
+    }
+
+    public String getProcessName_() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            return getProcessName();
+        }
+
+        int pid = Process.myPid();
+        ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        if (activityManager != null)
+            for (ActivityManager.RunningAppProcessInfo appProcess : activityManager
+                    .getRunningAppProcesses()) {
+
+                if (appProcess.pid == pid) {
+                    return appProcess.processName;
+                }
+            }
+        return null;
     }
 
     // TODO-------------------------------

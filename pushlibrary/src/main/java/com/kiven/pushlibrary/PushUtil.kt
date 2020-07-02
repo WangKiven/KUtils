@@ -12,14 +12,15 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 
 object PushUtil {
-
+    // PushUtil 可能被异步线程调用，所以需要
+    var platform = 0
 
     /**
      * 这个不要动，华为推送，服务器用了这个channelId
      */
 //    val channelId = "sxbChannelId"
     fun getChannelId(context: Context): String {
-        when (Web.platform) {//设备类型 0 不明，1 iOS, 2 华为, 3 vivo, 4 oppo, 5 小米
+        when (platform) {//设备类型 0 不明，1 iOS, 2 华为, 3 vivo, 4 oppo, 5 小米
             2 -> {
                 // 远程通道channelId, 可本地提前创建并命名。创建的通道都是默认开启的。
                 return "com.huawei.android.pushagent.low"

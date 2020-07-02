@@ -40,7 +40,8 @@
 
 
         <service android:name=".PushService"
-            android:enabled="true"/>
+            android:enabled="true"
+                android:process=":pushservice"/>
         <!--<service
             android:name=".PushNotificationListenerService"
             android:label="@string/push_notification_listener_service_name"

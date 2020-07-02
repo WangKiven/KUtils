@@ -35,7 +35,10 @@ internal object Web {
     var tokenOrId: String = ""
         private set
     var platform: Int = 5
-        private set
+        private set(value) {
+            field = value
+            PushUtil.platform = value
+        }
     var account: String = ""
         private set
     var tagOrTopics: String = ""
@@ -121,6 +124,7 @@ internal object Web {
                                         tokenOrId
                                     )}"
                                 )
+                                putExtra("platform", platform)
                             })
                         }
                     }

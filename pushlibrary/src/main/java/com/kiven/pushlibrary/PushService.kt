@@ -38,10 +38,10 @@ class PushService : Service() {
         KLog.i("PushService-onStartCommand")
 
         intent?.apply {
-            val u = getStringExtra("url")
+            val u = getStringExtra("url") ?: ""
             // PushService 有可能不在主线程，所以一些需要用到的参数，需要传过来。
             PushUtil.platform = getIntExtra("platform", 0)
-            KLog.i("xxxxxxxxxxxxx ${PushUtil.platform} ${KContext.getInstance().processName_}")
+//            KLog.i("xxxxxxxxxxxxx ${PushUtil.platform} ${KContext.getInstance().processName_}")
 
             if (u != url) {
                 url = u

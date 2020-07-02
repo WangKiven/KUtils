@@ -8,11 +8,6 @@ import com.sxb.kutils_ktx.util.KWeb
 import org.json.JSONObject
 
 internal object Web {
-    /*const val httpPre = "http://192.168.101.105:8080/api/"
-    private const val registerUrl = "${httpPre}open/push/register"
-    private const val bindAccountUrl = "${httpPre}open/push/bindAccount"
-    private const val setTagsUrl = "${httpPre}open/push/setTags"*/
-
     var context: Context? = null
     var shouldWebSocket: Boolean = false
 

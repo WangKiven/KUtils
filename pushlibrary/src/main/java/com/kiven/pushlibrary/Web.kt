@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import com.kiven.kutils.logHelper.KLog
+import com.kiven.kutils.tools.KContext
 import com.sxb.kutils_ktx.util.KWeb
 import org.json.JSONObject
 
@@ -116,17 +117,31 @@ internal object Web {
 
 
                     if (shouldWebSocket) {
-                        context?.apply {
-                            startService(Intent(this, PushService::class.java).apply {
-                                putExtra(
-                                    "url",
-                                    "${wsPre}?projectKey=${Uri.encode(projectKey)}&tokenOrId=${Uri.encode(
-                                        tokenOrId
-                                    )}"
-                                )
-                                putExtra("platform", platform)
-                            })
+                        // service 不允许在后台启动：java.lang.IllegalStateException: Not allowed to start service Intent { cmp=com.jeeinc.save.worry/com.kiven.pushlibrary.PushService (has extras) }: app is in background uid
+                        var startSuccess = false
+                        while (!startSuccess) {
+                            try {
+                                context?.apply {
+                                    startService(Intent(this, PushService::class.java).apply {
+                                        putExtra(
+                                            "url",
+                                            "${wsPre}?projectKey=${Uri.encode(projectKey)}&tokenOrId=${Uri.encode(
+                                                tokenOrId
+                                            )}"
+                                        )
+                                        putExtra("platform", platform)
+                                    })
+                                }
+
+                                startSuccess = true
+                            } catch (e: Throwable) {
+                                KLog.e("进程名：${KContext.getInstance().processName_}")
+                                KLog.e(e)
+
+                                Thread.sleep(1000 * 30)
+                            }
                         }
+
                     }
                 }
 

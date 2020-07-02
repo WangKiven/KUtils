@@ -62,7 +62,7 @@ class PushService : Service() {
             }
         }
 
-        return START_STICKY
+        return START_REDELIVER_INTENT
     }
 
     private var mSocket: WebSocket? = null
@@ -73,7 +73,10 @@ class PushService : Service() {
     private fun connWebSocket() {
 
         val curUrl = url
-        if (curUrl.isBlank()) return
+        if (curUrl.isBlank()) {
+            stopSelf()
+            return
+        }
 
         // TODO vivo 远程推送的channel,本地也可以使用。远程推送时创建的channel默认是开启的, 本地创建的默认是关闭的。
         //  所以等待远程推送并创建好channel后再，使用webSocket推送

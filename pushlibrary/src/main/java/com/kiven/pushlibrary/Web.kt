@@ -46,7 +46,7 @@ internal object Web {
         private set
 
     /**
-     * @param platformN 设备类型 0 不明，1 iOS, 2 华为, 3 vivo, 4 oppo, 5 小米
+     * @param platformN 设备类型 0 不明，1 iOS, 2 华为, 3 vivo, 4 oppo, 5 小米, 6 firebase
      */
     @Synchronized
     fun register(context: Context, tokenOrIdN: String, platformN: Int) {

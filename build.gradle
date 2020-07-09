@@ -31,6 +31,9 @@ buildscript {
 
         // google ar
         classpath 'com.google.ar.sceneform:plugin:1.17.0'
+
+        // firebase
+        classpath 'com.google.gms:google-services:4.3.3'
     }
 
     project.ext {

@@ -75,9 +75,17 @@
         tools:ignore="UnusedAttribute"
         tools:replace="icon,label,theme">
 
-        <meta-data android:name="com.google.ar.core" android:value="optional" /><!-- ARCore 配置 optional：可选AR，required:必须AR-->
+        <meta-data
+            android:name="com.google.ar.core"
+            android:value="optional" /><!-- ARCore 配置 optional：可选AR，required:必须AR-->
 
         <activity android:name=".noti.ClickNotiActivity">
+            <intent-filter>
+                <!--firebase采用action启动，服务器又不能设置category, 所以需要一个单独的 intent-filter-->
+                <!-- 隐式启动：https://blog.csdn.net/Leo_Liang_jie/article/details/92836838 -->
+                <action android:name="com.push.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -227,25 +235,34 @@
         </provider>
 
         <!-- vpn -->
-        <service android:name=".vpn.MyVPNService" android:permission="android.permission.BIND_VPN_SERVICE">
+        <service
+            android:name=".vpn.MyVPNService"
+            android:permission="android.permission.BIND_VPN_SERVICE">
             <intent-filter>
                 <action android:name="android.net.VpnService" />
             </intent-filter>
-            <meta-data android:name="android.net.VpnService.SUPPORTS_ALWAYS_ON" android:value="false" />
+            <meta-data
+                android:name="android.net.VpnService.SUPPORTS_ALWAYS_ON"
+                android:value="false" />
         </service>
-        <service android:name=".vpn.ToyVpnService" android:permission="android.permission.BIND_VPN_SERVICE">
+        <service
+            android:name=".vpn.ToyVpnService"
+            android:permission="android.permission.BIND_VPN_SERVICE">
             <intent-filter>
                 <action android:name="android.net.VpnService" />
             </intent-filter>
-            <meta-data android:name="android.net.VpnService.SUPPORTS_ALWAYS_ON" android:value="false" />
+            <meta-data
+                android:name="android.net.VpnService.SUPPORTS_ALWAYS_ON"
+                android:value="false" />
         </service>
         <!-- TileService -->
-        <service android:name=".service.MyTileService"
-            android:label="kiven"
+        <service
+            android:name=".service.MyTileService"
             android:icon="@drawable/ic_vpn"
+            android:label="kiven"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
-                <action android:name="android.service.quicksettings.action.QS_TILE"/>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
         </service>
 
@@ -325,6 +342,35 @@
         <meta-data
             android:name="oppo_app_secret"
             android:value="a1b2d2c0564d46e3b5319241bdeba7c1" />
+
+
+        <!--<meta-data
+            android:name="vivo_push_enable"
+            tools:replace="android:value"
+            android:value="false" />
+        <meta-data
+            android:name="mi_push_enable"
+            tools:replace="android:value"
+            android:value="false" />
+        <meta-data
+            android:name="oppo_push_enable"
+            tools:replace="android:value"
+            android:value="false" />-->
+
+        <!--firebase-->
+        <meta-data
+            android:name="firebase_push_enable"
+            android:value="true" />
+        <!-- 华为 -->
+        <!--<meta-data
+            android:name="hms_push_enable"
+            tools:replace="android:value"
+            android:value="false" />-->
+
+        <meta-data
+            android:name="default_push_mi_or_firebase_or_none"
+            android:value="firebase"
+            tools:replace="android:value" />
     </application>
 
 </manifest>

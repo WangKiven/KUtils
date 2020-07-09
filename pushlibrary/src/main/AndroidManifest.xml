@@ -26,6 +26,12 @@
 
         <activity android:name="ClickNotiActivity">
             <intent-filter>
+                <!--firebase采用action启动，服务器又不能设置category, 所以需要一个单独的 intent-filter-->
+                <!-- 隐式启动：https://blog.csdn.net/Leo_Liang_jie/article/details/92836838 -->
+                <action android:name="com.push.sample.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <!--指定在浏览器中的动作。当 Intent 在浏览器中被引发，都会被指定成 BROWSABLE 种类。 -->
@@ -149,6 +155,30 @@
                 <action android:name="com.huawei.push.action.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
+        <!-- firebase -->
+        <service
+                android:name=".firebase.ClientFirebaseMessagingService"
+                android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <!-- 禁止firebase自动初始化 -->
+        <meta-data
+                android:name="firebase_messaging_auto_init_enabled"
+                android:value="false" />
+        <meta-data
+                android:name="firebase_analytics_collection_enabled"
+                android:value="false" />
+
+        <meta-data android:name="vivo_push_enable" android:value="true" />
+        <meta-data android:name="mi_push_enable" android:value="true" />
+        <meta-data android:name="oppo_push_enable" android:value="true" />
+        <meta-data android:name="firebase_push_enable" android:value="true" />
+        <meta-data android:name="hms_push_enable" android:value="true" />
+        <meta-data android:name="default_push_mi_or_firebase_or_none" android:value="mi" />
 
     </application>
 </manifest>

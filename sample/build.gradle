@@ -6,6 +6,8 @@ apply plugin: 'kotlin-kapt'
 
 // 华为插件
 apply plugin: 'com.huawei.agconnect'
+// firebase
+apply plugin: 'com.google.gms.google-services'
 
 apply plugin: 'com.google.ar.sceneform.plugin'
 sceneform.asset(
@@ -211,8 +213,8 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
     // google-emoji
-    implementation "androidx.emoji:emoji-appcompat:1.0.0"
-    implementation "androidx.emoji:emoji-bundled:1.0.0"
+    implementation "androidx.emoji:emoji-appcompat:1.1.0"
+    implementation "androidx.emoji:emoji-bundled:1.1.0"
 
     // 图片信息获取修改
     implementation 'androidx.exifinterface:exifinterface:1.2.0'
@@ -233,9 +235,13 @@ dependencies {
 
     // 华为推送
 //    implementation 'com.huawei.hms:push:3.0.3.301'
+    // firebase
+//    implementation 'com.google.firebase:firebase-analytics:17.4.4'
+    implementation 'com.google.firebase:firebase-messaging:20.2.1'
+//    implementation 'com.google.firebase:firebase-messaging-directboot:20.2.1'//在直接启动模式下接收 FCM 消息
 
     // ARCore https://developers.google.cn/ar/develop/java/enable-arcore
-    implementation 'com.google.ar:core:1.17.0'
+    implementation 'com.google.ar:core:1.18.0'
     implementation 'com.google.ar.sceneform.ux:sceneform-ux:1.17.0'
     implementation 'com.google.ar.sceneform:core:1.17.0'
 

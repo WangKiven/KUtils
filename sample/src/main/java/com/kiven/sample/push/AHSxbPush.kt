@@ -80,7 +80,7 @@ class AHSxbPush : KActivityDebugHelper() {
         addTitle("projectKey = $projectKey")
         addTitle("")
 
-        var host = "192.168.101.106:8080"
+        var host = "192.168.0.105"
         flexboxLayout.addView(EditText(activity).apply {
             val spKey = "ah_sxb_push_host"
             host = KUtil.getSharedPreferencesStringValue(spKey, host)
@@ -100,7 +100,7 @@ class AHSxbPush : KActivityDebugHelper() {
             })
         })
 
-        var ishttps = false
+        var ishttps = true
         flexboxLayout.addView(Button(activity).apply {
             val spKey = "ah_sxb_push_is_https"
             ishttps = KUtil.getSharedPreferencesBooleanValue(spKey, ishttps)

@@ -6,8 +6,10 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
+import android.os.Bundle
 import androidx.core.content.ContextCompat
 import com.heytap.mcssdk.PushManager
+import com.kiven.pushlibrary.firebase.FirebaseHelper
 import com.kiven.pushlibrary.hw.HuaWeiPushHelper
 import com.kiven.pushlibrary.mi.MiPushHelper
 import com.kiven.pushlibrary.oppo.OPPOPushHelper
@@ -21,18 +23,26 @@ object PushClient {
     val hasInit: Boolean
         get() = pushHelper != null && pushHelper?.hasInitSuccess == true
 
+    private const val defaultPush = "mi"
+    private const val defaultPushKey = "default_push_mi_or_firebase_or_none"
+
     fun shouldRequestPermission(context: Context): Boolean {
+
         return when (Build.BRAND.toLowerCase()) {
             "huawei", "honor", "oppo", "vivo", "xiaomi", "redmi" -> false
             else -> {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                val manifest = context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
+                val defaultPushIsMi = manifest.metaData?.getString(defaultPushKey, defaultPush) == "mi"
+
+                // 非小米的不知名品牌，使用默认推送如果是小米推送，需要获取权限。
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && defaultPushIsMi) {
                     ContextCompat.checkSelfPermission(
-                        context,
-                        Manifest.permission.READ_PHONE_STATE
+                            context,
+                            Manifest.permission.READ_PHONE_STATE
                     ) == PackageManager.PERMISSION_GRANTED
                             && ContextCompat.checkSelfPermission(
-                        context,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                            context,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE
                     ) == PackageManager.PERMISSION_GRANTED
                 } else {
                     false
@@ -42,11 +52,11 @@ object PushClient {
     }
 
     fun initPush(
-        context: Context,
-        projectKey: String,
-        host: String,
-        ishttps: Boolean,
-        isDebug: Boolean
+            context: Context,
+            projectKey: String,
+            host: String,
+            ishttps: Boolean,
+            isDebug: Boolean
     ) {
         Web.context = context.applicationContext
         Web.projectKey = projectKey
@@ -54,32 +64,54 @@ object PushClient {
         Web.ishttps = ishttps
         Web.isDebug = isDebug
 
+        val bundleData = context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA).metaData
+                ?: Bundle()
+
         when (Build.BRAND.toLowerCase()) {
             "huawei", "honor" -> {
-                Web.shouldWebSocket = false
-                pushHelper = HuaWeiPushHelper()
+                if (bundleData.getBoolean("hms_push_enable", true)) {
+                    Web.shouldWebSocket = false
+                    pushHelper = HuaWeiPushHelper()
+                }
             }
             "oppo" -> {
-                if (PushManager.isSupportPush(context)) {
-                    Web.shouldWebSocket = true
-                    pushHelper = OPPOPushHelper()
+                if (bundleData.getBoolean("oppo_push_enable", true)) {
+                    if (PushManager.isSupportPush(context)) {
+                        Web.shouldWebSocket = true
+                        pushHelper = OPPOPushHelper()
+                    }
                 }
             }
             "vivo" -> {
-                if (PushClient.getInstance(context).isSupport) {
-                    Web.shouldWebSocket = true
-                    pushHelper = VivoPushHelper()
+                if (bundleData.getBoolean("vivo_push_enable", true)) {
+                    if (PushClient.getInstance(context).isSupport) {
+                        Web.shouldWebSocket = true
+                        pushHelper = VivoPushHelper()
+                    }
                 }
             }
             "xiaomi", "redmi" -> {
-                Web.shouldWebSocket = false
-                pushHelper = MiPushHelper()
+                if (bundleData.getBoolean("mi_push_enable", true)) {
+                    Web.shouldWebSocket = false
+                    pushHelper = MiPushHelper()
+                }
             }
         }
 
         if (pushHelper == null) {
-            Web.shouldWebSocket = true
-            pushHelper = MiPushHelper()
+            when (bundleData.getString(defaultPushKey, defaultPush)) {
+                "mi" -> {
+                    Web.shouldWebSocket = true
+                    pushHelper = MiPushHelper()
+                }
+                "firebase" -> {
+                    Web.shouldWebSocket = true
+                    pushHelper = FirebaseHelper()
+                }
+                "none" -> {
+                    Web.shouldWebSocket = false
+                }
+            }
         }
 
         pushHelper?.initPush(context)

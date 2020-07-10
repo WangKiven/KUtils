@@ -26,8 +26,10 @@ public class KActivity extends AppCompatActivity implements SensorEventListener 
         super.onCreate(savedInstanceState);
         KContext.getInstance().onActivityCreate(this);
 
-        if (showLog())
+        if (showLog()) {
             sensorManager = (SensorManager) getSystemService(Activity.SENSOR_SERVICE);
+            floatView = new DebugView(this);
+        }
     }
 
     @Override
@@ -45,7 +47,7 @@ public class KActivity extends AppCompatActivity implements SensorEventListener 
             showLogTime = System.currentTimeMillis();
             sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
 
-            if (Build.MODEL.contains("Android SDK built for")) showDebugView();
+            floatView.onResume();
         }
     }
 
@@ -54,10 +56,9 @@ public class KActivity extends AppCompatActivity implements SensorEventListener 
         super.onPause();
         KContext.getInstance().onActivityPause(this);
 
-        if (showLog())
+        if (showLog()) {
             sensorManager.unregisterListener(this);
-        if (floatView != null) {
-            floatView.hideFloat();
+            floatView.onPause();
         }
     }
 
@@ -121,10 +122,9 @@ public class KActivity extends AppCompatActivity implements SensorEventListener 
     }
 
     protected void showDebugView() {
-        if (floatView == null) {
-            floatView = new DebugView(this);
+        if (floatView != null) {
+            floatView.showFloat();
         }
-        floatView.showFloat();
     }
 
     @Override

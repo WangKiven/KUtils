@@ -49,6 +49,8 @@ public class DebugView {
     //定义浮动窗口布局
     LinearLayout mFloatLayout;
     WindowManager.LayoutParams wmParams;
+    LinearLayout barLayout;
+    WindowManager.LayoutParams barParams;
     //创建浮动窗口设置布局参数的对象
     WindowManager mWindowManager;
 
@@ -77,35 +79,62 @@ public class DebugView {
             }
         }));
 
-        createParams();
+        wmParams = createParams();
         createFloatView();
+
+        addDropDownBar();
     }
 
-    private void createParams() {
-        wmParams = new WindowManager.LayoutParams();
+    private void addDropDownBar() {
+        final float scale = activity.getResources().getDisplayMetrics().density;
+        int height = (int) (5 * scale + 0.5f);
+
+        View barView = new View(activity);
+        barView.setBackgroundColor(Color.parseColor("#22222222"));
+        barView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                showFloat();
+                return true;
+            }
+        });
+
+        barLayout = new LinearLayout(activity);
+        barLayout.addView(barView, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height));
+
+        barParams = createParams();
+        barParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+        barParams.gravity = Gravity.LEFT|Gravity.TOP;
+        mWindowManager.addView(barLayout, barParams);
+    }
+
+    private WindowManager.LayoutParams createParams() {
+        WindowManager.LayoutParams wlp = new WindowManager.LayoutParams();
         //获取的是WindowManagerImpl.CompatModeWrapper
 //        mWindowManager = (WindowManager) getApplication().getSystemService(getApplication().WINDOW_SERVICE);
         Log.i(TAG, "mWindowManager--->" + mWindowManager);
         //设置window type
-        wmParams.type = WindowManager.LayoutParams.TYPE_APPLICATION;// TYPE_APPLICATION 才是activity内
+        wlp.type = WindowManager.LayoutParams.TYPE_APPLICATION;// TYPE_APPLICATION 才是activity内
         //设置图片格式，效果为背景透明
-        wmParams.format = PixelFormat.RGBA_8888;
+        wlp.format = PixelFormat.RGBA_8888;
         //设置浮动窗口不可聚焦（实现操作除浮动窗口外的其他可见窗口的操作）
-        wmParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+        wlp.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
         //调整悬浮窗显示的停靠位置为左侧置顶
 //        wmParams.gravity = Gravity.LEFT | Gravity.TOP;
-        wmParams.gravity = Gravity.CENTER;
+        wlp.gravity = Gravity.CENTER;
 
         // 以屏幕左上角为原点，设置x、y初始值，相对于gravity
-        wmParams.x = 0;
-        wmParams.y = 0 - KUtil.getScreenHeight(activity) / 2;
+        wlp.x = 0;
+        wlp.y = 0 - KUtil.getScreenHeight(activity) / 2;
 
         //设置悬浮窗口长宽数据
-        wmParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
-        wmParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        wlp.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        wlp.height = WindowManager.LayoutParams.WRAP_CONTENT;
          /*// 设置悬浮窗口长宽数据
         wmParams.width = 200;
         wmParams.height = 80;*/
+
+         return wlp;
     }
 
     private LinearLayout.LayoutParams createButtonParam(int childSize, int margin) {
@@ -213,6 +242,19 @@ public class DebugView {
             mWindowManager.removeView(mFloatLayout);
             isShow = false;
         }
+    }
+
+    public void onResume() {
+        if (barLayout.getParent() == null) {
+            mWindowManager.addView(barLayout, barParams);
+        }
+    }
+
+    public void onPause() {
+        if (barLayout.getParent() != null) {
+            mWindowManager.removeView(barLayout);
+        }
+        hideFloat();
     }
 
     public boolean isShow() {

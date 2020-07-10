@@ -23,8 +23,10 @@ public class KActivityDebugHelper extends KActivityHelper implements SensorEvent
     public void onCreate(KHelperActivity activity, Bundle savedInstanceState) {
         super.onCreate(activity, savedInstanceState);
 
-        if (showLog())
+        if (showLog()) {
             sensorManager = (SensorManager) mActivity.getSystemService(Activity.SENSOR_SERVICE);
+            floatView = new DebugView(activity);
+        }
     }
 
     @Override
@@ -34,17 +36,16 @@ public class KActivityDebugHelper extends KActivityHelper implements SensorEvent
             showLogTime = System.currentTimeMillis();
             sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
 
-            if (Build.MODEL.contains("Android SDK built for") || Build.MODEL.contains("Emulator")) showDebugView();
+            floatView.onResume();
         }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if (showLog())
+        if (showLog()) {
             sensorManager.unregisterListener(this);
-        if (floatView != null) {
-            floatView.hideFloat();
+            floatView.onPause();
         }
     }
 
@@ -87,10 +88,9 @@ public class KActivityDebugHelper extends KActivityHelper implements SensorEvent
     }
 
     public void showDebugView() {
-        if (floatView == null) {
-            floatView = new DebugView(mActivity);
+        if (floatView != null) {
+            floatView.showFloat();
         }
-        floatView.showFloat();
     }
 
     /**

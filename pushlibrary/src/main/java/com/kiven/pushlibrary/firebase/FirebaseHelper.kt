@@ -10,6 +10,8 @@ import com.kiven.pushlibrary.Web
 
 /**
  * Created by oukobayashi on 2020/7/8.
+ * https://firebase.google.com/docs/cloud-messaging/android/send-multiple?authuser=0
+ * https://console.firebase.google.com
  */
 class FirebaseHelper : PushHelper {
     override var hasInitSuccess: Boolean = false

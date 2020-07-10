@@ -25,6 +25,8 @@ object PushClient {
 
     private const val defaultPush = "mi"
     private const val defaultPushKey = "default_push_mi_or_firebase_or_none"
+    private const val miPushEnableKey = "mi_push_enable"
+    private const val firebaseEnableKey = "firebase_push_enable"
 
     fun shouldRequestPermission(context: Context): Boolean {
 
@@ -91,22 +93,27 @@ object PushClient {
                 }
             }
             "xiaomi", "redmi" -> {
-                if (bundleData.getBoolean("mi_push_enable", true)) {
+                if (bundleData.getBoolean(miPushEnableKey, true)) {
                     Web.shouldWebSocket = false
                     pushHelper = MiPushHelper()
                 }
             }
         }
 
+        // 不可知品牌，使用默认推送。
         if (pushHelper == null) {
             when (bundleData.getString(defaultPushKey, defaultPush)) {
                 "mi" -> {
-                    Web.shouldWebSocket = true
-                    pushHelper = MiPushHelper()
+                    if (bundleData.getBoolean(miPushEnableKey, true)) {
+                        Web.shouldWebSocket = true
+                        pushHelper = MiPushHelper()
+                    }
                 }
                 "firebase" -> {
-                    Web.shouldWebSocket = true
-                    pushHelper = FirebaseHelper()
+                    if (bundleData.getBoolean(firebaseEnableKey, true)) {
+                        Web.shouldWebSocket = true
+                        pushHelper = FirebaseHelper()
+                    }
                 }
                 "none" -> {
                     Web.shouldWebSocket = false

@@ -173,12 +173,12 @@
                 android:name="firebase_analytics_collection_enabled"
                 android:value="false" />
 
-        <meta-data android:name="vivo_push_enable" android:value="true" />
+        <!--<meta-data android:name="vivo_push_enable" android:value="true" />
         <meta-data android:name="mi_push_enable" android:value="true" />
         <meta-data android:name="oppo_push_enable" android:value="true" />
         <meta-data android:name="firebase_push_enable" android:value="true" />
         <meta-data android:name="hms_push_enable" android:value="true" />
-        <meta-data android:name="default_push_mi_or_firebase_or_none" android:value="mi" />
+        <meta-data android:name="default_push_mi_or_firebase_or_none" android:value="mi" />-->
 
     </application>
 </manifest>

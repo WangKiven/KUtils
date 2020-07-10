@@ -343,34 +343,18 @@
             android:name="oppo_app_secret"
             android:value="a1b2d2c0564d46e3b5319241bdeba7c1" />
 
-
-        <!--<meta-data
-            android:name="vivo_push_enable"
-            tools:replace="android:value"
-            android:value="false" />
-        <meta-data
-            android:name="mi_push_enable"
-            tools:replace="android:value"
-            android:value="false" />
-        <meta-data
-            android:name="oppo_push_enable"
-            tools:replace="android:value"
-            android:value="false" />-->
-
         <!--firebase-->
         <meta-data
             android:name="firebase_push_enable"
-            android:value="true" />
+            android:value="false" />
         <!-- 华为 -->
         <!--<meta-data
             android:name="hms_push_enable"
-            tools:replace="android:value"
             android:value="false" />-->
 
-        <meta-data
+        <!--<meta-data
             android:name="default_push_mi_or_firebase_or_none"
-            android:value="firebase"
-            tools:replace="android:value" />
+            android:value="firebase" />-->
     </application>
 
 </manifest>

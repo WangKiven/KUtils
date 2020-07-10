@@ -43,7 +43,14 @@ internal object Web {
     var account: String = ""
         private set
     var tagOrTopics: String = ""
-        private set
+        private set(value) {
+            val oldV = field
+            field = value
+            onTagsChange?.invoke(oldV, value)
+        }
+
+    // 标签设置成功后的回调方法，用于通知各平台helper修改tag或topic
+    var onTagsChange: ((oldTags: String, newTags: String) -> Unit)? = null
 
     /**
      * @param platformN 设备类型 0 不明，1 iOS, 2 华为, 3 vivo, 4 oppo, 5 小米, 6 firebase
@@ -80,12 +87,14 @@ internal object Web {
         Thread {
             try {
                 val result = KWeb.request(
-                    registerUrl, mapOf(
-                        "projectKey" to projectKey,
-                        "tokenOrId" to tokenOrIdN,
-                        "platform" to platformN,
-                        "isDebug" to isDebug
-                    ), hostnameVerifier = !host.startsWith("192.168.")// 本地电脑不验证
+                        registerUrl,
+                        mapOf(
+                                "projectKey" to projectKey,
+                                "tokenOrId" to tokenOrIdN,
+                                "platform" to platformN,
+                                "isDebug" to isDebug
+                        ),
+                        hostnameVerifier = !host.startsWith("192.168.")// 本地电脑不验证
                 )
 
                 val json = JSONObject(result)
@@ -124,10 +133,10 @@ internal object Web {
                                 context?.apply {
                                     startService(Intent(this, PushService::class.java).apply {
                                         putExtra(
-                                            "url",
-                                            "${wsPre}?projectKey=${Uri.encode(projectKey)}&tokenOrId=${Uri.encode(
-                                                tokenOrId
-                                            )}"
+                                                "url",
+                                                "${wsPre}?projectKey=${Uri.encode(projectKey)}&tokenOrId=${Uri.encode(
+                                                        tokenOrId
+                                                )}"
                                         )
                                         putExtra("platform", platform)
                                     })
@@ -177,11 +186,11 @@ internal object Web {
 
             try {
                 val result = KWeb.request(
-                    bindAccountUrl, mapOf(
+                        bindAccountUrl, mapOf(
                         "projectKey" to projectKey,
                         "tokenOrId" to tokenOrId,
                         "account" to accountN
-                    ), hostnameVerifier = !host.startsWith("192.168.")// 本地电脑不验证
+                ), hostnameVerifier = !host.startsWith("192.168.")// 本地电脑不验证
                 )
 
                 val json = JSONObject(result)
@@ -222,11 +231,11 @@ internal object Web {
 
             try {
                 val result = KWeb.request(
-                    setTagsUrl, mapOf(
+                        setTagsUrl, mapOf(
                         "projectKey" to projectKey,
                         "tokenOrId" to tokenOrId,
                         "tagOrTopics" to tagOrTopicsN
-                    ), hostnameVerifier = !host.startsWith("192.168.")// 本地电脑不验证
+                ), hostnameVerifier = !host.startsWith("192.168.")// 本地电脑不验证
                 )
 
                 val json = JSONObject(result)
@@ -258,7 +267,7 @@ internal object Web {
 
             try {
                 val result = KWeb.request(
-                    msgCallBack, mapOf(
+                        msgCallBack, mapOf(
                         "projectKey" to projectKey,
                         "tokenOrId" to tokenOrId,
                         "platform" to platform,
@@ -266,7 +275,7 @@ internal object Web {
                         "isDebug" to isDebug,
                         "type" to 3,
                         "serverKey" to serverKey
-                    ), hostnameVerifier = !host.startsWith("192.168.")// 本地电脑不验证
+                ), hostnameVerifier = !host.startsWith("192.168.")// 本地电脑不验证
                 )
 
                 val json = JSONObject(result)

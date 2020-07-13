@@ -90,7 +90,7 @@ public class DebugView {
         int height = (int) (5 * scale + 0.5f);
 
         View barView = new View(activity);
-        barView.setBackgroundColor(Color.parseColor("#22222222"));
+        barView.setBackgroundColor(Color.parseColor("#11111111"));
         barView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {

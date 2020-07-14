@@ -543,10 +543,10 @@ class AHSmallAction : KActivityDebugHelper() {
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    /*override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         KGranting.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    }
+    }*/
 
     private fun showDialog(word: String) {
         KAlertDialogHelper.Show1BDialog(mActivity, word)

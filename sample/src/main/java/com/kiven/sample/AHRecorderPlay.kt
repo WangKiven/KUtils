@@ -167,9 +167,9 @@ class AHRecorderPlay : KActivityDebugHelper() {
 
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    /*override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         KGranting.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    }
+    }*/
 
     private fun dir(): File {
         return mActivity.getDir(Environment.DIRECTORY_MOVIES, Context.MODE_PRIVATE)

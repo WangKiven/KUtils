@@ -8,14 +8,13 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentActivity;
-
-import android.widget.Toast;
 
 import com.kiven.kutils.callBack.Consumer;
 import com.kiven.kutils.logHelper.KLog;
@@ -121,7 +120,7 @@ public class KGranting {
         }
     }
 
-    private void requestPermissions(){
+    private void requestPermissions() {
         if (useFragmentRequest) {
             granting = null;
 
@@ -304,12 +303,9 @@ public class KGranting {
      * 处理授权结果
      */
     public static void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull final int[] grantResults) {
-        if (granting != null) {
+        if (useFragmentRequest) return;
 
-            granting.onResult(granting.checkResult(grantResults));
-            granting = null;
-        } else {
-            granting = null;
-        }
+        if (granting != null) granting.onResult(granting.checkResult(grantResults));
+        granting = null;
     }
 }

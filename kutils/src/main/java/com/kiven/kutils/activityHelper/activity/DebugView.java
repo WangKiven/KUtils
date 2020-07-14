@@ -1,5 +1,6 @@
 package com.kiven.kutils.activityHelper.activity;
 
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Color;
@@ -98,6 +99,12 @@ public class DebugView {
                 return true;
             }
         });
+
+        // 加个动画
+        ObjectAnimator animator = ObjectAnimator.ofFloat(barView, "alpha", 0f, 0f, 0.3f, 1.0f, 0f);
+        animator.setDuration(5500);
+        animator.setRepeatCount(ObjectAnimator.INFINITE);
+        animator.start();
 
         barLayout = new LinearLayout(activity);
         barLayout.addView(barView, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height));

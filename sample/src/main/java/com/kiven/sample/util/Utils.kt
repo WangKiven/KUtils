@@ -2,7 +2,9 @@ package com.kiven.sample.util
 
 import android.app.Activity
 import android.app.Dialog
+import android.content.ContentUris
 import android.content.Intent
+import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
@@ -21,10 +23,12 @@ import com.google.android.material.snackbar.Snackbar
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KAlertDialogHelper
 import com.kiven.kutils.tools.KContext
+import com.kiven.kutils.tools.KGranting
 import com.kiven.sample.R
 import java.io.File
 import java.io.FileDescriptor
 import java.io.FileInputStream
+import java.util.*
 
 /**
  * Created by wangk on 2019/5/14.
@@ -141,7 +145,7 @@ fun Activity.showImageDialog(uri: Uri) {
     val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
         val source = ImageDecoder.createSource(contentResolver, uri)
         ImageDecoder.decodeBitmap(source)
-    }else{
+    } else {
         MediaStore.Images.Media.getBitmap(contentResolver, uri)
     }
 
@@ -165,6 +169,7 @@ fun Activity.showImageDialog(bitmap: Bitmap) {
 }
 
 private var preTime = 0L
+
 /**
  * toast提示 仅用于无障碍模块
  */
@@ -175,5 +180,61 @@ fun showToast(word: String = "还没做") {
     if (curTime - preTime > 4000L) {
         Toast.makeText(KContext.getInstance(), word, Toast.LENGTH_SHORT).show()
         preTime = curTime
+    }
+}
+
+/**
+ * 随机获取相册图片
+ */
+fun Activity.randomPhoneImage(call: (Uri) -> Unit) {
+    phoneImages {
+        val id = it.random()[MediaStore.Images.Media._ID]?.toLong() ?: 0L
+        val pathUri = ContentUris.withAppendedId(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                id
+        )
+        call.invoke(pathUri)
+    }
+}
+
+/**
+ * 获取相册图片
+ */
+fun Activity.phoneImages(call: (List<Map<String, String>>) -> Unit) {
+    KGranting.requestAlbumPermissions(this, 887) {
+        if (it) {
+            Thread {
+                contentResolver.query(
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                        null,
+                        null,
+                        null,
+                        MediaStore.Images.Media.DATE_MODIFIED + " desc"
+                )?.use { cusor ->
+                    val names = cusor.columnNames
+                    val indexs = names.map { cusor.getColumnIndex(it) }
+
+                    cusor.moveToFirst()
+
+
+                    val iDatas = mutableListOf<TreeMap<String, String>>()
+                    do {
+                        val map = TreeMap<String, String>()
+
+                        for (i in names.indices) {
+                            map[names[i]] = cusor.getString(indexs[i]) ?: ""
+
+                        }
+                        iDatas.add(map)
+                    } while (cusor.moveToNext())
+
+                    cusor.close()
+
+                    runOnUiThread {
+                        call.invoke(iDatas)
+                    }
+                }
+            }.start()
+        }
     }
 }

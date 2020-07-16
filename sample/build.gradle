@@ -114,12 +114,6 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation fileTree(dir: 'xunfeiLibs', include: ['*.jar', '*.bak'])
     implementation fileTree(dir: 'mimcLibs', include: ['*.jar', '*.bak'])
-//    implementation 'com.tencent.tbs.tbssdk:sdk:43697'
-//    implementation fileTree(dir: 'miPush', include: ['*.jar', '*.bak'])
-    // OPPO推送
-//    implementation fileTree(dir: 'oppoPush', include: ['*.jar', '*.bak'])
-    // vivo推送
-//    implementation fileTree(dir: 'vivoPush', include: ['*.jar', '*.bak', '*.aar'])
     implementation fileTree(dir: 'agoraLibs', include: ['*.jar', '*.bak'])
 
     testImplementation 'junit:junit:4.13'
@@ -250,4 +244,12 @@ dependencies {
 
     // tbs
     implementation 'com.tencent.tbs.tbssdk:sdk:43903'
+    // gpuimage https://github.com/cats-oss/android-gpuimage
+    implementation 'jp.co.cyberagent.android:gpuimage:2.0.4'
+    // https://github.com/koral--/android-gif-drawable
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.19'
+    // https://github.com/chrisbanes/PhotoView
+    implementation 'com.github.chrisbanes:PhotoView:2.3.0'
+    // https://github.com/ronmamo/reflections
+//    implementation 'org.reflections:reflections:0.9.12'
 }

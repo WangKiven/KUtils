@@ -1,5 +1,6 @@
 package com.kiven.sample.libs
 
+import android.app.Dialog
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -26,22 +27,31 @@ import com.kiven.kutils.activityHelper.KActivityDebugHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KToast
+import com.kiven.sample.R
 import com.kiven.sample.libs.chatkit.AHChatList
+import com.kiven.sample.util.randomPhoneImage
 import com.kiven.sample.util.snackbar
 import com.kiven.sample.xutils.db.AHDbDemo
 import com.kiven.sample.xutils.net.AHNetDemo
 import com.koushikdutta.async.http.AsyncHttpClient
 import com.koushikdutta.async.http.server.AsyncHttpServer
+import jp.co.cyberagent.android.gpuimage.GPUImage
+import jp.co.cyberagent.android.gpuimage.GPUImageView
+import jp.co.cyberagent.android.gpuimage.filter.GPUImageFilter
+import jp.co.cyberagent.android.gpuimage.filter.GPUImageHueFilter
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import okhttp3.*
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.FormBody
+import okhttp3.OkHttpClient
 import org.jetbrains.anko.support.v4.nestedScrollView
 import java.io.IOException
 import java.io.InputStream
 import java.net.Inet4Address
 import java.net.NetworkInterface
-import java.security.*
-import java.security.cert.CertificateException
+import java.security.KeyStore
+import java.security.SecureRandom
 import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
 import java.text.DateFormat
@@ -49,7 +59,6 @@ import java.util.*
 import javax.net.ssl.KeyManagerFactory
 import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManagerFactory
-import javax.net.ssl.X509TrustManager
 
 /**
  * Created by wangk on 2018/3/27.
@@ -250,7 +259,7 @@ class AHLibs : KActivityDebugHelper() {
         addBtn("PhotoEditor(图片编辑)", View.OnClickListener { })
         // https://github.com/alibaba/ARouter ，TODO 需要注意代码混淆和加固的问题, 我们的helper不适用，只能用于activity
         addBtn("ARouter", View.OnClickListener { ARouter.getInstance().build("/dock/home").navigation() })
-        addBtn("", View.OnClickListener { })
+        addBtn("GPUImage", View.OnClickListener { AHGPUImageLib().startActivity(activity) })
         addBtn("", View.OnClickListener { })
         addBtn("", View.OnClickListener { })
         addBtn("", View.OnClickListener { })

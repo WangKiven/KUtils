@@ -251,4 +251,8 @@ dependencies {
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
     // https://github.com/ronmamo/reflections
 //    implementation 'org.reflections:reflections:0.9.12'
+
+    // https://square.github.io/leakcanary/getting_started/
+    // https://www.jianshu.com/p/a5e69a2e093f
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.4'
 }

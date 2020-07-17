@@ -3,17 +3,13 @@ package com.kiven.sample.libs
 import android.app.Activity
 import android.content.Intent
 import android.graphics.BitmapFactory
-import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.Gravity
 import com.kiven.kutils.activityHelper.KActivityDebugHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
-import com.kiven.kutils.file.KFile
 import com.kiven.kutils.logHelper.KLog
-import com.kiven.kutils.tools.KImage
-import com.kiven.kutils.tools.KUtil
 import com.kiven.kutils.widget.RulingSeekbar
 import com.kiven.sample.R
 import com.kiven.sample.util.randomPhoneImage
@@ -24,8 +20,6 @@ import jp.co.cyberagent.android.gpuimage.GPUImage
 import jp.co.cyberagent.android.gpuimage.filter.*
 import kotlinx.android.synthetic.main.ah_gpu_image_lib.*
 import kotlinx.android.synthetic.main.item_gpu_test_seekbar.view.*
-import java.io.File
-import java.io.FileInputStream
 import java.lang.reflect.Modifier
 
 /**

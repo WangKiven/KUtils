@@ -1,6 +1,5 @@
 package com.kiven.sample.libs
 
-import android.app.Dialog
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -27,18 +26,13 @@ import com.kiven.kutils.activityHelper.KActivityDebugHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KToast
-import com.kiven.sample.R
 import com.kiven.sample.libs.chatkit.AHChatList
-import com.kiven.sample.util.randomPhoneImage
+import com.kiven.sample.media.AHGif
 import com.kiven.sample.util.snackbar
 import com.kiven.sample.xutils.db.AHDbDemo
 import com.kiven.sample.xutils.net.AHNetDemo
 import com.koushikdutta.async.http.AsyncHttpClient
 import com.koushikdutta.async.http.server.AsyncHttpServer
-import jp.co.cyberagent.android.gpuimage.GPUImage
-import jp.co.cyberagent.android.gpuimage.GPUImageView
-import jp.co.cyberagent.android.gpuimage.filter.GPUImageFilter
-import jp.co.cyberagent.android.gpuimage.filter.GPUImageHueFilter
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import okhttp3.Call
@@ -259,8 +253,8 @@ class AHLibs : KActivityDebugHelper() {
         addBtn("PhotoEditor(图片编辑)", View.OnClickListener { })
         // https://github.com/alibaba/ARouter ，TODO 需要注意代码混淆和加固的问题, 我们的helper不适用，只能用于activity
         addBtn("ARouter", View.OnClickListener { ARouter.getInstance().build("/dock/home").navigation() })
-        addBtn("GPUImage", View.OnClickListener { AHGPUImageLib().startActivity(activity) })
-        addBtn("", View.OnClickListener { })
+        addBtn("GPUImage & PhotoView", View.OnClickListener { AHGPUImageLib().startActivity(activity) })
+        addBtn("gif", View.OnClickListener { AHGif().startActivity(mActivity) })
         addBtn("", View.OnClickListener { })
         addBtn("", View.OnClickListener { })
         addBtn("", View.OnClickListener { })

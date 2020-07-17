@@ -161,7 +161,6 @@ dependencies {
     implementation project(':xutils')
 
     implementation 'com.android.volley:volley:1.1.1'
-    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.11'
 
     implementation 'com.google.android:flexbox:2.0.0'
 

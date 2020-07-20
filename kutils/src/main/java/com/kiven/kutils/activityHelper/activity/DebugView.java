@@ -91,7 +91,8 @@ public class DebugView {
         int height = (int) (5 * scale + 0.5f);
 
         View barView = new View(activity);
-        barView.setBackgroundColor(Color.parseColor("#11111111"));
+        int color1 = Color.parseColor("#11111111");
+        barView.setBackgroundColor(color1);
         barView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -101,7 +102,15 @@ public class DebugView {
         });
 
         // 加个动画
-        ObjectAnimator animator = ObjectAnimator.ofFloat(barView, "alpha", 0f, 0f, 0.3f, 1.0f, 0f);
+//        ObjectAnimator animator = ObjectAnimator.ofFloat(barView, "alpha", 0f, 0f, 0.3f, 1.0f, 0f);
+        int color2 = Color.parseColor("#11FF0000");
+        int color3 = Color.TRANSPARENT;
+        ObjectAnimator animator;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            animator = ObjectAnimator.ofArgb(barView, "backgroundColor", color1, color2, color2, color3, color3, color3, color1);
+        } else {
+            animator = ObjectAnimator.ofFloat(barView, "alpha", 0f, 0f, 0.3f, 1.0f, 0f);
+        }
         animator.setDuration(5500);
         animator.setRepeatCount(ObjectAnimator.INFINITE);
         animator.start();

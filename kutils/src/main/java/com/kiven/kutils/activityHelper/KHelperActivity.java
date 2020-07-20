@@ -169,12 +169,13 @@ public class KHelperActivity extends AppCompatActivity {
     protected void onDestroy() {
         if (helper != null) {
             helper.onDestroy();
+            helper.mActivity = null;
+            helper = null;
         }
         KActivityHelper.removeStack(getIntent().getStringExtra("BaseActivityHelper"));//将helper移除
         super.onDestroy();
         KContext.getInstance().onActivityDestory(this);
 
-        helper = null;
     }
 
     @Override

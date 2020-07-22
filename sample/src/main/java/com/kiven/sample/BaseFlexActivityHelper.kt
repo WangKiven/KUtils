@@ -5,6 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import com.google.android.flexbox.AlignContent
+import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
 import com.kiven.kutils.activityHelper.KActivityDebugHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
@@ -14,7 +16,10 @@ import com.kiven.kutils.activityHelper.KHelperActivity
  */
 open class BaseFlexActivityHelper : KActivityDebugHelper() {
     private val flexBoxLayout by lazy {
-        FlexboxLayout(mActivity)
+        FlexboxLayout(mActivity).apply {
+            flexWrap = FlexWrap.WRAP
+            alignContent = AlignContent.FLEX_START
+        }
     }
 
     val addTitle by lazy {

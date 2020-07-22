@@ -12,7 +12,16 @@
         app:layoutDescription="@xml/anim_scene"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:showPaths="true">
+        app:showPaths="true">
+
+        <TextView
+            android:id="@+id/tv1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:autoLink="all"
+            android:text="https://developer.android.google.cn/training/constraint-layout/motionlayout"/>
 
         <TextView
             android:id="@+id/button"

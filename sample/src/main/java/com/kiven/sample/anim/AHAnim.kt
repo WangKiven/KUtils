@@ -77,7 +77,7 @@ class AHAnim : KActivityHelper() {
             val fling = FlingAnimation(iv_1, FlingAnimation.TRANSLATION_Y)
             fling.setStartVelocity(300f)// 初始速度
                     .setMinValue(0f)// translationY 最小值
-                    .setMaxValue(500f)// translationY 最大值
+                    .setMaxValue(250f)// translationY 最大值
                     .setFriction(0.2f)// 摩擦系数
                     .setMinimumVisibleChange(FlingAnimation.MIN_VISIBLE_CHANGE_SCALE)// 设置最小可见变化, 越小检索效果越明显
                     .start()

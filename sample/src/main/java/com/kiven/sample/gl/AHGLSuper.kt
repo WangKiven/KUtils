@@ -3,9 +3,7 @@ package com.kiven.sample.gl
 import android.opengl.GLSurfaceView
 import android.opengl.GLU
 import android.os.Bundle
-import android.view.DragEvent
 import android.view.MotionEvent
-import android.view.View
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import javax.microedition.khronos.egl.EGLConfig

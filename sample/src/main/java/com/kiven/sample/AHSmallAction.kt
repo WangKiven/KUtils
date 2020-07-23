@@ -46,10 +46,7 @@ import com.kiven.sample.noti.AHNotiTest
 import com.kiven.sample.service.LiveWallpaper2
 import com.kiven.sample.spss.AHSpssTemple
 import com.kiven.sample.systemdata.AHSysgemData
-import com.kiven.sample.util.EncryptUtils
-import com.kiven.sample.util.WallpaperUtil
-import com.kiven.sample.util.callPhone
-import com.kiven.sample.util.snackbar
+import com.kiven.sample.util.*
 import com.xiaomi.mimc.MIMCGroupMessage
 import com.xiaomi.mimc.MIMCMessage
 import com.xiaomi.mimc.MIMCServerAck
@@ -531,7 +528,8 @@ class AHSmallAction : KActivityDebugHelper() {
         addView("系统数据", View.OnClickListener { AHSysgemData().startActivity(mActivity) })
         addView("url访问测试", View.OnClickListener { AHUrlTest().startActivity(mActivity) })
         addView("socket", View.OnClickListener { AHSocketTest().startActivity(mActivity) })
-        addView("", View.OnClickListener { })
+        addView("原生分享", View.OnClickListener { AHShare().startActivity(mActivity) })
+        addView("剪贴板", View.OnClickListener { KString.setClipText(activity, "这是剪贴内容x") })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
     }

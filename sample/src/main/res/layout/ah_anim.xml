@@ -1,12 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <androidx.constraintlayout.motion.widget.MotionLayout
+        android:id="@+id/motionLayout"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        app:layoutDescription="@xml/anim_scene"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:showPaths="true">
+
+        <TextView
+            android:id="@+id/tv1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:autoLink="all"
+            android:text="https://developer.android.google.cn/training/constraint-layout/motionlayout"/>
+
+        <TextView
+            android:id="@+id/button"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="@color/colorAccent"
+            android:textSize="11dp"
+            android:gravity="center"
+            android:text="MotionLayout动画，拖动我" />
+
+    </androidx.constraintlayout.motion.widget.MotionLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/v1"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="#11111111"
+        app:layout_constraintTop_toBottomOf="@+id/motionLayout">
+
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_1"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/anim_robot" />
+
+        <ImageView
+            android:id="@+id/iv_2"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_loading_rotate"
+            app:layout_constraintRight_toRightOf="parent" />
+
+
+        <FrameLayout
+            android:id="@+id/fl_transition"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:layout_constraintRight_toRightOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/v1">
 
         <com.google.android.flexbox.FlexboxLayout
             android:id="@+id/flex"
@@ -16,27 +80,5 @@
             app:alignContent="flex_start"
             app:flexWrap="wrap" />
     </androidx.core.widget.NestedScrollView>
-
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/iv_1"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:scaleType="fitXY"
-        app:srcCompat="@drawable/anim_robot" />
-
-    <ImageView
-        android:id="@+id/iv_2"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/ic_loading_rotate"
-        app:layout_constraintRight_toRightOf="parent" />
-
-
-    <FrameLayout
-        android:id="@+id/fl_transition"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        app:layout_constraintRight_toRightOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

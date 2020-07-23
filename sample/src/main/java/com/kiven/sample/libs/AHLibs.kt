@@ -255,7 +255,7 @@ class AHLibs : KActivityDebugHelper() {
         addBtn("ARouter", View.OnClickListener { ARouter.getInstance().build("/dock/home").navigation() })
         addBtn("GPUImage & PhotoView", View.OnClickListener { AHGPUImageLib().startActivity(activity) })
         addBtn("gif", View.OnClickListener { AHGif().startActivity(mActivity) })
-        addBtn("", View.OnClickListener { })
+        addBtn("spring for Android", View.OnClickListener { AHSpring().startActivity(mActivity) })
         addBtn("", View.OnClickListener { })
         addBtn("", View.OnClickListener { })
         addBtn("", View.OnClickListener { })

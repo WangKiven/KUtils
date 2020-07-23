@@ -8,6 +8,7 @@ import android.widget.Button
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.sample.util.randomPhoneImage
+import com.kiven.sample.util.showListDialog
 import org.jetbrains.anko.toast
 
 /**
@@ -100,21 +101,37 @@ class AHShare : BaseFlexActivityHelper() {
                 }
             }
         })
-        addBtn("多图片分享2", View.OnClickListener {
-            activity.randomPhoneImage { uri1 ->
-                activity.randomPhoneImage { uri2 ->
+        addBtn("直接指定App分享", View.OnClickListener {
+            activity.showListDialog(listOf(
+                    "微信",
+                    "盆友圈",
+                    "QQ",
+                    "QQ分享到电脑",
+                    "QQ文件互传",
+                    "QQ收藏"
+            )){i, _ ->
+                activity.randomPhoneImage { uri ->
                     val shareIntent = Intent().apply {
                         action = Intent.ACTION_SEND
                         type = "image/*"
-//                        putParcelableArrayListExtra(Intent.EXTRA_STREAM, arrayListOf(uri1, uri2))
-                        putExtra(Intent.EXTRA_STREAM, arrayOf(uri1, uri2))
+                        putExtra(Intent.EXTRA_STREAM, uri)
                         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                        when(i) {
+                            0 -> { setClassName("com.tencent.mm", "com.tencent.mm.ui.tools.ShareImgUI") }
+                            1 -> { setClassName("com.tencent.mm", "com.tencent.mm.ui.tools.ShareToTimeLineUI") }
+                            2 -> { setClassName("com.tencent.mobileqq", "com.tencent.mobileqq.activity.JumpActivity") }
+                            // qq 分享到电脑
+                            3 -> { setClassName("com.tencent.mobileqq", "com.tencent.mobileqq.activity.qfileJumpActivity") }
+                            // qq 文件互传
+                            4 -> { setClassName("com.tencent.mobileqq", "cooperation.qlink.QlinkShareJumpActivity") }
+                            // qq 收藏
+                            5 -> { setClassName("com.tencent.mobileqq", "cooperation.qqfav.widget.QfavJumpActivity") }
+                        }
                     }
                     startShare(shareIntent)
                 }
             }
         })
-        addBtn("", View.OnClickListener { })
         addBtn("", View.OnClickListener { })
         addBtn("", View.OnClickListener { })
         addBtn("", View.OnClickListener { })

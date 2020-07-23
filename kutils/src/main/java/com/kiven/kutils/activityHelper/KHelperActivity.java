@@ -1,8 +1,6 @@
 package com.kiven.kutils.activityHelper;
 
 import android.content.Intent;
-import android.content.res.AssetManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -10,14 +8,14 @@ import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
+import com.kiven.kutils.activityHelper.activity.KActivity;
 import com.kiven.kutils.logHelper.KLog;
 import com.kiven.kutils.tools.KContext;
 
 import java.lang.reflect.Constructor;
 
-public class KHelperActivity extends AppCompatActivity {
+public class KHelperActivity extends KActivity {
 
     private KActivityHelper helper;
 
@@ -244,11 +242,11 @@ public class KHelperActivity extends AppCompatActivity {
     }
 
     // for fix https://stackoverflow.com/questions/41025200/android-view-inflateexception-error-inflating-class-android-webkit-webview
-    @Override
+    /*@Override
     public AssetManager getAssets() {
         if (Build.VERSION.SDK_INT == 21 || Build.VERSION.SDK_INT == 22) {
             return getResources().getAssets();
         } else
             return super.getAssets();
-    }
+    }*/
 }

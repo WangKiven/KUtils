@@ -1,23 +1,12 @@
 package com.kiven.kutils.activityHelper;
 
-import android.app.Activity;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
-import android.os.Build;
-import android.os.Bundle;
-
-import com.kiven.kutils.activityHelper.activity.DebugView;
-import com.kiven.kutils.logHelper.KLog;
-
 /**
  * helper, 可显示日志
  * Created by kiven on 16/7/22.
  */
-public class KActivityDebugHelper extends KActivityHelper implements SensorEventListener {
+public class KActivityDebugHelper extends KActivityHelper/* implements SensorEventListener*/ {
 
-    protected SensorManager sensorManager;
+    /*protected SensorManager sensorManager;
 
     @Override
     public void onCreate(KHelperActivity activity, Bundle savedInstanceState) {
@@ -80,7 +69,6 @@ public class KActivityDebugHelper extends KActivityHelper implements SensorEvent
 //            KLog.i("( " + sens + " )");
 
             if (sens > 15) {
-                /*new KShowLog().startActivity(mActivity);*/
                 showDebugView();
                 showLogTime = System.currentTimeMillis();
             }
@@ -93,18 +81,8 @@ public class KActivityDebugHelper extends KActivityHelper implements SensorEvent
         }
     }
 
-    /**
-     * Called when the accuracy of the registered sensor has changed.
-     * <p/>
-     * <p>See the SENSOR_STATUS_* constants in
-     * {@link SensorManager SensorManager} for details.
-     *
-     * @param sensor
-     * @param accuracy The new accuracy of this sensor, one of
-     *                 {@code SensorManager.SENSOR_STATUS_*}
-     */
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
-    }
+    }*/
 }

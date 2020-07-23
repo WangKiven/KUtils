@@ -2,14 +2,15 @@ package com.kiven.kutils.activityHelper;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import com.kiven.kutils.R;
+import com.kiven.kutils.activityHelper.activity.KActivity;
 import com.kiven.kutils.logHelper.KLog;
 
 import java.lang.reflect.Constructor;
@@ -20,7 +21,7 @@ import java.util.List;
  * Created by kiven on 2017/7/21.
  */
 
-public class KFragmentActivity extends AppCompatActivity {
+public class KFragmentActivity extends KActivity {
     Fragment helperFragment;
 
     @Override

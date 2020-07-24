@@ -26,7 +26,7 @@ class AHConstraintLayoutTest : KActivityHelper() {
         val animator = ValueAnimator.ofFloat(0f, 360f)
         animator.addUpdateListener {
             val value = it.animatedValue as Float
-            val textView5 = findViewById<TextView>(R.id.textView5)
+            val textView5 = activity.findViewById<TextView>(R.id.textView5)
             val params = textView5.layoutParams as ConstraintLayout.LayoutParams
             params.circleAngle = value
 

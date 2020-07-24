@@ -31,10 +31,10 @@ class AHConstraintLayoutTest : KActivityHelper() {
 
         animator.addUpdateListener {
             val value = it.animatedValue as Float
-            val textView5 = activity.findViewById<TextView>(R.id.textView5)
+            val textView5 = findViewById<TextView>(R.id.textView5)
             val params = textView5.layoutParams as ConstraintLayout.LayoutParams
             params.circleAngle = value
-            KLog.i("xxxxxxxxxxxxxx $value")
+
             textView5.layoutParams = params
         }
         animator.repeatCount = INFINITE

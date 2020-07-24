@@ -35,7 +35,7 @@ public class KHelperActivity extends KActivity {
             helper.onCreate(this, savedInstanceState);
         }
 
-        KContext.getInstance().onActivityCreate(this);
+//        KContext.getInstance().onActivityCreate(this);
     }
 
     @SuppressWarnings({"rawtypes"})
@@ -125,7 +125,7 @@ public class KHelperActivity extends KActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        KContext.getInstance().onActivityStart(this);
+//        KContext.getInstance().onActivityStart(this);
         if (helper != null) {
             helper.onStart();
         }
@@ -134,7 +134,7 @@ public class KHelperActivity extends KActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        KContext.getInstance().onActivityResume(this);
+//        KContext.getInstance().onActivityResume(this);
         if (helper != null) {
             helper.onResume();
         }
@@ -142,7 +142,7 @@ public class KHelperActivity extends KActivity {
 
     @Override
     protected void onPause() {
-        KContext.getInstance().onActivityPause(this);
+//        KContext.getInstance().onActivityPause(this);
         if (helper != null) {
             helper.onPause();
         }
@@ -152,7 +152,7 @@ public class KHelperActivity extends KActivity {
     @Override
     public void finish() {
         super.finish();
-        KContext.getInstance().onActivityFinish(this);
+//        KContext.getInstance().onActivityFinish(this);
     }
 
     @Override
@@ -162,7 +162,7 @@ public class KHelperActivity extends KActivity {
         }
         super.onStop();
 
-        KContext.getInstance().onActivityStop(this);
+//        KContext.getInstance().onActivityStop(this);
     }
 
     @Override
@@ -174,8 +174,7 @@ public class KHelperActivity extends KActivity {
         }
         KActivityHelper.removeStack(getIntent().getStringExtra("BaseActivityHelper"));//将helper移除
         super.onDestroy();
-        KContext.getInstance().onActivityDestory(this);
-
+//        KContext.getInstance().onActivityDestory(this);
     }
 
     @Override

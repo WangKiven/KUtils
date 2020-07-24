@@ -278,7 +278,7 @@ public class KContext extends Application {
     private List<ActivityInfo> activities = new ArrayList<>();
     private List<ActivityOnChangeStatusListener> activityOnChangeStatusListeners = new ArrayList<>();
 
-    private void changeStatus(ActivityInfo activityInfo) {
+    private synchronized void changeStatus(ActivityInfo activityInfo) {
         for (ActivityOnChangeStatusListener listener : activityOnChangeStatusListeners) {
             listener.onChange(activityInfo);
         }
@@ -287,7 +287,7 @@ public class KContext extends Application {
     /**
      * 添加监听
      */
-    public void addActivityOnChangeStatusListener(ActivityOnChangeStatusListener listener) {
+    public synchronized void addActivityOnChangeStatusListener(ActivityOnChangeStatusListener listener) {
         if (listener != null && !activityOnChangeStatusListeners.contains(listener)) {
             activityOnChangeStatusListeners.add(listener);
         }
@@ -296,7 +296,7 @@ public class KContext extends Application {
     /**
      * 移除监听
      */
-    public void removeActivityOnChangeStatusListener(ActivityOnChangeStatusListener listener) {
+    public synchronized void removeActivityOnChangeStatusListener(ActivityOnChangeStatusListener listener) {
         if (listener != null && activityOnChangeStatusListeners.contains(listener)) {
             activityOnChangeStatusListeners.remove(listener);
         }

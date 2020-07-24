@@ -1,16 +1,19 @@
 package com.kiven.sample
 
+import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.animation.ValueAnimator.INFINITE
 import android.os.Bundle
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.Group
-import androidx.constraintlayout.widget.Placeholder
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.Group
+import androidx.constraintlayout.widget.Placeholder
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
+import com.kiven.kutils.logHelper.KLog
+import kotlinx.android.synthetic.main.ah_constraint_layout_test.*
 
 /**
  * Created by wangk on 2019/5/5.
@@ -19,22 +22,29 @@ import com.kiven.kutils.activityHelper.KHelperActivity
  * https://blog.csdn.net/guolin_blog/article/details/53122387
  */
 class AHConstraintLayoutTest : KActivityHelper() {
+
+    private val animator = ValueAnimator.ofFloat(0f, 360f)
+
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
         setContentView(R.layout.ah_constraint_layout_test)
 
-        val animator = ValueAnimator.ofFloat(0f, 360f)
         animator.addUpdateListener {
             val value = it.animatedValue as Float
             val textView5 = activity.findViewById<TextView>(R.id.textView5)
             val params = textView5.layoutParams as ConstraintLayout.LayoutParams
             params.circleAngle = value
-
+            KLog.i("xxxxxxxxxxxxxx $value")
             textView5.layoutParams = params
         }
         animator.repeatCount = INFINITE
         animator.duration = 5000
         animator.start()
+    }
+
+    override fun onDestroy() {
+        animator.end()
+        super.onDestroy()
     }
 
     override fun onClick(view: View?) {

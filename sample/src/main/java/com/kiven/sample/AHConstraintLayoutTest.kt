@@ -1,6 +1,5 @@
 package com.kiven.sample
 
-import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.animation.ValueAnimator.INFINITE
 import android.os.Bundle
@@ -12,8 +11,6 @@ import androidx.constraintlayout.widget.Group
 import androidx.constraintlayout.widget.Placeholder
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
-import com.kiven.kutils.logHelper.KLog
-import kotlinx.android.synthetic.main.ah_constraint_layout_test.*
 
 /**
  * Created by wangk on 2019/5/5.

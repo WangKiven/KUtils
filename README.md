@@ -50,7 +50,6 @@ KLog.w("Hello KLog.);
 - 自定义日志弹窗
 ```
 DebugView.addAction("测试", new DebugViewListener() {
-
     @Override
     public void onClick(Activity activity, View view, DebugEntity entity) {
         new AHTest().startActivity(activity);
@@ -58,3 +57,4 @@ DebugView.addAction("测试", new DebugViewListener() {
 });
 ```
 ### app目录结构
+- 打开日志界面，按右上角的按钮选择查看文件夹

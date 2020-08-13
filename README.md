@@ -31,7 +31,7 @@ AHShare().startActivityForResult(mActivity, 8899)
 ```
 `注`: KActivityHelper 是 Activity 的代理，通过mActivity持有Activity。通过代码可以看出，KActivityHelper在Activity之前创建， KActivityHelper.startActivity时会请KActivityHelper存入静态map，存入时拿取到key，将key存入intent后其他Activity。Activity启动后在onCreate中，通过key从静态map拿取到KActivityHelper，开始将Activity的生命周期与KActivityHelper绑定，在onDestroy()释放KActivityHelper与Activity的相互持有。
 
-`内存回收`: 这种情况，KActivityHelper是不能拿取到了，所以只有重新创建KActivityHelper，可查看KHelperActivity类里面的方法getHelper(Bundle savedInstanceState)连接原理，其实就是通过反射实现的，内存回收的时候会在onSaveInstanceState()保存类名。所以，建议不要直接给KActivityHelper设置参数值，还是通过KActivityHelper.getIntent()来设置值。
+`内存回收`: 这种情况，KActivityHelper是不能拿取到了，所以只有重新创建KActivityHelper，可查看KHelperActivity类里面的方法getHelper(Bundle savedInstanceState)理解原理，其实就是通过反射实现的，内存回收的时候会在onSaveInstanceState()保存类名。所以，建议不要直接给KActivityHelper设置参数值，还是通过KActivityHelper.getIntent()来设置值。
 
 ### 查看打印的日志
 - Activity继承`KActivity`, 不用对`KActivityHelper`进行处理

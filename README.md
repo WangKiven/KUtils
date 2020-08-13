@@ -47,6 +47,7 @@ KLog.e("Hello KLog.);
 KLog.w("Hello KLog.);
 ```
 - 运行App，摇动手机或者长按顶部呼吸条(仔细看，在界面顶部有呼吸条)，出现功能弹窗，选择Log进入日志查看界面
+
 ![avatar](images/1.jpg)  ![avatar](images/2.jpg)
 - 自定义日志弹窗
 ```
@@ -60,9 +61,11 @@ DebugView.addAction("测试", new DebugViewListener() {
 ### 在手机端查看mipmap/drawable/color资源
 - 打开日志界面，点击`查看资源`。
 - 注意：在`查看资源`界面，可以点击右边按钮选择`查看日志`进入日志查看界面
+
 ![avatar](images/3.jpg)  ![avatar](images/4.jpg)
 ### app目录结构
 - 打开日志界面，按右上角的按钮选择`文件目录`
+
 ![avatar](images/5.jpg)  ![avatar](images/6.jpg)
 ### 各种功能、三方库的使用demo
 - 运行sample模块可启动demo

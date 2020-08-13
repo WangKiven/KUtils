@@ -100,7 +100,7 @@ KGranting.requestPermissions(activity, 377, Manifest.permission.RECORD_AUDIO,
             AHXunfeiTest().startActivity(mActivity)
     }
 }
-// 这不必须。这里是Kotlin代码。在Activity或者KActivityHelper的onRequestPermissionsResult里面调用KGranting.onRequestPermissionsResult，注意不要出现请求一次权限多次回调的情况
+// 请求结果处理。这里是Kotlin代码。在Activity或者KActivityHelper的onRequestPermissionsResult里面调用KGranting.onRequestPermissionsResult，注意不要出现请求一次权限多次回调的情况
 override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
     KGranting.onRequestPermissionsResult(requestCode, permissions, grantResults)
 }

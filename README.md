@@ -4,6 +4,7 @@
 - 输出带代码位置的日志，并且在手机上可查看日志，且仅在`debug`状态打印，打包`release`好不会打印。
 - 在手机端查看mipmap/drawable/color资源
 - 在手机上查看当前app目录结构
+- 授权申请。简化请求各种权限。
 - 各种功能、三方库的使用demo
 - 小米、华为、OPPO、vivo 4大厂商的推送集成
 
@@ -72,5 +73,37 @@ DebugView.addAction("测试", new DebugViewListener() {
 - 打开日志界面，按右上角的按钮选择`文件目录`
 
 ![avatar](images/3.jpg)  ![avatar](images/5.jpg)  ![avatar](images/6.jpg)
+
+### 授权申请
+- 通过fragment请求权限，建议使用这个。
+```
+// 这句代码建议，在继承的Application中使用，因为是静态变量，只需要设置一次。
+KGranting.useFragmentRequest = true;
+
+// 使用。这里是Kotlin代码
+KGranting.requestPermissions(activity, 377, Manifest.permission.RECORD_AUDIO,
+    "录音") {
+        if (it) {
+            AHXunfeiTest().startActivity(mActivity)
+    }
+}
+```
+- 不通过fragment请求权限，不建议使用。
+```
+// 这句代码建议，在继承的Application中使用，因为是静态变量，只需要设置一次。
+KGranting.useFragmentRequest = false;
+
+// 使用。这里是Kotlin代码
+KGranting.requestPermissions(activity, 377, Manifest.permission.RECORD_AUDIO,
+    "录音") {
+        if (it) {
+            AHXunfeiTest().startActivity(mActivity)
+    }
+}
+// 这不必须。这里是Kotlin代码。在Activity或者KActivityHelper的onRequestPermissionsResult里面调用KGranting.onRequestPermissionsResult，注意不要出现请求一次权限多次回调的情况
+override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    KGranting.onRequestPermissionsResult(requestCode, permissions, grantResults)
+}
+```
 ### 各种功能、三方库的使用demo
 - 运行sample模块可启动demo

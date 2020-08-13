@@ -67,7 +67,7 @@ DebugView.addAction("测试", new DebugViewListener() {
 - 打开日志界面，点击`查看资源`。
 - 注意：在`查看资源`界面，可以点击右边按钮选择`查看日志`进入日志查看界面
 
-![avatar](images/4.jpg)
+![avatar](images/4.jpg)  ![avatar](images/7.jpg)
 ### app目录结构
 - 打开日志界面，按右上角的按钮选择`文件目录`
 

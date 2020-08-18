@@ -1,4 +1,4 @@
-# KUtils
+# KUtils [![](https://jitpack.io/v/WangKiven/KUtils.svg)](https://jitpack.io/#WangKiven/KUtils)
 一些工具集合。
 - Activity代理。继承`KActivityHelper`，只需要在`manifest`中注册一次`KHelperActivity`就行，免去多人协作同时修改`manifest`导致`git`冲突的情况。
 - 输出带代码位置的日志，并且在手机上可查看日志，且仅在`debug`状态打印，打包`release`好不会打印。

@@ -8,4 +8,6 @@
         <item>drawable</item>
         <item>color</item>
     </array>
+    <string name="search">search</string>
+    <string name="show_res">查看资源</string>
 </resources>

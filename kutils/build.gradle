@@ -19,14 +19,14 @@ android {
 
 /*group = 'com.kiven.kutils'
 version = '0.1'*/
-uploadArchives {
+/*uploadArchives {
     repositories {
         flatDir {
             name 'pcLocal'
             dir "$parent.rootDir/maven/aars"
         }
     }
-}
+}*/
 dependencies {
 //    implementation fileTree(include: ['*.jar'], dir: 'libs')
 

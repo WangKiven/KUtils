@@ -144,7 +144,6 @@ class LauchActivity : KActivity(), LifecycleOwner {
         })
         addView("arch", View.OnClickListener { AHArch().startActivity(this) })
         addView("KGranting", View.OnClickListener {
-
             KGranting.requestAlbumPermissions(this, 233) {
                 if (it) {
                     showDialog("获取到了相册权限")

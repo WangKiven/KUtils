@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
 
+import com.kiven.kutils.R;
 import com.kiven.kutils.activityHelper.KActivityHelper;
 import com.kiven.kutils.activityHelper.KHelperActivity;
 
@@ -29,6 +30,8 @@ public class KCPUMem extends KActivityHelper {
     @Override
     public void onCreate(KHelperActivity activity, Bundle savedInstanceState) {
         super.onCreate(activity, savedInstanceState);
+        activity.setTheme(R.style.Theme_AppCompat_NoActionBar);
+
         LinearLayout ui = new LinearLayout(activity);
         ui.setOrientation(LinearLayout.VERTICAL);
         setContentView(ui);

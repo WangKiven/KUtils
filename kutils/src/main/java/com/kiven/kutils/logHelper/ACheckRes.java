@@ -102,6 +102,7 @@ public class ACheckRes extends KActivityHelper {
     @Override
     public void onCreate(KHelperActivity activity, Bundle savedInstanceState) {
         super.onCreate(activity, savedInstanceState);
+        activity.setTheme(R.style.Theme_AppCompat_NoActionBar);
         setContentView(R.layout.k_a_check_res);
 
         initBackToolbar(R.id.toolbar);

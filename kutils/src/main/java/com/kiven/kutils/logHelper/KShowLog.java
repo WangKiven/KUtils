@@ -8,6 +8,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.MenuItemCompat;
 import androidx.appcompat.app.AlertDialog;
 
@@ -19,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -53,6 +56,7 @@ public class KShowLog extends KActivityHelper implements AdapterView.OnItemClick
     @Override
     public void onCreate(KHelperActivity activity, Bundle savedInstanceState) {
         super.onCreate(activity, savedInstanceState);
+        activity.setTheme(R.style.Theme_AppCompat_NoActionBar);
         setContentView(R.layout.k_show_log);
 
         if (KUtil.getSharedPreferencesIntValue("kutil_log_res_preferences", 0) == 1) {
@@ -63,6 +67,7 @@ public class KShowLog extends KActivityHelper implements AdapterView.OnItemClick
         showSearch = KUtil.getSharedPreferencesBooleanValue("kutil_log_show_search", true);
 
         initBackToolbar(R.id.toolbar);
+
         listView = findViewById(R.id.listView);
 
         mData = new ArrayList<KLogInfo>(KLog.getLogs());

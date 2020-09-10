@@ -36,7 +36,9 @@ class AppContext : KContext() {
         super.init()
         KLog.i("AppContext init")
         x.Ext.init(this)
-        KUtil.setApp(this)
+
+//        KGranting.useFragmentRequest = true
+//        KUtil.setApp(this)
 
         registerReceiver(NotificationClickReceiver(), IntentFilter())
 
@@ -45,7 +47,6 @@ class AppContext : KContext() {
         ARouter.init(this)
 
 
-        KGranting.useFragmentRequest = true
 
         QbSdk.initX5Environment(this, object : QbSdk.PreInitCallback {
             override fun onCoreInitFinished() {

@@ -31,7 +31,6 @@ public class KContext extends Application {
         mInstance = this;
 
         KUtil.setApp(this);
-        KGranting.useFragmentRequest = true;
 
         if (isMainProcess()) {
             initOnlyMainProcess();

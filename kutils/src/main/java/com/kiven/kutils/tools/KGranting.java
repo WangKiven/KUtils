@@ -30,9 +30,9 @@ import java.util.TreeMap;
  */
 public class KGranting {
     // todo 全局设置，是否通过fragment请求权限。不要频繁改变该值，否则会出问题。
-    //  默认false: 通过activity请求，需要在activity中配置onRequestPermissionsResult().
+    //  false: 通过activity请求，需要在activity中配置onRequestPermissionsResult().
     //  true: activity中的onRequestPermissionsResult()必须调用super.onRequestPermissionsResult()，否则回调会出问题
-    public static boolean useFragmentRequest = false;
+    public static boolean useFragmentRequest = true;
 
     private Activity mActivity;
     private int requestCode;

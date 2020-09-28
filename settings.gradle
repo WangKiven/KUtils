@@ -4,5 +4,5 @@ include ':xutils'
 project(':xutils').projectDir = new File('../xUtils3/xutils')
 
 // https://github.com/WangKiven/ChatKit
-include ':chatkit'
-project(':chatkit').projectDir = new File('../ChatKit/chatkit')
+//include ':chatkit'
+//project(':chatkit').projectDir = new File('../ChatKit/chatkit')

@@ -7,6 +7,8 @@ import android.graphics.Color;
 import android.graphics.PixelFormat;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
+
+import android.os.Debug;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -18,11 +20,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.kiven.kutils.R;
 import com.kiven.kutils.logHelper.KShowLog;
 import com.kiven.kutils.tools.KUtil;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -41,6 +46,36 @@ public class DebugView {
 
     public static void addAction(@NonNull String text, DebugViewListener callBack) {
         customAction.add(new DebugEntity(text, callBack));
+    }
+
+    static {
+        // todo 固定选项：日志，Profiler
+        addAction(R.mipmap.k_ic_text_log, new DebugViewListener() {
+            @Override
+            public void onClick(Activity activity, View view, DebugEntity entity) {
+                new KShowLog().startActivity(activity);
+            }
+        });
+        addAction(R.mipmap.k_ic_profiler_open, new DebugViewListener() {
+            private boolean hasStartMethodTracing = false;
+            @Override
+            public void onClick(Activity activity, View view, DebugEntity entity) {
+                String say;
+                if (hasStartMethodTracing) {
+                    hasStartMethodTracing = false;
+                    say = "Stop method tracing";
+                    Debug.stopMethodTracing();
+                } else {
+                    hasStartMethodTracing = true;
+                    say = "Start method tracing";
+                    //系统将在getExternalFilesDir() 目录下生成 .trace 文件，一般都在 ~/sdcard/Android/data/$packname/files 目录中
+                    Debug.startMethodTracing("KUtilsMethodTracing-" + SimpleDateFormat.getDateTimeInstance().format(new Date()));
+                }
+                Object a;
+
+                Snackbar.make(activity.getWindow().getDecorView(), say, Snackbar.LENGTH_LONG).show();
+            }
+        });
     }
 
 
@@ -66,13 +101,7 @@ public class DebugView {
 
         // todo 装载自定义选项
         actions.addAll(customAction);
-        // todo 固定选项：日志，关闭
-        actions.add(new DebugEntity(R.mipmap.k_ic_text_log, new DebugViewListener() {
-            @Override
-            public void onClick(Activity activity, View view, DebugEntity entity) {
-                new KShowLog().startActivity(activity);
-            }
-        }));
+        // todo 关闭按钮
         actions.add(new DebugEntity(R.drawable.k_ic_close, new DebugViewListener() {
             @Override
             public void onClick(Activity activity, View view, DebugEntity entity) {

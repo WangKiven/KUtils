@@ -25,7 +25,7 @@ public class KActivity extends AppCompatActivity implements SensorEventListener 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        KContext.getInstance().onActivityCreate(this);
+//        KContext.getInstance().onActivityCreate(this);
 
         if (showLog()) {
             sensorManager = (SensorManager) getSystemService(Activity.SENSOR_SERVICE);
@@ -33,16 +33,16 @@ public class KActivity extends AppCompatActivity implements SensorEventListener 
         }
     }
 
-    @Override
+    /*@Override
     protected void onStart() {
         super.onStart();
         KContext.getInstance().onActivityStart(this);
-    }
+    }*/
 
     @Override
     protected void onResume() {
         super.onResume();
-        KContext.getInstance().onActivityResume(this);
+//        KContext.getInstance().onActivityResume(this);
 
         if (showLog()) {
             showLogTime = System.currentTimeMillis();
@@ -55,7 +55,7 @@ public class KActivity extends AppCompatActivity implements SensorEventListener 
     @Override
     protected void onPause() {
         super.onPause();
-        KContext.getInstance().onActivityPause(this);
+//        KContext.getInstance().onActivityPause(this);
 
         if (showLog()) {
             sensorManager.unregisterListener(this);
@@ -69,7 +69,7 @@ public class KActivity extends AppCompatActivity implements SensorEventListener 
         KContext.getInstance().onActivityFinish(this);
     }
 
-    @Override
+    /*@Override
     protected void onStop() {
         super.onStop();
         KContext.getInstance().onActivityStop(this);
@@ -79,7 +79,7 @@ public class KActivity extends AppCompatActivity implements SensorEventListener 
     protected void onDestroy() {
         super.onDestroy();
         KContext.getInstance().onActivityDestory(this);
-    }
+    }*/
 
     protected boolean showLog() {
         return KLog.isDebug();

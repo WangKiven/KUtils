@@ -6,11 +6,15 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Process;
 import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.kiven.kutils.activityHelper.KActivityHelper;
+import com.kiven.kutils.logHelper.KLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +37,54 @@ public class KContext extends Application {
         KUtil.setApp(this);
 
         if (isMainProcess()) {
+            registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
+                @Override
+                public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
+                    KLog.d(activity.toString() + " - onActivityCreated");
+                    changeStatus(checkOrAdd(activity, ActivityStatus.CREATED));
+                }
+
+                @Override
+                public void onActivityStarted(@NonNull Activity activity) {
+                    KLog.d(activity.toString() + " - onActivityStarted");
+                    changeStatus(checkOrAdd(activity, ActivityStatus.STARTED));
+                }
+
+                @Override
+                public void onActivityResumed(@NonNull Activity activity) {
+                    KLog.d(activity.toString() + " - onActivityResumed");
+                    changeStatus(checkOrAdd(activity, ActivityStatus.RESUMED));
+                }
+
+                @Override
+                public void onActivityPaused(@NonNull Activity activity) {
+                    KLog.d(activity.toString() + " - onActivityPaused");
+                    changeStatus(checkOrAdd(activity, ActivityStatus.PAUSED));
+                }
+
+                @Override
+                public void onActivityStopped(@NonNull Activity activity) {
+                    KLog.d(activity.toString() + " - onActivityStopped");
+                    changeStatus(checkOrAdd(activity, ActivityStatus.STOPED));
+                }
+
+                @Override
+                public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {
+                    KLog.d(activity.toString() + " - onActivitySaveInstanceState");
+                }
+
+                @Override
+                public void onActivityDestroyed(@NonNull Activity activity) {
+                    KLog.d(activity.toString() + " - onActivityDestroyed");
+
+                    ActivityInfo a = remove(activity);
+                    if (a != null) {
+                        a.status = ActivityStatus.DESTORIED;
+                    }
+                    changeStatus(a);
+                }
+            });
+
             initOnlyMainProcess();
         }
 
@@ -117,7 +169,7 @@ public class KContext extends Application {
         void onChange(ActivityInfo activityInfo);
     }
 
-    public void onActivityCreate(Activity activity) {
+    /*public void onActivityCreate(Activity activity) {
         if (activity == null) {
             return;
         }
@@ -139,7 +191,7 @@ public class KContext extends Application {
         }
 
         changeStatus(checkOrAdd(activity, ActivityStatus.RESUMED));
-    }
+    }*/
 
     public void onActivityFinish(Activity activity) {
         if (activity == null) {
@@ -149,7 +201,7 @@ public class KContext extends Application {
         changeStatus(checkOrAdd(activity, ActivityStatus.FINISHING));
     }
 
-    public void onActivityPause(Activity activity) {
+    /*public void onActivityPause(Activity activity) {
         if (activity == null) {
             return;
         }
@@ -174,7 +226,7 @@ public class KContext extends Application {
             a.status = ActivityStatus.DESTORIED;
         }
         changeStatus(a);
-    }
+    }*/
 
     /**
      *

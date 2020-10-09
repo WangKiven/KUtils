@@ -1,20 +1,13 @@
 package com.kiven.sample
 
-import android.app.ActivityManager
 import android.content.Context
 import android.content.IntentFilter
-import android.os.Process
 import androidx.multidex.MultiDex
 import com.alibaba.android.arouter.launcher.ARouter
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KContext
-import com.kiven.kutils.tools.KGranting
-import com.kiven.kutils.tools.KUtil
 import com.kiven.sample.noti.NotificationClickReceiver
 import com.tencent.smtt.sdk.QbSdk
-import com.xiaomi.channel.commonutils.logger.LoggerInterface
-import com.xiaomi.mipush.sdk.Logger
-import com.xiaomi.mipush.sdk.MiPushClient
 import org.xutils.x
 
 

@@ -47,6 +47,8 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:scaleType="fitXY"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/anim_robot" />
 
         <ImageView
@@ -55,6 +57,7 @@
             android:layout_height="60dp"
             android:scaleType="fitXY"
             android:src="@drawable/ic_loading_rotate"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
 
 
@@ -62,7 +65,8 @@
             android:id="@+id/fl_transition"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            app:layout_constraintRight_toRightOf="parent" />
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

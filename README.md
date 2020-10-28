@@ -47,10 +47,10 @@ public class ConfigureWidget extends KActivity {
 ```
 - 输出日志需要使用指定的方法来输出
 ```
-KLog.i("Hello KLog.);
-KLog.d("Hello KLog.);
-KLog.e("Hello KLog.);
-KLog.w("Hello KLog.);
+KLog.i("Hello KLog.");
+KLog.d("Hello KLog.");
+KLog.e("Hello KLog.");
+KLog.w("Hello KLog.");
 ```
 - 运行App，摇动手机或者长按顶部呼吸条(仔细看，在界面顶部有呼吸条)，出现功能弹窗，选择Log进入日志查看界面
 

@@ -180,7 +180,7 @@ class AHSmallAction : KActivityDebugHelper() {
         addView("协程", View.OnClickListener {
             GlobalScope.launch {
                 delay(1000)
-                val data = doSomthing()
+                val data = doSomething()
                 KLog.i("data = $data")
 
                 val dea = suspendCoroutine<Int> {
@@ -535,7 +535,7 @@ class AHSmallAction : KActivityDebugHelper() {
         addView("", View.OnClickListener { })
     }
 
-    private suspend fun doSomthing(): Int {
+    private suspend fun doSomething(): Int {
         delay(1000)
         return suspendCoroutine {
             it.resume(6)

@@ -530,6 +530,7 @@ class AHSmallAction : KActivityDebugHelper() {
         addView("socket", View.OnClickListener { AHSocketTest().startActivity(mActivity) })
         addView("原生分享", View.OnClickListener { AHShare().startActivity(mActivity) })
         addView("剪贴板", View.OnClickListener { KString.setClipText(activity, "这是剪贴内容x") })
+        addView("崩溃拦截", View.OnClickListener { throw error("测试崩溃"); })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
     }

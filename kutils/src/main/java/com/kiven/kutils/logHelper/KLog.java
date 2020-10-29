@@ -211,6 +211,8 @@ public class KLog {
                 PrintWriter pw = new PrintWriter(sw);
                 e.printStackTrace(pw);
                 e("\r\n" + sw.toString() + "\r\n");
+                pw.close();
+                sw.close();
             } catch (Exception e2) {
                 e("fail getErrorInfoFromException");
             }

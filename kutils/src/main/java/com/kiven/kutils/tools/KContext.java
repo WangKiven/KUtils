@@ -35,6 +35,8 @@ public class KContext extends Application {
         mInstance = this;
 
         KUtil.setApp(this);
+        // 拦截崩溃异常。
+        KUncaughtExceptionHandler.getInstance().register();
 
         if (isMainProcess()) {
             registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
@@ -89,6 +91,10 @@ public class KContext extends Application {
         }
 
         init();
+
+        // 再次拦截，防止被替换。
+        // 注册两次的原因是，1 拦截所有异常 2 防止被替换
+        KUncaughtExceptionHandler.getInstance().register();
     }
 
     protected void initOnlyMainProcess() {

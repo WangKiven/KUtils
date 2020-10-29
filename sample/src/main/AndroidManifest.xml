@@ -319,11 +319,11 @@
         <!--Vivo Push开放平台中应用的appid 和api key-->
         <meta-data
             android:name="com.vivo.push.api_key"
-            android:value="0a596c9e-3810-4529-8d0f-f1b42e1caa3a" />
+            android:value="xxx" />
 
         <meta-data
             android:name="com.vivo.push.app_id"
-            android:value="18387" />
+            android:value="0" />
 
         <!-- 小米AppID和AppKey，在前边加个'MI'。纯数字会导致系统获取失败，测试时拿到的就是浮点数 -->
         <meta-data

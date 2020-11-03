@@ -30,10 +30,10 @@ buildscript {
         classpath 'com.huawei.agconnect:agcp:1.0.0.300'
 
         // google ar
-        classpath 'com.google.ar.sceneform:plugin:1.17.0'
+        classpath 'com.google.ar.sceneform:plugin:1.17.1'
 
         // firebase
-        classpath 'com.google.gms:google-services:4.3.3'
+        classpath 'com.google.gms:google-services:4.3.4'
     }
 
     project.ext {

@@ -43,7 +43,8 @@ android {
         applicationId "com.kiven.sample"
 //        minSdkVersion 14
 //        minSdkVersion 16
-        minSdkVersion 17 // 华为推送要求17
+//        minSdkVersion 17 // 华为推送要求17
+        minSdkVersion 21 // jetpack Compose 要求21
         targetSdkVersion parent.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
@@ -55,6 +56,10 @@ android {
         // 配置了两处，下面还有一处配置，以后检测到底是那一次生效，或者说两处同时配置才生效，海豚车测试是另一处生效
         if (properties.containsKey('store.filePath'))
             signingConfig signingConfigs.release
+    }
+    buildFeatures {
+        // Enables Jetpack Compose for this module
+//        compose true
     }
     buildTypes {
         debug {
@@ -99,6 +104,9 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
 project.tasks.withType(JavaCompile) { task ->
@@ -136,6 +144,13 @@ dependencies {
     implementation "org.jetbrains.anko:anko:$anko_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.3.2'
+
+    //  https://developer.android.google.cn/jetpack/compose/preview
+    // https://blog.csdn.net/u012556114/article/details/103285377
+    def ui_version = "1.0.0-alpha03"// 查看版本 https://developer.android.google.cn/jetpack/androidx/releases/ui
+//    implementation "androidx.ui:ui-tooling:$ui_version"
+//    implementation "androidx.ui:ui-layout:$ui_version"
+//    implementation "androidx.ui:ui-material:$ui_version"
 
     // animation & transition
     implementation "androidx.dynamicanimation:dynamicanimation:1.0.0"

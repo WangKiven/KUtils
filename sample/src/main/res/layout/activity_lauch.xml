@@ -31,6 +31,7 @@
         </androidx.appcompat.widget.Toolbar>
         
         <com.kiven.kutils.widget.RulingSeekbar
+            android:id="@+id/rulingSeekbar"
             android:layout_width="match_parent"
             android:layout_height="60dp" />
 

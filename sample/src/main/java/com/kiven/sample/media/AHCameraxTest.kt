@@ -19,6 +19,7 @@ import java.util.concurrent.Executor
  * Created by wangk on 2019/5/17.
  *
  *  TODO: 2019/5/17  https://developer.android.google.cn/training/camerax
+ *  手把手：https://codelabs.developers.google.com/codelabs/camerax-getting-started#0
  */
 class AHCameraxTest : KActivityDebugHelper() {
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {

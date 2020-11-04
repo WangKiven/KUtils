@@ -26,6 +26,7 @@ import com.kiven.kutils.callBack.CallBack
 import com.kiven.kutils.file.KFile
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.*
+import com.kiven.kutils.widget.RulingSeekbar
 import com.kiven.sample.arch.AHArch
 import com.kiven.sample.arcore.AHARCoreInlet
 import com.kiven.sample.floatView.ActivityHFloatView
@@ -46,6 +47,16 @@ class LauchActivity : KActivity(), LifecycleOwner {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lauch)
+
+        rulingSeekbar.apply {
+            setScale(5, 120)
+            progress = 30;
+            addNode(10, 0, true);
+            addNode(30, 2, true);
+            addNode(57, 1, true);
+            addNode(85, 1, false);
+            addNode(110, 2, true);
+        }
 
         KLog.printDeviceInfo()
 

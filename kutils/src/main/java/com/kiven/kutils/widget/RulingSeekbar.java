@@ -164,7 +164,8 @@ public class RulingSeekbar extends View {
                 }
                 invalidate();
                 if (onChange != null) {
-                    progress = position2Value(binX);
+//                    progress = position2Value(binX);
+                    setProgress(position2Value(binX));
                     onChange.onProgressChanged(this, progress, true);
                 }
                 break;

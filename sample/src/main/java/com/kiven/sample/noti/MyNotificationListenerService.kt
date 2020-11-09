@@ -28,7 +28,7 @@ class MyNotificationListenerService : NotificationListenerService() {
         set(value) = KUtil.putSharedPreferencesBooleanValue(isReadNotiKey, value)
         get() = KUtil.getSharedPreferencesBooleanValue(isReadNotiKey, true)
     }
-    var text2speech: TextToSpeech? = null
+    /*var text2speech: TextToSpeech? = null*/
 
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
         sbn?.apply {
@@ -38,7 +38,11 @@ class MyNotificationListenerService : NotificationListenerService() {
 
             showTip("监听到通知：${text}")
 
-            // 不判空华为崩溃，小米没有崩溃
+            if (isReadNoti) {
+                SpeechText.speech(text.toString())
+            }
+
+            /*// 不判空华为崩溃，小米没有崩溃
             if (text.isNullOrBlank() || !isReadNoti) {
                 return
             }
@@ -52,12 +56,12 @@ class MyNotificationListenerService : NotificationListenerService() {
                 initTextToSpeech()
 
                 // QUEUE_ADD 添加新的，QUEUE_FLUSH 刷新(即清除之前的，会打断正在播放的)
-                text2speech?.speak(text.toString(), TextToSpeech.QUEUE_ADD, null)
-            }
+                text2speech?.speak(text.toString(), TextToSpeech.QUEUE_ADD, null, null)
+            }*/
         }
     }
 
-    @Synchronized
+    /*@Synchronized
     suspend fun initTextToSpeech() {
         if (text2speech == null) {
             val result = suspendCoroutine<Boolean> {
@@ -95,7 +99,7 @@ class MyNotificationListenerService : NotificationListenerService() {
                 text2speech = null
             }
         }
-    }
+    }*/
 
     /*override fun onNotificationPosted(sbn: StatusBarNotification?, rankingMap: RankingMap?) {
         super.onNotificationPosted(sbn, rankingMap)

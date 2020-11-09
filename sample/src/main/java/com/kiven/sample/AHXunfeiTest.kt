@@ -14,6 +14,7 @@ import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KGranting
 import com.kiven.kutils.tools.KString
+import com.kiven.sample.noti.SpeechText
 import com.kiven.sample.util.getInput
 import com.kiven.sample.util.showBottomSheetDialog
 import com.kiven.sample.util.snackbar
@@ -186,7 +187,8 @@ class AHXunfeiTest : KActivityDebugHelper() {
             }
 
             btn_system_create_voice.setOnClickListener {
-                snackbar("在监听通知的类MyNotificationListenerService有使用，这里就不写了")
+//                snackbar("在监听通知的类MyNotificationListenerService有使用，这里就不写了")
+                SpeechText.speech(text)
             }
         }
     }

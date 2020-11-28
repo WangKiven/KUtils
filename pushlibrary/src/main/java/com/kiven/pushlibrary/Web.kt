@@ -3,6 +3,7 @@ package com.kiven.pushlibrary
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KContext
 import com.sxb.kutils_ktx.util.KWeb
@@ -92,7 +93,10 @@ internal object Web {
                                 "projectKey" to projectKey,
                                 "tokenOrId" to tokenOrIdN,
                                 "platform" to platformN,
-                                "isDebug" to isDebug
+                                "isDebug" to isDebug,
+
+                                // 服务器错误日志需要，为了记录是哪款手机除了新的token长度
+                                "brandAndModel" to "${Build.BRAND} - ${Build.MODEL}"
                         ),
                         hostnameVerifier = !host.startsWith("192.168.")// 本地电脑不验证
                 )

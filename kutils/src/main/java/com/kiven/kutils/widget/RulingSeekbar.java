@@ -82,8 +82,8 @@ public class RulingSeekbar extends View {
         this.min = min;
         this.max = max;
 
+        progress = position2Value(binX);
         if (onChange != null) {
-            progress = position2Value(binX);
             onChange.onProgressChanged(this, progress, false);
         }
         invalidate();
@@ -162,17 +162,17 @@ public class RulingSeekbar extends View {
                 } else if (binX > barRight) {
                     binX = barRight;
                 }
-                invalidate();
+//                invalidate();
+                setProgress(position2Value(binX));
                 if (onChange != null) {
-//                    progress = position2Value(binX);
-                    setProgress(position2Value(binX));
                     onChange.onProgressChanged(this, progress, true);
                 }
                 break;
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
+                setProgress(position2Value(binX));
                 if (onChange != null) {
-                    progress = position2Value(binX);
+//                    progress = position2Value(binX);
                     onChange.onStopTrackingTouch(this);
                 }
                 break;

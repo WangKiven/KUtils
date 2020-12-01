@@ -103,9 +103,11 @@ class AHSmallAction : KActivityDebugHelper() {
                 KLog.i("name = ${it.name}, pkgName = ${it.packageName}")
             }
         })
-        addView("关闭省心宝", View.OnClickListener {
+        addView("关闭微信", View.OnClickListener {
             val am = activity.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-            am.killBackgroundProcesses("com.jeeinc.save.worry")
+            am.killBackgroundProcesses("com.tencent.mm")
+
+            activity.snackbar("关闭微信不行，打算关闭自己写的一个App能成功，是我的红米手机系统的限制吗")
 
             // 需要系统权限（Manifest.permission.FORCE_STOP_PACKAGES），无法获取。
             /*val method = am::class.java.getMethod("forceStopPackage", String::class.java)

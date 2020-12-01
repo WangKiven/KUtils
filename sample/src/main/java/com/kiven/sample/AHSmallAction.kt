@@ -106,6 +106,7 @@ class AHSmallAction : KActivityDebugHelper() {
         addView("关闭微信", View.OnClickListener {
             val am = activity.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
             am.killBackgroundProcesses("com.tencent.mm")
+            //am.killBackgroundProcesses("com.jeeinc.save.worry")
 
             activity.snackbar("关闭微信不行，打算关闭自己写的一个App能成功，是我的红米手机系统的限制吗")
 

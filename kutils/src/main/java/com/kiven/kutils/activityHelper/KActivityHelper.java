@@ -12,6 +12,8 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import androidx.annotation.CallSuper;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -122,6 +124,7 @@ public class KActivityHelper {
         KView.runUI(mActivity, callBack);
     }
 
+    @CallSuper
     public void onCreate(@NonNull KHelperActivity activity, Bundle savedInstanceState) {
         mActivity = activity;
         mIntent = activity.getIntent();

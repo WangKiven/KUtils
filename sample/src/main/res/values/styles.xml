@@ -11,7 +11,7 @@
         <item name="android:colorBackgroundCacheHint">@null</item>
         <item name="android:windowShowWallpaper">true</item>
 
-        <item name="android:textColorPrimary">#605756</item>
+        <item name="android:textColorPrimary">#aaaaaa</item>
         <item name="android:textColorSecondary">#512B77</item>
         <item name="android:textColorTertiary">#43ba50</item>
 

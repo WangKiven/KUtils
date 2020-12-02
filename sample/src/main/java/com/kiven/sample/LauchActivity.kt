@@ -39,14 +39,23 @@ import com.kiven.sample.theme.AHTheme
 import com.kiven.sample.util.showDialog
 import com.kiven.sample.util.showListDialog
 import com.kiven.sample.vpn.AHMyVpn
+import com.sxb.kutils_ktx.util.main
 import kotlinx.android.synthetic.main.activity_lauch.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import me.grantland.widget.AutofitHelper
 
-class LauchActivity : KActivity(), LifecycleOwner {
+class LauchActivity : KActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lauch)
+
+//        GlobalScope.main {
+//            delay(2000)
+//            startActivity(Intent(this@LauchActivity, MainActivity::class.java))
+//            finish()
+//        }
 
         rulingSeekbar.apply {
             setScale(5, 120)

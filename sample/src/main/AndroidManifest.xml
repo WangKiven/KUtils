@@ -118,6 +118,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity android:name=".MainActivity" />
         <activity android:name=".ActivityDataBinding" />
         <activity android:name="com.kiven.kutils.activityHelper.KHelperActivity">
             <intent-filter>

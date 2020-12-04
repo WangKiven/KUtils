@@ -7,6 +7,8 @@ import android.os.IBinder;
 import android.util.Log;
 import android.view.WindowManager;
 
+import com.kiven.kutils.logHelper.KLog;
+
 /**
  * Created by kiven on 2016/10/31.
  */
@@ -48,6 +50,6 @@ public class ServiceFloat extends Service {
     }
 
     public void printLog(String log) {
-        Log.i("ULog_default", log);
+        Log.i(KLog.getTag(), log);
     }
 }

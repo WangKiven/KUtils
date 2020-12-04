@@ -284,7 +284,7 @@ open class AHMediaList : KActivityDebugHelper() {
                 }
                 val uri = data?.data
                 if (uri == null) {
-                    Log.i("ULog_default", "uri = null")
+                    Log.i(KLog.getTag(), "uri = null")
                 }
             }
         }

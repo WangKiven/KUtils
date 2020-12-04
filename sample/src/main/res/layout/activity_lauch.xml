@@ -42,12 +42,6 @@
             app:flexWrap="wrap">
         </com.google.android.flexbox.FlexboxLayout>
 
-        <ImageView
-            android:id="@+id/iv_test"
-            android:layout_width="50dp"
-            android:src="@mipmap/ic_launcher"
-            android:layout_height="50dp" />
-
         <com.kiven.kutils.widget.KNormalItemView
             android:id="@+id/item_path"
             android:layout_width="match_parent"

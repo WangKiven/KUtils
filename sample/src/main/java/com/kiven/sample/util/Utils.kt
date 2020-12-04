@@ -4,7 +4,6 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.ContentUris
 import android.content.Intent
-import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
@@ -13,9 +12,14 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.view.Gravity
+import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.annotation.IdRes
+import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AlertDialog
 import com.flyco.dialog.widget.ActionSheetDialog
 import com.flyco.dialog.widget.NormalListDialog
@@ -25,9 +29,6 @@ import com.kiven.kutils.tools.KAlertDialogHelper
 import com.kiven.kutils.tools.KContext
 import com.kiven.kutils.tools.KGranting
 import com.kiven.sample.R
-import java.io.File
-import java.io.FileDescriptor
-import java.io.FileInputStream
 import java.util.*
 
 /**
@@ -85,7 +86,7 @@ fun showTip(word: String) {
 
 fun Activity.showDialog(word: String) {
     KAlertDialogHelper.Show1BDialog(this, word)
-    Log.i("ULog_default", word)
+    Log.i(KLog.getTag(), word)
 }
 
 fun Activity.showListDialog(list: List<String>, autoClose: Boolean, onClickItem: (Int, String) -> Unit) {
@@ -128,7 +129,7 @@ fun Activity.showBottomSheetDialog(list: Array<String>, onClickItem: (Int, Strin
 
 fun Activity.showSnack(word: String) {
     Snackbar.make(window.decorView.findViewById(android.R.id.content), word, Snackbar.LENGTH_LONG).show()
-    Log.i("ULog_default", word)
+    Log.i(KLog.getTag(), word)
 }
 
 fun Activity.showImageDialog(path: String?) {
@@ -166,6 +167,28 @@ fun Activity.showImageDialog(bitmap: Bitmap) {
         }
     }
     dialog.show()
+}
+
+fun Activity.newDialog(view: View): Dialog {
+    return object : Dialog(this, R.style.Dialog) {
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            val root = LinearLayout(context).apply {
+                gravity = Gravity.CENTER
+                addView(view)
+            }
+            setContentView(root)
+        }
+    }
+}
+
+fun Activity.newDialog(@LayoutRes viewId: Int): Dialog {
+    return object : Dialog(this, R.style.Dialog) {
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            setContentView(viewId)
+        }
+    }
 }
 
 private var preTime = 0L

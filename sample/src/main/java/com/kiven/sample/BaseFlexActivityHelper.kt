@@ -10,6 +10,9 @@ import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
 import com.kiven.kutils.activityHelper.KActivityDebugHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
+import com.kiven.sample.util.addBtn
+import com.kiven.sample.util.addTitle
+import org.jetbrains.anko.support.v4.nestedScrollView
 
 /**
  * Created by oukobayashi on 2020/7/22.
@@ -22,7 +25,7 @@ open class BaseFlexActivityHelper : KActivityDebugHelper() {
         }
     }
 
-    val addTitle by lazy {
+    /*val addTitle by lazy {
         fun(text: String): TextView {
             val tv = TextView(mActivity)
             tv.text = text
@@ -40,10 +43,13 @@ open class BaseFlexActivityHelper : KActivityDebugHelper() {
             flexBoxLayout.addView(btn)
             return btn
         }
-    }
+    }*/
+    fun addTitle(text: String): TextView = flexBoxLayout.addTitle(text)
+    fun addBtn(text: String, click: View.OnClickListener): Button = flexBoxLayout.addBtn(text, click)
 
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
-        setContentView(flexBoxLayout)
+//        setContentView(flexBoxLayout)
+        activity.nestedScrollView { addView(flexBoxLayout) }
     }
 }

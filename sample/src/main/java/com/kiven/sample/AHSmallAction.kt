@@ -259,7 +259,7 @@ class AHSmallAction : KActivityDebugHelper() {
                                 TelephonyManager.CALL_STATE_OFFHOOK -> "通话状态"
                                 else -> "unknown"
                             }
-                            Log.i("ULog_default", "$ss($phoneNumber):${nowTime - oldTime}")
+                            Log.i(KLog.getTag(), "$ss($phoneNumber):${nowTime - oldTime}")
                             oldTime = nowTime
 
                             if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
@@ -290,7 +290,7 @@ class AHSmallAction : KActivityDebugHelper() {
 
                         override fun onDataConnectionStateChanged(state: Int, networkType: Int) {
                             super.onDataConnectionStateChanged(state, networkType)
-                            Log.i("ULog_default", "$state($networkType)")
+                            Log.i(KLog.getTag(), "$state($networkType)")
                         }
                     }
 
@@ -552,6 +552,6 @@ class AHSmallAction : KActivityDebugHelper() {
 
     private fun showDialog(word: String) {
         KAlertDialogHelper.Show1BDialog(mActivity, word)
-        Log.i("ULog_default", word)
+        Log.i(KLog.getTag(), word)
     }
 }

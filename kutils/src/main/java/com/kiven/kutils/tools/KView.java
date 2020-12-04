@@ -172,7 +172,7 @@ public class KView {
     }
 
     /**
-     * 在UI线程上运行。
+     * 在UI线程上运行。主要作用是防止activity已经finish，还有线程调用该activity的UI线程。
      * 最好再数据处理完成后，再用该方法进行UI的显示
      * 如果owner（activity或fragment）在前台，则运行callBack。
      * 如果owner（activity或fragment）在后台，则等待owner进入前台再运行callBack。

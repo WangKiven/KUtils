@@ -8,13 +8,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 
+import com.kiven.kutils.activityHelper.activity.KActivity;
+import com.kiven.kutils.tools.KView;
 import com.kiven.sample.entity.EntityUser;
 
 /**
  * Created by kiven on 2017/2/13.
  */
 
-public class ActivityDataBinding extends AppCompatActivity implements View.OnClickListener {
+public class ActivityDataBinding extends KActivity implements View.OnClickListener {
     DataBindingMode dataBindingMode;
 
     @Override
@@ -29,9 +31,10 @@ public class ActivityDataBinding extends AppCompatActivity implements View.OnCli
 //        setTitle("Data Binding");
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+        KView.initBackActionBar(getSupportActionBar());
     }
 
     @Override

@@ -157,6 +157,9 @@ public class KLog {
         if (KString.isBlank(newTag)) return;
         tag = newTag;
     }
+    public static String getTag() {
+        return tag;
+    }
 
     public static void d(String debugInfo) {
         if (isDebug()) {

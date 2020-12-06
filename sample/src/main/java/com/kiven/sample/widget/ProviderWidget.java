@@ -9,7 +9,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.RemoteViews;
 
-import com.kiven.sample.LauchActivity;
+import com.kiven.sample.LaunchActivity;
 import com.kiven.sample.R;
 
 /**
@@ -43,7 +43,7 @@ public class ProviderWidget extends AppWidgetProvider {
         for (int i = 0; i < N; i++) {
             int appWidgetId = appWidgetIds[i];
 
-            Intent intent2 = new Intent(context, LauchActivity.class);
+            Intent intent2 = new Intent(context, LaunchActivity.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent2, 0);
 
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);

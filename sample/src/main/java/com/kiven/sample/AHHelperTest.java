@@ -10,7 +10,7 @@ import com.kiven.kutils.activityHelper.KHelperActivity;
 /**
  * Created by kiven on 16/5/6.
  */
-public class ActivityHTestBase extends KActivityDebugHelper {
+public class AHHelperTest extends KActivityDebugHelper {
 
     private String key = "ActivityHTestBase_count_key";
 
@@ -33,7 +33,7 @@ public class ActivityHTestBase extends KActivityDebugHelper {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.button1:
-                ActivityHTestBase nextHelper = new ActivityHTestBase();
+                AHHelperTest nextHelper = new AHHelperTest();
                 nextHelper.getIntent().putExtra(key, count + 1);
                 nextHelper.startActivity(mActivity);
                 /*AppContext.getInstance().startSinkActivity(new ActivityHFloatView());*/

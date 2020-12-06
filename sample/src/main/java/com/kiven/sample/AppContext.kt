@@ -25,6 +25,12 @@ class AppContext : KContext() {
         KLog.i("AppContext attachBaseContext")
     }
 
+    override fun initOnlyMainProcess() {
+        super.initOnlyMainProcess()
+
+        KLog.printDeviceInfo()
+    }
+
     override fun init() {
         super.init()
         KLog.i("AppContext init")

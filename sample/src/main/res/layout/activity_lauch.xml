@@ -1,172 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.core.widget.NestedScrollView
+<androidx.constraintlayout.motion.widget.MotionLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    app:layoutDescription="@xml/anim_launch"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
 
-        <androidx.appcompat.widget.Toolbar
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|enterAlways|snap"
-            app:navigationIcon="@drawable/abc_ic_ab_back_material"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_launcher_foreground"
+        app:tint="#099a4a"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="KUSample"
-                android:background="#123421"
-                android:autoSizeTextType="uniform"
-                android:paddingHorizontal="10dp"/>
-
-        </androidx.appcompat.widget.Toolbar>
-        
-        <com.kiven.kutils.widget.RulingSeekbar
-            android:id="@+id/rulingSeekbar"
-            android:layout_width="match_parent"
-            android:layout_height="60dp" />
-
-        <com.google.android.flexbox.FlexboxLayout
-            android:id="@+id/flex"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:flexWrap="wrap">
-        </com.google.android.flexbox.FlexboxLayout>
-
-        <com.kiven.kutils.widget.KNormalItemView
-            android:id="@+id/item_path"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:onClick="onClick"
-            app:item_title="路径测试"/>
-
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/et_auto"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:maxLines="1"/>
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:text="hill好哈好哈好哈"
-            android:maxLines="1"
-            app:autoSizeTextType="uniform"
-            app:autoSizeMinTextSize="7sp"
-            app:autoSizeMaxTextSize="14sp" />
-
-        <com.kiven.kutils.widget.UIGridView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <RelativeLayout
-            android:id="@+id/root"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingBottom="@dimen/activity_vertical_margin"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingTop="@dimen/activity_vertical_margin"
-            tools:context="com.kiven.sample.LauchActivity">
-
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:id="@+id/linearLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="我是中国人"/>
-
-                <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
-                    android:text="我是中国人"
-                    android:textAppearance="?android:attr/textAppearanceLarge"/>
-
-                <TextView
-                    android:id="@+id/textView3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
-                    android:text="我是中国人"
-                    android:textAppearance="?android:attr/textAppearanceMedium"/>
-
-                <TextView
-                    android:id="@+id/textView4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="29dp"
-                    android:text="我是中国人"
-                    android:textAppearance="?android:attr/textAppearanceSmall"/>
-
-                <Button
-                    android:id="@+id/button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="36dp"
-                    android:text="我是中国人"/>
-
-                <Button
-                    android:id="@+id/button3"
-                    style="?android:attr/buttonStyleSmall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
-                    android:text="我是中国人"/>
-
-            </androidx.appcompat.widget.LinearLayoutCompat>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginTop="10dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="中华人民共和国万岁"
-                    android:textColor="?android:attr/textColorPrimary"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
-                    android:text="中华人民共和国万岁"
-                    android:textColor="?android:attr/textColorSecondary"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
-                    android:text="中华人民共和国万岁"
-                    android:textColor="?android:attr/textColorTertiary"/>
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
-                    android:text="中华人民共和国万岁"/>
-
-            </LinearLayout>
-        </RelativeLayout>
-    </LinearLayout>
-
-</androidx.core.widget.NestedScrollView>
+    <TextView
+        android:id="@+id/from"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:padding="8dp"
+        android:text="from Kiven"
+        android:gravity="end"/>
+</androidx.constraintlayout.motion.widget.MotionLayout>

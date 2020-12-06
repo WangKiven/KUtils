@@ -52,6 +52,7 @@ android {
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
 
+        buildConfigField("String", "dpkTime", "\"${new Date().format("yyyyMMdd HH:mm:ss")}\"")
 
         // 配置了两处，下面还有一处配置，以后检测到底是那一次生效，或者说两处同时配置才生效，海豚车测试是另一处生效
         if (properties.containsKey('store.filePath'))
@@ -65,7 +66,6 @@ android {
         debug {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-
 
             // 配置了两处，上面还有一处配置，以后检测到底是那一次生效，或者说两处同时配置才生效, 海豚车测试，是这一处生效
             if (properties.containsKey('store.filePath'))

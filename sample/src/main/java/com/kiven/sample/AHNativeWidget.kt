@@ -15,69 +15,47 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.kiven.kutils.activityHelper.KActivityDebugHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.AHFileManager
+import com.kiven.sample.libs.AHTextViewDemo
+import com.kiven.sample.util.addBtn
 import com.kiven.sample.util.showToast
 
 /**
  * Created by oukobayashi on 2020/6/12.
  */
-class AHNativeWidget :KActivityDebugHelper() {
+class AHNativeWidget :BaseFlexActivityHelper() {
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
 
-        val flexboxLayout = FlexboxLayout(activity)
-        flexboxLayout.flexWrap = FlexWrap.WRAP
-        flexboxLayout.alignContent = AlignContent.FLEX_START
-
-        setContentView(flexboxLayout)
-
-        val addTitle = fun(text: String): TextView {
-            val tv = TextView(activity)
-            tv.text = text
-            tv.layoutParams = ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.MATCH_PARENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT)
-            flexboxLayout.addView(tv)
-
-            return tv
-        }
-
-        val addView = fun(text: String, click: View.OnClickListener) {
-            val btn = Button(activity)
-            btn.text = text
-            btn.setOnClickListener(click)
-            flexboxLayout.addView(btn)
-        }
-
         addTitle("弹窗")
-        addView("Dialog", View.OnClickListener { AHDialogTest().startActivity(activity) })
-        addView("PopupMenu", View.OnClickListener {
+        addBtn("Dialog") { AHDialogTest().startActivity(activity) }
+        addBtn("PopupMenu") {
             val popupMenu = PopupMenu(mActivity, it)
             popupMenu.inflate(R.menu.show_log)
             popupMenu.show()
-        })
-        addView("BottomSheetDialog", View.OnClickListener {
+        }
+        addBtn("BottomSheetDialog") {
             val dialog = BottomSheetDialog(mActivity)
             dialog.setContentView(R.layout.widget_layout)
             dialog.show()
-        })
-        addView("BottomSheetDialogFragment", View.OnClickListener {
+        }
+        addBtn("BottomSheetDialogFragment") {
             showToast()
-        })
+        }
 
 
 
         addTitle("View")
-        addView("ConstraintLayout", View.OnClickListener {
+        addBtn("ConstraintLayout") {
             AHConstraintLayoutTest().startActivity(activity)
-        })
-        addView("MotionLayout", View.OnClickListener {
+        }
+        addBtn("MotionLayout") {
             //https://developer.android.google.cn/training/constraint-layout/motionlayout
             showToast()
-        })
-        addView("", View.OnClickListener {  })
-        addView("", View.OnClickListener {  })
-        addView("", View.OnClickListener {  })
-        addView("", View.OnClickListener {  })
-        addView("", View.OnClickListener {  })
-        addView("", View.OnClickListener {  })
-        addView("", View.OnClickListener {  })
+        }
+        addBtn("TextView风格") { AHTextViewDemo().startActivity(activity) }
+        addBtn("Toolbar") { AHHelperTest().startActivity(activity) }
+        addBtn("") {}
+        addBtn("") {}
+        addBtn("") {}
     }
 }

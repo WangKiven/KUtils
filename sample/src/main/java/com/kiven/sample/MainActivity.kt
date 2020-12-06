@@ -1,19 +1,21 @@
 package com.kiven.sample
 
+import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.os.Handler
 import android.transition.Slide
 import android.view.Gravity
-import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import com.kiven.kutils.activityHelper.KFragmentActivity
 import com.kiven.kutils.activityHelper.activity.KActivity
+import com.kiven.kutils.file.KFile
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KAlertDialogHelper
 import com.kiven.kutils.tools.KGranting
@@ -75,6 +77,21 @@ class MainActivity : KActivity() {
             addBtn("arch") { AHArch().startActivity(this@MainActivity) }
             addBtn("服务自启动与保活") { AHAutoStartAndLiving().startActivity(this@MainActivity) }
             addBtn("VPN") { AHMyVpn().startActivity(this@MainActivity) }
+            addBtn("打印各文件路径") {
+                KGranting.requestPermissions(this@MainActivity, 345, Manifest.permission.WRITE_EXTERNAL_STORAGE, "存储空间") { isSuccess ->
+                    if (isSuccess) {
+                        KLog.i("" + KFile.createFile("tmp", ".img", getDir(Environment.DIRECTORY_PICTURES, Context.MODE_PRIVATE))!!.absolutePath)
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                            KLog.i("" + KFile.createFile("tmp", ".img", getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)!!)!!.absolutePath)
+                        }
+                        KLog.i("" + KFile.createFile("tmp", ".img", getDatabasePath("db"))!!.absolutePath)
+                        KLog.i("" + KFile.createFile("tmp", ".img", cacheDir)!!.absolutePath)
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            KLog.i("" + KFile.createFile("tmp", ".img", dataDir)!!.absolutePath)
+                        }
+                    }
+                }
+            }
 
 
 
@@ -84,9 +101,10 @@ class MainActivity : KActivity() {
 
 
             addTitle("KUtils功能")
-            addBtn("测试KActivityHelper") { ActivityHTestBase().startActivity(this@MainActivity) }
-            addBtn("KNormalItemView") {}
-            addBtn("UIGridView     ") {}
+            addBtn("测试KActivityHelper") { AHHelperTest().startActivity(this@MainActivity) }
+            addBtn("自定义的几个控件展示") {
+                AHKUtilsWidgetDemo().startActivity(this@MainActivity)
+            }
             addBtn("KGranting") {
                 KGranting.requestAlbumPermissions(this@MainActivity, 233) {
                     if (it) {

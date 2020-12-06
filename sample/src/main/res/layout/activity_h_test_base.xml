@@ -13,8 +13,14 @@
         android:background="?attr/colorPrimary"
         app:layout_scrollFlags="scroll|enterAlways|snap"
         app:navigationIcon="@drawable/abc_ic_ab_back_material"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:title="测试Helper">
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Helper和Toolbar的测试"
+            android:layout_gravity="center"
+            android:textColor="?android:attr/textColorPrimary"/>
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -23,6 +29,7 @@
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
         android:onClick="onClick"
         android:text="open next" />
 

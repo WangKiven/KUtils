@@ -9,7 +9,7 @@ import androidx.annotation.Nullable;
 import android.widget.RemoteViews;
 
 import com.kiven.kutils.activityHelper.activity.KActivity;
-import com.kiven.sample.LauchActivity;
+import com.kiven.sample.LaunchActivity;
 import com.kiven.sample.R;
 
 /**
@@ -30,7 +30,7 @@ public class ConfigureWidget extends KActivity {
         if (extras != null) {
             mAppWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
 
-            Intent intent2 = new Intent(this, LauchActivity.class);
+            Intent intent2 = new Intent(this, LaunchActivity.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent2, 0);
 
             RemoteViews views = new RemoteViews(this.getPackageName(), R.layout.widget_layout);

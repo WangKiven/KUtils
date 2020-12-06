@@ -124,7 +124,7 @@ class AHLibs : BaseFlexActivityHelper() {
         // https://github.com/vanniktech/Emoji
         addBtn("Emoji库及各库TextView的展示对比", View.OnClickListener { AHEmoji().startActivity(activity) })
 
-        addTitle("other")
+        addTitle("其他")
         addBtn("ChatKit", View.OnClickListener { AHChatList().startActivity(activity) })
         addBtn("MPAndroidChart", View.OnClickListener { AHMPAndroidChart().startActivity(activity) })
         // 安卓平台下，图片或视频转化为ascii，图片转化成低多边形风格图形，emoji表情填充图片，合并视频用到ffmpeg库。后期会加入带色彩的ascii码图片或视频
@@ -138,76 +138,12 @@ class AHLibs : BaseFlexActivityHelper() {
         addBtn("GPUImage & PhotoView", View.OnClickListener { AHGPUImageLib().startActivity(activity) })
         addBtn("gif", View.OnClickListener { AHGif().startActivity(mActivity) })
         addBtn("spring for Android", View.OnClickListener { AHSpring().startActivity(mActivity) })
-        addBtn("", View.OnClickListener { })
-        addBtn("", View.OnClickListener { })
-        addBtn("", View.OnClickListener { })
-        addBtn("", View.OnClickListener { })
-        addBtn("", View.OnClickListener { })
-        addBtn("", View.OnClickListener { })
+        addBtn("autofittextview") { AHTextViewDemo().startActivity(mActivity) }
+        addBtn("") {  }
+        addBtn("") {  }
+        addBtn("") {  }
+        addBtn("") {  }
+        addBtn("") {  }
     }
 
-    private fun getIPAddress(): String? {
-
-        try {
-            val en = NetworkInterface.getNetworkInterfaces()
-            while (en.hasMoreElements()) {
-                val intf = en.nextElement()
-                val enumIpAddr = intf.inetAddresses
-                while (enumIpAddr.hasMoreElements()) {
-                    val inetAddress = enumIpAddr.nextElement()
-                    //这里需要注意：这里增加了一个限定条件( inetAddress instanceof Inet4Address ),主要是在Android4.0高版本中可能优先得到的是IPv6的地址
-                    if (!inetAddress.isLoopbackAddress && inetAddress is Inet4Address) {
-                        return inetAddress.getHostAddress().toString()
-                    }
-                }
-            }
-        } catch (ex: Exception) {
-            KLog.e(ex)
-        }
-
-        return null
-    }
-
-    private var sslContext: SSLContext? = null
-    private fun getSSLContext(): SSLContext {
-        if (sslContext != null) return sslContext!!
-
-        try {
-            // 生成SSLContext对象
-            val mSslContext: SSLContext = SSLContext.getInstance("TLS")
-            // 从assets中加载证书
-            val inStream: InputStream = mActivity.getAssets().open("1_www.yimizi.xyz_bundle.crt")
-
-
-            // 密钥库
-            val kStore: KeyStore = KeyStore.getInstance("PKCS12") //如果是运行在PC端，这里需要将PKCS12替换成JKS
-            kStore.load(null, null)
-            kStore.setCertificateEntry("trust", certificate) // 加载证书到密钥库中
-
-            // 密钥管理器
-            val keyFactory: KeyManagerFactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm())
-            keyFactory.init(kStore, null) // 加载密钥库到管理器
-
-            // 信任管理器
-            val tFactory: TrustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
-            tFactory.init(kStore) // 加载密钥库到信任管理器
-
-            // 初始化
-            mSslContext.init(keyFactory.keyManagers, tFactory.trustManagers, SecureRandom())
-
-            sslContext = mSslContext
-            return sslContext!!
-        } catch (e: Throwable) {
-            throw e
-        }
-    }
-
-    private val certificate: X509Certificate by lazy {
-        CertificateFactory.getInstance("X.509")
-                .generateCertificate(mActivity.assets.open("1_www.yimizi.xyz_bundle.crt")) as X509Certificate
-    }
-//    private fun getX509Certificate():X509Certificate {
-//        return CertificateFactory.getInstance("X.509")
-//                .generateCertificate(mActivity.assets.open("1_www.yimizi.xyz_bundle.crt")) as X509Certificate
-//    }
 }

@@ -103,7 +103,7 @@
             android:name="roboguice.annotations.packages"
             android:value="com.kiven.sample" />
 
-        <activity android:name=".LauchActivity">
+        <activity android:name=".LaunchActivity">
             <intent-filter>
 
                 <!-- 应用入口, 多个activity都配置了android.intent.action.MAIN的话，启动App的时候那个在清单文件前面，就启动那个 -->

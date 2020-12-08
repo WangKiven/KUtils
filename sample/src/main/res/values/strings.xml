@@ -4,19 +4,8 @@
     <string name="text_test"><![CDATA[<font color="#23ade4" size="36">%1$d</font>条即将被批量报价，总共消耗宝豆<font color="#23ade4">%2$d</font>]]></string>
     <string name="paper_name">KPaper</string>
     <string name="paper_name2">KPaper2</string>
-    <array name="resource_where">
-        <item>系统文件</item>
-        <item>app文件</item>
-    </array>
-    <array name="resours_type">
-        <item>drawable</item>
-        <item>mipmap</item>
-        <item>图像</item>
-        <item>string</item>
-        <item>color</item>
-    </array>
 
-    <string name="auto_access_service_description">巴拉啦小魔仙</string>
+    <string name="auto_access_service_description">Kiven的无障碍助手</string>
     <string name="auto_access_service_dist_package">com.tencent.mm</string>
 
     <string name="auto_access_service_dist_package1">com.jeeinc.save.worry</string>
@@ -27,4 +16,8 @@
     <string name="connecting">ToyVPN正在连接。。。</string>
     <string name="connected">ToyVPN已连接</string>
     <string name="disconnected">ToyVPN 已断开!</string>
+
+<!--  重新定义leakcanary的显示名称  -->
+    <string name="leak_canary_display_activity_label">K·Leaks</string>
+    <string name="leak_canary_shortcut_label">K·Leaks</string>
 </resources>

@@ -2,17 +2,24 @@ package com.kiven.sample.actions
 
 import android.os.Bundle
 import android.text.util.Linkify
+import android.util.AttributeSet
 import android.view.Gravity
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.view.ViewGroup
+import android.widget.*
 import androidx.annotation.StyleRes
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.cardview.widget.CardView
+import androidx.core.view.marginBottom
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipDrawable
+import com.google.android.material.chip.ChipGroup
 import com.kiven.kutils.activityHelper.KActivityDebugHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.tools.KUtil
 import com.kiven.sample.R
 import com.kiven.sample.util.showListDialog
 import org.jetbrains.anko.*
+import org.jetbrains.anko.support.v4.nestedScrollView
 
 /**
  * Created by oukobayashi on 2019-09-17.
@@ -55,7 +62,7 @@ class AHThemeDemo : KActivityDebugHelper() {
             }
             setTheme(themeId)
 
-            linearLayout {
+            nestedScrollView().linearLayout {
                 gravity = Gravity.CENTER
                 orientation = LinearLayout.VERTICAL
 
@@ -130,8 +137,27 @@ class AHThemeDemo : KActivityDebugHelper() {
                     text = "10款 Material Design 配色工具: https://blog.csdn.net/dsc114/article/details/52120080 " +
                             "\nAndroid Theme 属性详解: https://www.jianshu.com/p/06a3bbb7ce79 " +
                             "\n换肤框架：https://github.com/ximsfei/Android-skin-support " +
-                            "\n可下载切换主题皮肤: https://www.jianshu.com/p/0d07a2e45be2?tdsourcetag=s_pcqq_aiomsg"
+                            "\n可下载切换主题皮肤: https://www.jianshu.com/p/0d07a2e45be2?tdsourcetag=s_pcqq_aiomsg" +
+                            "\n\n\n"
                 }
+
+                addView(Switch(mActivity))
+                addView(ChipGroup(mActivity).apply {
+                    addView(Chip(mActivity).apply {
+                        text = "选项一"
+                        id = R.id.chip1
+                    })
+                    addView(Chip(mActivity).apply {
+                        text = "选项二"
+                        id = R.id.chip2
+                    })
+
+                    check(R.id.chip1)
+                    setOnCheckedChangeListener { _, checkedId -> check(checkedId) }
+                })
+
+                addView(ProgressBar(mActivity))
+                addView(SeekBar(mActivity))
             }
         }
     }

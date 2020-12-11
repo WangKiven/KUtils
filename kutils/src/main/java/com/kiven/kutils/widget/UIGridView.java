@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+
 import com.kiven.kutils.R;
 import com.kiven.kutils.tools.KUtil;
 
@@ -53,9 +55,7 @@ public class UIGridView extends ViewGroup {
     }
 
     private void init(Context context) {
-        if (isInEditMode() && getChildCount() == 0) {
-            setAdapter(new UIGridViewAdapter(context));
-        }
+
     }
 
     private void init(Context context, AttributeSet attrs) {
@@ -63,6 +63,7 @@ public class UIGridView extends ViewGroup {
         if (attrs == null) {
             return;
         }
+
         TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.UIGridView);
         // 水平单元格间距
         if (typedArray.hasValue(R.styleable.UIGridView_gv_dividWith)) {
@@ -92,6 +93,15 @@ public class UIGridView extends ViewGroup {
             return;
         }
         gridViewAdapter.addAllItemView();
+    }
+
+    @Override
+    protected void onVisibilityChanged(@NonNull View changedView, int visibility) {
+        super.onVisibilityChanged(changedView, visibility);
+
+        if (isInEditMode() && getChildCount() == 0) {
+            setAdapter(new Adapter());
+        }
     }
 
     //存储所有子View

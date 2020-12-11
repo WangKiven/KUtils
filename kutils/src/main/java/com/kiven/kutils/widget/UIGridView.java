@@ -272,7 +272,7 @@ public class UIGridView extends ViewGroup {
         }
     }
 
-    public static class Adapter implements View.OnClickListener {
+    public static class Adapter {
 
         //childView间的间距
 //        protected int childMargin;
@@ -312,12 +312,6 @@ public class UIGridView extends ViewGroup {
 
             return itemView;
         }
-
-        @Override
-        public void onClick(View v) {
-
-        }
-
 
         final Handler ch = new Handler(new Handler.Callback() {
             @Override

@@ -18,6 +18,12 @@
         android:onClick="onClick"
         app:item_title="KNormalItemView"/>
 
+
+
+    <com.kiven.kutils.widget.UIGridView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
     <com.kiven.kutils.widget.UIGridView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

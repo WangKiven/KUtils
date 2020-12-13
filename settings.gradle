@@ -1,7 +1,8 @@
 include ':kutils', ':sample', ':kutils-ktx', ':pushlibrary'
 
-include ':xutils'
-project(':xutils').projectDir = new File('../xUtils3/xutils')
+// https://github.com/WangKiven/xUtils3
+//include ':xutils'
+//project(':xutils').projectDir = new File('../xUtils3/xutils')
 
 // https://github.com/WangKiven/ChatKit
 //include ':chatkit'

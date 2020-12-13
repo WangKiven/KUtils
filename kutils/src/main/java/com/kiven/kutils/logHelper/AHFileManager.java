@@ -134,7 +134,7 @@ public class AHFileManager extends KActivityHelper {
         return super.onBackPressed();
     }
 
-    private class GridViewAdapter extends UIGridView.Adapter {
+    private class GridViewAdapter extends UIGridView.Adapter implements View.OnClickListener {
         @Override
         public int getGridViewItemCount() {
             return selDir.size() + 1;
@@ -164,7 +164,6 @@ public class AHFileManager extends KActivityHelper {
 
         @Override
         public void onClick(View v) {
-            super.onClick(v);
             int position = (int) v.getTag();
 
             List<LFile> rf = new ArrayList<>();

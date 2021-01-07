@@ -68,7 +68,9 @@ class MiPushHelper : PushHelper {
     }*/
 
     override fun setTags(context: Context, tags: Set<String>) {
-        val oldTags = MiPushClient.getAllTopic(context)
+        // TODO: 2021/1/7 今日收到通知，1月14小米推送增加限制：每个App单台设备可以订阅的Topic上限由原先的不限制改为30个，Alias上限由原先的不限制改为15个。如果超过了对应上限数，则新订阅的Topic/Alias会覆盖最早设置的Topic/Alias。
+        // TODO: 2021/1/7 解决方案：标签上传到我们自己的服务器（之前已经做了，所有平台的标签都会保存一份到我们自己的服务器），由我们自己服务器挨个调用小米推送发送通知。
+        /*val oldTags = MiPushClient.getAllTopic(context)
 
         val addTags = mutableSetOf<String>()
         val delTags = mutableSetOf<String>()
@@ -92,7 +94,7 @@ class MiPushHelper : PushHelper {
 
         delTags.forEach { tag ->
             MiPushClient.unsubscribe(context, tag, null)
-        }
+        }*/
     }
 
     /*fun setAccount(context: Context, account: String) {

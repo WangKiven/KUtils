@@ -37,7 +37,7 @@ android {
     }
 
     compileSdkVersion parent.ext.compileSdkVersion
-    buildToolsVersion parent.ext.buildToolsVersion
+//    buildToolsVersion parent.ext.buildToolsVersion
 
     defaultConfig {
         applicationId "com.kiven.sample"

@@ -3,6 +3,8 @@ package com.kiven.kutils.tools;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Application;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
@@ -17,7 +19,10 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.os.ParcelFileDescriptor;
+import android.provider.MediaStore;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 
 import androidx.annotation.NonNull;
@@ -28,6 +33,7 @@ import com.kiven.kutils.logHelper.KLog;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -75,6 +81,12 @@ public class KUtil {
 
     public static void setFileDirName(@NonNull String dirName) {
         fileDirName = dirName;
+    }
+
+    private static String tag = "kutils";
+
+    public static void setTag(@NonNull String tag) {
+        KUtil.tag = tag;
     }
 
     /**
@@ -227,6 +239,95 @@ public class KUtil {
      */
     public static String getAppPictureFolderPath() {
         return getAppFileFolderPath(imageDirName);
+    }
+
+    public static Uri createNewAppPictureUri() {
+        return createNewAppPictureUri("", imageDirName, false);
+    }
+
+    public static Uri createNewAppPictureUri(boolean saveToPng) {
+        return createNewAppPictureUri("", imageDirName, saveToPng);
+    }
+
+    public static Uri createNewAppPictureUri(@NonNull String displayName, boolean saveToPng) {
+        return createNewAppPictureUri(displayName, imageDirName, saveToPng);
+    }
+
+    public static Uri createNewAppPictureUri(@NonNull String displayName, @NonNull String folderName, boolean saveToPng) {
+
+        // 1 构建 ContentValues
+
+        ContentValues values = new ContentValues();
+        String fullDisplayName = displayName;
+        if (displayName.isEmpty()) {
+            fullDisplayName = tag + System.currentTimeMillis();
+        }
+        if (saveToPng) {
+            fullDisplayName += ".png";
+        }else {
+            fullDisplayName += ".jpg";
+        }
+
+        values.put(MediaStore.MediaColumns.DISPLAY_NAME, fullDisplayName);
+        if (saveToPng) {
+            values.put(MediaStore.MediaColumns.MIME_TYPE, "image/png");
+        }else {
+            values.put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg");
+        }
+
+        String time = "" + System.currentTimeMillis() / 1000;
+        values.put(MediaStore.MediaColumns.DATE_ADDED, time);
+        values.put(MediaStore.MediaColumns.DATE_MODIFIED, time);
+
+        String dir = "";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (!TextUtils.isEmpty(folderName)) {
+                dir = File.separator + folderName;
+            }
+            values.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + dir);
+        } else {
+            // android 10 以前使用原来的方式
+            if (!TextUtils.isEmpty(folderName)) {
+                dir = folderName + File.separator;
+            }
+
+            String abPath = Environment.getExternalStorageDirectory().getPath() + "/" + Environment.DIRECTORY_PICTURES + "/" + dir;
+            if (!TextUtils.isEmpty(dir)/* && Build.VERSION.SDK_INT <= Build.VERSION_CODES.M*/) {
+                // 有些手机不会自动创建目录，所以要手动创建
+                File imgFile = new File(abPath);
+                if (!imgFile.exists()) imgFile.mkdir();
+            }
+            values.put(MediaStore.MediaColumns.DATA, abPath + fullDisplayName);
+        }
+
+        // 2 构建uri
+
+        try {
+            ContentResolver contentResolver = app.getContentResolver();
+            return contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+        } catch (Exception e) {
+            KLog.e(e);
+            return null;
+        }
+    }
+
+    public static Uri saveImage(@NonNull Bitmap bitmap, boolean saveToPng) {
+        try {
+            Uri outUri = createNewAppPictureUri(saveToPng);
+            ParcelFileDescriptor descriptor = app.getContentResolver().openFileDescriptor(outUri, "w");
+
+            if (descriptor != null) {
+                FileOutputStream fos = new FileOutputStream(descriptor.getFileDescriptor());
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fos);
+                fos.flush();
+                fos.close();
+
+                return outUri;
+            }
+        } catch (Exception e) {
+            KLog.e(e);
+        }
+        return null;
     }
 
     /**

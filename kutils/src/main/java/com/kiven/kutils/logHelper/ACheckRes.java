@@ -119,7 +119,7 @@ public class ACheckRes extends KActivityHelper {
 
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
-                recyclerView.setLayoutManager(new GridLayoutManager(mActivity, KUtil.getScreenWith(mActivity) / KUtil.dip2px(50f)));
+                recyclerView.setLayoutManager(new GridLayoutManager(mActivity, KUtil.getScreenWith() / KUtil.dip2px(50f)));
             }
         }
 

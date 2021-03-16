@@ -68,7 +68,7 @@ public class KImage {
 	 * @return
 	 */
 	public static Bitmap getRoundedCornerBitmap(Bitmap bitmap) {
-		return getRoundedCornerBitmap(bitmap, 200, KUtil.dip2px(KContext.getInstance(), 4));
+		return getRoundedCornerBitmap(bitmap, 200, KUtil.dip2px(4));
 	}
 	public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, int min, int radius) {
 		if (bitmap != null) {

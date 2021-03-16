@@ -90,7 +90,7 @@ public class FloatView {
         Button mFloatView = new Button(context);
         mFloatView.setText("省");
 
-        mFloatLayout.addView(mFloatView, new LinearLayout.LayoutParams(KUtil.dip2px(context, 50), KUtil.dip2px(context, 50)));
+        mFloatLayout.addView(mFloatView, new LinearLayout.LayoutParams(KUtil.dip2px(50), KUtil.dip2px(50)));
 
         mFloatLayout.measure(View.MeasureSpec.makeMeasureSpec(0,
                 View.MeasureSpec.UNSPECIFIED), View.MeasureSpec
@@ -116,7 +116,7 @@ public class FloatView {
                         oldY1 = wmParams.y;
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        int b = KUtil.dip2px(context, 1) / 2;
+                        int b = KUtil.dip2px(1) / 2;
                         float x = event.getRawX() - oldX;
                         float y = event.getRawY() - oldY;
                         if (Math.abs(x) > 1 && Math.abs(y) > 1) {
@@ -125,7 +125,7 @@ public class FloatView {
                         }
                         break;
                     default:
-                        int a = KUtil.dip2px(context, 2);
+                        int a = KUtil.dip2px(2);
                         if (Math.abs(wmParams.x - oldX1) <= a && Math.abs(wmParams.y - oldY1) <= a) {// 认定单点击
                             WXConst.logType++;
 

@@ -341,14 +341,14 @@ public class KLog {
         Application app = KUtil.getApp();
 
         StringBuilder builder = new StringBuilder();
-        builder.append("\n屏幕密度（0.75 / 1.0 / 1.5）:").append(KUtil.getScreenDensity(app))
-                .append("\n屏幕密度DPI（120 / 160 / 240）:").append(KUtil.getScreenDensityDpi(app)).append("  每英寸多少像素")
-                .append("\n屏幕宽度(px):").append(KUtil.getScreenWith(app))
-                .append("\n屏幕高度(px):").append(KUtil.getScreenHeight(app))
-                .append("\n屏幕宽度(dp):").append(KUtil.getScreenWith(app) / KUtil.getScreenDensity(app))
-                .append("\n屏幕高度(dp):").append(KUtil.getScreenHeight(app) / KUtil.getScreenDensity(app))
-                .append("\n屏幕宽度(英寸):").append(KUtil.getScreenWith(app) * 1f / KUtil.getScreenDensityDpi(app))
-                .append("\n屏幕高度(英寸):").append(KUtil.getScreenHeight(app) * 1f / KUtil.getScreenDensityDpi(app))
+        builder.append("\n屏幕密度（0.75 / 1.0 / 1.5）:").append(KUtil.getScreenDensity())
+                .append("\n屏幕密度DPI（120 / 160 / 240）:").append(KUtil.getScreenDensityDpi()).append("  每英寸多少像素")
+                .append("\n屏幕宽度(px):").append(KUtil.getScreenWith())
+                .append("\n屏幕高度(px):").append(KUtil.getScreenHeight())
+                .append("\n屏幕宽度(dp):").append(KUtil.getScreenWith() / KUtil.getScreenDensity())
+                .append("\n屏幕高度(dp):").append(KUtil.getScreenHeight() / KUtil.getScreenDensity())
+                .append("\n屏幕宽度(英寸):").append(KUtil.getScreenWith() * 1f / KUtil.getScreenDensityDpi())
+                .append("\n屏幕高度(英寸):").append(KUtil.getScreenHeight() * 1f / KUtil.getScreenDensityDpi())
                 .append("\nProduct Model: ").append(Build.BRAND).append(",").append(Build.MODEL).append(",")
                 .append(Build.VERSION.SDK_INT).append(",").append(Build.VERSION.RELEASE);
 

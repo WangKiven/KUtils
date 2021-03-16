@@ -125,7 +125,7 @@ class AHUnicodeList : KActivityDebugHelper() {
             layoutManager.justifyContent = JustifyContent.CENTER
 
             recyclerView.layoutManager = layoutManager*/ // 由于要计算每一个单元格的位置，当item太多的时候，会消耗大量内存存储相关数据
-            recyclerView.layoutManager = GridLayoutManager(mActivity, KUtil.getScreenWith(activity) / dip(70))
+            recyclerView.layoutManager = GridLayoutManager(mActivity, KUtil.getScreenWith() / dip(70))
             recyclerView.adapter = adapter
         }
     }

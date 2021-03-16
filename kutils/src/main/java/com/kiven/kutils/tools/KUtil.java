@@ -80,30 +80,6 @@ public class KUtil {
     /**
      * 像素转化
      */
-    @Deprecated
-    public static int dip2px(Context context, float dipValue) {
-        final float scale = context.getResources().getDisplayMetrics().density;
-        return (int) (dipValue * scale + 0.5f);
-    }
-
-    @Deprecated
-    public static int px2dip(Context context, float pxValue) {
-        final float scale = context.getResources().getDisplayMetrics().density;
-        return (int) (pxValue / scale + 0.5f);
-    }
-
-    @Deprecated
-    public static int px2sp(Context context, float pxValue) {
-        final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
-        return (int) (pxValue / fontScale + 0.5f);
-    }
-
-    @Deprecated
-    public static int sp2px(Context context, float spValue) {
-        final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
-        return (int) (spValue * fontScale + 0.5f);
-    }
-
     public static int dip2px(float dipValue) {
         final float scale = app.getResources().getDisplayMetrics().density;
         return (int) (dipValue * scale + 0.5f);
@@ -140,29 +116,29 @@ public class KUtil {
     /**
      * 屏幕宽高
      */
-    public static int getScreenWith(Context context) {
-        DisplayMetrics metric = context.getResources().getDisplayMetrics();
+    public static int getScreenWith() {
+        DisplayMetrics metric = app.getResources().getDisplayMetrics();
         return metric.widthPixels;
     }
 
-    public static int getScreenHeight(Context context) {
-        DisplayMetrics metric = context.getResources().getDisplayMetrics();
+    public static int getScreenHeight() {
+        DisplayMetrics metric = app.getResources().getDisplayMetrics();
         return metric.heightPixels;
     }
 
     /**
      * 屏幕密度（0.75 / 1.0 / 1.5）
      */
-    public static float getScreenDensity(Context context) {
-        DisplayMetrics metric = context.getResources().getDisplayMetrics();
+    public static float getScreenDensity() {
+        DisplayMetrics metric = app.getResources().getDisplayMetrics();
         return metric.density;
     }
 
     /**
      * 屏幕密度DPI（120 / 160 / 240）
      */
-    public static int getScreenDensityDpi(Context context) {
-        DisplayMetrics metric = context.getResources().getDisplayMetrics();
+    public static int getScreenDensityDpi() {
+        DisplayMetrics metric = app.getResources().getDisplayMetrics();
         return metric.densityDpi;
     }
 
@@ -238,7 +214,7 @@ public class KUtil {
                 //b785756b5c4cbbce5c2d6c781d5099bd
                 Editor editor = preferences.edit();
                 editor.putString("Util_My_UUID", uuId);
-                editor.commit();
+                editor.apply();
 //			uuId = JPushInterface.getUdid(KContext.getInstance());
             }
         }
@@ -267,7 +243,6 @@ public class KUtil {
         File folder = new File(Environment.getExternalStorageDirectory() + "/" + packageName);
         folder.mkdirs();
         return folder.getAbsolutePath();
-        // return folder;
     }
 
     /**

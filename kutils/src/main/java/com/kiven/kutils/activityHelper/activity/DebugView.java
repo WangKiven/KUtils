@@ -170,7 +170,7 @@ public class DebugView {
 
         // 以屏幕左上角为原点，设置x、y初始值，相对于gravity
         wlp.x = 0;
-        wlp.y = 0 - KUtil.getScreenHeight(activity) / 2;
+        wlp.y = 0 - KUtil.getScreenHeight() / 2;
 
         //设置悬浮窗口长宽数据
         wlp.width = WindowManager.LayoutParams.WRAP_CONTENT;

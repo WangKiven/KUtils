@@ -381,7 +381,7 @@ public class UIGridView extends ViewGroup {
     public static class UIGridViewAdapter extends Adapter {
 
         public UIGridViewAdapter(Context context) {
-            setChildMargin(KUtil.dip2px(context, 5));
+            setChildMargin(KUtil.dip2px(5));
         }
     }
 }

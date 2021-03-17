@@ -36,7 +36,7 @@ class AHWebView : KActivityHelper() {
             }
         }
 
-        webView.loadUrl(activity.intent.getStringExtra("url"))
+        webView.loadUrl(activity.intent.getStringExtra("url") ?: "")
 
         val backView = ImageView(activity)
         backView.setImageResource(R.drawable.emoji_backspace)

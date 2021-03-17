@@ -10,7 +10,6 @@ import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.content.pm.ConfigurationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -37,17 +36,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.net.Inet6Address;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Properties;
 import java.util.Set;
 
 /**
@@ -373,8 +362,8 @@ public class KUtil {
      * @param callBack 跟新成功是否提示, 0:失败，1：成功，2：保存中
      *                 <p>
      *                 Android Q 访问存储权限变动，该方法可能不再适用。
-     *                 可以使用{@link com.kiven.kutils.file.KFile#saveJpgBitmap(Context, Bitmap, String, String)}
-     *                 或者{@link com.kiven.kutils.file.KFile#savePngBitmap(Context, Bitmap, String, String)}
+     *                 可以使用{@link KFile#saveJpgBitmap(Context, Bitmap, String, String)}
+     *                 或者{@link KFile#savePngBitmap(Context, Bitmap, String, String)}
      */
     public static void addPicture(String path, MediaScannerConnection.OnScanCompletedListener callBack) {
         // TODO - 在外部存储的应用私有文件夹下面的文件，是没办法放到相册里面的

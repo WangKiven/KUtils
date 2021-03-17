@@ -92,7 +92,7 @@ class ActivityDock : KActivity() {
                 // 判断桌面是否是当前app的
                 val dockIntent = Intent(Intent.ACTION_MAIN)
                 dockIntent.addCategory(Intent.CATEGORY_HOME)
-                val res = packageManager.resolveActivity(dockIntent, 0)
+                val res = packageManager.resolveActivity(dockIntent, 0) ?: return true
 
                 val sb = StringBuilder()
                 sb.appendln("桌面Activity类名：${res.activityInfo.name}")

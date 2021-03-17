@@ -227,7 +227,7 @@ open class AHMediaList : KActivityDebugHelper() {
             345 -> {
                 val uri = data?.data ?: return
 
-                selPath = KPath.getPath(mActivity, uri)
+                selPath = KPath.getPath(uri)
                 KLog.i(selPath)
                 KLog.i(uri.toString())
 
@@ -262,7 +262,7 @@ open class AHMediaList : KActivityDebugHelper() {
                 }*/
             }
             347 -> KAlertDialogHelper.Show1BDialog(mActivity, data?.data?.path ?: "路径获取失败")
-            348 -> cropImage(KPath.getPath(mActivity, data?.data))
+            348 -> cropImage(KPath.getPath(data?.data))
             349 -> showImage(cropPath)
             350 -> {
                 /*val retriever = MediaMetadataRetriever()
@@ -270,7 +270,7 @@ open class AHMediaList : KActivityDebugHelper() {
                 val bmp = retriever.frameAtTime
                 retriever.release()*/
 
-                val path = KPath.getPath(mActivity, data?.data)
+                val path = KPath.getPath(data?.data)
                 val bmp = ThumbnailUtils.createVideoThumbnail(path, MediaStore.Video.Thumbnails.MINI_KIND)
                 if (bmp == null) {
                     KToast.ToastMessage("获取视频文件缩略图失败")

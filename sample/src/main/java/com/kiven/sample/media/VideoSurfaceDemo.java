@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.kiven.kutils.activityHelper.KActivityHelper;
 import com.kiven.kutils.activityHelper.KHelperActivity;
+import com.kiven.kutils.logHelper.KLog;
 import com.kiven.kutils.tools.KPath;
 import com.kiven.sample.R;
 
@@ -62,18 +63,14 @@ public class VideoSurfaceDemo extends KActivityHelper implements SurfaceHolder.C
                 player.setDataSource(parceFileDescriptor.getFileDescriptor());
                 parceFileDescriptor.close();
 
-                ((TextView) findViewById(R.id.tv_title)).setText(KPath.getPath(mActivity, mp4Path) + "\n" + mp4Path.toString());
+                ((TextView) findViewById(R.id.tv_title)).setText(KPath.getPath(mp4Path) + "\n" + mp4Path.toString());
             } else{
                 player.setDataSource(mActivity, Uri.parse("android.resource://" + mActivity.getPackageName() + "/" + R.raw.h));
                 ((TextView) findViewById(R.id.tv_title)).setText("R.raw.h");
             }
-            Log.v("Next:::", "surfaceDestroyed called");
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+            KLog.e("surfaceDestroyed called");
+        } catch (Exception e) {
+            KLog.e(e);
         }
         //然后，我们取得当前Display对象
         currDisplay = mActivity.getWindowManager().getDefaultDisplay();

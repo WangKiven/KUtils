@@ -10,12 +10,12 @@ import android.os.Environment;
 import android.os.StatFs;
 import android.os.storage.StorageManager;
 import android.provider.MediaStore;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.text.TextUtils;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.kiven.kutils.logHelper.KLog;
-import com.kiven.kutils.tools.KString;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -24,7 +24,6 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.net.URLConnection;
-import java.nio.file.NoSuchFileException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -97,43 +96,32 @@ public class KFile {
      */
     public static String[] getStoragePaths(@NonNull Context cxt) {
         List<String> pathsList = new ArrayList<String>();
-        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.GINGERBREAD) {
-            /*StringBuilder sb = new StringBuilder();
-            try {
-                pathsList.addAll(new SdCardFetcher().getStoragePaths(new FileReader("/proc/mounts"), sb));
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-                File externalFolder = Environment.getExternalStorageDirectory();
-                if (externalFolder != null) {
-                    pathsList.add(externalFolder.getAbsolutePath());
-                }
-            }*/
-        } else {
-            StorageManager storageManager = (StorageManager) cxt.getSystemService(Context.STORAGE_SERVICE);
-            try {
-                Method method = StorageManager.class.getDeclaredMethod("getVolumePaths");
-                method.setAccessible(true);
-                Object result = method.invoke(storageManager);
-                if (result != null && result instanceof String[]) {
-                    String[] pathes = (String[]) result;
-                    StatFs statFs;
-                    for (String path : pathes) {
-                        if (!TextUtils.isEmpty(path) && new File(path).exists()) {
-                            statFs = new StatFs(path);
-                            if (statFs.getBlockCount() * statFs.getBlockSize() != 0) {
-                                pathsList.add(path);
-                            }
+
+        StorageManager storageManager = (StorageManager) cxt.getSystemService(Context.STORAGE_SERVICE);
+        try {
+            Method method = StorageManager.class.getDeclaredMethod("getVolumePaths");
+            method.setAccessible(true);
+            Object result = method.invoke(storageManager);
+            if (result != null && result instanceof String[]) {
+                String[] pathes = (String[]) result;
+                StatFs statFs;
+                for (String path : pathes) {
+                    if (!TextUtils.isEmpty(path) && new File(path).exists()) {
+                        statFs = new StatFs(path);
+                        if (statFs.getBlockCount() * statFs.getBlockSize() != 0) {
+                            pathsList.add(path);
                         }
                     }
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-                File externalFolder = Environment.getExternalStorageDirectory();
-                if (externalFolder != null) {
-                    pathsList.add(externalFolder.getAbsolutePath());
-                }
+            }
+        } catch (Exception e) {
+            KLog.e(e);
+            File externalFolder = Environment.getExternalStorageDirectory();
+            if (externalFolder != null) {
+                pathsList.add(externalFolder.getAbsolutePath());
             }
         }
+
         return pathsList.toArray(new String[pathsList.size()]);
     }
 

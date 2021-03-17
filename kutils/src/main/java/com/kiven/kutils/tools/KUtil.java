@@ -369,8 +369,6 @@ public class KUtil {
         // TODO - 在外部存储的应用私有文件夹下面的文件，是没办法放到相册里面的
         // todo - 如果图库中已经存在该图片，如果在次调用该方法通知图库，可能会出现异常。
         // todo 目前遇到的是：华为荣耀10(系统 android 9.1) ,图片在图库中消失，实际还存在，只是在图库中没有
-        /*MediaScannerConnection.scanFile(KContext.getInstance(), new String[]{path}, new String[]{"image/*"},
-                callBack);*/
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
             app.sendBroadcast(
                     new Intent(
@@ -384,44 +382,6 @@ public class KUtil {
             MediaScannerConnection.scanFile(KContext.getInstance(), new String[]{path}, new String[]{"image/*"},
                     callBack);
         }
-
-        /*if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-            MediaScannerConnection.scanFile(KContext.getInstance(), new String[]{path}, new String[]{"image/*"},
-                    callBack);
-        } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-            app.sendBroadcast(
-                    new Intent(
-                            Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
-                            Uri.fromFile(new File(path))
-                    )
-            );
-            callBack.onScanCompleted(path, null);
-        } else {
-            try {
-                MediaStore.Images.Media.insertImage(app.getContentResolver(), path, new File(path).getName(), null);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-//            ExifInterface
-
-//                    MediaStore.getMediaScannerUri()
-
-            ContentValues values = new ContentValues();
-            values.put(MediaStore.MediaColumns.DATA, path);
-            values.put(MediaStore.MediaColumns.RELATIVE_PATH, path);
-            app.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-
-//            String where=MediaStore.Audio.Media.DATA+" like \""+path+"%"+"\"";
-//            app.getContentResolver().delete(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, where, null);
-
-
-
-
-
-
-
-            callBack.onScanCompleted(path, null);
-        }*/
     }
 
     public static void addPicture(@NonNull String[] paths) {

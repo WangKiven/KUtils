@@ -12,7 +12,7 @@ import android.provider.MediaStore;
 
 /**
  * 选择系统文件后，一些路径不能直接用，需要做一些处理后才能用
- *
+ * <p>
  * TODO http://blog.csdn.net/tempersitu/article/details/20557383
  * Created by kiven on 2016/11/3.
  */
@@ -35,18 +35,14 @@ public class KPath {
                 }
 
                 // TODO handle non-primary volumes
-            }
-            // DownloadsProvider
-            else if (isDownloadsDocument(uri)) {
+            } else if (isDownloadsDocument(uri)) {// DownloadsProvider
 
                 final String id = DocumentsContract.getDocumentId(uri);
                 final Uri contentUri = ContentUris.withAppendedId(
                         Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
 
                 return getDataColumn(context, contentUri, null, null);
-            }
-            // MediaProvider
-            else if (isMediaDocument(uri)) {
+            } else if (isMediaDocument(uri)) {// MediaProvider
                 final String docId = DocumentsContract.getDocumentId(uri);
                 final String[] split = docId.split(":");
                 final String type = split[0];
@@ -61,24 +57,20 @@ public class KPath {
                 }
 
                 final String selection = "_id=?";
-                final String[] selectionArgs = new String[] {
+                final String[] selectionArgs = new String[]{
                         split[1]
                 };
 
                 return getDataColumn(context, contentUri, selection, selectionArgs);
             }
-        }
-        // MediaStore (and general)
-        else if ("content".equalsIgnoreCase(uri.getScheme())) {
+        } else if ("content".equalsIgnoreCase(uri.getScheme())) {// MediaStore (and general)
 
             // Return the remote address
             if (isGooglePhotosUri(uri))
                 return uri.getLastPathSegment();
 
             return getDataColumn(context, uri, null, null);
-        }
-        // File
-        else if ("file".equalsIgnoreCase(uri.getScheme())) {
+        } else if ("file".equalsIgnoreCase(uri.getScheme())) {// File
             return uri.getPath();
         }
 
@@ -89,9 +81,9 @@ public class KPath {
      * Get the value of the data column for this Uri. This is useful for
      * MediaStore Uris, and other file-based ContentProviders.
      *
-     * @param context The context.
-     * @param uri The Uri to query.
-     * @param selection (Optional) Filter used in the query.
+     * @param context       The context.
+     * @param uri           The Uri to query.
+     * @param selection     (Optional) Filter used in the query.
      * @param selectionArgs (Optional) Selection arguments used in the query.
      * @return The value of the _data column, which is typically a file path.
      */

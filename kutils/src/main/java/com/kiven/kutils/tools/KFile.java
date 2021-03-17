@@ -273,7 +273,7 @@ public class KFile {
      * 保存后，如果想在图库中查看，需要通知图库刷新，调用方法：{@link com.kiven.kutils.tools.KUtil#addPicture(String, MediaScannerConnection.OnScanCompletedListener)}
      * 或者使用方法将图片插入图库中：{@link MediaStore.Images.Media#insertImage(ContentResolver, String, String, String)}
      */
-    public static boolean saveJpgBitmap(@NonNull Context context, @NonNull File file, @NonNull Bitmap bitmap) {
+    public static boolean saveJpgBitmap(@NonNull File file, @NonNull Bitmap bitmap) {
         if (file.exists()) {
             file.delete();
         }
@@ -296,7 +296,9 @@ public class KFile {
     /**
      * 保存图片到图库, 一般在手机存储卡根目录下Pictures文件内。
      * 保存后，可以直接打开相册查看。不用通知图库刷新
+     * @deprecated 建议使用{@link KUtil#saveImage(Bitmap, boolean)}，保存到图库下的默认文件夹。默认文件夹可以使用{@link KUtil#setImageDirName(String)}设置
      */
+    @Deprecated
     public static String saveJpgBitmap(@NonNull Context context, @NonNull Bitmap bitmap, String title, String detail) {
         String fileName = KString.isBlank(title) ? getTimeTag() : title;
         try {
@@ -310,6 +312,7 @@ public class KFile {
         return fileName;
     }
 
+    @Deprecated
     public static String savePngBitmap(@NonNull Context context, @NonNull Bitmap source, String title, String description) {
         ContentValues values = new ContentValues();
         values.put(MediaStore.Images.Media.TITLE, title);
@@ -317,7 +320,7 @@ public class KFile {
         values.put(MediaStore.Images.Media.MIME_TYPE, "image/png");
 
         Uri url = null;
-        String stringUrl = null;    /* value to be returned */
+        String stringUrl = null;
         ContentResolver cr = context.getContentResolver();
 
         try {

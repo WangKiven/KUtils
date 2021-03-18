@@ -22,6 +22,8 @@ import android.os.AsyncTask;
 import android.os.Build;
 import androidx.annotation.ColorRes;
 import androidx.annotation.DrawableRes;
+import androidx.core.content.ContextCompat;
+
 import android.view.View;
 import android.widget.ImageView;
 
@@ -34,8 +36,6 @@ public class KImage {
 	 * 第二个绘制的是个Bitmap，于是交集为圆形，展现的是BItmap，就实现了圆形图片效果。圆角，其实就是先绘制圆角矩形，
 	 * 是不是很简单，以后别人再说实现圆角，你就把这一行代码给他就行了。
 	 *
-	 * @param bitmap
-	 * @return
 	 */
 	public static Bitmap getCircleBitmap(Bitmap bitmap) {
 		return getCircleBitmap(bitmap, 200);
@@ -64,8 +64,6 @@ public class KImage {
 
 	/**
 	 * 将图片圆角
-	 * @param bitmap
-	 * @return
 	 */
 	public static Bitmap getRoundedCornerBitmap(Bitmap bitmap) {
 		return getRoundedCornerBitmap(bitmap, 200, KUtil.dip2px(4));
@@ -162,11 +160,6 @@ public class KImage {
 	}
 	/**
 	 * 有各种效果的按钮Drawable
-	 * @param normalDrawable
-	 * @param disenableDrawable
-	 * @param selectedDrawable
-	 * @param pressDrawable
-	 * @return
 	 */
 	public static StateListDrawable getSelectorDrawable(Drawable normalDrawable, Drawable disenableDrawable, Drawable selectedDrawable, Drawable pressDrawable){
 		StateListDrawable listDrawable = new StateListDrawable();
@@ -186,10 +179,6 @@ public class KImage {
 	}
 	/**
 	 * 有各种效果的圆角按钮Drawable
-	 * @param normalColor
-	 * @param disenableColor
-	 * @param selectedColor
-	 * @param corner
 	 */
 	public static StateListDrawable getSelectorDrawable(int normalColor, int disenableColor, int selectedColor, int pressColor, int[] padding, int corner){
 		StateListDrawable listDrawable = new StateListDrawable();
@@ -293,8 +282,6 @@ public class KImage {
 
 	/**
 	 * 设置显示图片
-	 * @param imageView
-	 * @param image
 	 */
 	public static void setImageView( View imageView, Bitmap image ){
 		if(imageView instanceof ImageView){
@@ -307,8 +294,6 @@ public class KImage {
 	}
 	/**
 	 * 设置显示背景图片
-	 * @param view
-	 * @param drawable
 	 */
 	@SuppressWarnings("deprecation")
 	@SuppressLint("NewApi")
@@ -322,42 +307,32 @@ public class KImage {
 
 	/**
 	 * 获取颜色
-	 * @param rId
-	 * @return
      */
 	public static int getColor(Context context, @ColorRes int rId) {
-		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-			return context.getColor(rId);
-		} else {
-			return context.getResources().getColor(rId);
-		}
+		return ContextCompat.getColor(context, rId);
+	}
+
+	public static int getColor(@ColorRes int rId) {
+		return ContextCompat.getColor(KUtil.getApp(), rId);
 	}
 
 	/**
 	 * 获取颜色2
-	 * @param context
-	 * @param rId
-	 * @return
 	 */
 	public static ColorStateList getColorStateList(Context context, @ColorRes int rId) {
-		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-			return context.getColorStateList(rId);
-		} else {
-			return context.getResources().getColorStateList(rId);
-		}
+		return ContextCompat.getColorStateList(context, rId);
+	}
+	public static ColorStateList getColorStateList( @ColorRes int rId) {
+		return ContextCompat.getColorStateList(KUtil.getApp(), rId);
 	}
 
 	/**
 	 * 获取drawable
-	 * @param context	context
-	 * @param rId		rId
-	 * @return			Drawable
 	 */
 	public static Drawable getDrawable(Context context, @DrawableRes int rId) {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-			return context.getDrawable(rId);
-		} else {
-			return context.getResources().getDrawable(rId);
-		}
+		return ContextCompat.getDrawable(context, rId);
+	}
+	public static Drawable getDrawable(@DrawableRes int rId) {
+		return ContextCompat.getDrawable(KUtil.getApp(), rId);
 	}
 }

@@ -240,12 +240,8 @@ public class KHelperActivity extends KActivity {
         }
     }
 
-    // for fix https://stackoverflow.com/questions/41025200/android-view-inflateexception-error-inflating-class-android-webkit-webview
-    /*@Override
-    public AssetManager getAssets() {
-        if (Build.VERSION.SDK_INT == 21 || Build.VERSION.SDK_INT == 22) {
-            return getResources().getAssets();
-        } else
-            return super.getAssets();
-    }*/
+    @Override
+    public String toString() {
+        return "" + helper + "@" + Integer.toHexString(hashCode()) ;
+    }
 }

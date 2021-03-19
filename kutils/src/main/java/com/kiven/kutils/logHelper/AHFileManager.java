@@ -40,8 +40,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AHFileManager extends KActivityHelper {
-
-    //    private UIGridView gridView;
     private GridViewAdapter gridViewAdapter = new GridViewAdapter();
 
     private final ArrayList<LFile> modules = new ArrayList<>();
@@ -188,7 +186,6 @@ public class AHFileManager extends KActivityHelper {
             ImageView iv = new ImageView(mActivity);
             iv.setAdjustViewBounds(true);
             iv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-//            x.image().bind(iv, cFile.getAbsolutePath());
             iv.setImageBitmap(BitmapFactory.decodeFile(cFile.getAbsolutePath()));
 
             new AlertDialog.Builder(mActivity).setView(iv).show();

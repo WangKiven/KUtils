@@ -11,7 +11,7 @@ import android.widget.TextView
 import com.google.android.flexbox.AlignContent
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
-import com.kiven.kutils.activityHelper.KActivityDebugHelper
+import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.tools.KUtil
 import com.kiven.sample.service.PersistentService
@@ -20,7 +20,7 @@ import org.jetbrains.anko.support.v4.nestedScrollView
 /**
  * Created by oukobayashi on 2019-12-23.
  */
-class AHAutoStartAndLiving : KActivityDebugHelper() {
+class AHAutoStartAndLiving : KActivityHelper() {
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
 

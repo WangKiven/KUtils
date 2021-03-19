@@ -22,7 +22,7 @@ import com.google.ar.sceneform.rendering.ModelRenderable
 import com.google.ar.sceneform.rendering.ShapeFactory
 import com.google.ar.sceneform.ux.ArFragment
 import com.google.ar.sceneform.ux.TransformableNode
-import com.kiven.kutils.activityHelper.KActivityDebugHelper
+import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KGranting
@@ -34,7 +34,7 @@ import org.jetbrains.anko.support.v4.nestedScrollView
 /**
  * https://developers.google.cn/ar/develop/java/enable-arcore
  */
-class AHARCore : KActivityDebugHelper() {
+class AHARCore : KActivityHelper() {
     var supportARCoreTextView: TextView? = null
     var isSupport = -1
 

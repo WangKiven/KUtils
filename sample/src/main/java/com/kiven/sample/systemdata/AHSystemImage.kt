@@ -15,7 +15,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.kiven.kutils.activityHelper.KActivityDebugHelper
+import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KGranting
@@ -36,7 +36,7 @@ import kotlin.math.max
 /**
  * Created by oukobayashi on 2019-11-12.
  */
-class AHSystemImage : KActivityDebugHelper() {
+class AHSystemImage : KActivityHelper() {
     private val adapter = MyAdapter()
     private val datas = mutableListOf<TreeMap<String, String>>()
 

@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.Gravity
 import android.widget.LinearLayout
 import android.widget.TextView
-import com.kiven.kutils.activityHelper.KActivityDebugHelper
+import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KString
@@ -26,7 +26,7 @@ import java.nio.charset.Charset
  * unicode 的组成部分(0号平面，即基本多文种平面): https://baike.baidu.com/item/Unicode/750500?fr=aladdin
  * unicode 的组成部分(其他平面)：https://www.qqxiuzi.cn/wz/zixun/1663.htm
  */
-class AHCharCode : KActivityDebugHelper() {
+class AHCharCode : KActivityHelper() {
 
     private var textView: TextView? = null
 

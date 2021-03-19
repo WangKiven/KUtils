@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
 import android.os.storage.StorageManager;
@@ -24,6 +25,8 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.net.URLConnection;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -257,7 +260,7 @@ public class KFile {
     /**
      * 读取文件
      */
-    public static byte[] readFile(@NonNull File file) throws Exception {
+    public static byte[] readFileByte(@NonNull File file) throws Exception {
         if (!file.exists()) {
             throw new FileNotFoundException();
         }
@@ -267,6 +270,58 @@ public class KFile {
         fileInputStream.read(buf);
         fileInputStream.close();
         return buf;
+    }
+
+    /**
+     * 读取纯文本文件
+     */
+    public static String readFile(String filePath) {
+        return readFile(new File(filePath));
+    }
+    public static String readFile(File file) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            return readFile(file, StandardCharsets.UTF_8);
+        } else {
+            return readFile(file, Charset.forName("UTF-8"));
+        }
+    }
+
+    public static String readFile(String filePath, Charset charset) {
+        return readFile(new File(filePath), charset);
+    }
+    public static String readFile(File file, Charset charset) {
+        /*InputStreamReader inputReader = null;
+        BufferedReader bufferReader = null;
+
+        InputStream inputStream = new FileInputStream(new File(filePath));
+        inputReader = new InputStreamReader(inputStream);
+        bufferReader = new BufferedReader(inputReader);
+
+        String line = null;
+        StringBuffer strBuffer = new StringBuffer();
+        while ((line = bufferReader.readLine()) != null) {
+            strBuffer.append(line);
+        }
+        bufferReader.close();
+
+        return new String(strBuffer);*/
+        if (file.exists() && file.isFile() && file.length() > 0) {
+            try {
+                FileInputStream inputStream = new FileInputStream(file);
+
+                int l = inputStream.available();
+                byte[] bytes = new byte[l];
+
+                int r = inputStream.read(bytes);
+                KLog.i("文件长度：" + file.length() + ", 数据流长度：" + l + ", 读取数据返回值：" + r);
+                inputStream.close();
+
+                return new String(bytes, charset);
+            } catch (Exception e) {
+                KLog.e(e);
+            }
+        }
+        return "";
     }
 
     /**

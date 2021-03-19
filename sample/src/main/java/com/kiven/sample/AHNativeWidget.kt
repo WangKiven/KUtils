@@ -1,22 +1,10 @@
 package com.kiven.sample
 
 import android.os.Bundle
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
 import androidx.appcompat.widget.PopupMenu
-import androidx.constraintlayout.motion.widget.MotionLayout
-import com.google.android.flexbox.AlignContent
-import com.google.android.flexbox.FlexWrap
-import com.google.android.flexbox.FlexboxLayout
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.kiven.kutils.activityHelper.KActivityDebugHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
-import com.kiven.kutils.logHelper.AHFileManager
 import com.kiven.sample.libs.AHTextViewDemo
-import com.kiven.sample.util.addBtn
 import com.kiven.sample.util.showToast
 
 /**

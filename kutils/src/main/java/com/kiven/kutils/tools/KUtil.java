@@ -29,13 +29,8 @@ import androidx.annotation.RequiresApi;
 
 import com.kiven.kutils.logHelper.KLog;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -333,27 +328,6 @@ public class KUtil {
         File folder = new File(Environment.getExternalStorageDirectory() + "/" + packageName);
         folder.mkdirs();
         return folder.getAbsolutePath();
-    }
-
-    /**
-     * 读取纯文本文件
-     */
-    public static String readFile(String filePath) throws IOException {
-        InputStreamReader inputReader = null;
-        BufferedReader bufferReader = null;
-
-        InputStream inputStream = new FileInputStream(new File(filePath));
-        inputReader = new InputStreamReader(inputStream);
-        bufferReader = new BufferedReader(inputReader);
-
-        String line = null;
-        StringBuffer strBuffer = new StringBuffer();
-        while ((line = bufferReader.readLine()) != null) {
-            strBuffer.append(line);
-        }
-        bufferReader.close();
-
-        return new String(strBuffer);
     }
 
     /**

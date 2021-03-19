@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ListView
 import android.widget.TextView
-import com.kiven.kutils.activityHelper.KActivityDebugHelper
+import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import java.io.File
@@ -18,7 +18,7 @@ import java.io.FileInputStream
 /**
  * Created by oukobayashi on 2020/6/23.
  */
-class AHFont : KActivityDebugHelper() {
+class AHFont : KActivityHelper() {
     private val files = mutableListOf<File>()
 
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {

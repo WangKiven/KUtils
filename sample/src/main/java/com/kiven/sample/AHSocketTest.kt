@@ -8,7 +8,7 @@ import android.widget.TextView
 import com.google.android.flexbox.AlignContent
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
-import com.kiven.kutils.activityHelper.KActivityDebugHelper
+import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.sample.util.showSnack
 import kotlinx.coroutines.Dispatchers.IO
@@ -25,7 +25,7 @@ import java.net.MulticastSocket
 /**
  * https://www.cnblogs.com/xujian2014/p/5072215.html
  */
-class AHSocketTest : KActivityDebugHelper() {
+class AHSocketTest : KActivityHelper() {
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
         val flexboxLayout = FlexboxLayout(activity)

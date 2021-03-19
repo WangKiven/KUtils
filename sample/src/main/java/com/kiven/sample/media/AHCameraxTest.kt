@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.camera.core.*
 import androidx.lifecycle.LifecycleOwner
-import com.kiven.kutils.activityHelper.KActivityDebugHelper
+import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.tools.KUtil
 import com.kiven.sample.util.Const.IMAGE_DIR
@@ -21,7 +21,7 @@ import java.util.concurrent.Executor
  *  TODO: 2019/5/17  https://developer.android.google.cn/training/camerax
  *  手把手：https://codelabs.developers.google.com/codelabs/camerax-getting-started#0
  */
-class AHCameraxTest : KActivityDebugHelper() {
+class AHCameraxTest : KActivityHelper() {
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
 

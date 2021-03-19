@@ -10,7 +10,7 @@ import androidx.appcompat.app.AlertDialog
 import com.google.android.flexbox.AlignContent
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
-import com.kiven.kutils.activityHelper.KActivityDebugHelper
+import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.sample.R
 import org.jetbrains.anko.backgroundColor
@@ -19,7 +19,7 @@ import org.jetbrains.anko.support.v4.nestedScrollView
 /**
  * Created by wangk on 2019/5/29.
  */
-class AHTheme : KActivityDebugHelper() {
+class AHTheme : KActivityHelper() {
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
 

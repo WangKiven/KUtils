@@ -6,7 +6,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
 import com.bumptech.glide.Glide
-import com.kiven.kutils.activityHelper.KActivityDebugHelper
+import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.stfalcon.chatkit.commons.ImageLoader
 import com.stfalcon.chatkit.dialogs.DialogsList
@@ -14,7 +14,7 @@ import com.stfalcon.chatkit.dialogs.DialogsListAdapter
 import org.jetbrains.anko.appcompat.v7.toolbar
 import org.jetbrains.anko.linearLayout
 
-class AHChatList : KActivityDebugHelper() {
+class AHChatList : KActivityHelper() {
 
     val adapter by lazy {
         DialogsListAdapter<DefaultDailog>(ImageLoader { imageView, url, payload ->

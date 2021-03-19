@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.Toast
-import com.kiven.kutils.activityHelper.KActivityDebugHelper
+import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KTextView
@@ -22,7 +22,7 @@ import kotlinx.android.synthetic.main.ah_url_test.*
 /**
  * Created by oukobayashi on 2019-12-04.
  */
-class AHUrlTest : KActivityDebugHelper() {
+class AHUrlTest : KActivityHelper() {
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
         mActivity.apply {

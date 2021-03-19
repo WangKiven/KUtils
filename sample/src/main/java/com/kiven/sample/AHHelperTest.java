@@ -4,13 +4,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import com.kiven.kutils.activityHelper.KActivityDebugHelper;
+import com.kiven.kutils.activityHelper.KActivityHelper;
 import com.kiven.kutils.activityHelper.KHelperActivity;
 
 /**
  * Created by kiven on 16/5/6.
  */
-public class AHHelperTest extends KActivityDebugHelper {
+public class AHHelperTest extends KActivityHelper {
 
     private String key = "ActivityHTestBase_count_key";
 

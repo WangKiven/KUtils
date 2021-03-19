@@ -8,7 +8,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.RadioButton
 import android.widget.TextView
-import com.kiven.kutils.activityHelper.KActivityDebugHelper
+import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.sample.R
@@ -19,7 +19,7 @@ import org.jetbrains.anko.toast
 /**
  * Created by oukobayashi on 2020/6/22.
  */
-class AHToyVpn : KActivityDebugHelper() {
+class AHToyVpn : KActivityHelper() {
     class Prefs {
         companion object {
             const val NAME = "connection"

@@ -14,13 +14,16 @@ import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.CallSuper;
+import androidx.annotation.DrawableRes;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import com.kiven.kutils.callBack.CallBack;
 import com.kiven.kutils.callBack.Consumer;
+import com.kiven.kutils.tools.KImage;
 import com.kiven.kutils.tools.KView;
 
 import java.io.Serializable;
@@ -256,14 +259,9 @@ public class KActivityHelper {
     }
 
     public <T extends View> T findViewById(@IdRes int rId) {
-        return (T) mActivity.getDelegate().findViewById(rId);
+        return mActivity.getDelegate().findViewById(rId);
     }
 
-    /**
-     * resources
-     *
-     * @return
-     */
     protected Resources getResources() {
         return mActivity.getResources();
     }
@@ -286,12 +284,12 @@ public class KActivityHelper {
         return "";
     }
 
-    protected Drawable getDrawable(int resId) {
-        return getResources().getDrawable(resId);
+    protected Drawable getDrawable(@DrawableRes int resId) {
+        return ContextCompat.getDrawable(mActivity, resId);
     }
 
     protected int getColor(int resId) {
-        return getResources().getColor(resId);
+        return ContextCompat.getColor(mActivity, resId);
     }
 
     private static Map<String, Object> stuts = null;
@@ -299,9 +297,6 @@ public class KActivityHelper {
 
     /**
      * 存放Activity间跳转时传递的参数
-     *
-     * @param obj
-     * @return
      */
     public static String putStack(Object obj) {
         if (obj == null)
@@ -319,9 +314,6 @@ public class KActivityHelper {
 
     /**
      * 获取Activity间跳转时传递的参数
-     *
-     * @param key
-     * @return
      */
     public static Object getStackValue(String key) {
         Object obj = null;
@@ -333,8 +325,6 @@ public class KActivityHelper {
 
     /**
      * 移除Activity间跳转时传递的参数
-     *
-     * @param key
      */
     public static void removeStack(String key) {
         if (key == null)

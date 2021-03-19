@@ -1,18 +1,24 @@
 package com.kiven.kutils.tools;
 
 import android.annotation.SuppressLint;
+
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -27,9 +33,6 @@ import java.util.ArrayList;
 public class KView {
     /**
      * 设置单击事件，主要防止多次连续点击
-     *
-     * @param view
-     * @param listener
      */
     public static void setOnClickListener(View view, final OnClickListener listener) {
         if (view == null || listener == null) {
@@ -94,9 +97,6 @@ public class KView {
 
     /**
      * 设置View在LinearLayout中的weight
-     *
-     * @param view
-     * @param weight
      */
     public static void setWeight(View view, float weight) {
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view.getLayoutParams();
@@ -190,8 +190,29 @@ public class KView {
         data.setValue(v == null ? 0 : (v + 1));
     }
 
-    private static MutableLiveData<Integer> data = new MutableLiveData<Integer>();
+    /**
+     * 获取View的截图
+     *
+     * @param width  指定宽
+     * @param height 指定高
+     */
+    public static Bitmap getBitmap(@NonNull View v, int width, int height) {
+        if (width > 0 && height > 0) {
+            //测量使得view指定大小
+            int measuredWidth = View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY);
+            int measuredHeight = View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY);
+            v.measure(measuredWidth, measuredHeight);
+            //调用layout方法布局后，可以得到view的尺寸大小
+            v.layout(0, 0, v.getMeasuredWidth(), v.getMeasuredHeight());
+        }
+        Bitmap bmp = Bitmap.createBitmap(v.getWidth(), v.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas c = new Canvas(bmp);
+        c.drawColor(Color.WHITE);
+        v.draw(c);
+        return bmp;
+    }
 
+    private static MutableLiveData<Integer> data = new MutableLiveData<Integer>();
 
 
     /**

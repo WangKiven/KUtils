@@ -12,7 +12,7 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
-import com.kiven.kutils.activityHelper.KActivityDebugHelper
+import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.sample.R
 import kotlinx.android.synthetic.main.ah_mp_android_chart.*
@@ -21,7 +21,7 @@ import java.util.ArrayList
 /**
  * 图表库 MPAndroidChart：https://github.com/PhilJay/MPAndroidChart
  */
-class AHMPAndroidChart : KActivityDebugHelper() {
+class AHMPAndroidChart : KActivityHelper() {
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
         setContentView(R.layout.ah_mp_android_chart)

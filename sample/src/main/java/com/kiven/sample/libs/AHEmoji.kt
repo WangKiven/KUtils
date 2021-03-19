@@ -6,7 +6,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.emoji.bundled.BundledEmojiCompatConfig
 import androidx.emoji.text.EmojiCompat
-import com.kiven.kutils.activityHelper.KActivityDebugHelper
+import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.vanniktech.emoji.EmojiManager
 import com.vanniktech.emoji.EmojiTextView
@@ -21,7 +21,7 @@ import org.jetbrains.anko.textView
 /**
  * Created by oukobayashi on 2019-07-29.
  */
-class AHEmoji : KActivityDebugHelper() {
+class AHEmoji : KActivityHelper() {
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
 

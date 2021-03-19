@@ -35,6 +35,7 @@ import com.kiven.kutils.widget.UIGridView;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,6 +88,7 @@ public class AHFileManager extends KActivityHelper {
         }
         modules.add(new LFile("系统根目录", new File("/")));
         modules.add(new LFile("系统内部存储", Environment.getExternalStorageDirectory()));
+        modules.add(new LFile("相册", new File(Environment.getExternalStorageDirectory(), "Pictures")));
 
         UIGridView gridView = findViewById(R.id.uiGridView);
         gridView.setAdapter(gridViewAdapter);
@@ -245,17 +247,44 @@ public class AHFileManager extends KActivityHelper {
                                                 if (cFile.length() / 1024 > 100) {
                                                     KAlertDialogHelper.Show1BDialog(mActivity, "文件太大了，会卡！");
                                                 } else {
-                                                    ScrollView scrollView = new ScrollView(mActivity);
-                                                    TextView tv = new TextView(mActivity);
-                                                    scrollView.addView(tv);
+                                                    new AlertDialog.Builder(mActivity)
+                                                            .setTitle("选择编码")
+                                                            .setItems(new CharSequence[]{
+                                                                    "UTF-8", "US_ASCII", "ISO-8859-1", "UTF-16", "UTF-16BE", "UTF-16LE"
+                                                            }, new DialogInterface.OnClickListener() {
+                                                                @Override
+                                                                public void onClick(DialogInterface dialog, int which) {
+                                                                    Charset charset;
+                                                                    switch (which) {
+                                                                        case 1:
+                                                                            charset = Charset.forName("US_ASCII");
+                                                                            break;
+                                                                        case 2:
+                                                                            charset = Charset.forName("ISO-8859-1");
+                                                                            break;
+                                                                        case 3:
+                                                                            charset = Charset.forName("UTF-16");
+                                                                            break;
+                                                                        case 4:
+                                                                            charset = Charset.forName("UTF-16BE");
+                                                                            break;
+                                                                        case 5:
+                                                                            charset = Charset.forName("UTF-16LE");
+                                                                            break;
+                                                                        default:
+                                                                            charset = Charset.forName("UTF-8");
+                                                                    }
 
-                                                    try {
-                                                        tv.setText(KUtil.readFile(cFile.getAbsolutePath()));
-                                                    } catch (IOException e) {
-                                                        KLog.e(e);
-                                                        tv.setText("文档读取异常：" + e.getMessage());
-                                                    }
-                                                    new AlertDialog.Builder(mActivity).setView(scrollView).show();
+                                                                    ScrollView scrollView = new ScrollView(mActivity);
+                                                                    TextView tv = new TextView(mActivity);
+                                                                    scrollView.addView(tv);
+
+                                                                    tv.setText(KFile.readFile(cFile, charset));
+
+                                                                    new AlertDialog.Builder(mActivity).setView(scrollView).show();
+
+                                                                }
+                                                            }).show();
                                                 }
                                             }
                                         })
@@ -325,7 +354,7 @@ public class AHFileManager extends KActivityHelper {
     }
 
 
-    private class LFile extends File {
+    private static class LFile extends File {
         String name = "";
 
         LFile(@NonNull String name, @NonNull File file) {
@@ -342,15 +371,15 @@ public class AHFileManager extends KActivityHelper {
             super(pathname);
         }
 
-        public LFile(String parent, @NonNull String child) {
+        LFile(String parent, @NonNull String child) {
             super(parent, child);
         }
 
-        public LFile(File parent, @NonNull String child) {
+        LFile(File parent, @NonNull String child) {
             super(parent, child);
         }
 
-        public LFile(@NonNull URI uri) {
+        LFile(@NonNull URI uri) {
             super(uri);
         }
     }

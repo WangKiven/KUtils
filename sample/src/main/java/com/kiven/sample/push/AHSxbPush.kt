@@ -13,7 +13,7 @@ import android.widget.TextView
 import com.google.android.flexbox.AlignContent
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
-import com.kiven.kutils.activityHelper.KActivityDebugHelper
+import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KGranting
@@ -43,7 +43,7 @@ import javax.net.ssl.HostnameVerifier
  *
  * vivo推送：https://dev.vivo.com.cn/documentCenter/doc/233
  */
-class AHSxbPush : KActivityDebugHelper() {
+class AHSxbPush : KActivityHelper() {
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
         val flexboxLayout = FlexboxLayout(activity)

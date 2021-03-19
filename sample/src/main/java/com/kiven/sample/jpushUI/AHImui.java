@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.widget.ImageView;
 
-import com.kiven.kutils.activityHelper.KActivityDebugHelper;
+import com.kiven.kutils.activityHelper.KActivityHelper;
 import com.kiven.kutils.activityHelper.KHelperActivity;
 import com.kiven.kutils.tools.KUtil;
 import com.kiven.sample.R;
@@ -30,7 +30,7 @@ import cn.jiguang.imui.commons.models.IUser;
 import cn.jiguang.imui.messages.MessageList;
 import cn.jiguang.imui.messages.MsgListAdapter;
 
-public class AHImui extends KActivityDebugHelper {
+public class AHImui extends KActivityHelper {
 
     private String toAccount;
 

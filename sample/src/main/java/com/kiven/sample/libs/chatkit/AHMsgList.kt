@@ -3,7 +3,7 @@ package com.kiven.sample.libs.chatkit
 import android.os.Bundle
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
-import com.kiven.kutils.activityHelper.KActivityDebugHelper
+import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.sample.R
 import com.kiven.sample.util.Const
@@ -15,7 +15,7 @@ import java.util.*
 /**
  * Created by oukobayashi on 2019-07-25.
  */
-class AHMsgList : KActivityDebugHelper() {
+class AHMsgList : KActivityHelper() {
     val myId = "ddddddd"
 
     val adapter by lazy {

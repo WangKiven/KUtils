@@ -15,7 +15,7 @@ import android.widget.TextView
 import com.google.android.flexbox.AlignContent
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
-import com.kiven.kutils.activityHelper.KActivityDebugHelper
+import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.tools.KGranting
 import com.kiven.sample.util.showSnack
@@ -34,7 +34,7 @@ import kotlin.coroutines.suspendCoroutine
  * 参考demo：https://gitee.com/WangKiven/storage-samples/tree/master/MediaStore
  * 参考文档：https://www.jianshu.com/p/498c9d06c193
  */
-class AHSysgemData : KActivityDebugHelper() {
+class AHSysgemData : KActivityHelper() {
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
         val flexboxLayout = FlexboxLayout(activity)

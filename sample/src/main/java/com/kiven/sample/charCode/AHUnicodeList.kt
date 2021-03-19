@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayout
 import com.google.android.flexbox.JustifyContent
-import com.kiven.kutils.activityHelper.KActivityDebugHelper
+import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.tools.KString
 import com.kiven.kutils.tools.KUtil
@@ -31,7 +31,7 @@ import java.nio.charset.Charset
 /**
  * Created by oukobayashi on 2019-10-24.
  */
-class AHUnicodeList : KActivityDebugHelper() {
+class AHUnicodeList : KActivityHelper() {
 
     var showSel: TextView? = null
 

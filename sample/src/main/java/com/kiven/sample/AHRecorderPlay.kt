@@ -20,7 +20,7 @@ import android.widget.TextView
 import com.google.android.flexbox.AlignContent
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
-import com.kiven.kutils.activityHelper.KActivityDebugHelper
+import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KGranting
@@ -28,7 +28,7 @@ import com.kiven.kutils.tools.KToast
 import java.io.File
 import java.util.*
 
-class AHRecorderPlay : KActivityDebugHelper() {
+class AHRecorderPlay : KActivityHelper() {
     var tvFb:TextView? = null
 
     @SuppressLint("ResourceType")

@@ -7,7 +7,7 @@ import android.os.Handler
 import android.os.Process
 import android.view.View
 import android.widget.TextView
-import com.kiven.kutils.activityHelper.KActivityDebugHelper
+import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import org.jetbrains.anko.activityManager
@@ -17,7 +17,7 @@ import java.io.RandomAccessFile
 /**
  * Created by wangk on 2018/3/9.
  */
-class AHCPUMemory : KActivityDebugHelper() {
+class AHCPUMemory : KActivityHelper() {
 
     private var isNext = true
 

@@ -9,7 +9,7 @@ import android.speech.RecognitionListener
 import android.speech.RecognitionService
 import android.speech.RecognizerIntent
 import com.iflytek.cloud.*
-import com.kiven.kutils.activityHelper.KActivityDebugHelper
+import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KGranting
@@ -25,7 +25,7 @@ import kotlinx.android.synthetic.main.ah_xunfei_test.*
  * 集成文档：https://www.xfyun.cn/doc/
  * api: http://mscdoc.xfyun.cn/android/api/
  */
-class AHXunfeiTest : KActivityDebugHelper() {
+class AHXunfeiTest : KActivityHelper() {
     val text = """
         北国风光，千里冰封，万里雪飘。
         望长城内外，惟余莽莽；大河上下，顿失滔滔。

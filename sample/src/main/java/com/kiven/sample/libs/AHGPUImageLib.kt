@@ -7,7 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.Gravity
-import com.kiven.kutils.activityHelper.KActivityDebugHelper
+import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.widget.RulingSeekbar
@@ -25,7 +25,7 @@ import java.lang.reflect.Modifier
 /**
  * Created by oukobayashi on 2020/7/16.
  */
-class AHGPUImageLib : KActivityDebugHelper() {
+class AHGPUImageLib : KActivityHelper() {
     private var imageUri: Uri? = null
         set(value) {
             field = value

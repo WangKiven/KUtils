@@ -13,7 +13,7 @@ import androidx.core.view.marginBottom
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
 import com.google.android.material.chip.ChipGroup
-import com.kiven.kutils.activityHelper.KActivityDebugHelper
+import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.tools.KUtil
 import com.kiven.sample.R
@@ -30,7 +30,7 @@ import org.jetbrains.anko.support.v4.nestedScrollView
  *
  * 助你快速搭配 Material Design 配色方案的10款Web工具: https://blog.csdn.net/dsc114/article/details/52120080
  */
-class AHThemeDemo : KActivityDebugHelper() {
+class AHThemeDemo : KActivityHelper() {
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
         initUI()

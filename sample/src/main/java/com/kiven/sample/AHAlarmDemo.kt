@@ -15,7 +15,7 @@ import android.widget.TextView
 import com.google.android.flexbox.AlignContent
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
-import com.kiven.kutils.activityHelper.KActivityDebugHelper
+import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.sample.dock.ActivityDock
 import com.kiven.sample.util.showDialog
@@ -27,7 +27,7 @@ import java.util.*
  *
  * https://blog.csdn.net/danwuxie/article/details/88605418
  */
-class AHAlarmDemo : KActivityDebugHelper() {
+class AHAlarmDemo : KActivityHelper() {
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
         val flexboxLayout = FlexboxLayout(activity)

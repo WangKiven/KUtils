@@ -25,7 +25,7 @@ import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
 import com.google.android.material.snackbar.Snackbar
 import com.jaredrummler.android.processes.AndroidProcesses
-import com.kiven.kutils.activityHelper.KActivityDebugHelper
+import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KAlertDialogHelper
@@ -63,7 +63,7 @@ import kotlin.coroutines.suspendCoroutine
 /**
  * Created by wangk on 2018/3/28.
  */
-class AHSmallAction : KActivityDebugHelper() {
+class AHSmallAction : KActivityHelper() {
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
         val flexboxLayout = FlexboxLayout(activity)

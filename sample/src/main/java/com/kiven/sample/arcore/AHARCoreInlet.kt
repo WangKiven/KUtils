@@ -13,13 +13,13 @@ import com.google.android.flexbox.FlexboxLayout
 import com.google.ar.core.ArCoreApk
 import com.google.ar.core.Session
 import com.google.ar.core.exceptions.UnavailableUserDeclinedInstallationException
-import com.kiven.kutils.activityHelper.KActivityDebugHelper
+import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.tools.KGranting
 import com.kiven.sample.util.snackbar
 import org.jetbrains.anko.support.v4.nestedScrollView
 
-class AHARCoreInlet : KActivityDebugHelper() {
+class AHARCoreInlet : KActivityHelper() {
     var supportARCoreTextView: TextView? = null
     var isSupport = -1
 

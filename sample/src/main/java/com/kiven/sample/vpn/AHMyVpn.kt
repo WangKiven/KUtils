@@ -11,7 +11,7 @@ import android.widget.TextView
 import com.google.android.flexbox.AlignContent
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
-import com.kiven.kutils.activityHelper.KActivityDebugHelper
+import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import org.jetbrains.anko.support.v4.nestedScrollView
 
@@ -19,7 +19,7 @@ import org.jetbrains.anko.support.v4.nestedScrollView
 /**
  * Created by oukobayashi on 2020/6/22.
  */
-class AHMyVpn:KActivityDebugHelper() {
+class AHMyVpn:KActivityHelper() {
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
         val flexboxLayout = FlexboxLayout(activity)

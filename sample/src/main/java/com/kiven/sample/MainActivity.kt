@@ -83,12 +83,27 @@ class MainActivity : KActivity() {
                         KLog.i("" + KFile.createFile("tmp", ".img", getDir(Environment.DIRECTORY_PICTURES, Context.MODE_PRIVATE))!!.absolutePath)
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                             KLog.i("" + KFile.createFile("tmp", ".img", getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)!!)!!.absolutePath)
+                            KLog.i("" + KFile.createFile("tmp", ".img", getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!)!!.absolutePath)
                         }
                         KLog.i("" + KFile.createFile("tmp", ".img", getDatabasePath("db"))!!.absolutePath)
                         KLog.i("" + KFile.createFile("tmp", ".img", cacheDir)!!.absolutePath)
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                             KLog.i("" + KFile.createFile("tmp", ".img", dataDir)!!.absolutePath)
                         }
+
+
+                        KLog.i("codeCacheDir = " + codeCacheDir.absolutePath)
+                        KLog.i("obbDir = " + obbDir.absolutePath)
+                        KLog.i("--------------------- obbDirs -----------------------")
+                        obbDirs?.forEach {
+                            KLog.i(it.absolutePath)
+                        }
+                        KLog.i("--------------------- obbDirs -----------------------")
+                        KLog.i("--------------------- fileList -----------------------")
+                        fileList()?.forEach {
+                            KLog.i(it)
+                        }
+                        KLog.i("--------------------- fileList -----------------------")
                     }
                 }
             }

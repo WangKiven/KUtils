@@ -7,10 +7,12 @@ import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +39,8 @@ import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 public class AHFileManager extends KActivityHelper {
@@ -66,7 +70,7 @@ public class AHFileManager extends KActivityHelper {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             childAdapter.notifyDataSetChanged();
-        }else{
+        } else {
             KGranting.requestPermissions(mActivity, 345, Manifest.permission.WRITE_EXTERNAL_STORAGE, "存储空间", new KGranting.GrantingCallBack() {
                 @Override
                 public void onGrantSuccess(boolean isSuccess) {
@@ -84,9 +88,20 @@ public class AHFileManager extends KActivityHelper {
         if (cf != null) {
             modules.add(new LFile("应用外部", cf));
         }
+        modules.add(new LFile("/system", Environment.getRootDirectory()));
+        modules.add(new LFile("/data", Environment.getDataDirectory()));
         modules.add(new LFile("系统根目录", new File("/")));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            modules.add(new LFile("/storage", Environment.getStorageDirectory()));
+        }
         modules.add(new LFile("系统内部存储", Environment.getExternalStorageDirectory()));
         modules.add(new LFile("相册", new File(Environment.getExternalStorageDirectory(), "Pictures")));
+
+        modules.add(new LFile("sourceDir", new File(mActivity.getApplicationInfo().sourceDir)));
+        modules.add(new LFile("publicSourceDir", new File(mActivity.getApplicationInfo().publicSourceDir)));
+        modules.add(new LFile("nativeLibraryDir", new File(mActivity.getApplicationInfo().nativeLibraryDir)));
+        modules.add(new LFile("dataDir", new File(mActivity.getApplicationInfo().dataDir)));
+
 
         UIGridView gridView = findViewById(R.id.uiGridView);
         gridView.setAdapter(gridViewAdapter);
@@ -114,7 +129,24 @@ public class AHFileManager extends KActivityHelper {
     private void onSelectedDir() {
         if (selDir.size() > 0) {
             LFile file = selDir.get(selDir.size() - 1);
-            childAdapter.refreshData(file.listFiles());
+
+            File[] childs = file.listFiles();
+            if (childs != null && childs.length > 1)
+                Arrays.sort(childs, new Comparator<File>() {
+                    @Override
+                    public int compare(File o1, File o2) {
+                        boolean dir1 = o1.isDirectory();
+                        boolean dir2 = o2.isDirectory();
+                        if (dir1 == dir2) {
+                            return o1.compareTo(o2);
+                        } else {
+                            if (dir1) return -1;
+                        }
+                        return 0;
+                    }
+                });
+
+            childAdapter.refreshData(childs);
         } else {
             childAdapter.refreshData(modules);
         }

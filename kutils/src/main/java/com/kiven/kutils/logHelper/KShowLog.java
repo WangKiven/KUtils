@@ -59,11 +59,6 @@ public class KShowLog extends KActivityHelper implements AdapterView.OnItemClick
         activity.setTheme(R.style.Theme_AppCompat_NoActionBar);
         setContentView(R.layout.k_show_log);
 
-        if (KUtil.getSharedPreferencesIntValue("kutil_log_res_preferences", 0) == 1) {
-            new ACheckRes().startActivity(mActivity);
-            finish();
-            return;
-        }
         showSearch = KUtil.getSharedPreferencesBooleanValue("kutil_log_show_search", true);
 
         initBackToolbar(R.id.toolbar);
@@ -139,7 +134,6 @@ public class KShowLog extends KActivityHelper implements AdapterView.OnItemClick
         super.onOptionsItemSelected(item);
         int i = item.getItemId();
         if (i == R.id.res) {
-            KUtil.putSharedPreferencesIntValue("kutil_log_res_preferences", 1);
             new ACheckRes().startActivity(mActivity);
             finish();
         } else if (i == Menu.FIRST + 1000) {

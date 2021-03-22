@@ -1,5 +1,6 @@
 package com.kiven.pushlibrary
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -9,6 +10,7 @@ import com.kiven.kutils.tools.KContext
 import com.sxb.kutils_ktx.util.KWeb
 import org.json.JSONObject
 
+@SuppressLint("StaticFieldLeak")
 internal object Web {
     var context: Context? = null
     var shouldWebSocket: Boolean = false

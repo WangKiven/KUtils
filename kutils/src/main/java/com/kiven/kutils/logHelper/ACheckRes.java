@@ -74,7 +74,6 @@ public class ACheckRes extends KActivityHelper {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case Menu.FIRST + 1:
-                KUtil.putSharedPreferencesIntValue("kutil_log_res_preferences", 0);
                 new KShowLog().startActivity(mActivity);
                 finish();
                 break;

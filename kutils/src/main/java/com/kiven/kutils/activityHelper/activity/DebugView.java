@@ -22,6 +22,8 @@ import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.kiven.kutils.R;
+import com.kiven.kutils.logHelper.ACheckRes;
+import com.kiven.kutils.logHelper.AHFileManager;
 import com.kiven.kutils.logHelper.KShowLog;
 import com.kiven.kutils.tools.KUtil;
 
@@ -54,6 +56,18 @@ public class DebugView {
             @Override
             public void onClick(Activity activity, View view, DebugEntity entity) {
                 new KShowLog().startActivity(activity);
+            }
+        });
+        addAction(R.mipmap.k_ic_source, new DebugViewListener() {
+            @Override
+            public void onClick(Activity activity, View view, DebugEntity entity) {
+                new ACheckRes().startActivity(activity);
+            }
+        });
+        addAction(R.mipmap.k_ic_dir, new DebugViewListener() {
+            @Override
+            public void onClick(Activity activity, View view, DebugEntity entity) {
+                new AHFileManager().startActivity(activity);
             }
         });
         addAction(R.mipmap.k_ic_profiler_open, new DebugViewListener() {

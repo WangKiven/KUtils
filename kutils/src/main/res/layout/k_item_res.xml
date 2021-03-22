@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
@@ -26,14 +27,15 @@
             android:visibility="gone"
             android:layout_width="15dp"
             android:layout_height="15dp"
-            android:tint="@android:color/holo_red_light"
-            android:src="@android:drawable/stat_notify_error"/>
+            android:src="@android:drawable/stat_notify_error"
+            app:tint="#ffff4444" />
     </FrameLayout>
 
     <TextView
         android:id="@+id/tv_num"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:maxWidth="150dp"
         android:padding="10dp"/>
 
 </LinearLayout>

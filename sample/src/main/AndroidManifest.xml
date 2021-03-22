@@ -63,6 +63,9 @@
     <!--<uses-permission android:name="android.permission.CAMERA" />-->
     <uses-feature android:name="android.hardware.camera" />
 
+    <!-- 查看所有App信息 https://developer.android.google.cn/training/basics/intents/package-visibility -->
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+
     <application
         android:name=".AppContext"
         android:allowBackup="true"

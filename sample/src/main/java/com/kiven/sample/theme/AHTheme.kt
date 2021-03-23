@@ -51,7 +51,7 @@ class AHTheme : KActivityHelper() {
                     .setView(textView).create()
             dialog.show()
         })
-        addBtn("", View.OnClickListener {  })
+        addBtn("设置主题", View.OnClickListener { AHThemeDemo().startActivity(mActivity) })
         addBtn("", View.OnClickListener {  })
         addBtn("", View.OnClickListener {  })
         addBtn("", View.OnClickListener {  })

@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -11,7 +11,7 @@
         <item name="android:colorBackgroundCacheHint">@null</item>
         <item name="android:windowShowWallpaper">true</item>
 
-        <item name="android:textColorPrimary">#aaaaaa</item>
+        <item name="android:textColorPrimary">#aaaa00</item>
         <item name="android:textColorSecondary">#512B77</item>
         <item name="android:textColorTertiary">#009688</item>
 
@@ -41,16 +41,20 @@
         <item name="android:windowExitAnimation">@android:anim/fade_out</item>
     </style>
 
-    <style name="ThemeDemo" parent="Theme.MaterialComponents.DayNight">
+    <style name="ThemeDemo" parent="Theme.AppCompat.DayNight">
         <item name="colorPrimary">#dc96f3</item>
         <item name="colorPrimaryDark">#6b1089</item>
         <item name="colorAccent">#b31ae5</item>
+
+        <item name="android:textColorPrimary">#2196F3</item>
     </style>
 
-    <style name="ThemeDemo2" parent="Theme.MaterialComponents.DayNight">
+    <style name="ThemeDemo2" parent="Theme.AppCompat.DayNight">
         <item name="colorPrimary">@color/demo_colorPrimary</item>
         <item name="colorPrimaryDark">@color/demo_colorPrimaryDark</item>
         <item name="colorAccent">@color/demo_colorAccent</item>
+
+        <item name="android:textColorPrimary">@color/demo_textColorPrimary</item>
     </style>
 
     <style name="Dialog">

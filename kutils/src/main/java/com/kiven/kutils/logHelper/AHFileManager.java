@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.kiven.kutils.R;
 import com.kiven.kutils.activityHelper.KActivityHelper;
 import com.kiven.kutils.activityHelper.KHelperActivity;
@@ -63,7 +64,7 @@ public class AHFileManager extends KActivityHelper {
     @Override
     public void onCreate(@NonNull KHelperActivity activity, Bundle savedInstanceState) {
         super.onCreate(activity, savedInstanceState);
-        activity.setTheme(R.style.Theme_AppCompat_NoActionBar);
+        activity.setTheme(R.style.KTheme);
 
         setContentView(R.layout.k_ah_file_manager);
         initBackToolbar(R.id.toolbar);
@@ -256,7 +257,7 @@ public class AHFileManager extends KActivityHelper {
                             if (KFile.checkFileType(cFile) != KFile.FileType.UNKNOWN) {
                                 showImage();
                             } else
-                                new AlertDialog.Builder(mActivity)
+                                new MaterialAlertDialogBuilder(mActivity)
                                         .setTitle("选择打开方式").setMessage("文件大小" + cFile.length() / 1024.0 + "k")
                                         .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                                             @Override

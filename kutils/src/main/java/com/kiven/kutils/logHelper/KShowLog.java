@@ -8,11 +8,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.MenuItemCompat;
-import androidx.appcompat.app.AlertDialog;
-
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -21,12 +16,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.view.MenuItemCompat;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -56,7 +53,7 @@ public class KShowLog extends KActivityHelper implements AdapterView.OnItemClick
     @Override
     public void onCreate(KHelperActivity activity, Bundle savedInstanceState) {
         super.onCreate(activity, savedInstanceState);
-        activity.setTheme(R.style.Theme_AppCompat_NoActionBar);
+        activity.setTheme(R.style.KTheme);
         setContentView(R.layout.k_show_log);
 
         showSearch = KUtil.getSharedPreferencesBooleanValue("kutil_log_show_search", true);
@@ -170,7 +167,7 @@ public class KShowLog extends KActivityHelper implements AdapterView.OnItemClick
             slog += ("\n" + pp);
         }
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(mActivity);
         builder.setMessage(KString.fromHtml(slog));
         builder.setPositiveButton("复制", new DialogInterface.OnClickListener() {
             @Override

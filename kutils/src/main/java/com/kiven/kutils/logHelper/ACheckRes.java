@@ -14,10 +14,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.AppCompatSpinner;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,9 +23,14 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.AppCompatSpinner;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.kiven.kutils.R;
 import com.kiven.kutils.activityHelper.KActivityHelper;
 import com.kiven.kutils.activityHelper.KHelperActivity;
@@ -101,7 +102,7 @@ public class ACheckRes extends KActivityHelper {
     @Override
     public void onCreate(KHelperActivity activity, Bundle savedInstanceState) {
         super.onCreate(activity, savedInstanceState);
-        activity.setTheme(R.style.Theme_AppCompat_NoActionBar);
+        activity.setTheme(R.style.KTheme);
         setContentView(R.layout.k_a_check_res);
 
         initBackToolbar(R.id.toolbar);
@@ -246,7 +247,7 @@ public class ACheckRes extends KActivityHelper {
                         childHolder.setDrawable(drawable);
                         childHolder.tv_num.setText(field.getName() + "\n" + drawable.getClass().getName());
 
-                        new AlertDialog.Builder(mActivity).setView(view).show();
+                        new MaterialAlertDialogBuilder(mActivity).setView(view).show();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

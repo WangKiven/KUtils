@@ -30,7 +30,7 @@ public class KCPUMem extends KActivityHelper {
     @Override
     public void onCreate(KHelperActivity activity, Bundle savedInstanceState) {
         super.onCreate(activity, savedInstanceState);
-        activity.setTheme(R.style.Theme_AppCompat_NoActionBar);
+        activity.setTheme(R.style.KTheme);
 
         LinearLayout ui = new LinearLayout(activity);
         ui.setOrientation(LinearLayout.VERTICAL);

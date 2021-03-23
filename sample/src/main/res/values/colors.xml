@@ -13,4 +13,5 @@
     <color name="demo_colorPrimary">#607d8b</color>
     <color name="demo_colorPrimaryDark">#455a64</color>
     <color name="demo_colorAccent">#607d8b</color>
+    <color name="demo_textColorPrimary">#CDDC39</color>
 </resources>

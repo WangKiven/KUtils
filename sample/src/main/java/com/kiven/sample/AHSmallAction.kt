@@ -32,7 +32,7 @@ import com.kiven.kutils.tools.KAlertDialogHelper
 import com.kiven.kutils.tools.KGranting
 import com.kiven.kutils.tools.KNetwork
 import com.kiven.kutils.tools.KString
-import com.kiven.sample.actions.AHThemeDemo
+import com.kiven.sample.theme.AHThemeDemo
 import com.kiven.sample.actions.BiometricDemo
 import com.kiven.sample.anim.AHAnim
 import com.kiven.sample.autoService.AHAutoService

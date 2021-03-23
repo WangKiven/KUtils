@@ -1,9 +1,21 @@
 <resources>
+    <style name="KTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">#607d8b</item>
+        <item name="colorPrimaryDark">#455a64</item>
+        <item name="colorAccent">#E91E63</item>
 
-    <!--<style name="KAlertDialog" parent="AlertDialog.AppCompat.Light">
-        <item name="android:windowBackground">@null</item>
-        <item name="android:windowIsTranslucent">true</item>
-    </style>-->
+<!--        <item name="title">#4CAF50</item>-->
+
+<!--        <item name="android:windowBackground">@color/md_white_1000</item>-->
+        <!--api 21 可用 底部导航栏颜色-->
+<!--        <item name="android:navigationBarColor">#4CAF50</item>-->
+        <!--api 21 可用 Appbar背景色-->
+<!--        <item name="android:colorPrimary">#4CAF50</item>-->
+        <!--ToolBar上的Title颜色-->
+        <item name="android:textColorPrimary">#4CAF50</item>
+        <!--api 21 可用 各个控制控件的默认颜色-->
+<!--        <item name="android:colorControlNormal">#4CAF50</item>-->
+    </style>
 
     <style name="KAlertDialog" parent="Theme.AppCompat.Light.Dialog">
         

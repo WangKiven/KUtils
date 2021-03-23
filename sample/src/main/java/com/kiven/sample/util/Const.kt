@@ -1,5 +1,7 @@
 package com.kiven.sample.util
 
+import androidx.appcompat.app.AppCompatDelegate
+import com.kiven.kutils.tools.KUtil
 import java.io.File
 
 object Const {
@@ -19,4 +21,12 @@ object Const {
 
     fun randomImage() = IMAGES[(Math.random() * 1000).toInt() % IMAGES.size]
 //    fun randomImage2() = IMAGES[(Math.random() * 1000).toInt() % (IMAGES.size - 4) + 4]
+
+    var nightMode: Int
+        set(value) {
+            KUtil.putSharedPreferencesIntValue("AHThemeDemo.DefaultNightMode", value)
+        }
+        get() {
+            return KUtil.getSharedPreferencesIntValue("AHThemeDemo.DefaultNightMode", AppCompatDelegate.getDefaultNightMode())
+        }
 }

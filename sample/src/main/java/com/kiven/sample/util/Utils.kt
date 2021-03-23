@@ -18,7 +18,6 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AlertDialog
 import com.flyco.dialog.widget.ActionSheetDialog
@@ -107,6 +106,10 @@ fun Activity.showListDialog(list: Array<String>, autoClose: Boolean, onClickItem
             dialog.dismiss()
     }
     dialog.show()
+
+    /*AlertDialog.Builder(this).setItems(list) { _, position ->
+        onClickItem(position, list[position])
+    }.setCancelable(autoClose).show()*/
 }
 
 fun Activity.showListDialog(list: Array<String>, onClickItem: (Int, String) -> Unit) {

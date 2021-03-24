@@ -3,10 +3,13 @@ package com.kiven.kutils.activityHelper.activity;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import android.os.Debug;
 import android.util.Log;
@@ -68,6 +71,29 @@ public class DebugView {
             @Override
             public void onClick(Activity activity, View view, DebugEntity entity) {
                 new AHFileManager().startActivity(activity);
+            }
+        });
+        addAction(R.mipmap.k_ic_night, new DebugViewListener() {
+            @Override
+            public void onClick(Activity activity, View view, DebugEntity entity) {
+                new AlertDialog.Builder(activity).setItems(new String[]{"跟随系统", "根据节电模式", "白天", "黑夜", "不指定"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        int nm = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
+                        switch (which) {
+                            case 1: nm = AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY;// 节能模式时是黑暗主题，否则是白亮主题。
+                                break;
+                            case 2: nm = AppCompatDelegate.MODE_NIGHT_NO;
+                            break;
+                            case 3: nm = AppCompatDelegate.MODE_NIGHT_YES;
+                                break;
+                            case 4: nm = AppCompatDelegate.MODE_NIGHT_UNSPECIFIED;// 设置为全局为不指定，应该会使用系统的夜间模式。
+                                break;
+                        }
+
+                        AppCompatDelegate.setDefaultNightMode(nm); // 设置全局的夜间模式
+                    }
+                }).setTitle("设置夜间模式").show();
             }
         });
         addAction(R.mipmap.k_ic_profiler_open, new DebugViewListener() {

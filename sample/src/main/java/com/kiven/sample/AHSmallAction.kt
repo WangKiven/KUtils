@@ -32,7 +32,6 @@ import com.kiven.kutils.tools.KAlertDialogHelper
 import com.kiven.kutils.tools.KGranting
 import com.kiven.kutils.tools.KNetwork
 import com.kiven.kutils.tools.KString
-import com.kiven.sample.theme.AHThemeDemo
 import com.kiven.sample.actions.BiometricDemo
 import com.kiven.sample.anim.AHAnim
 import com.kiven.sample.autoService.AHAutoService
@@ -46,7 +45,10 @@ import com.kiven.sample.noti.AHNotiTest
 import com.kiven.sample.service.LiveWallpaper2
 import com.kiven.sample.spss.AHSpssTemple
 import com.kiven.sample.systemdata.AHSysgemData
-import com.kiven.sample.util.*
+import com.kiven.sample.util.EncryptUtils
+import com.kiven.sample.util.WallpaperUtil
+import com.kiven.sample.util.callPhone
+import com.kiven.sample.util.snackbar
 import com.xiaomi.mimc.MIMCGroupMessage
 import com.xiaomi.mimc.MIMCMessage
 import com.xiaomi.mimc.MIMCServerAck
@@ -524,7 +526,6 @@ class AHSmallAction : KActivityHelper() {
             // <uses-permission android:name="android.permission.USE_BIOMETRIC"/>
             BiometricDemo(mActivity).test()
         })
-        addView("Theme", View.OnClickListener { AHThemeDemo().startActivity(mActivity) })
         addView("字符编码测试", View.OnClickListener { AHUnicodeList().startActivity(mActivity) })
         addView("无障碍", View.OnClickListener { AHAutoService().startActivity(mActivity) })
         addView("闹钟demo", View.OnClickListener { AHAlarmDemo().startActivity(mActivity) })

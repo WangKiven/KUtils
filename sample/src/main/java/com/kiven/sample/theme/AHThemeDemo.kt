@@ -1,15 +1,14 @@
 package com.kiven.sample.theme
 
-import android.content.Intent
-import android.graphics.Color
-import android.net.Uri
 import android.os.Bundle
-import android.provider.Settings
 import android.text.util.Linkify
 import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.*
+import android.widget.LinearLayout
+import android.widget.ProgressBar
+import android.widget.SeekBar
+import android.widget.Switch
 import androidx.annotation.StyleRes
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
@@ -18,13 +17,10 @@ import com.google.android.material.chip.ChipGroup
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
-import com.kiven.kutils.logHelper.AHFileManager
 import com.kiven.kutils.logHelper.KLog
-import com.kiven.kutils.logHelper.KShowLog
 import com.kiven.kutils.tools.KUtil
 import com.kiven.sample.R
 import com.kiven.sample.util.Const
-import com.kiven.sample.util.showListDialog
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.nestedScrollView
 
@@ -125,9 +121,9 @@ class AHThemeDemo : KActivityHelper() {
                 button {
                     text = "选择主题"
                     setOnClickListener {
-                        AlertDialog.Builder(mActivity).setItems(arrayOf("系统主题", "自定义主题 双style", "自定义主题 双color")) { _, position ->
+                        AlertDialog.Builder(mActivity).setItems(arrayOf("全局主题", "自定义主题 双style", "自定义主题 双color")) { _, position ->
                             themeId = when(position){
-                                0 -> R.style.Theme_MaterialComponents_DayNight
+                                0 -> R.style.AppTheme
                                 1 -> R.style.ThemeDemo
                                 else -> R.style.ThemeDemo2
                             }

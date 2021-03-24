@@ -1,16 +1,20 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
+        <!--状态栏颜色-->
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <!--控制各个控件被选中时的颜色-->
         <item name="colorAccent">@color/colorAccent</item>
 
+        <!--页面背景色-->
         <item name="android:windowBackground">@drawable/windowBackground</item>
         <item name="android:colorBackgroundCacheHint">@null</item>
         <item name="android:windowShowWallpaper">true</item>
 
+        <!--ToolBar上的Title颜色-->
         <item name="android:textColorPrimary">#aaaa00</item>
         <item name="android:textColorSecondary">#512B77</item>
         <item name="android:textColorTertiary">#009688</item>
@@ -23,6 +27,11 @@
 
         <!-- Button 取消强制大写 -->
         <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
     <style name="Dialog.Nobackground" parent="AlertDialog.AppCompat.Light">

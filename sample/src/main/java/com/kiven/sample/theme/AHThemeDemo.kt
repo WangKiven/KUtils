@@ -28,6 +28,9 @@ import org.jetbrains.anko.support.v4.nestedScrollView
 /**
  * Created by oukobayashi on 2019-09-17.
  *
+ * material设计规则官网：https://material.io/
+ * 不期望界面开启时跟换日夜模式，在manifest中对应activity设置android:configChanges="uiMode"：https://developer.android.com/guide/topics/ui/look-and-feel/darktheme#%E9%85%8D%E7%BD%AE%E5%8F%98%E6%9B%B4
+ *
  * Theme 属性详解: https://www.jianshu.com/p/06a3bbb7ce79
  *
  * 日夜主题切换(google推荐): https://www.jianshu.com/p/27f1aad049f7

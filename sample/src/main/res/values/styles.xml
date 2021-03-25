@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight">
@@ -66,6 +66,14 @@
         <item name="android:textColorPrimary">@color/demo_textColorPrimary</item>
     </style>
 
+    <style name="ThemeDemo3" parent="Theme.MaterialComponents.DayNight">
+        <item name="android:statusBarColor" tools:ignore="NewApi">?attr/colorSurface</item>
+        <item name="android:windowLightStatusBar" tools:ignore="NewApi">true</item>
+        <item name="android:navigationBarColor" tools:ignore="NewApi">?android:attr/colorBackground</item>
+        <item name="android:windowLightNavigationBar" tools:ignore="NewApi">true</item>
+        <item name="android:navigationBarDividerColor" tools:ignore="NewApi">?attr/colorControlHighlight</item>
+    </style>
+
     <style name="Dialog">
         <item name="android:windowBackground">@android:color/transparent</item><!-- 控制背景 -->
         <!--<item name="android:windowFrame">@null</item>
@@ -81,6 +89,7 @@
     </style>
 
     <style name="Dialog.Test1" parent="Dialog">
+        <item name="android:windowTranslucentStatus">true</item>
     </style>
 
     <style name="item">

@@ -5,6 +5,7 @@ import android.text.util.Linkify
 import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.SeekBar
@@ -58,7 +59,6 @@ class AHThemeDemo : KActivityHelper() {
         mActivity.apply {
             if (nightMode != delegate.localNightMode) {
                 delegate.localNightMode = nightMode // 设置本界面的夜间模式
-//                AppCompatDelegate.setDefaultNightMode(nightMode) // 设置全局的夜间模式
             }
             try {
                 setTheme(themeId)
@@ -66,124 +66,64 @@ class AHThemeDemo : KActivityHelper() {
                 KLog.e(e)
             }
 
-            nestedScrollView().linearLayout {
-                gravity = Gravity.CENTER
-                orientation = LinearLayout.VERTICAL
+            setContentView(R.layout.ah_theme_demo)
 
-                textView {
-                    text = "设置夜间主题模式"
-                }
-
-                radioGroup {
-                    radioButton {
-                        id = R.id.rb_0
-                        text = "跟随系统"
-                    }
-                    radioButton {
-                        id = R.id.rb_1
-                        text = "根据节电模式"
-                    }
-                    radioButton {
-                        id = R.id.rb_2
-                        text = "白天"
-                    }
-                    radioButton {
-                        id = R.id.rb_3
-                        text = "黑夜"
-                    }
-                    radioButton {
-                        id = R.id.rb_4
-                        text = "不指定（应该是会使用全局夜间）"// 如果全局夜间也是MODE_NIGHT_UNSPECIFIED，就会使用系统的夜间模式
-                    }
-
-                    check(when (nightMode) {
-                        AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY -> R.id.rb_1
-                        AppCompatDelegate.MODE_NIGHT_NO -> R.id.rb_2
-                        AppCompatDelegate.MODE_NIGHT_YES -> R.id.rb_3
-                        AppCompatDelegate.MODE_NIGHT_UNSPECIFIED -> R.id.rb_4
-                        else -> R.id.rb_0
-                    })
-
-                    setOnCheckedChangeListener { _, rb_id ->
-                        nightMode = when (rb_id) {
-                            R.id.rb_1 -> AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
-                            R.id.rb_2 -> AppCompatDelegate.MODE_NIGHT_NO
-                            R.id.rb_3 -> AppCompatDelegate.MODE_NIGHT_YES
-                            R.id.rb_4 -> AppCompatDelegate.MODE_NIGHT_UNSPECIFIED
-                            else -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-                        }
-
-                        delegate.localNightMode = nightMode // 设置本界面的夜间模式
-//                        AppCompatDelegate.setDefaultNightMode(nightMode) // 设置全局的夜间模式
-                    }
-                }
-
-                button {
-                    text = "选择主题"
-                    setOnClickListener {
-                        AlertDialog.Builder(mActivity).setItems(arrayOf("全局主题", "自定义主题 双style", "自定义主题 双color")) { _, position ->
-                            themeId = when(position){
-                                0 -> R.style.AppTheme
-                                1 -> R.style.ThemeDemo
-                                else -> R.style.ThemeDemo2
-                            }
-                            recreate()
-                        }.show()
-                    }
-                }
-
-                button {
-                    text = "AlertDialog"
-                    setOnClickListener {
-                        val builder = MaterialAlertDialogBuilder(mActivity)
-                        builder.setMessage("这是 AlertDialog 的样式。")
-                        builder.setPositiveButton("操作1") { _, _ ->
-                        }
-                        builder.setNegativeButton("操作2") { _, _ ->
-                        }
-                        builder.setNeutralButton("操作3") { _, _ ->
-
-                        }
-                        builder.create().show()
-                    }
-                }
-
-                textView {
-                    text = when (themeId) {
-                        R.style.Theme_MaterialComponents_DayNight -> "当前主题是 系统主题"
-                        R.style.ThemeDemo -> "当前主题是 自定义主题 双style"
-                        else -> "当前主题是 自定义主题 双color"
-                    }
-                }
-
-                textView {
-                    autoLinkMask = Linkify.WEB_URLS
-                    text = "10款 Material Design 配色工具: https://blog.csdn.net/dsc114/article/details/52120080 " +
-                            "\nAndroid Theme 属性详解: https://www.jianshu.com/p/06a3bbb7ce79 " +
-                            "\n换肤框架：https://github.com/ximsfei/Android-skin-support " +
-                            "\n可下载切换主题皮肤: https://www.jianshu.com/p/0d07a2e45be2?tdsourcetag=s_pcqq_aiomsg" +
-                            "\n\n\n"
-                }
-
-                addView(Switch(mActivity))
-                addView(ChipGroup(mActivity).apply {
-                    addView(Chip(mActivity).apply {
-                        text = "选项一"
-                        id = R.id.chip1
-                    })
-                    addView(Chip(mActivity).apply {
-                        text = "选项二"
-                        id = R.id.chip2
-                    })
-
-                    check(R.id.chip1)
-                    setOnCheckedChangeListener { _, checkedId -> check(checkedId) }
-                })
-
-                addView(ProgressBar(mActivity))
-                addView(SeekBar(mActivity))
+            supportActionBar?.apply {
+                setDisplayHomeAsUpEnabled(true)
+                setDisplayShowHomeEnabled(true)
+                setHomeButtonEnabled(true)
+                title = "主题展示设置"
             }
         }
+    }
+
+    override fun onClick(view: View?) {
+        super.onClick(view)
+        when (view?.id) {
+            R.id.btn_night -> {
+                selectNightMode {
+                    nightMode = it
+                    mActivity.delegate.localNightMode = it // 设置本界面的夜间模式
+                }
+            }
+            R.id.btn_theme -> {
+                AlertDialog.Builder(mActivity).setItems(arrayOf("全局主题", "自定义主题 双style", "自定义主题 双color", "Material 主题")) { _, position ->
+                    themeId = when(position){
+                        0 -> R.style.AppTheme
+                        1 -> R.style.ThemeDemo
+                        2 -> R.style.ThemeDemo2
+                        else -> R.style.ThemeDemo3
+                    }
+                    mActivity.recreate()
+                }.show()
+            }
+            R.id.btn_alert -> {
+                val builder = MaterialAlertDialogBuilder(mActivity)
+                builder.setMessage("这是 AlertDialog 的样式。")
+                builder.setPositiveButton("操作1") { _, _ ->
+                }
+                builder.setNegativeButton("操作2") { _, _ ->
+                }
+                builder.setNeutralButton("操作3") { _, _ ->
+
+                }
+                builder.create().show()
+            }
+        }
+    }
+
+    private fun selectNightMode(callback: (Int) -> Unit) {
+        AlertDialog.Builder(mActivity).setItems(arrayOf("跟随系统", "根据节电模式", "白天", "黑夜", "不指定")) { _, i ->
+            val nm = when (i) {
+                1 -> AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY// 节能模式时是黑暗主题，否则是白亮主题。
+                2 -> AppCompatDelegate.MODE_NIGHT_NO
+                3 -> AppCompatDelegate.MODE_NIGHT_YES
+                4 -> AppCompatDelegate.MODE_NIGHT_UNSPECIFIED // 设置为全局为不指定，应该会使用系统的夜间模式。
+                else -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+            }
+
+            callback(nm)
+        }.show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -192,29 +132,22 @@ class AHThemeDemo : KActivityHelper() {
         return true
     }
 
-    var count = 0
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            Menu.FIRST + 1 -> {
-                AlertDialog.Builder(mActivity).setItems(arrayOf("跟随系统", "根据节电模式", "白天", "黑夜", "不指定")) { _, i ->
-                    val nm = when (i) {
-                        1 -> AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY// 节能模式时是黑暗主题，否则是白亮主题。
-                        2 -> AppCompatDelegate.MODE_NIGHT_NO
-                        3 -> AppCompatDelegate.MODE_NIGHT_YES
-                        4 -> AppCompatDelegate.MODE_NIGHT_UNSPECIFIED // 设置为全局为不指定，应该会使用系统的夜间模式。
-                        else -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-                    }
 
+        when (item.itemId) {
+            android.R.id.home -> finish()
+            Menu.FIRST + 1 -> {
+                selectNightMode { nm ->
                     Const.nightMode = nm
                     AppCompatDelegate.setDefaultNightMode(nm) // 设置全局的夜间模式
-                }.show()
-
+                }
             }
             Menu.FIRST + 2 -> {
             }
-            Menu.FIRST + 3 -> {}
-            Menu.FIRST + 4 -> { }
+            Menu.FIRST + 3 -> {
+            }
+            Menu.FIRST + 4 -> {
+            }
         }
         return true
     }

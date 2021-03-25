@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import androidx.core.widget.NestedScrollView
 import com.google.android.flexbox.AlignContent
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
@@ -24,31 +25,13 @@ open class BaseFlexActivityHelper : KActivityHelper() {
         }
     }
 
-    /*val addTitle by lazy {
-        fun(text: String): TextView {
-            val tv = TextView(mActivity)
-            tv.text = text
-            tv.layoutParams = ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.MATCH_PARENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT)
-            flexBoxLayout.addView(tv)
-            return tv
-        }
-    }
-
-    val addBtn by lazy {
-        fun(text: String, click: View.OnClickListener): Button {
-            val btn = Button(mActivity)
-            btn.text = text
-            btn.setOnClickListener(click)
-            flexBoxLayout.addView(btn)
-            return btn
-        }
-    }*/
     fun addTitle(text: String): TextView = flexBoxLayout.addTitle(text)
     fun addBtn(text: String, click: View.OnClickListener): Button = flexBoxLayout.addBtn(text, click)
 
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
-//        setContentView(flexBoxLayout)
-        activity.nestedScrollView { addView(flexBoxLayout) }
+        val scroll = NestedScrollView(activity)
+        scroll.addView(flexBoxLayout)
+        setContentView(scroll)
     }
 }

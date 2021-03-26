@@ -38,14 +38,8 @@ public class KLog {
 
     private static final LinkedList<KLogInfo> logs = new LinkedList<KLogInfo>();
 
-    private static boolean isDebug = true;
-
     public static boolean isDebug() {
-        return isDebug;
-    }
-
-    public static void setDebug(boolean isDebug) {
-        KLog.isDebug = isDebug;
+        return KUtil.getConfig().isDebug();
     }
 
     /**

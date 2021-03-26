@@ -32,7 +32,6 @@ import com.kiven.kutils.logHelper.KLog;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Set;
 
 /**
@@ -40,15 +39,57 @@ import java.util.Set;
  */
 public class KUtil {
 
+    public static class Config {
+        private boolean isDebug = true;
+        private String imageDirName = "kUtilsImage";
+        private String fileDirName = "kUtilsFile";
+        private String tag = "kutils";
+        private String CONFIG_SHARED_PREFERENCES = "KContext.ACCOUNT_CONFIG";
+
+        public void setDebug(boolean debug) {
+            isDebug = debug;
+        }
+
+        public boolean isDebug() {
+            return isDebug;
+        }
+
+        public void setImageDirName(String imageDirName) {
+            this.imageDirName = imageDirName;
+        }
+
+        public void setFileDirName(String fileDirName) {
+            this.fileDirName = fileDirName;
+        }
+
+        public void setTag(String tag) {
+            this.tag = tag;
+        }
+
+        public void setConfigSharedPreferences(@NonNull String configSharedPreferences) {
+            if (!configSharedPreferences.isEmpty()) CONFIG_SHARED_PREFERENCES = configSharedPreferences;
+        }
+    }
+
     private static Application app;
-    private static String CONFIG_SHARED_PREFERENCES = "KContext.ACCOUNT_CONFIG";
+    private static Config config = new Config();
+    public static void init(@NonNull Application app, Config config) {
+        KUtil.app = app;
+        if (config != null) KUtil.config = config;
+    }
 
     public static void setApp(Application app) {
         KUtil.app = app;
     }
+
     public static Application getApp() {
         return app;
     }
+
+    public static Config getConfig() {
+        return config;
+    }
+    /*private static String CONFIG_SHARED_PREFERENCES = "KContext.ACCOUNT_CONFIG";
 
     public static void setConfigSharedPreferences(@NonNull String configSharedPreferences) {
         CONFIG_SHARED_PREFERENCES = configSharedPreferences;
@@ -72,7 +113,7 @@ public class KUtil {
 
     public static void setTag(@NonNull String tag) {
         KUtil.tag = tag;
-    }
+    }*/
 
     /**
      * 像素转化
@@ -228,19 +269,19 @@ public class KUtil {
      * 应用图片保存路径
      */
     public static String getAppPictureFolderPath() {
-        return getAppFileFolderPath(imageDirName);
+        return getAppFileFolderPath(config.imageDirName);
     }
 
     public static Uri createNewAppPictureUri() {
-        return createNewAppPictureUri("", imageDirName, false);
+        return createNewAppPictureUri("", config.imageDirName, false);
     }
 
     public static Uri createNewAppPictureUri(boolean saveToPng) {
-        return createNewAppPictureUri("", imageDirName, saveToPng);
+        return createNewAppPictureUri("", config.imageDirName, saveToPng);
     }
 
     public static Uri createNewAppPictureUri(@NonNull String displayName, boolean saveToPng) {
-        return createNewAppPictureUri(displayName, imageDirName, saveToPng);
+        return createNewAppPictureUri(displayName, config.imageDirName, saveToPng);
     }
 
     public static Uri createNewAppPictureUri(@NonNull String displayName, @NonNull String folderName, boolean saveToPng) {
@@ -250,7 +291,7 @@ public class KUtil {
         ContentValues values = new ContentValues();
         String fullDisplayName = displayName;
         if (displayName.isEmpty()) {
-            fullDisplayName = tag + System.currentTimeMillis();
+            fullDisplayName = config.tag + System.currentTimeMillis();
         }
         if (saveToPng) {
             fullDisplayName += ".png";
@@ -324,7 +365,7 @@ public class KUtil {
      * 应用文件保存路径
      */
     public static String getAppFileFolderPath() {
-        return getAppFileFolderPath(fileDirName);
+        return getAppFileFolderPath(config.fileDirName);
     }
 
     /**
@@ -476,7 +517,7 @@ public class KUtil {
      * SharedPreferences
      */
     public static SharedPreferences getSharedPreferences() {
-        return KContext.getInstance().getSharedPreferences(CONFIG_SHARED_PREFERENCES, Context.MODE_PRIVATE);
+        return KContext.getInstance().getSharedPreferences(config.CONFIG_SHARED_PREFERENCES, Context.MODE_PRIVATE);
     }
 
     public static void removeSharedPreferencesValue(String key) {

@@ -41,14 +41,14 @@ class AppContext : KContext() {
 //        KGranting.useFragmentRequest = true
 //        KUtil.setApp(this)
 
+        if (Const.nightMode != AppCompatDelegate.getDefaultNightMode())
+            AppCompatDelegate.setDefaultNightMode(Const.nightMode)
+
         registerReceiver(NotificationClickReceiver(), IntentFilter())
 
 //        ARouter.openLog();     // 打印日志
 //        ARouter.openDebug();   // // TODO: 2019-09-16  开启调试模式(如果在InstantRun模式下运行，必须开启调试模式！线上版本需要关闭,否则有安全风险)
         ARouter.init(this)
-
-        if (Const.nightMode != AppCompatDelegate.getDefaultNightMode())
-            AppCompatDelegate.setDefaultNightMode(Const.nightMode)
 
 
         QbSdk.initX5Environment(this, object : QbSdk.PreInitCallback {

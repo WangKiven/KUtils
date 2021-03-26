@@ -58,6 +58,11 @@
         <item name="android:textColorPrimary">#2196F3</item>
     </style>
 
+    <style name="ThemeDemo.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
     <style name="ThemeDemo2" parent="Theme.AppCompat.DayNight">
         <item name="colorPrimary">@color/demo_colorPrimary</item>
         <item name="colorPrimaryDark">@color/demo_colorPrimaryDark</item>
@@ -66,12 +71,18 @@
         <item name="android:textColorPrimary">@color/demo_textColorPrimary</item>
     </style>
 
+    <style name="ThemeDemo2.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
     <style name="ThemeDemo3" parent="Theme.MaterialComponents.DayNight">
-        <item name="android:statusBarColor" tools:ignore="NewApi">?attr/colorSurface</item>
-        <item name="android:windowLightStatusBar" tools:ignore="NewApi">true</item>
-        <item name="android:navigationBarColor" tools:ignore="NewApi">?android:attr/colorBackground</item>
-        <item name="android:windowLightNavigationBar" tools:ignore="NewApi">true</item>
-        <item name="android:navigationBarDividerColor" tools:ignore="NewApi">?attr/colorControlHighlight</item>
+        <item name="android:fontFamily">@font/font1_regular</item>
+    </style>
+
+    <style name="ThemeDemo3.NoActionBar" parent="ThemeDemo3">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
     <style name="Dialog">

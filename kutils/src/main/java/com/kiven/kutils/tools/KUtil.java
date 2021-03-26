@@ -32,6 +32,7 @@ import com.kiven.kutils.logHelper.KLog;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Set;
 
 /**
@@ -54,14 +55,14 @@ public class KUtil {
     }
 
 
-    private static String imageDirName = "SXB_IMAGES";
+    private static String imageDirName = "kUtilsImage";
 
     public static void setImageDirName(@NonNull String dirName) {
         imageDirName = dirName;
     }
 
 
-    private static String fileDirName = "SXB_FILES";
+    private static String fileDirName = "kUtilsFile";
 
     public static void setFileDirName(@NonNull String dirName) {
         fileDirName = dirName;
@@ -160,7 +161,8 @@ public class KUtil {
         try {
             PackageManager manager = context.getPackageManager();
             PackageInfo info = manager.getPackageInfo(context.getPackageName(), 0);
-            return info.versionCode;
+//            return info.versionCode;
+            return (int) info.getLongVersionCode();
         } catch (NameNotFoundException e) {
             e.printStackTrace();
         }
@@ -169,17 +171,21 @@ public class KUtil {
 
     /**
      * 是否是模拟器
-     *
-     * @return
+     * 根据abi判断，并不完整
      */
     public static boolean isAVD() {
-        /*String serial;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            serial = Build.getSerial();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            for (String abi: Build.SUPPORTED_ABIS) {
+                if (abi.toLowerCase().contains("x86")) return true;
+            }
         } else {
-            serial = Build.SERIAL;
+            if (Build.CPU_ABI != null && Build.CPU_ABI.toLowerCase().contains("x86")) {
+                return true;
+            }
+
+            return Build.CPU_ABI2 != null && Build.CPU_ABI2.toLowerCase().contains("x86");
         }
-        return TextUtils.equals(serial, "unknown");*/
+
         return false;
     }
 

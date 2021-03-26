@@ -2,7 +2,9 @@ package com.kiven.kutils.tools;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
+import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
+import android.os.Build;
 
 import com.kiven.kutils.logHelper.KLog;
 
@@ -19,42 +21,55 @@ public class KNetwork {
     public static final int NETTYPE_WIFI = 0x01;
     public static final int NETTYPE_CMWAP = 0x02;
     public static final int NETTYPE_CMNET = 0x03;
-
-    /**
-     * 检测网络是否可用
-     *
-     * @return
-     */
-    /*public static boolean isNetworkConnected(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo ni = cm != null ? cm.getActiveNetworkInfo() : null;
-        return ni != null && ni.isConnectedOrConnecting();
-    }*/
+    public static final int NETTYPE_OTHER = 0x04;
 
     /**
      * 获取当前网络类型
      *
-     * @return 0：没有网络 1：WIFI网络 2：WAP网络 3：NET网络
+     * @return 0：没有网络 1：WIFI网络 2：WAP网络 3：NET网络 4:其他网络（如：VPN，蓝牙，WLAN等）
      */
     public static int getNetworkType(Context context) {
         int netType = NETTYPE_NONE;
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityManager != null ? connectivityManager.getActiveNetworkInfo() : null;
-        if (networkInfo == null) {
+        if (connectivityManager == null) {
             return netType;
         }
-        int nType = networkInfo.getType();
-        if (nType == ConnectivityManager.TYPE_MOBILE) {
-            String extraInfo = networkInfo.getExtraInfo();
-            if (KString.isBlank(extraInfo)) {
-                if (extraInfo.toLowerCase().equals("cmnet")) {
-                    netType = NETTYPE_CMNET;
-                } else {
-                    netType = NETTYPE_CMWAP;
-                }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            NetworkCapabilities networkCapabilities = connectivityManager.getNetworkCapabilities(connectivityManager.getActiveNetwork());
+            if (networkCapabilities == null) {
+                return netType;
+            } else if (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                netType = NETTYPE_CMNET;
+            } else if (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                netType = NETTYPE_WIFI;
+            } else {
+                // 能拿到 networkCapabilities，说明是有网络的
+                netType = NETTYPE_OTHER;
             }
-        } else if (nType == ConnectivityManager.TYPE_WIFI) {
-            netType = NETTYPE_WIFI;
+        } else {
+            NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+            if (networkInfo == null || !networkInfo.isConnectedOrConnecting()) {
+                return netType;
+            }
+            int nType = networkInfo.getType();
+            if (nType == ConnectivityManager.TYPE_MOBILE) {
+                String extraInfo = networkInfo.getExtraInfo();
+                if (KString.isBlank(extraInfo)) {
+                    if (extraInfo.toLowerCase().equals("cmnet")) {
+                        netType = NETTYPE_CMNET;
+                    } else {
+                        netType = NETTYPE_CMWAP;
+                    }
+                } else {
+                    netType = NETTYPE_CMNET;
+                }
+            } else if (nType == ConnectivityManager.TYPE_WIFI) {
+                netType = NETTYPE_WIFI;
+            } else {
+                // 能拿到networkInfo，说明是有网络的
+                netType = NETTYPE_OTHER;
+            }
         }
         return netType;
     }

@@ -374,7 +374,7 @@ class AHSmallAction : KActivityHelper() {
                     "MNET"
                 }
                 else -> {
-                    "检测失败"
+                    "其他"
                 }
             }
             KAlertDialogHelper.Show1BDialog(mActivity, "网络类型：$ts\nIP:${KNetwork.getIPAddress()}")

@@ -202,8 +202,9 @@ public class KUtil {
         try {
             PackageManager manager = context.getPackageManager();
             PackageInfo info = manager.getPackageInfo(context.getPackageName(), 0);
-//            return info.versionCode;
-            return (int) info.getLongVersionCode();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                return (int) info.getLongVersionCode();
+            } else return info.versionCode;
         } catch (NameNotFoundException e) {
             e.printStackTrace();
         }

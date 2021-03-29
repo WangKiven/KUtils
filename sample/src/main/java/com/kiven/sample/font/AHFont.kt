@@ -88,7 +88,7 @@ class AHFont : KActivityHelper() {
             if (convertView == null) {
                 textView = TextView(mActivity)
                 textView.setPadding(10, 10, 10, 10)
-                textView.setBackgroundColor(Color.parseColor("#eeeeee"))
+                textView.setBackgroundColor(Color.parseColor("#66eeeeee"))
                 textView.setTextColor(Color.parseColor("#000000"))
                 convertView = textView
             } else {

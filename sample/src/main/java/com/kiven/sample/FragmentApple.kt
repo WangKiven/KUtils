@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import androidx.fragment.app.Fragment
+import com.kiven.kutils.tools.RequestPermissionFragment
+import com.kiven.sample.util.showDialog
 import kotlinx.android.synthetic.main.fragment_apple.*
 
 /**
@@ -61,12 +63,12 @@ class FragmentApple : Fragment() {
         }
 
         btn_test.setOnClickListener {
-            /*RequestPermissionFragment.requestPermissions(childFragmentManager, listOf(Manifest.permission.READ_EXTERNAL_STORAGE)){
-                activity!!.showDialog("获取到了")
+            RequestPermissionFragment.requestPermissions(childFragmentManager, arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE)){
+                activity?.showDialog("获取存储权限情况：$it")
+            }
+            /*KGranting.requestPermissions(activity!!, 8899, android.Manifest.permission.READ_EXTERNAL_STORAGE, "存储") {
+                activity?.showDialog("获取存储权限情况：$it")
             }*/
         }
-        /*RequestPermissionFragment.requestPermissions(childFragmentManager, listOf(Manifest.permission.READ_EXTERNAL_STORAGE)){
-            activity!!.showDialog("获取到了")
-        }*/
     }
 }

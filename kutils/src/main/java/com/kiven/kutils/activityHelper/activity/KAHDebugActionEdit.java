@@ -22,52 +22,12 @@ import com.kiven.kutils.activityHelper.KHelperActivity;
 import com.kiven.kutils.callBack.CallBack;
 import com.kiven.kutils.callBack.Consumer;
 import com.kiven.kutils.logHelper.KLog;
-import com.kiven.kutils.tools.KUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 class KAHDebugActionEdit extends KActivityHelper {
-    final static String quickActionsKey = "kUtil_quickActionsKey";
-    final static String shareDivStr = "\n";
-    final static int maxQuickShow = 5;
-    @NonNull
-    static List<DebugEntity> getQuickActions() {
-        String keyStr = KUtil.getSharedPreferencesStringValue(quickActionsKey, null);
-        List<DebugEntity> quickActions = new ArrayList<>();
-        if (!TextUtils.isEmpty(keyStr)) {
-            String[] ss = keyStr.split(shareDivStr);
-            if (ss != null && ss.length > 0) {
-                for (String s: ss) {
-                    if (s != null && !TextUtils.isEmpty(s)) {
-                        for (DebugEntity entity: DebugView.customAction) {
-                            if (s.equals(entity.getOnlyKey())) {
-                                quickActions.add(entity);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return quickActions;
-    }
-
-    static void saveQuickActions(@NonNull List<DebugEntity> actions) {
-        StringBuilder builder = new StringBuilder();
-        if (actions.size() > 0) {
-            int i = 0;
-            for (DebugEntity action: actions) {
-                if (i != 0) {
-                    builder.append(shareDivStr);
-                }
-                builder.append(action.getOnlyKey());
-                i++;
-            }
-        }
-        KLog.i(builder.toString());
-        KUtil.putSharedPreferencesStringValue(quickActionsKey, builder.toString());
-    }
 
     private List<DebugEntity> quickActions;
     private List<DebugEntity> otherActions;
@@ -87,7 +47,7 @@ class KAHDebugActionEdit extends KActivityHelper {
 
 
         otherActions = new ArrayList<>(DebugView.customAction);
-        quickActions = getQuickActions();
+        quickActions = DebugConst.getQuickActions();
         otherActions.removeAll(quickActions);
 
 
@@ -124,7 +84,7 @@ class KAHDebugActionEdit extends KActivityHelper {
                 if (quickActions.contains(param)) {
                     int position = quickActions.indexOf(param);
                     quickActions.remove(param);
-                    saveQuickActions(quickActions);
+                    DebugConst.saveQuickActions(quickActions);
                     rv_quick.getAdapter().notifyItemRemoved(position);
 
                     otherActions.add(param);
@@ -137,7 +97,7 @@ class KAHDebugActionEdit extends KActivityHelper {
         new ItemTouchHelper(new ItemTouchHelperCallback(quickActions, new CallBack() {
             @Override
             public void callBack() {
-                saveQuickActions(quickActions);
+                DebugConst.saveQuickActions(quickActions);
             }
         })).attachToRecyclerView(rv_quick);
 
@@ -152,11 +112,11 @@ class KAHDebugActionEdit extends KActivityHelper {
         rv_other.setAdapter(new MyAdapter(otherActions, new Consumer<DebugEntity>() {
             @Override
             public void callBack(DebugEntity param) {
-                if (quickActions.size() >= maxQuickShow) {
+                if (quickActions.size() >= DebugConst.maxQuickShow) {
                     Toast.makeText(mActivity, "已到上限", Toast.LENGTH_SHORT).show();
                 } else {
                     quickActions.add(param);
-                    saveQuickActions(quickActions);
+                    DebugConst.saveQuickActions(quickActions);
                     rv_quick.getAdapter().notifyItemInserted(quickActions.size() - 1);
 
                     int position = otherActions.indexOf(param);

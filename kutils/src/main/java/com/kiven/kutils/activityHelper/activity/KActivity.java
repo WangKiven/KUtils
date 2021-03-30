@@ -75,12 +75,9 @@ public class KActivity extends AppCompatActivity implements SensorEventListener 
 
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
 
-            // assign directions
             float x = event.values[0];
             float y = event.values[1];
             float z = event.values[2];
-
-//            KLog.i("(" + x + ", " + y + ", " + z + ")");
 
             float xx = Math.abs(x);
             float yy = Math.abs(y);
@@ -88,11 +85,7 @@ public class KActivity extends AppCompatActivity implements SensorEventListener 
 
             double sens = Math.sqrt(xx * xx + yy * yy + zz * zz);
 
-//            KLog.i("( " + sens + " )");
-
             if (sens > 15) {
-//                KLog.i("showLog " + System.currentTimeMillis() + " " + event.timestamp);
-                /*new KShowLog().startActivity(this);*/
                 showDebugView();
 
                 showLogTime = System.currentTimeMillis();

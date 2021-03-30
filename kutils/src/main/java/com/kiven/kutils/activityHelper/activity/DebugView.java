@@ -158,10 +158,10 @@ public class DebugView {
         // todo 装载自定义选项
 //        actions.addAll(customAction);
 
-        List<DebugEntity> showActions = KAHDebugActionEdit.getQuickActions();
+        List<DebugEntity> showActions = DebugConst.getQuickActions();
         if (showActions.isEmpty()) {
-            if (customAction.size() > KAHDebugActionEdit.maxQuickShow) {
-                actions.addAll(customAction.subList(0, KAHDebugActionEdit.maxQuickShow - 1));
+            if (customAction.size() > DebugConst.maxQuickShow) {
+                actions.addAll(customAction.subList(0, DebugConst.maxQuickShow));
             } else {
                 actions.addAll(customAction);
             }
@@ -362,6 +362,9 @@ public class DebugView {
 
     public void hideFloat() {
         if (isShow) {
+            // removeViewImmediate 通知View立刻调用View.onDetachWindow(), 但是不能再调用addView
+            // 当前界面动态刷新的时候，removeView没有立刻调用View.onDetachWindow()，就会出现异常
+            // 出现问题的点：切换黑夜模式的时候，由于老的view没有解绑，mWindowManager.addView会打印错误，不过不会崩溃。
             mWindowManager.removeView(mFloatLayout);
             isShow = false;
         }
@@ -375,6 +378,9 @@ public class DebugView {
 
     public void onPause() {
         if (barLayout.getParent() != null) {
+            // removeViewImmediate 通知View立刻调用View.onDetachWindow(), 但是不能再调用addView
+            // 当前界面动态刷新的时候，removeView没有立刻调用View.onDetachWindow()，就会出现异常
+            // 出现问题的点：切换黑夜模式的时候，由于老的view没有解绑，mWindowManager.addView会打印错误，不过不会崩溃。
             mWindowManager.removeView(barLayout);
         }
         hideFloat();

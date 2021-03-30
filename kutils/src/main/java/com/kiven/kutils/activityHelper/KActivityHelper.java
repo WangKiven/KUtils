@@ -142,17 +142,25 @@ public class KActivityHelper {
      */
     protected void initBackToolbar(@IdRes int toolBarId) {
         Toolbar toolBar = findViewById(toolBarId);
-        initBackToolbar(toolBar);
+        initBackToolbar(toolBar, false);
+    }
+
+    protected void initBackToolbar(@IdRes int toolBarId, boolean showTitle) {
+        Toolbar toolBar = findViewById(toolBarId);
+        initBackToolbar(toolBar, showTitle);
     }
 
     protected void initBackToolbar(Toolbar toolBar) {
+        initBackToolbar(toolBar, false);
+    }
+    protected void initBackToolbar(Toolbar toolBar, boolean showTitle) {
         if (toolBar == null) {
             return;
         }
         mActivity.setSupportActionBar(toolBar);
         ActionBar actionBar = mActivity.getSupportActionBar();
         if (actionBar != null) {
-            KView.initBackActionBar(actionBar);
+            KView.initBackActionBar(actionBar, showTitle);
 
             toolBar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override

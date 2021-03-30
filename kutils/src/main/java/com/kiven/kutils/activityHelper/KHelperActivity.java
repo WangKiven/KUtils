@@ -173,8 +173,10 @@ public class KHelperActivity extends KActivity {
         KActivityHelper.removeStack(getIntent().getStringExtra("BaseActivityHelper"));//将helper移除
         super.onDestroy();
 //        KContext.getInstance().onActivityDestory(this);
-        helper.mActivity = null;
-        helper = null;
+        if (helper != null) {
+            helper.mActivity = null;
+            helper = null;
+        }
     }
 
     @Override

@@ -118,10 +118,14 @@ public class KView {
      * actionbar添加默认返回按钮
      */
     public static void initBackActionBar(@NonNull ActionBar actionBar) {
+        initBackActionBar(actionBar, false);
+    }
+
+    public static void initBackActionBar(@NonNull ActionBar actionBar, boolean showTitle) {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setHomeButtonEnabled(true);
-        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayShowTitleEnabled(showTitle);
     }
 
     /**

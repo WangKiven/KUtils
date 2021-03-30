@@ -4,14 +4,12 @@ import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
-import androidx.annotation.DrawableRes;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatDelegate;
-
+import android.net.Uri;
 import android.os.Debug;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -22,6 +20,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.kiven.kutils.R;
@@ -43,7 +46,7 @@ import java.util.List;
 
 public class DebugView {
     // todo 自定义选项
-    private final static List<DebugEntity> customAction = new ArrayList<DebugEntity>();
+    protected final static List<DebugEntity> customAction = new ArrayList<DebugEntity>();
 
     public static void addAction(@DrawableRes int resId, DebugViewListener callBack) {
         customAction.add(new DebugEntity(resId, callBack));
@@ -81,13 +84,17 @@ public class DebugView {
                     public void onClick(DialogInterface dialog, int which) {
                         int nm = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
                         switch (which) {
-                            case 1: nm = AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY;// 节能模式时是黑暗主题，否则是白亮主题。
+                            case 1:
+                                nm = AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY;// 节能模式时是黑暗主题，否则是白亮主题。
                                 break;
-                            case 2: nm = AppCompatDelegate.MODE_NIGHT_NO;
-                            break;
-                            case 3: nm = AppCompatDelegate.MODE_NIGHT_YES;
+                            case 2:
+                                nm = AppCompatDelegate.MODE_NIGHT_NO;
                                 break;
-                            case 4: nm = AppCompatDelegate.MODE_NIGHT_UNSPECIFIED;// 设置为全局为不指定，应该会使用系统的夜间模式。
+                            case 3:
+                                nm = AppCompatDelegate.MODE_NIGHT_YES;
+                                break;
+                            case 4:
+                                nm = AppCompatDelegate.MODE_NIGHT_UNSPECIFIED;// 设置为全局为不指定，应该会使用系统的夜间模式。
                                 break;
                         }
 
@@ -96,8 +103,17 @@ public class DebugView {
                 }).setTitle("设置夜间模式").show();
             }
         });
+        addAction(R.mipmap.k_ic_info, new DebugViewListener() {
+            @Override
+            public void onClick(Activity activity, View view, DebugEntity entity) {
+                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                intent.setData(Uri.fromParts("package", activity.getPackageName(), null));
+                activity.startActivity(intent);
+            }
+        });
         addAction(R.mipmap.k_ic_profiler_open, new DebugViewListener() {
             private boolean hasStartMethodTracing = false;
+
             @Override
             public void onClick(Activity activity, View view, DebugEntity entity) {
                 String say;
@@ -140,7 +156,26 @@ public class DebugView {
         mWindowManager = context.getWindowManager();
 
         // todo 装载自定义选项
-        actions.addAll(customAction);
+//        actions.addAll(customAction);
+
+        List<DebugEntity> showActions = KAHDebugActionEdit.getQuickActions();
+        if (showActions.isEmpty()) {
+            if (customAction.size() > KAHDebugActionEdit.maxQuickShow) {
+                actions.addAll(customAction.subList(0, KAHDebugActionEdit.maxQuickShow - 1));
+            } else {
+                actions.addAll(customAction);
+            }
+        } else {
+            actions.addAll(showActions);
+        }
+
+        // todo 更多按钮
+        actions.add(new DebugEntity(R.mipmap.k_ic_more, new DebugViewListener() {
+            @Override
+            public void onClick(Activity activity, View view, DebugEntity entity) {
+                new KAHDebugActionEdit().startActivity(activity);
+            }
+        }));
         // todo 关闭按钮
         actions.add(new DebugEntity(R.drawable.k_ic_close, new DebugViewListener() {
             @Override
@@ -155,6 +190,9 @@ public class DebugView {
         addDropDownBar();
     }
 
+    /**
+     * 渐变颜色条
+     */
     private void addDropDownBar() {
         final float scale = activity.getResources().getDisplayMetrics().density;
         int height = (int) (5 * scale + 0.5f);
@@ -189,7 +227,7 @@ public class DebugView {
 
         barParams = createParams();
         barParams.width = WindowManager.LayoutParams.MATCH_PARENT;
-        barParams.gravity = Gravity.LEFT|Gravity.TOP;
+        barParams.gravity = Gravity.LEFT | Gravity.TOP;
         mWindowManager.addView(barLayout, barParams);
     }
 
@@ -219,7 +257,7 @@ public class DebugView {
         wmParams.width = 200;
         wmParams.height = 80;*/
 
-         return wlp;
+        return wlp;
     }
 
     private LinearLayout.LayoutParams createButtonParam(int childSize, int margin) {

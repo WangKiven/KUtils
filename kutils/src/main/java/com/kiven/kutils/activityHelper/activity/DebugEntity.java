@@ -23,7 +23,7 @@ public class DebugEntity {
 
     public DebugEntity(@NonNull String text, DebugViewListener callBack) {
         this.isIcon = false;
-        this.text = text;
+        this.text = text.replace("\n", "");
         this.callBack = callBack;
     }
 
@@ -54,5 +54,9 @@ public class DebugEntity {
             return "";
         }
         return text.substring(0, 1);
+    }
+
+    protected String getOnlyKey() {
+        return "DebugEntity_" + resId + "_" + text;
     }
 }

@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -141,8 +142,6 @@ public class DebugView {
     //定义浮动窗口布局
     LinearLayout mFloatLayout;
     WindowManager.LayoutParams wmParams;
-    LinearLayout barLayout;
-    WindowManager.LayoutParams barParams;
     //创建浮动窗口设置布局参数的对象
     WindowManager mWindowManager;
 
@@ -160,13 +159,13 @@ public class DebugView {
 
         wmParams = createParams();
 
-        addDropDownBar();
+//        addDropDownBar();
     }
 
     /**
      * 渐变颜色条
      */
-    private void addDropDownBar() {
+    protected void addDropDownBar() {
         final float scale = activity.getResources().getDisplayMetrics().density;
         int height = (int) (5 * scale + 0.5f);
 
@@ -195,12 +194,12 @@ public class DebugView {
         animator.setRepeatCount(ObjectAnimator.INFINITE);
         animator.start();
 
-        barLayout = new LinearLayout(activity);
+        LinearLayout barLayout = new LinearLayout(activity);
         barLayout.addView(barView, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height));
 
-        barParams = createParams();
-        barParams.width = WindowManager.LayoutParams.MATCH_PARENT;
-        barParams.gravity = Gravity.LEFT | Gravity.TOP;
+        FrameLayout rootView = (FrameLayout) activity.getWindow().getDecorView().findViewById(android.R.id.content).getParent().getParent();
+        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, height);
+        rootView.addView(barLayout, layoutParams);
     }
 
     private WindowManager.LayoutParams createParams() {
@@ -377,18 +376,9 @@ public class DebugView {
     }
 
     public void onResume() {
-        if (barLayout.getParent() == null) {
-            mWindowManager.addView(barLayout, barParams);
-        }
     }
 
     public void onPause() {
-        if (barLayout.getParent() != null) {
-            // removeViewImmediate 通知View立刻调用View.onDetachWindow(), 但是不能再调用addView
-            // 当前界面动态刷新的时候，removeView没有立刻调用View.onDetachWindow()，就会出现异常
-            // 出现问题的点：切换黑夜模式的时候，由于老的view没有解绑，mWindowManager.addView会打印错误，不过不会崩溃。
-            mWindowManager.removeView(barLayout);
-        }
         hideFloat();
     }
 

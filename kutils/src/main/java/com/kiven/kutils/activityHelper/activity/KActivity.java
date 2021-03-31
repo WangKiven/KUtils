@@ -8,6 +8,9 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -45,6 +48,24 @@ public class KActivity extends AppCompatActivity implements SensorEventListener 
 
             floatView.onResume();
         }
+    }
+
+    @Override
+    public void setContentView(View view) {
+        super.setContentView(view);
+        if (floatView != null) floatView.addDropDownBar();
+    }
+
+    @Override
+    public void setContentView(int layoutResID) {
+        super.setContentView(layoutResID);
+        if (floatView != null) floatView.addDropDownBar();
+    }
+
+    @Override
+    public void setContentView(View view, ViewGroup.LayoutParams params) {
+        super.setContentView(view, params);
+        if (floatView != null) floatView.addDropDownBar();
     }
 
     @Override

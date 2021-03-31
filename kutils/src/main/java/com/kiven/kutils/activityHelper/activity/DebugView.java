@@ -158,34 +158,7 @@ public class DebugView {
         // todo 装载自定义选项
 //        actions.addAll(customAction);
 
-        List<DebugEntity> showActions = DebugConst.getQuickActions();
-        if (showActions.isEmpty()) {
-            if (customAction.size() > DebugConst.maxQuickShow) {
-                actions.addAll(customAction.subList(0, DebugConst.maxQuickShow));
-            } else {
-                actions.addAll(customAction);
-            }
-        } else {
-            actions.addAll(showActions);
-        }
-
-        // todo 更多按钮
-        actions.add(new DebugEntity(R.mipmap.k_ic_more, new DebugViewListener() {
-            @Override
-            public void onClick(Activity activity, View view, DebugEntity entity) {
-                new KAHDebugActionEdit().startActivity(activity);
-            }
-        }));
-        // todo 关闭按钮
-        actions.add(new DebugEntity(R.drawable.k_ic_close, new DebugViewListener() {
-            @Override
-            public void onClick(Activity activity, View view, DebugEntity entity) {
-                hideFloat();
-            }
-        }));
-
         wmParams = createParams();
-        createFloatView();
 
         addDropDownBar();
     }
@@ -228,7 +201,6 @@ public class DebugView {
         barParams = createParams();
         barParams.width = WindowManager.LayoutParams.MATCH_PARENT;
         barParams.gravity = Gravity.LEFT | Gravity.TOP;
-        mWindowManager.addView(barLayout, barParams);
     }
 
     private WindowManager.LayoutParams createParams() {
@@ -269,28 +241,61 @@ public class DebugView {
 
     @SuppressLint("ClickableViewAccessibility")
     private void createFloatView() {
-        LayoutInflater inflater = LayoutInflater.from(activity);
+
+
+        actions.clear();
+
+        List<DebugEntity> showActions = DebugConst.getQuickActions();
+        if (showActions.isEmpty()) {
+            if (customAction.size() > DebugConst.maxQuickShow) {
+                actions.addAll(customAction.subList(0, DebugConst.maxQuickShow));
+            } else {
+                actions.addAll(customAction);
+            }
+        } else {
+            actions.addAll(showActions);
+        }
+
+        // todo 更多按钮
+        actions.add(new DebugEntity(R.mipmap.k_ic_more, new DebugViewListener() {
+            @Override
+            public void onClick(Activity activity, View view, DebugEntity entity) {
+                new KAHDebugActionEdit().startActivity(activity);
+            }
+        }));
+        // todo 关闭按钮
+        actions.add(new DebugEntity(R.drawable.k_ic_close, new DebugViewListener() {
+            @Override
+            public void onClick(Activity activity, View view, DebugEntity entity) {
+                hideFloat();
+            }
+        }));
+
+
+
+
+
+
+
         //获取浮动窗口视图所在布局
-//        mFloatLayout = (LinearLayout) inflater.inflate(R.layout.float_layout, null);
-        mFloatLayout = new LinearLayout(activity);
-        //浮动窗口按钮
-//        mFloatView = (Button)mFloatLayout.findViewById(R.id.float_id);
+        if (mFloatLayout == null)
+            mFloatLayout = new LinearLayout(activity);
+        else mFloatLayout.removeAllViews();
 
         final int childSize = KUtil.dip2px(35);
         int padding = KUtil.dip2px(2);
         for (DebugEntity action : actions) {
+            TextView textView = new TextView(activity);
+            textView.setGravity(Gravity.CENTER);
+            textView.setTextColor(Color.BLUE);
             if (action.isIcon()) {
-                ImageView imageView = new ImageView(activity);
-                imageView.setImageResource(action.getResId());
-                mFloatLayout.addView(imageView, createButtonParam(childSize, padding));
+                textView.setText("");
+                textView.setBackgroundResource(action.getResId());
             } else {
-                TextView textView = new TextView(activity);
                 textView.setText(action.getText());
-                textView.setGravity(Gravity.CENTER);
-                textView.setTextColor(Color.BLUE);
                 textView.setBackgroundResource(R.mipmap.k_bg_blank_circle);
-                mFloatLayout.addView(textView, createButtonParam(childSize, padding));
             }
+            mFloatLayout.addView(textView, createButtonParam(childSize, padding));
         }
 
         mFloatLayout.measure(View.MeasureSpec.makeMeasureSpec(0,
@@ -354,6 +359,7 @@ public class DebugView {
 
     public void showFloat() {
         if (!isShow) {
+            createFloatView();
             //添加mFloatLayout
             mWindowManager.addView(mFloatLayout, wmParams);
             isShow = true;
@@ -365,7 +371,7 @@ public class DebugView {
             // removeViewImmediate 通知View立刻调用View.onDetachWindow(), 但是不能再调用addView
             // 当前界面动态刷新的时候，removeView没有立刻调用View.onDetachWindow()，就会出现异常
             // 出现问题的点：切换黑夜模式的时候，由于老的view没有解绑，mWindowManager.addView会打印错误，不过不会崩溃。
-            mWindowManager.removeView(mFloatLayout);
+            if (mFloatLayout != null) mWindowManager.removeView(mFloatLayout);
             isShow = false;
         }
     }

@@ -146,7 +146,7 @@ public class DebugView {
     private List<DebugEntity> actions = new ArrayList<DebugEntity>();
 
     // 颜色条
-    LinearLayout barLayout;
+    ImageView barView;
     //定义浮动窗口布局
     LinearLayout mFloatLayout;
 
@@ -170,14 +170,14 @@ public class DebugView {
      */
     @SuppressLint("ClickableViewAccessibility")
     protected void showDropDownBar() {
-        if (barLayout != null) {
+        if (barView != null) {
             return;
         }
 
         final float scale = activity.getResources().getDisplayMetrics().density;
         int height = (int) (24 * scale + 0.5f);
 
-        final ImageView barView = new ImageView(activity);
+        barView = new ImageView(activity);
         barView.setImageResource(R.drawable.k_ic_action_bar);
         barView.setScaleType(ImageView.ScaleType.MATRIX);
         barView.setOnTouchListener(new View.OnTouchListener() {

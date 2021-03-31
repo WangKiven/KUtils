@@ -1,16 +1,20 @@
 package com.kiven.kutils.activityHelper.activity;
 
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Debug;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.DragEvent;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -26,11 +30,13 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.kiven.kutils.R;
 import com.kiven.kutils.logHelper.ACheckRes;
 import com.kiven.kutils.logHelper.AHFileManager;
+import com.kiven.kutils.logHelper.KLog;
 import com.kiven.kutils.logHelper.KShowLog;
 import com.kiven.kutils.tools.KUtil;
 
@@ -162,32 +168,64 @@ public class DebugView {
     /**
      * 渐变颜色条
      */
+    @SuppressLint("ClickableViewAccessibility")
     protected void showDropDownBar() {
         if (barLayout != null) {
             return;
         }
 
         final float scale = activity.getResources().getDisplayMetrics().density;
-        int height = (int) (5 * scale + 0.5f);
+        int height = (int) (24 * scale + 0.5f);
 
-        View barView = new View(activity);
-        int color1 = Color.parseColor("#11111111");
-        barView.setBackgroundColor(color1);
-        barView.setOnLongClickListener(new View.OnLongClickListener() {
+        final ImageView barView = new ImageView(activity);
+        barView.setImageResource(R.drawable.k_ic_action_bar);
+        barView.setScaleType(ImageView.ScaleType.MATRIX);
+        barView.setOnTouchListener(new View.OnTouchListener() {
+            float oldY;
+            float oldY1;
+
             @Override
-            public boolean onLongClick(View v) {
-                showFloat();
-                return true;
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        oldY = event.getRawY();
+                        oldY1 = v.getY();
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        float y = event.getRawY() - oldY;
+                        if (Math.abs(y) > 1) {
+                            v.setY(oldY1 + y);
+                        }
+                        break;
+                    default:
+                        int a = KUtil.dip2px(2);
+                        if (Math.abs(v.getY() - oldY1) <= a) {// 认定单点击
+                            showFloat();
+                        }
+                        break;
+                }
+
+                return true;  //此处必须返回false，否则OnClickListener获取不到监听
             }
         });
 
         // 加个动画
 //        ObjectAnimator animator = ObjectAnimator.ofFloat(barView, "alpha", 0f, 0f, 0.3f, 1.0f, 0f);
-        int color2 = Color.parseColor("#33FF0000");
+        final int color1 = Color.parseColor("#1111FF");
+        int color2 = Color.parseColor("#FF0000");
         int color3 = Color.TRANSPARENT;
-        ObjectAnimator animator;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            animator = ObjectAnimator.ofArgb(barView, "backgroundColor", color1, color2, color2, color3, color3, color3, color1);
+        ValueAnimator animator;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            barView.setImageTintList(new ColorStateList(new int[][]{new int[]{}}, new int[]{color1}));
+
+//            animator = ObjectAnimator.ofArgb(barView, "backgroundColor", color1, color2, color2, color3, color3, color3, color1);
+            animator = ValueAnimator.ofArgb(color1, color2, color2, color3, color3, color3, color1);
+            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    barView.setImageTintList(new ColorStateList(new int[][]{new int[]{}}, new int[]{(int) animation.getAnimatedValue()}));
+                }
+            });
         } else {
             animator = ObjectAnimator.ofFloat(barView, "alpha", 0f, 0f, 0.3f, 1.0f, 0f);
         }
@@ -195,11 +233,10 @@ public class DebugView {
         animator.setRepeatCount(ObjectAnimator.INFINITE);
         animator.start();
 
-        barLayout = new LinearLayout(activity);
-        barLayout.addView(barView, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height));
-
-        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, height);
-        getRootView().addView(barLayout, layoutParams);
+        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(height/2, height);
+        layoutParams.gravity = Gravity.END;
+        layoutParams.topMargin = height;
+        getRootView().addView(barView, layoutParams);
     }
 
     private LinearLayout.LayoutParams createButtonParam(int childSize, int margin) {
@@ -254,6 +291,7 @@ public class DebugView {
 
             FrameLayout.LayoutParams mFloatLayoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
             mFloatLayoutParams.gravity = Gravity.CENTER_HORIZONTAL;
+            mFloatLayoutParams.topMargin = KUtil.dip2px(35);
 
             getRootView().addView(mFloatLayout, mFloatLayoutParams);
         } else {

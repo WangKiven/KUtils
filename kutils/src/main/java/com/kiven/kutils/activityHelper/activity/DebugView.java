@@ -120,11 +120,11 @@ public class DebugView {
                 String say;
                 if (hasStartMethodTracing) {
                     hasStartMethodTracing = false;
-                    say = "Stop method tracing";
+                    say = "停止方法追踪";
                     Debug.stopMethodTracing();
                 } else {
                     hasStartMethodTracing = true;
-                    say = "Start method tracing";
+                    say = "开始方法追踪";
                     //系统将在getExternalFilesDir() 目录下生成 .trace 文件，一般都在 ~/sdcard/Android/data/$packname/files 目录中
                     Debug.startMethodTracing("KUtilsMethodTracing-" + SimpleDateFormat.getDateTimeInstance().format(new Date()));
                 }
@@ -139,33 +139,34 @@ public class DebugView {
     // todo 所有选项，初始化FloatView，装载数据
     private List<DebugEntity> actions = new ArrayList<DebugEntity>();
 
+    // 颜色条
+    LinearLayout barLayout;
     //定义浮动窗口布局
     LinearLayout mFloatLayout;
-    WindowManager.LayoutParams wmParams;
-    //创建浮动窗口设置布局参数的对象
-    WindowManager mWindowManager;
 
-//    Button mFloatView;
-
-    Activity activity;
-    private static final String TAG = "FloatView";
+    private final Activity activity;
 
     public DebugView(@NonNull Activity context) {
         this.activity = context;
-        mWindowManager = context.getWindowManager();
+        // 在这里获取android.R.id.content并持有，会影响状态栏的颜色
+//        rootView = activity.getWindow().getDecorView().findViewById(android.R.id.content);
+    }
 
-        // todo 装载自定义选项
-//        actions.addAll(customAction);
-
-        wmParams = createParams();
-
-//        addDropDownBar();
+//    private final FrameLayout rootView;
+    private FrameLayout getRootView() {
+        // 不同的时候，android.R.id.content 指向的view不同。
+        return (FrameLayout) activity.getWindow().getDecorView().findViewById(android.R.id.content).getParent().getParent();
+//        return rootView;
     }
 
     /**
      * 渐变颜色条
      */
-    protected void addDropDownBar() {
+    protected void showDropDownBar() {
+        if (barLayout != null) {
+            return;
+        }
+
         final float scale = activity.getResources().getDisplayMetrics().density;
         int height = (int) (5 * scale + 0.5f);
 
@@ -182,7 +183,7 @@ public class DebugView {
 
         // 加个动画
 //        ObjectAnimator animator = ObjectAnimator.ofFloat(barView, "alpha", 0f, 0f, 0.3f, 1.0f, 0f);
-        int color2 = Color.parseColor("#11FF0000");
+        int color2 = Color.parseColor("#33FF0000");
         int color3 = Color.TRANSPARENT;
         ObjectAnimator animator;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
@@ -194,41 +195,11 @@ public class DebugView {
         animator.setRepeatCount(ObjectAnimator.INFINITE);
         animator.start();
 
-        LinearLayout barLayout = new LinearLayout(activity);
+        barLayout = new LinearLayout(activity);
         barLayout.addView(barView, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height));
 
-        FrameLayout rootView = (FrameLayout) activity.getWindow().getDecorView().findViewById(android.R.id.content).getParent().getParent();
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, height);
-        rootView.addView(barLayout, layoutParams);
-    }
-
-    private WindowManager.LayoutParams createParams() {
-        WindowManager.LayoutParams wlp = new WindowManager.LayoutParams();
-        //获取的是WindowManagerImpl.CompatModeWrapper
-//        mWindowManager = (WindowManager) getApplication().getSystemService(getApplication().WINDOW_SERVICE);
-        Log.i(TAG, "mWindowManager--->" + mWindowManager);
-        //设置window type
-        wlp.type = WindowManager.LayoutParams.TYPE_APPLICATION;// TYPE_APPLICATION 才是activity内
-        //设置图片格式，效果为背景透明
-        wlp.format = PixelFormat.RGBA_8888;
-        //设置浮动窗口不可聚焦（实现操作除浮动窗口外的其他可见窗口的操作）
-        wlp.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
-        //调整悬浮窗显示的停靠位置为左侧置顶
-//        wmParams.gravity = Gravity.LEFT | Gravity.TOP;
-        wlp.gravity = Gravity.CENTER;
-
-        // 以屏幕左上角为原点，设置x、y初始值，相对于gravity
-        wlp.x = 0;
-        wlp.y = 0 - KUtil.getScreenHeight() / 2;
-
-        //设置悬浮窗口长宽数据
-        wlp.width = WindowManager.LayoutParams.WRAP_CONTENT;
-        wlp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-         /*// 设置悬浮窗口长宽数据
-        wmParams.width = 200;
-        wmParams.height = 80;*/
-
-        return wlp;
+        getRootView().addView(barLayout, layoutParams);
     }
 
     private LinearLayout.LayoutParams createButtonParam(int childSize, int margin) {
@@ -239,7 +210,7 @@ public class DebugView {
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private void createFloatView() {
+    public void showFloat() {
 
 
         actions.clear();
@@ -277,9 +248,18 @@ public class DebugView {
 
 
         //获取浮动窗口视图所在布局
-        if (mFloatLayout == null)
+        if (mFloatLayout == null) {
             mFloatLayout = new LinearLayout(activity);
-        else mFloatLayout.removeAllViews();
+
+
+            FrameLayout.LayoutParams mFloatLayoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+            mFloatLayoutParams.gravity = Gravity.CENTER_HORIZONTAL;
+
+            getRootView().addView(mFloatLayout, mFloatLayoutParams);
+        } else {
+            mFloatLayout.removeAllViews();
+            mFloatLayout.setVisibility(View.VISIBLE);
+        }
 
         final int childSize = KUtil.dip2px(35);
         int padding = KUtil.dip2px(2);
@@ -304,7 +284,7 @@ public class DebugView {
         mFloatLayout.setOnTouchListener(new View.OnTouchListener() {
 
             float oldX, oldY;
-            int oldX1, oldY1;
+            float oldX1, oldY1;
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -315,20 +295,20 @@ public class DebugView {
                         oldX = event.getRawX();
                         oldY = event.getRawY();
 
-                        oldX1 = wmParams.x;
-                        oldY1 = wmParams.y;
+                        oldX1 = mFloatLayout.getX();
+                        oldY1 = mFloatLayout.getY();
                         break;
                     case MotionEvent.ACTION_MOVE:
                         float x = event.getRawX() - oldX;
                         float y = event.getRawY() - oldY;
                         if (Math.abs(x) > 1 && Math.abs(y) > 1) {
-                            wmParams.x = (int) (oldX1 + x);
-                            wmParams.y = (int) (oldY1 + y);
+                            mFloatLayout.setX(oldX1 + x);
+                            mFloatLayout.setY(oldY1 + y);
                         }
                         break;
                     default:
                         int a = KUtil.dip2px(2);
-                        if (Math.abs(wmParams.x - oldX1) <= a && Math.abs(wmParams.y - oldY1) <= a) {// 认定单点击
+                        if (Math.abs(mFloatLayout.getX() - oldX1) <= a && Math.abs(mFloatLayout.getY() - oldY1) <= a) {// 认定单点击
                             int position = ((int) event.getX()) / childSize;
                             if (position >= 0 && position < actions.size()) {
                                 actions.get(position).onClick(activity, mFloatLayout.getChildAt(position));
@@ -336,9 +316,6 @@ public class DebugView {
                         }
                         break;
                 }
-
-                //刷新
-                mWindowManager.updateViewLayout(mFloatLayout, wmParams);
 
                 return true;  //此处必须返回false，否则OnClickListener获取不到监听
             }
@@ -354,35 +331,14 @@ public class DebugView {
         });
     }
 
-    boolean isShow = false;
-
-    public void showFloat() {
-        if (!isShow) {
-            createFloatView();
-            //添加mFloatLayout
-            mWindowManager.addView(mFloatLayout, wmParams);
-            isShow = true;
-        }
-    }
-
     public void hideFloat() {
-        if (isShow) {
-            // removeViewImmediate 通知View立刻调用View.onDetachWindow(), 但是不能再调用addView
-            // 当前界面动态刷新的时候，removeView没有立刻调用View.onDetachWindow()，就会出现异常
-            // 出现问题的点：切换黑夜模式的时候，由于老的view没有解绑，mWindowManager.addView会打印错误，不过不会崩溃。
-            if (mFloatLayout != null) mWindowManager.removeView(mFloatLayout);
-            isShow = false;
+        if (mFloatLayout != null) {
+            mFloatLayout.setVisibility(View.GONE);
         }
-    }
-
-    public void onResume() {
-    }
-
-    public void onPause() {
-        hideFloat();
     }
 
     public boolean isShow() {
-        return isShow;
+        if (mFloatLayout == null) return false;
+        return mFloatLayout.getVisibility() == View.VISIBLE;
     }
 }

@@ -45,27 +45,8 @@ public class KActivity extends AppCompatActivity implements SensorEventListener 
         if (showLog()) {
             showLogTime = System.currentTimeMillis();
             sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
-
-            floatView.onResume();
+            floatView.showDropDownBar();
         }
-    }
-
-    @Override
-    public void setContentView(View view) {
-        super.setContentView(view);
-        if (floatView != null) floatView.addDropDownBar();
-    }
-
-    @Override
-    public void setContentView(int layoutResID) {
-        super.setContentView(layoutResID);
-        if (floatView != null) floatView.addDropDownBar();
-    }
-
-    @Override
-    public void setContentView(View view, ViewGroup.LayoutParams params) {
-        super.setContentView(view, params);
-        if (floatView != null) floatView.addDropDownBar();
     }
 
     @Override
@@ -74,7 +55,7 @@ public class KActivity extends AppCompatActivity implements SensorEventListener 
 
         if (showLog()) {
             sensorManager.unregisterListener(this);
-            floatView.onPause();
+            floatView.hideFloat();
         }
     }
 

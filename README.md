@@ -37,7 +37,7 @@ AHShare().startActivityForResult(mActivity, 8899)
 ### 功能菜单呼出方法
 
 - 运行App，摇动手机或者点击右侧中间位置的呼吸按钮，出现功能弹窗
-- 可以在功能菜单编辑界面，设置功能菜单呼出方式。点击![](kutils/src/main/res/mipmap-xxhdpi/k_ic_more.png)可打开编辑界面，设置快捷功能，和呼出方式。
+- 可以在功能菜单编辑界面，设置功能菜单呼出方式。点击<img src="kutils/src/main/res/mipmap-xxhdpi/k_ic_more.png" width="30"/>可打开编辑界面，设置快捷功能，和呼出方式。
 
 ### 查看打印的日志
 - Activity继承`KActivity`, 不用对`KActivityHelper`进行处理
@@ -57,7 +57,7 @@ KLog.d("Hello KLog.");
 KLog.e("Hello KLog.");
 KLog.w("Hello KLog.");
 ```
-- 运行App，摇动手机或者点击右侧中间位置的呼吸按钮，出现功能弹窗，选择Log图标![](kutils/src/main/res/mipmap-xxhdpi/k_ic_text_log.png)进入日志查看界面
+- 运行App，摇动手机或者点击右侧中间位置的呼吸按钮，出现功能弹窗，选择Log图标<img src="kutils/src/main/res/mipmap-xxhdpi/k_ic_text_log.png" width="30"/>进入日志查看界面
 
 ![avatar](images/1.jpg)  ![avatar](images/2.jpg)
 - 自定义日志弹窗
@@ -71,12 +71,12 @@ DebugView.addAction("测试", new DebugViewListener() {
 ```
 ### 在手机端查看mipmap/drawable/color资源
 - 打开日志界面，点击`查看资源`。
-- 在功能菜单点击按钮![](kutils/src/main/res/mipmap-xxhdpi/k_ic_source.png)
+- 在功能菜单点击按钮<img src="kutils/src/main/res/mipmap-xxhdpi/k_ic_source.png" width="30"/>
 
 ![avatar](images/4.jpg)  ![avatar](images/7.jpg)
 ### app目录结构
 - 打开日志界面，按右上角的按钮选择`文件目录`
-- 在功能菜单点击按钮![](kutils/src/main/res/mipmap-xxhdpi/k_ic_dir.png)
+- 在功能菜单点击按钮<img src="kutils/src/main/res/mipmap-xxhdpi/k_ic_dir.png" width="30"/>
 
 ![avatar](images/3.jpg)  ![avatar](images/5.jpg)  ![avatar](images/6.jpg)
 
@@ -84,7 +84,7 @@ DebugView.addAction("测试", new DebugViewListener() {
 
 ### 打开系统设置里面对应该应用的应用详情
 
-在功能菜单点击按钮![](kutils/src/main/res/mipmap-xxhdpi/k_ic_info.png)
+在功能菜单点击按钮<img src="kutils/src/main/res/mipmap-xxhdpi/k_ic_info.png" width="30"/>
 
 ### 授权申请
 

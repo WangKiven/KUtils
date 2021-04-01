@@ -11,6 +11,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DebugConst {
+    private final static String actionStartTypeKey = "kUtil_actionStartTypeKey";
+
+    /**
+     * 功能菜单呼出方式
+     * @return  0：呼吸按钮和传感器，1：传感器，2：呼吸按钮
+     */
+    public static int getActionStartType() {
+        return KUtil.getSharedPreferencesIntValue(actionStartTypeKey, 0);
+    }
+
+    public static void setActionStartType(int actionStartType) {
+        KUtil.putSharedPreferencesIntValue(actionStartTypeKey, actionStartType);
+    }
+
     final static String quickActionsKey = "kUtil_quickActionsKey";
     final static String shareDivStr = "\n";
     final static int maxQuickShow = 5;

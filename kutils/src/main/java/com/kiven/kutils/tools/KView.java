@@ -2,6 +2,7 @@ package com.kiven.kutils.tools;
 
 import android.annotation.SuppressLint;
 
+import androidx.annotation.StringRes;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
@@ -26,6 +27,8 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.LinearLayout;
 
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.kiven.kutils.callBack.CallBack;
 
 import java.util.ArrayList;
@@ -194,6 +197,8 @@ public class KView {
         data.setValue(v == null ? 0 : (v + 1));
     }
 
+    private static MutableLiveData<Integer> data = new MutableLiveData<Integer>();
+
     /**
      * 获取View的截图
      *
@@ -216,7 +221,38 @@ public class KView {
         return bmp;
     }
 
-    private static MutableLiveData<Integer> data = new MutableLiveData<Integer>();
+    public static void showSnackbar(@NonNull Activity activity, @NonNull CharSequence text, @BaseTransientBottomBar.Duration int duration) {
+        Snackbar.make(activity.getWindow().getDecorView().findViewById(android.R.id.content), text, duration).show();
+    }
+    public static void showSnackbar(@NonNull Activity activity, @StringRes int resId, @BaseTransientBottomBar.Duration int duration) {
+        Snackbar.make(activity.getWindow().getDecorView().findViewById(android.R.id.content), resId, duration).show();
+    }
+
+    public static void showSnackbar(@NonNull CharSequence text, @BaseTransientBottomBar.Duration int duration) {
+        Activity activity = KContext.getInstance().getTopActivity();
+        if (activity != null)
+            showSnackbar(activity, text, Snackbar.LENGTH_SHORT);
+    }
+
+    public static void showSnackbar(@StringRes int resId, @BaseTransientBottomBar.Duration int duration) {
+        Activity activity = KContext.getInstance().getTopActivity();
+        if (activity != null)
+            showSnackbar(activity, resId, Snackbar.LENGTH_SHORT);
+    }
+
+    public static void showSnackbar(@NonNull Activity activity, @NonNull CharSequence text) {
+        showSnackbar(activity, text, Snackbar.LENGTH_LONG);
+    }
+    public static void showSnackbar(@NonNull Activity activity, @StringRes int resId) {
+        showSnackbar(activity, resId, Snackbar.LENGTH_LONG);
+    }
+
+    public static void showSnackbar(@NonNull CharSequence text) {
+        showSnackbar(text, Snackbar.LENGTH_LONG);
+    }
+    public static void showSnackbar(@StringRes int resId) {
+        showSnackbar(resId, Snackbar.LENGTH_LONG);
+    }
 
 
     /**

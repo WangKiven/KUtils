@@ -1,8 +1,10 @@
 package com.kiven.kutils.activityHelper.activity;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -10,18 +12,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.ImageViewCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.flexbox.FlexboxLayoutManager;
+import com.google.android.material.snackbar.Snackbar;
 import com.kiven.kutils.R;
 import com.kiven.kutils.activityHelper.KActivityHelper;
 import com.kiven.kutils.activityHelper.KHelperActivity;
 import com.kiven.kutils.callBack.CallBack;
 import com.kiven.kutils.callBack.Consumer;
 import com.kiven.kutils.logHelper.KLog;
+import com.kiven.kutils.tools.KView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,6 +36,7 @@ class KAHDebugActionEdit extends KActivityHelper {
 
     private List<DebugEntity> quickActions;
     private List<DebugEntity> otherActions;
+
     @Override
     public void onCreate(@NonNull KHelperActivity activity, Bundle savedInstanceState) {
         super.onCreate(activity, savedInstanceState);
@@ -38,12 +44,9 @@ class KAHDebugActionEdit extends KActivityHelper {
         initBackToolbar(R.id.toolbar, true);
 
 
-
         final ImageView iv_edit = findViewById(R.id.iv_edit);
         final RecyclerView rv_quick = findViewById(R.id.rv_quick);
         final RecyclerView rv_other = findViewById(R.id.rv_other);
-
-
 
 
         otherActions = new ArrayList<>(DebugView.customAction);
@@ -51,10 +54,9 @@ class KAHDebugActionEdit extends KActivityHelper {
         otherActions.removeAll(quickActions);
 
 
-
-
         iv_edit.setOnClickListener(new View.OnClickListener() {
             boolean isEditing = false;
+
             @Override
             public void onClick(View v) {
                 MyAdapter quickAdapter = (MyAdapter) rv_quick.getAdapter();
@@ -102,12 +104,6 @@ class KAHDebugActionEdit extends KActivityHelper {
         })).attachToRecyclerView(rv_quick);
 
 
-
-
-
-
-
-
         rv_other.setLayoutManager(new FlexboxLayoutManager(activity));
         rv_other.setAdapter(new MyAdapter(otherActions, new Consumer<DebugEntity>() {
             @Override
@@ -128,9 +124,33 @@ class KAHDebugActionEdit extends KActivityHelper {
         new ItemTouchHelper(new ItemTouchHelperCallback(otherActions, null)).attachToRecyclerView(rv_other);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.add(0, Menu.FIRST + 1, 0, "呼出方式").setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == Menu.FIRST + 1) {
+            new AlertDialog.Builder(mActivity).setItems(new String[]{"呼吸按钮和传感器", "传感器", "呼吸按钮"}, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    DebugConst.setActionStartType(which);
+                    KView.showSnackbar("已保存设置，重新打开界面时启用");
+                }
+            }).show();
+
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     private static class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
         final List<DebugEntity> actions;
         final CallBack onChange;
+
         public ItemTouchHelperCallback(List<DebugEntity> actions, CallBack onChange) {
             this.actions = actions;
             this.onChange = onChange;
@@ -194,7 +214,8 @@ class KAHDebugActionEdit extends KActivityHelper {
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             return new RecyclerView.ViewHolder(LayoutInflater.from(mActivity)
-                    .inflate(R.layout.k_ah_debug_action_edit_item, parent, false)) {};
+                    .inflate(R.layout.k_ah_debug_action_edit_item, parent, false)) {
+            };
         }
 
         @Override

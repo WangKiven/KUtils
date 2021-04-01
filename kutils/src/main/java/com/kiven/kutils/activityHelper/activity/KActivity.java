@@ -23,6 +23,8 @@ import com.kiven.kutils.tools.KContext;
  */
 public class KActivity extends AppCompatActivity implements SensorEventListener {
 
+    private int actionStartType;
+
     protected SensorManager sensorManager;
 
     private long showLogTime;
@@ -33,7 +35,9 @@ public class KActivity extends AppCompatActivity implements SensorEventListener 
         super.onCreate(savedInstanceState);
 
         if (showLog()) {
-            sensorManager = (SensorManager) getSystemService(Activity.SENSOR_SERVICE);
+            actionStartType = DebugConst.getActionStartType();
+            if (actionStartType != 2)
+                sensorManager = (SensorManager) getSystemService(Activity.SENSOR_SERVICE);
             floatView = new DebugView(this);
         }
     }
@@ -44,8 +48,10 @@ public class KActivity extends AppCompatActivity implements SensorEventListener 
 
         if (showLog()) {
             showLogTime = System.currentTimeMillis();
-            sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
-            floatView.showDropDownBar();
+            if (sensorManager != null)
+                sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+
+            if (actionStartType != 1) floatView.showDropDownBar();
         }
     }
 
@@ -54,7 +60,7 @@ public class KActivity extends AppCompatActivity implements SensorEventListener 
         super.onPause();
 
         if (showLog()) {
-            sensorManager.unregisterListener(this);
+            if (sensorManager != null) sensorManager.unregisterListener(this);
             floatView.hideFloat();
         }
     }

@@ -57,12 +57,6 @@ fun Activity.getInput(inputName: String, text: String, action: (CharSequence) ->
             .show()
 }
 
-/// 显示提示
-fun Activity.snackbar(text: String) {
-    Snackbar.make(window.decorView, text, Snackbar.LENGTH_SHORT).show()
-    KLog.i(text)
-}
-
 /// 选择列表
 fun Activity.listPicker(title: String, items: Array<String>, action: (Int) -> Unit) {
     AlertDialog.Builder(this).setItems(items) { dialog, p ->
@@ -130,9 +124,16 @@ fun Activity.showBottomSheetDialog(list: Array<String>, onClickItem: (Int, Strin
     sheetDialog.show()
 }
 
+@Deprecated("不小心谢了两个")
 fun Activity.showSnack(word: String) {
     Snackbar.make(window.decorView.findViewById(android.R.id.content), word, Snackbar.LENGTH_LONG).show()
     Log.i(KLog.getTag(), word)
+}
+
+/// 显示提示
+fun Activity.snackbar(text: String) {
+    Snackbar.make(window.decorView.findViewById(android.R.id.content), text, Snackbar.LENGTH_SHORT).show()
+    KLog.i(text)
 }
 
 fun Activity.showImageDialog(path: String?) {

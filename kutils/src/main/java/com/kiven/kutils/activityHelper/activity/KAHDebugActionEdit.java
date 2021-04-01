@@ -40,6 +40,7 @@ class KAHDebugActionEdit extends KActivityHelper {
     @Override
     public void onCreate(@NonNull KHelperActivity activity, Bundle savedInstanceState) {
         super.onCreate(activity, savedInstanceState);
+        activity.setTheme(R.style.KTheme);
         setContentView(R.layout.k_ah_debug_action_edit);
         initBackToolbar(R.id.toolbar, true);
 

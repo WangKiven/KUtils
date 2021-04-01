@@ -27,7 +27,7 @@ public class DebugConst {
 
     final static String quickActionsKey = "kUtil_quickActionsKey";
     final static String shareDivStr = "\n";
-    final static int maxQuickShow = 5;
+    final static int maxQuickShow = 10;
     @NonNull
     static List<DebugEntity> getQuickActions() {
         String keyStr = KUtil.getSharedPreferencesStringValue(quickActionsKey, null);

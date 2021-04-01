@@ -52,7 +52,7 @@ KLog.d("Hello KLog.");
 KLog.e("Hello KLog.");
 KLog.w("Hello KLog.");
 ```
-- 运行App，摇动手机或者长按顶部呼吸条(仔细看，在界面顶部有呼吸条)，出现功能弹窗，选择Log进入日志查看界面
+- 运行App，摇动手机或者点击右侧中间位置的呼吸按钮，出现功能弹窗，选择Log进入日志查看界面
 
 ![avatar](images/1.jpg)  ![avatar](images/2.jpg)
 - 自定义日志弹窗
@@ -88,9 +88,10 @@ KGranting.requestPermissions(activity, 377, Manifest.permission.RECORD_AUDIO,
     }
 }
 ```
-- 不通过fragment请求权限，不建议使用。
+- 不通过fragment请求权限，不建议使用，以后可能会删除这个权限请求方式。
 ```
 // 这句代码建议，在继承的Application中使用，因为是静态变量，只需要设置一次。
+// 默认值是true，不建议设置为false
 KGranting.useFragmentRequest = false;
 
 // 使用。这里是Kotlin代码

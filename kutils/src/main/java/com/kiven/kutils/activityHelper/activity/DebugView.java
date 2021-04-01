@@ -211,8 +211,8 @@ public class DebugView {
 
         // 加个动画
 //        ObjectAnimator animator = ObjectAnimator.ofFloat(barView, "alpha", 0f, 0f, 0.3f, 1.0f, 0f);
-        final int color1 = Color.parseColor("#1111FF");
-        int color2 = Color.parseColor("#FF0000");
+        final int color1 = Color.parseColor("#331111FF");
+        int color2 = Color.parseColor("#33FF0000");
         int color3 = Color.TRANSPARENT;
         ValueAnimator animator;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -234,7 +234,7 @@ public class DebugView {
         animator.start();
 
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(height/2, height);
-        layoutParams.gravity = Gravity.END;
+        layoutParams.gravity = Gravity.END | Gravity.CENTER_VERTICAL;
         layoutParams.topMargin = height;
         getRootView().addView(barView, layoutParams);
     }

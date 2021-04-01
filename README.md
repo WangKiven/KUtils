@@ -34,6 +34,11 @@ AHShare().startActivityForResult(mActivity, 8899)
 
 `内存回收`: 这种情况，KActivityHelper是不能拿取到了，所以只有重新创建KActivityHelper，可查看KHelperActivity类里面的方法getHelper(Bundle savedInstanceState)理解原理，其实就是通过反射实现的，内存回收的时候会在onSaveInstanceState()保存类名。所以，建议不要直接给KActivityHelper设置参数值，还是通过KActivityHelper.getIntent()来设置值。
 
+### 功能菜单呼出方法
+
+- 运行App，摇动手机或者点击右侧中间位置的呼吸按钮，出现功能弹窗
+- 可以在功能菜单编辑界面，设置功能菜单呼出方式。点击![](kutils/src/main/res/mipmap-xxhdpi/k_ic_more.png)可打开编辑界面，设置快捷功能，和呼出方式。
+
 ### 查看打印的日志
 - Activity继承`KActivity`, 不用对`KActivityHelper`进行处理
 ```
@@ -52,7 +57,7 @@ KLog.d("Hello KLog.");
 KLog.e("Hello KLog.");
 KLog.w("Hello KLog.");
 ```
-- 运行App，摇动手机或者点击右侧中间位置的呼吸按钮，出现功能弹窗，选择Log进入日志查看界面
+- 运行App，摇动手机或者点击右侧中间位置的呼吸按钮，出现功能弹窗，选择Log图标![](kutils/src/main/res/mipmap-xxhdpi/k_ic_text_log.png)进入日志查看界面
 
 ![avatar](images/1.jpg)  ![avatar](images/2.jpg)
 - 自定义日志弹窗
@@ -66,15 +71,23 @@ DebugView.addAction("测试", new DebugViewListener() {
 ```
 ### 在手机端查看mipmap/drawable/color资源
 - 打开日志界面，点击`查看资源`。
-- 注意：在`查看资源`界面，可以点击右边按钮选择`查看日志`进入日志查看界面
+- 在功能菜单点击按钮![](kutils/src/main/res/mipmap-xxhdpi/k_ic_source.png)
 
 ![avatar](images/4.jpg)  ![avatar](images/7.jpg)
 ### app目录结构
 - 打开日志界面，按右上角的按钮选择`文件目录`
+- 在功能菜单点击按钮![](kutils/src/main/res/mipmap-xxhdpi/k_ic_dir.png)
 
 ![avatar](images/3.jpg)  ![avatar](images/5.jpg)  ![avatar](images/6.jpg)
 
+
+
+### 打开系统设置里面对应该应用的应用详情
+
+在功能菜单点击按钮![](kutils/src/main/res/mipmap-xxhdpi/k_ic_info.png)
+
 ### 授权申请
+
 - 通过fragment请求权限，建议使用这个。
 ```
 // 这句代码建议，在继承的Application中使用，因为是静态变量，只需要设置一次。

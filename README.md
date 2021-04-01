@@ -38,6 +38,7 @@ AHShare().startActivityForResult(mActivity, 8899)
 
 - 运行App，摇动手机或者点击右侧中间位置的呼吸按钮，出现功能弹窗
 - 可以在功能菜单编辑界面，设置功能菜单呼出方式。点击<img src="kutils/src/main/res/mipmap-xxhdpi/k_ic_more.png" width="30"/>可打开编辑界面，设置快捷功能，和呼出方式。
+- ![avatar](images/1.jpg)![avatar](images/8.jpg)
 
 ### 查看打印的日志
 - Activity继承`KActivity`, 不用对`KActivityHelper`进行处理

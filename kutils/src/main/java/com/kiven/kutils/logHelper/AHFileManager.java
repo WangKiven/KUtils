@@ -67,7 +67,7 @@ public class AHFileManager extends KActivityHelper {
         activity.setTheme(R.style.KTheme);
 
         setContentView(R.layout.k_ah_file_manager);
-        initBackToolbar(R.id.toolbar);
+        initBackToolbar(R.id.toolbar, true);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             childAdapter.notifyDataSetChanged();

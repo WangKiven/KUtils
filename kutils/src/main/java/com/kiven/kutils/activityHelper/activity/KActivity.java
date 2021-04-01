@@ -71,6 +71,12 @@ public class KActivity extends AppCompatActivity implements SensorEventListener 
         KContext.getInstance().onActivityFinish(this);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (floatView != null) floatView.onDestroy();
+    }
+
     protected boolean showLog() {
         return KLog.isDebug();
     }

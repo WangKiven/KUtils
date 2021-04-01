@@ -147,6 +147,7 @@ public class DebugView {
 
     // 颜色条
     ImageView barView;
+    ValueAnimator barAnimator;
     //定义浮动窗口布局
     LinearLayout mFloatLayout;
 
@@ -214,24 +215,23 @@ public class DebugView {
         final int color1 = Color.parseColor("#331111FF");
         int color2 = Color.parseColor("#33FF0000");
         int color3 = Color.TRANSPARENT;
-        ValueAnimator animator;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             barView.setImageTintList(new ColorStateList(new int[][]{new int[]{}}, new int[]{color1}));
 
 //            animator = ObjectAnimator.ofArgb(barView, "backgroundColor", color1, color2, color2, color3, color3, color3, color1);
-            animator = ValueAnimator.ofArgb(color1, color2, color2, color3, color3, color3, color1);
-            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            barAnimator = ValueAnimator.ofArgb(color1, color2, color2, color3, color3, color3, color1);
+            barAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
                     barView.setImageTintList(new ColorStateList(new int[][]{new int[]{}}, new int[]{(int) animation.getAnimatedValue()}));
                 }
             });
         } else {
-            animator = ObjectAnimator.ofFloat(barView, "alpha", 0f, 0f, 0.3f, 1.0f, 0f);
+            barAnimator = ObjectAnimator.ofFloat(barView, "alpha", 0f, 0f, 0.3f, 1.0f, 0f);
         }
-        animator.setDuration(5500);
-        animator.setRepeatCount(ObjectAnimator.INFINITE);
-        animator.start();
+        barAnimator.setDuration(5500);
+        barAnimator.setRepeatCount(ObjectAnimator.INFINITE);
+        barAnimator.start();
 
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(height/2, height);
         layoutParams.gravity = Gravity.END | Gravity.CENTER_VERTICAL;
@@ -378,5 +378,11 @@ public class DebugView {
     public boolean isShow() {
         if (mFloatLayout == null) return false;
         return mFloatLayout.getVisibility() == View.VISIBLE;
+    }
+
+    protected void onDestroy() {
+        // ValueAnimator需要手动停止，否则会内存溢出。ObjectAnimator是自动停止。
+        // 高系统用的ValueAnimator，低系统用的ObjectAnimator。所以这里还是手动取消一下。
+        if (barAnimator != null) barAnimator.cancel();
     }
 }

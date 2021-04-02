@@ -21,48 +21,21 @@ import com.kiven.kutils.tools.KContext;
  * 可显示日志父类Activit
  * Created by kiven on 16/5/6.
  */
-public class KActivity extends AppCompatActivity implements SensorEventListener {
-
-    private int actionStartType;
-
-    protected SensorManager sensorManager;
-
-    private long showLogTime;
-    private DebugView floatView;
+public class KActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (showLog()) {
-            actionStartType = DebugConst.getActionStartType();
-            if (actionStartType != 2)
-                sensorManager = (SensorManager) getSystemService(Activity.SENSOR_SERVICE);
-            floatView = new DebugView(this);
-        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        if (showLog()) {
-            showLogTime = System.currentTimeMillis();
-            if (sensorManager != null)
-                sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
-
-            if (actionStartType != 1) floatView.showDropDownBar();
-        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-
-        if (showLog()) {
-            if (sensorManager != null) sensorManager.unregisterListener(this);
-            floatView.hideFloat();
-        }
     }
 
     @Override
@@ -74,48 +47,10 @@ public class KActivity extends AppCompatActivity implements SensorEventListener 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (floatView != null) floatView.onDestroy();
     }
 
     protected boolean showLog() {
         return KLog.isDebug();
-    }
-
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        if (System.currentTimeMillis() - showLogTime < 1000) {
-            return;
-        }
-
-        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-
-            float x = event.values[0];
-            float y = event.values[1];
-            float z = event.values[2];
-
-            float xx = Math.abs(x);
-            float yy = Math.abs(y);
-            float zz = Math.abs(z - 9.8f);
-
-            double sens = Math.sqrt(xx * xx + yy * yy + zz * zz);
-
-            if (sens > 15) {
-                showDebugView();
-
-                showLogTime = System.currentTimeMillis();
-            }
-        }
-    }
-
-    protected void showDebugView() {
-        if (floatView != null) {
-            floatView.showFloat();
-        }
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
     }
 
     // for fix https://stackoverflow.com/questions/41025200/android-view-inflateexception-error-inflating-class-android-webkit-webview

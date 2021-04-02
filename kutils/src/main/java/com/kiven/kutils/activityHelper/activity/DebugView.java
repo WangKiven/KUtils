@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.DrawableRes;
+import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -141,44 +142,46 @@ public class DebugView {
         });
     }
 
-
-    // todo 所有选项，初始化FloatView，装载数据
-    private List<DebugEntity> actions = new ArrayList<DebugEntity>();
-
-    // 颜色条
-    ImageView barView;
-    ValueAnimator barAnimator;
-    //定义浮动窗口布局
-    LinearLayout mFloatLayout;
-
-    private final Activity activity;
-
     public DebugView(@NonNull Activity context) {
-        this.activity = context;
         // 在这里获取android.R.id.content并持有，会影响状态栏的颜色
 //        rootView = activity.getWindow().getDecorView().findViewById(android.R.id.content);
     }
 
 //    private final FrameLayout rootView;
-    private FrameLayout getRootView() {
+    private static FrameLayout getRootView(@NonNull Activity activity) {
         // 不同的时候，android.R.id.content 指向的view不同。
         return (FrameLayout) activity.getWindow().getDecorView().findViewById(android.R.id.content).getParent().getParent();
 //        return rootView;
+    }
+
+    private static View findFloatViewById(@NonNull Activity activity, @IdRes int id) {
+        FrameLayout rv = getRootView(activity);
+        int count = rv.getChildCount();
+        for (int i = 0; i < count; i++) {
+            View v = rv.getChildAt(i);
+            if (v.getId() == id) {
+                return v;
+            }
+        }
+
+        return null;
     }
 
     /**
      * 渐变颜色条
      */
     @SuppressLint("ClickableViewAccessibility")
-    protected void showDropDownBar() {
-        if (barView != null) {
+    public static void addBreathBtn(@NonNull final Activity activity) {
+        View vv = findFloatViewById(activity, R.id.k_bar_view);
+
+        if (vv != null && vv.getTag() != null && vv.getTag() instanceof ValueAnimator) {
             return;
         }
 
         final float scale = activity.getResources().getDisplayMetrics().density;
         int height = (int) (24 * scale + 0.5f);
 
-        barView = new ImageView(activity);
+        final ImageView barView = new ImageView(activity);
         barView.setImageResource(R.drawable.k_ic_action_bar);
         barView.setScaleType(ImageView.ScaleType.MATRIX);
         barView.setOnTouchListener(new View.OnTouchListener() {
@@ -201,7 +204,7 @@ public class DebugView {
                     default:
                         int a = KUtil.dip2px(2);
                         if (Math.abs(v.getY() - oldY1) <= a) {// 认定单点击
-                            showFloat();
+                            showFloat(activity);
                         }
                         break;
                 }
@@ -215,6 +218,8 @@ public class DebugView {
         final int color1 = Color.parseColor("#331111FF");
         int color2 = Color.parseColor("#33FF0000");
         int color3 = Color.TRANSPARENT;
+
+        ValueAnimator barAnimator;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             barView.setImageTintList(new ColorStateList(new int[][]{new int[]{}}, new int[]{color1}));
 
@@ -236,10 +241,14 @@ public class DebugView {
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(height/2, height);
         layoutParams.gravity = Gravity.END | Gravity.CENTER_VERTICAL;
         layoutParams.topMargin = height;
-        getRootView().addView(barView, layoutParams);
+        getRootView(activity).addView(barView, layoutParams);
+
+        //
+        barView.setId(R.id.k_bar_view);
+        barView.setTag(barAnimator);
     }
 
-    private LinearLayout.LayoutParams createButtonParam(int childSize, int margin) {
+    private static LinearLayout.LayoutParams createButtonParam(int childSize, int margin) {
         int size = childSize - 2 * margin;
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(size, size);
         params.setMargins(margin, margin, margin, margin);
@@ -247,10 +256,11 @@ public class DebugView {
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    public void showFloat() {
+    public static void showFloat(@NonNull final Activity activity) {
 
 
-        actions.clear();
+        // todo 所有选项，初始化FloatView，装载数据
+        final List<DebugEntity> actions = new ArrayList<DebugEntity>();
 
         List<DebugEntity> showActions = DebugConst.getQuickActions();
         if (showActions.isEmpty()) {
@@ -274,7 +284,7 @@ public class DebugView {
         actions.add(new DebugEntity(R.drawable.k_ic_close, new DebugViewListener() {
             @Override
             public void onClick(Activity activity, View view, DebugEntity entity) {
-                hideFloat();
+                hideFloat(activity);
             }
         }));
 
@@ -285,16 +295,32 @@ public class DebugView {
 
 
         //获取浮动窗口视图所在布局
-        if (mFloatLayout == null) {
+
+
+        final LinearLayout mFloatLayout;
+
+        View vv = findFloatViewById(activity, R.id.k_float_layout);
+        if (vv != null) {
+            if (!(vv instanceof LinearLayout)) {
+                // 发现了类型不是LinearLayout的view，说明出现冲突了
+                KLog.e("R.id.k_float_layout 控件类型不对");
+                return;
+            }
+        }
+
+        if (vv == null) {
             mFloatLayout = new LinearLayout(activity);
+            mFloatLayout.setId(R.id.k_float_layout);
 
 
             FrameLayout.LayoutParams mFloatLayoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
             mFloatLayoutParams.gravity = Gravity.CENTER_HORIZONTAL;
             mFloatLayoutParams.topMargin = KUtil.dip2px(35);
 
-            getRootView().addView(mFloatLayout, mFloatLayoutParams);
+            getRootView(activity).addView(mFloatLayout, mFloatLayoutParams);
         } else {
+            mFloatLayout = (LinearLayout) vv;
+
             mFloatLayout.removeAllViews();
             mFloatLayout.setVisibility(View.VISIBLE);
         }
@@ -369,20 +395,33 @@ public class DebugView {
         });
     }
 
-    public void hideFloat() {
-        if (mFloatLayout != null) {
-            mFloatLayout.setVisibility(View.GONE);
+    public static void hideFloat(@NonNull Activity activity) {
+        View vv = findFloatViewById(activity, R.id.k_float_layout);
+        if (vv != null) {
+            if (vv instanceof LinearLayout) {
+                vv.setVisibility(View.GONE);
+            }
         }
     }
 
-    public boolean isShow() {
-        if (mFloatLayout == null) return false;
-        return mFloatLayout.getVisibility() == View.VISIBLE;
+    public static boolean isShow(@NonNull Activity activity) {
+        View vv = findFloatViewById(activity, R.id.k_float_layout);
+        if (vv != null) {
+            if (vv instanceof LinearLayout) {
+                return vv.getVisibility() == View.VISIBLE;
+            }
+        }
+
+        return false;
     }
 
-    protected void onDestroy() {
+    public static void onDestroy(@NonNull Activity activity) {
         // ValueAnimator需要手动停止，否则会内存溢出。ObjectAnimator是自动停止。
         // 高系统用的ValueAnimator，低系统用的ObjectAnimator。所以这里还是手动取消一下。
-        if (barAnimator != null) barAnimator.cancel();
+        View vv = findFloatViewById(activity, R.id.k_bar_view);
+
+        if (vv != null && vv.getTag() != null && vv.getTag() instanceof ValueAnimator) {
+            ((ValueAnimator) vv.getTag()).cancel();
+        }
     }
 }

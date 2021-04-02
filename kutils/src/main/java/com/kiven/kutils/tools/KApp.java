@@ -5,8 +5,6 @@ import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
-import android.hardware.Sensor;
-import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Process;
@@ -18,34 +16,34 @@ import androidx.annotation.Nullable;
 import com.kiven.kutils.activityHelper.KActivityHelper;
 import com.kiven.kutils.activityHelper.activity.DebugConst;
 import com.kiven.kutils.activityHelper.activity.DebugView;
-import com.kiven.kutils.activityHelper.activity.KShakingListener;
-import com.kiven.kutils.callBack.CallBack;
 import com.kiven.kutils.logHelper.KLog;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by kiven on 16/5/6.
- */
-public class KContext extends Application {
-    private static KContext mInstance;
+public final class KApp {
+    private static KApp instance;
 
-    public static KContext getInstance() {
-        return mInstance;
+    private final Application app;
+    private KApp(@NonNull Application app) {
+        this.app = app;
     }
 
-    @Override
-    public final void onCreate() {
-        super.onCreate();
-        mInstance = this;
+    public static KApp getInstance(@NonNull Application app) {
+        if (instance == null)
+            instance = new KApp(app);
+        return instance;
+    }
 
-        KUtil.setApp(this);
-        // 拦截崩溃异常。
-        KUncaughtExceptionHandler.getInstance().register();
+    public Application getApp() {
+        return app;
+    }
+
+    public void onCreate() {
+        KUtil.setApp(app);
 
         if (isMainProcess()) {
-            registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
+            app.registerActivityLifecycleCallbacks(new Application.ActivityLifecycleCallbacks() {
                 @Override
                 public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
                     KLog.d(activity.toString() + " - onActivityCreated");
@@ -98,54 +96,17 @@ public class KContext extends Application {
                     DebugView.onDestroy(activity);
                 }
             });
-
-            initOnlyMainProcess();
         }
-
-        init();
-
-        if (isMainProcess()) {
-            if (KLog.isDebug()) {
-                startShakingListener();
-            }
-        }
-
-        // 再次拦截，防止被替换。
-        // 注册两次的原因是，1 拦截所有异常 2 防止被替换
-        KUncaughtExceptionHandler.getInstance().register();
-    }
-
-    protected void startShakingListener() {
-        SensorManager sensorManager = (SensorManager) getSystemService(Activity.SENSOR_SERVICE);
-        sensorManager.registerListener(new KShakingListener(new CallBack() {
-            @Override
-            public void callBack() {
-                if (DebugConst.getActionStartType()  != 2) {
-                    Activity activity = getTopActivity();
-                    if (activity != null) {
-                        DebugView.showFloat(activity);
-                    }
-                }
-            }
-        }), sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
-    }
-
-    protected void initOnlyMainProcess() {
-    }
-
-    protected void init() {
-//        x.Ext.init(this);
-//        x.Ext.setDebug(KLog.isDebug());
     }
 
     /**
      * 判断当前进程是否是主进程， 可用于防止多次调用 onCreate()
      */
     public boolean isMainProcess() {
-        String packageName = getPackageName();
+        String packageName = app.getPackageName();
 
         int pid = android.os.Process.myPid();
-        ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        ActivityManager activityManager = (ActivityManager) app.getSystemService(Context.ACTIVITY_SERVICE);
         if (activityManager != null)
             for (ActivityManager.RunningAppProcessInfo appProcess : activityManager
                     .getRunningAppProcesses()) {
@@ -160,11 +121,11 @@ public class KContext extends Application {
 
     public String getProcessName_() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            return getProcessName();
+            return app.getProcessName();
         }
 
         int pid = Process.myPid();
-        ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        ActivityManager activityManager = (ActivityManager) app.getSystemService(Context.ACTIVITY_SERVICE);
         if (activityManager != null)
             for (ActivityManager.RunningAppProcessInfo appProcess : activityManager
                     .getRunningAppProcesses()) {
@@ -208,30 +169,6 @@ public class KContext extends Application {
         void onChange(ActivityInfo activityInfo);
     }
 
-    /*public void onActivityCreate(Activity activity) {
-        if (activity == null) {
-            return;
-        }
-
-        changeStatus(checkOrAdd(activity, ActivityStatus.CREATED));
-    }
-
-    public void onActivityStart(Activity activity) {
-        if (activity == null) {
-            return;
-        }
-
-        changeStatus(checkOrAdd(activity, ActivityStatus.STARTED));
-    }
-
-    public void onActivityResume(Activity activity) {
-        if (activity == null) {
-            return;
-        }
-
-        changeStatus(checkOrAdd(activity, ActivityStatus.RESUMED));
-    }*/
-
     public void onActivityFinish(Activity activity) {
         if (activity == null) {
             return;
@@ -239,33 +176,6 @@ public class KContext extends Application {
 
         changeStatus(checkOrAdd(activity, ActivityStatus.FINISHING));
     }
-
-    /*public void onActivityPause(Activity activity) {
-        if (activity == null) {
-            return;
-        }
-
-        changeStatus(checkOrAdd(activity, ActivityStatus.PAUSED));
-    }
-
-    public void onActivityStop(Activity activity) {
-        if (activity == null) {
-            return;
-        }
-
-        changeStatus(checkOrAdd(activity, ActivityStatus.STOPED));
-    }
-
-    public void onActivityDestory(Activity activity) {
-        if (activity == null) {
-            return;
-        }
-        ActivityInfo a = remove(activity);
-        if (a != null) {
-            a.status = ActivityStatus.DESTORIED;
-        }
-        changeStatus(a);
-    }*/
 
     /**
      *
@@ -300,7 +210,7 @@ public class KContext extends Application {
      */
     public boolean isOnForeground() {
         System.out.println("=======获得当前正在运行的activity=========");
-        Context context = this;
+        Context context = app;
 
         ActivityManager activityManager = (ActivityManager) context
                 .getSystemService(Context.ACTIVITY_SERVICE);
@@ -412,7 +322,7 @@ public class KContext extends Application {
      */
     public void startSinkActivity(Class aClass) {
         closeAllActivity();
-        startActivity(new Intent(this, aClass));
+        app.startActivity(new Intent(app, aClass));
     }
 
     /**
@@ -423,7 +333,7 @@ public class KContext extends Application {
 
         // 不加这句可能会蹦
         helper.getIntent().addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-        helper.startActivity(this);
+        helper.startActivity(app);
     }
 
     @Nullable

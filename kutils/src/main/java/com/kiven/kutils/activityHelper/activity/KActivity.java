@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.kiven.kutils.logHelper.KLog;
+import com.kiven.kutils.tools.KAppHelper;
 import com.kiven.kutils.tools.KContext;
 
 /**
@@ -41,16 +42,12 @@ public class KActivity extends AppCompatActivity {
     @Override
     public void finish() {
         super.finish();
-        KContext.getInstance().onActivityFinish(this);
+        KAppHelper.getInstance().onActivityFinish(this);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-    }
-
-    protected boolean showLog() {
-        return KLog.isDebug();
     }
 
     // for fix https://stackoverflow.com/questions/41025200/android-view-inflateexception-error-inflating-class-android-webkit-webview

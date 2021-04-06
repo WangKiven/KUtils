@@ -8,6 +8,65 @@
 - 各种功能、三方库的使用demo
 - 小米、华为、OPPO、vivo 4大厂商的推送集成
 
+### 初始配置
+
+- gradle配置
+
+```
+// 仓库配置
+maven { url "https://jitpack.io" }
+
+// 依赖配置
+implementation 'com.github.WangKiven:KUtils:1.4.1'
+```
+
+- 配置`Application`
+
+```
+// 如果不需要在Application中做什么操作，直接在manifest配置KContext就行了(不建议，KUtil.Config中的参数最好手动配置一下)，否则使用下面两种方法中的一种
+// 1 继承KContext，onCreate()不能被重写，只能使用initOnlyMainProcess()和init()，下面是kotlin代码
+class AppContext : KContext() {
+    override fun initOnlyMainProcess() {
+        super.initOnlyMainProcess()
+        
+        KUtil.init(this, KUtil.Config().apply {
+            isDebug = true/false;
+            setTag("xxx")
+            setImageDirName("xxx")
+        })
+    }
+
+    override fun init() {
+        super.init()
+    }
+}
+// 2 仿照KContext重新写一个Application
+public class KContext extends Application {
+    @Override
+    public final void onCreate() {
+        super.onCreate();
+        KUtil.setApp(this);
+
+        // 必须先调用KUtil.setApp(this);否则 KAppHelper.getInstance()=null
+        KAppHelper.getInstance().startAppCreate();
+
+        // TODO: 2021-04-06 ------------------要加的代码在下面-------------------
+        
+        KUtil.Config config = new KUtil.Config();
+        config.setConfigSharedPreferences("xxx");
+        config.setDebug(true/false);
+        config.setImageDirName("xxx");
+        KUtil.init(this, config);
+        
+        // TODO: 2021-04-06 ------------------要加的代码在上面-------------------
+
+        KAppHelper.getInstance().endAppCreate();
+    }
+}
+```
+
+
+
 ### KActivityHelper 使用方法
 - 注意区分`KHelperActivity`与`KActivityHelper`的区别
 

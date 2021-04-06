@@ -298,7 +298,7 @@ public class ACheckRes extends KActivityHelper {
                         break;
                 }
                 try {
-                    String cln = KContext.getInstance().getPackageName() + ".R$" + na;
+                    String cln = KUtil.getApp().getPackageName() + ".R$" + na;
                     dclass = Class.forName(cln);
                 } catch (ClassNotFoundException e) {
                     KLog.e(e);

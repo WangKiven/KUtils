@@ -229,13 +229,13 @@ public class KView {
     }
 
     public static void showSnackbar(@NonNull CharSequence text, @BaseTransientBottomBar.Duration int duration) {
-        Activity activity = KContext.getInstance().getTopActivity();
+        Activity activity = KAppHelper.getInstance().getTopActivity();
         if (activity != null)
             showSnackbar(activity, text, Snackbar.LENGTH_SHORT);
     }
 
     public static void showSnackbar(@StringRes int resId, @BaseTransientBottomBar.Duration int duration) {
-        Activity activity = KContext.getInstance().getTopActivity();
+        Activity activity = KAppHelper.getInstance().getTopActivity();
         if (activity != null)
             showSnackbar(activity, resId, Snackbar.LENGTH_SHORT);
     }

@@ -11,10 +11,10 @@ import java.io.StringWriter;
 import java.text.DateFormat;
 import java.util.Date;
 
-class KUncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
+public class KUncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
     private static final KUncaughtExceptionHandler ourInstance = new KUncaughtExceptionHandler();
 
-    static KUncaughtExceptionHandler getInstance() {
+    public static KUncaughtExceptionHandler getInstance() {
         return ourInstance;
     }
 
@@ -32,7 +32,7 @@ class KUncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
     private boolean hasRun = false;
     @Override
     public void uncaughtException(@NonNull Thread t, @NonNull Throwable e) {
-        if (hasRun) return;// 由于KContext中次调用register(),防止导致循环运行该方法。因为其他程序有可能也要拦截崩溃异常
+        if (hasRun) return;// 由于KContext中两次调用register(),防止导致循环运行该方法。因为其他程序有可能也要拦截崩溃异常
         hasRun = true;
 
         Application app = KUtil.getApp();

@@ -24,7 +24,7 @@ public class KToast {
     }
 
     public static void ToastMessage(String msg, int time) {
-        Context context = KContext.getInstance();
+        Context context = KUtil.getApp();
         if (context != null) {
 
             /*if (KContext.getInstance().isOnForeground()) {

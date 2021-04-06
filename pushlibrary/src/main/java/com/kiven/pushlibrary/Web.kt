@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import com.kiven.kutils.logHelper.KLog
+import com.kiven.kutils.tools.KAppHelper
 import com.kiven.kutils.tools.KContext
 import com.sxb.kutils_ktx.util.KWeb
 import org.json.JSONObject
@@ -150,7 +151,7 @@ internal object Web {
 
                                 startSuccess = true
                             } catch (e: Throwable) {
-                                KLog.e("进程名：${KContext.getInstance().processName_}")
+                                KLog.e("进程名：${KAppHelper.getInstance().processName_}")
                                 KLog.e(e)
 
                                 Thread.sleep(1000 * 30)

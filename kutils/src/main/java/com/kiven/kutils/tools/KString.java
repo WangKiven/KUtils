@@ -766,7 +766,7 @@ public class KString {
         return fromHtml(context.getString(sourceId));
     }
     public static Spanned fromHtml(@StringRes int sourceId) {
-        return fromHtml(KContext.getInstance().getString(sourceId));
+        return fromHtml(KUtil.getApp().getString(sourceId));
     }
 
     /**

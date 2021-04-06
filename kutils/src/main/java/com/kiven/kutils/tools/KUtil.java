@@ -27,6 +27,7 @@ import android.util.DisplayMetrics;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
+import com.kiven.kutils.BuildConfig;
 import com.kiven.kutils.logHelper.KLog;
 
 import java.io.File;
@@ -40,7 +41,7 @@ import java.util.Set;
 public class KUtil {
 
     public static class Config {
-        private boolean isDebug = true;
+        private boolean isDebug = BuildConfig.DEBUG;
         private String imageDirName = "kUtilsImage";
         private String fileDirName = "kUtilsFile";
         private String tag = "kutils";
@@ -78,7 +79,7 @@ public class KUtil {
         if (config != null) KUtil.config = config;
     }
 
-    public static void setApp(Application app) {
+    public static void setApp(@NonNull Application app) {
         KUtil.app = app;
     }
 
@@ -88,6 +89,9 @@ public class KUtil {
 
     public static Config getConfig() {
         return config;
+    }
+    public static boolean isDebug() {
+        return config.isDebug;
     }
     /*private static String CONFIG_SHARED_PREFERENCES = "KContext.ACCOUNT_CONFIG";
 
@@ -184,11 +188,10 @@ public class KUtil {
      * 获取版本号
      */
     public static String getVersion() {
-        Context context = KContext.getInstance();
 
         try {
-            PackageManager manager = context.getPackageManager();
-            PackageInfo info = manager.getPackageInfo(context.getPackageName(), 0);
+            PackageManager manager = app.getPackageManager();
+            PackageInfo info = manager.getPackageInfo(app.getPackageName(), 0);
             String version = info.versionName;
             return version;
         } catch (Exception e) {
@@ -198,10 +201,9 @@ public class KUtil {
     }
 
     public static int getVersionCode() {
-        Context context = KContext.getInstance();
         try {
-            PackageManager manager = context.getPackageManager();
-            PackageInfo info = manager.getPackageInfo(context.getPackageName(), 0);
+            PackageManager manager = app.getPackageManager();
+            PackageInfo info = manager.getPackageInfo(app.getPackageName(), 0);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 return (int) info.getLongVersionCode();
             } else return info.versionCode;
@@ -401,7 +403,7 @@ public class KUtil {
             if (callBack != null)
                 callBack.onScanCompleted(path, null);
         } else {
-            MediaScannerConnection.scanFile(KContext.getInstance(), new String[]{path}, new String[]{"image/*"},
+            MediaScannerConnection.scanFile(app, new String[]{path}, new String[]{"image/*"},
                     callBack);
         }
     }
@@ -417,13 +419,13 @@ public class KUtil {
                 );
             }
         } else {
-            MediaScannerConnection.scanFile(KContext.getInstance(), paths, new String[]{"image/*"},
+            MediaScannerConnection.scanFile(app, paths, new String[]{"image/*"},
                     null);
         }
     }
 
     public static void addVideo(String path, MediaScannerConnection.OnScanCompletedListener callBack) {
-        MediaScannerConnection.scanFile(KContext.getInstance(), new String[]{path}, new String[]{"video/*"},
+        MediaScannerConnection.scanFile(app, new String[]{path}, new String[]{"video/*"},
                 callBack);
     }
 
@@ -518,7 +520,7 @@ public class KUtil {
      * SharedPreferences
      */
     public static SharedPreferences getSharedPreferences() {
-        return KContext.getInstance().getSharedPreferences(config.CONFIG_SHARED_PREFERENCES, Context.MODE_PRIVATE);
+        return app.getSharedPreferences(config.CONFIG_SHARED_PREFERENCES, Context.MODE_PRIVATE);
     }
 
     public static void removeSharedPreferencesValue(String key) {

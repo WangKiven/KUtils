@@ -8,10 +8,7 @@ import android.os.Handler
 import android.view.WindowManager
 import android.view.accessibility.AccessibilityEvent
 import com.kiven.kutils.logHelper.KLog
-import com.kiven.kutils.tools.KAlertDialogHelper
-import com.kiven.kutils.tools.KAppTool
-import com.kiven.kutils.tools.KContext
-import com.kiven.kutils.tools.KUtil
+import com.kiven.kutils.tools.*
 import com.kiven.sample.R
 import com.kiven.sample.autoService.wechat.WXConst
 import com.kiven.sample.floatView.FloatView
@@ -117,7 +114,7 @@ class AutoInstallService : AccessibilityService() {
         performGlobalAction(GLOBAL_ACTION_BACK)
 
         mHandler.postDelayed({
-            if (KContext.getInstance().topActivity == null) {
+            if (KAppHelper.getInstance().topActivity == null) {
                 closeSettingAndNext()
             } else {
                 // 任务处理

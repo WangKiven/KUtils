@@ -15,9 +15,9 @@ import androidx.core.util.Pair
 import androidx.lifecycle.MutableLiveData
 import com.kiven.kutils.activityHelper.KFragmentActivity
 import com.kiven.kutils.activityHelper.activity.KActivity
-import com.kiven.kutils.tools.KFile
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KAlertDialogHelper
+import com.kiven.kutils.tools.KFile
 import com.kiven.kutils.tools.KGranting
 import com.kiven.kutils.tools.KView
 import com.kiven.sample.arch.AHArch
@@ -25,6 +25,7 @@ import com.kiven.sample.arcore.AHARCoreInlet
 import com.kiven.sample.floatView.ActivityHFloatView
 import com.kiven.sample.font.AHFont
 import com.kiven.sample.gl.AHGL
+import com.kiven.sample.helperTest.AHHelperTest
 import com.kiven.sample.libs.AHLibs
 import com.kiven.sample.media.AHMediaList
 import com.kiven.sample.push.AHSxbPush
@@ -63,7 +64,7 @@ class MainActivity : KActivity() {
                     data.postValue(1)
                 }.start()
             }
-            addBtn("打开设置") { AHOpenSetting().startActivity(context)}
+            addBtn("打开设置") { AHOpenSetting().startActivity(context) }
             addBtn("悬浮框") { ActivityHFloatView().startActivity(this@MainActivity) }
             addBtn("媒体文件处理") { AHMediaList().startActivity(this@MainActivity) }
             addBtn("Theme和Style") { AHTheme().startActivity(this@MainActivity) }
@@ -140,6 +141,9 @@ class MainActivity : KActivity() {
                 val fproxyIntent = Intent(this@MainActivity, KFragmentActivity::class.java)
                 fproxyIntent.putExtra("fragment_name", FragmentApple::class.java.name)
                 startActivity(fproxyIntent)
+            }
+            addBtn("DebugView") {
+                AHHelperTest().startActivity(this@MainActivity)
             }
 
             addTitle("其他")

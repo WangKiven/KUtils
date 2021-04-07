@@ -4,6 +4,7 @@ import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KContext
+import com.kiven.kutils.tools.KUtil
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -36,7 +37,7 @@ object SpeechText {
     suspend fun initTextToSpeech() {
         if (text2speech == null) {
             val result = suspendCoroutine<Boolean> {
-                text2speech = TextToSpeech(KContext.getInstance(), TextToSpeech.OnInitListener { status ->
+                text2speech = TextToSpeech(KUtil.getApp(), TextToSpeech.OnInitListener { status ->
                     if (status == TextToSpeech.SUCCESS) {
                         it.resume(true)
                         return@OnInitListener

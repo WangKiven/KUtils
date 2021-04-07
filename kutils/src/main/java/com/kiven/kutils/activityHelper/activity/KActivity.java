@@ -1,22 +1,13 @@
 package com.kiven.kutils.activityHelper.activity;
 
-import android.app.Activity;
 import android.content.res.AssetManager;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.kiven.kutils.logHelper.KLog;
 import com.kiven.kutils.tools.KAppHelper;
-import com.kiven.kutils.tools.KContext;
 
 /**
  * 可显示日志父类Activit

@@ -3,6 +3,7 @@ package com.kiven.sample.mimc;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.kiven.kutils.tools.KUtil;
 import com.kiven.sample.AppContext;
 import com.xiaomi.mimc.MIMCGroupMessage;
 import com.xiaomi.mimc.MIMCMessage;
@@ -326,7 +327,7 @@ public class UserManager {
 
         // online
         // cachePath必须传入，用于缓存文件读写，否则返回null
-        mUser = MIMCUser.newInstance(appAccount, cachePath == null? AppContext.getInstance().getExternalFilesDir(null).getAbsolutePath(): cachePath);
+        mUser = MIMCUser.newInstance(appAccount, cachePath == null? KUtil.getApp().getExternalFilesDir(null).getAbsolutePath(): cachePath);
         // 注册相关监听，必须
         mUser.registerTokenFetcher(new TokenFetcher());
         mUser.registerMessageHandler(new MessageHandler());

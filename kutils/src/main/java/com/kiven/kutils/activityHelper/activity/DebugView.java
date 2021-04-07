@@ -150,7 +150,10 @@ public class DebugView {
 //    private final FrameLayout rootView;
     private static FrameLayout getRootView(@NonNull Activity activity) {
         // 不同的时候，android.R.id.content 指向的view不同。
-        return (FrameLayout) activity.getWindow().getDecorView().findViewById(android.R.id.content).getParent().getParent();
+        // flutter项目的io.flutter.embedding.android.FlutterActivity的子类使用https://github.com/yuanhoujun/Snake的注解@EnableDragToClose时，DebugView不能正常显示
+        // 所以直接用DecorView吧
+//        return (FrameLayout) activity.getWindow().getDecorView().findViewById(android.R.id.content).getParent().getParent();
+        return (FrameLayout) activity.getWindow().getDecorView();
 //        return rootView;
     }
 

@@ -27,6 +27,7 @@ import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KAlertDialogHelper
 import com.kiven.kutils.tools.KContext
 import com.kiven.kutils.tools.KGranting
+import com.kiven.kutils.tools.KUtil
 import com.kiven.sample.R
 import java.util.*
 
@@ -205,7 +206,7 @@ fun showToast(word: String = "还没做") {
     // Toast.LENGTH_LONG 7s
     val curTime = System.currentTimeMillis()
     if (curTime - preTime > 4000L) {
-        Toast.makeText(KContext.getInstance(), word, Toast.LENGTH_SHORT).show()
+        Toast.makeText(KUtil.getApp(), word, Toast.LENGTH_SHORT).show()
         preTime = curTime
     }
 }

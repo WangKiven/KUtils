@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.widget.PopupMenu
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.kiven.kutils.activityHelper.KHelperActivity
+import com.kiven.sample.helperTest.AHHelperTest
 import com.kiven.sample.libs.AHTextViewDemo
 import com.kiven.sample.util.showToast
 

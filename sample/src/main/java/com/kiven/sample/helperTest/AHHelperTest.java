@@ -1,11 +1,13 @@
-package com.kiven.sample;
+package com.kiven.sample.helperTest;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
 import com.kiven.kutils.activityHelper.KActivityHelper;
 import com.kiven.kutils.activityHelper.KHelperActivity;
+import com.kiven.sample.R;
 
 /**
  * Created by kiven on 16/5/6.
@@ -41,6 +43,9 @@ public class AHHelperTest extends KActivityHelper {
             case R.id.button2:
 //                TransitionManager.beginDelayedTransition((ViewGroup) findViewById(R.id.root), new Slide(Gravity.LEFT));
                 finish();
+                break;
+            case R.id.button3:
+                mActivity.startActivity(new Intent(mActivity, HelperTestActivity.class));
                 break;
         }
     }

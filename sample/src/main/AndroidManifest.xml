@@ -141,6 +141,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".helperTest.HelperTestActivity"/>
+
         <service android:name=".floatView.ServiceFloat" />
         <service
             android:name=".service.LiveWallpaper"

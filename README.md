@@ -17,7 +17,7 @@
 maven { url "https://jitpack.io" }
 
 // 依赖配置
-implementation 'com.github.WangKiven:KUtils:1.4.1'
+implementation 'com.github.WangKiven:KUtils:1.4.x'
 ```
 
 - 配置`Application`

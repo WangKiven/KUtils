@@ -132,6 +132,13 @@ public class KGranting {
                         onResult(param);
                     }
                 });
+            } else {
+                RequestPermissionFragment2.requestPermissions(mActivity.getFragmentManager(), waitGrant, new Consumer<Boolean>() {
+                    @Override
+                    public void callBack(Boolean param) {
+                        onResult(param);
+                    }
+                });
             }
 
             KLog.e("使用fragment请求权限，请使用FragmentActivity作为activity传入");

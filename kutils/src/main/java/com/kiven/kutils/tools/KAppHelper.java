@@ -385,9 +385,14 @@ public final class KAppHelper {
     @Nullable
     public Activity getTopActivity() {
         if (activities.size() > 0) {
-            ActivityInfo activityInfo = activities.get(activities.size() - 1);
+            /*ActivityInfo activityInfo = activities.get(activities.size() - 1);
             if (activityInfo.status == ActivityStatus.RESUMED)
-                return activityInfo.activity;
+                return activityInfo.activity;*/
+            // 内存回收后，可能先生成的要使用的activity，所以顶部的不一定在数组顶部
+            for (ActivityInfo activityInfo: activities) {
+                if (activityInfo.status == ActivityStatus.RESUMED)
+                    return activityInfo.activity;
+            }
         }
 
         return null;

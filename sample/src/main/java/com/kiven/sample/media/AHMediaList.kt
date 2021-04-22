@@ -44,7 +44,7 @@ import java.util.*
  *
  * Created by wangk on 2018/2/4.
  */
-open class AHMediaList : KActivityHelper() {
+class AHMediaList : KActivityHelper() {
 
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
@@ -116,7 +116,7 @@ open class AHMediaList : KActivityHelper() {
                 var player = ExoPlayerFactory.newSimpleInstance(mActivity, DefaultTrackSelector(AdaptiveTrackSelection.Factory(bandwidthMeter)))
 
                 val dataSourceFactory = DefaultHttpDataSourceFactory("userAgent")
-                player.prepare(ExtractorMediaSource(Uri.parse("https://raw.githubusercontent.com/WangKiven/mygit/master/company.mp4"), dataSourceFactory, DefaultExtractorsFactory(), null, null))
+                player.prepare(ExtractorMediaSource(Uri.parse("https://www.yimizi.xyz/wedding/resource/1.mp4"), dataSourceFactory, DefaultExtractorsFactory(), null, null))
 
                 val dialog = object : Dialog(mActivity) {
                     init {

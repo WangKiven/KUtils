@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.MediaRecorder
+import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -45,10 +46,7 @@ import com.kiven.sample.noti.AHNotiTest
 import com.kiven.sample.service.LiveWallpaper2
 import com.kiven.sample.spss.AHSpssTemple
 import com.kiven.sample.systemdata.AHSysgemData
-import com.kiven.sample.util.EncryptUtils
-import com.kiven.sample.util.WallpaperUtil
-import com.kiven.sample.util.callPhone
-import com.kiven.sample.util.snackbar
+import com.kiven.sample.util.*
 import com.xiaomi.mimc.MIMCGroupMessage
 import com.xiaomi.mimc.MIMCMessage
 import com.xiaomi.mimc.MIMCServerAck
@@ -378,6 +376,47 @@ class AHSmallAction : KActivityHelper() {
                 }
             }
             KAlertDialogHelper.Show1BDialog(mActivity, "网络类型：$ts\nIP:${KNetwork.getIPAddress()}")
+        })
+        addView("检测网络能力", View.OnClickListener {
+            val connectivityManager = mActivity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+            mActivity.listPicker("方式", arrayOf("新的获取方式（仅23及以上可用）", "老的获取方式")) {
+                when(it) {
+                    0 -> {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)?.apply {
+                                val capabilities = (0..25).filter { hasCapability(it) }.joinToString()
+                                val transports = (0..7).filter { hasTransport(it) }.joinToString()
+
+                                KLog.i(capabilities)
+                                KLog.i(transports)
+                                KAlertDialogHelper.Show1BDialog(mActivity, "capabilities：$capabilities\ntransports: $transports")
+                            } ?: mActivity.snackbar("没有网络")
+                        } else mActivity.snackbar("不支持该系统")
+                    }
+                    1 -> {
+                        val networkInfo = connectivityManager.activeNetworkInfo
+                        if (networkInfo != null) {
+                            networkInfo.apply {
+                                KAlertDialogHelper.Show1BDialog(mActivity, "typeName：$typeName\n" +
+                                        "type: $type\n" +
+                                        "subtypeName: $subtypeName\n" +
+                                        "subtype: $subtype\n" +
+                                        "extraInfo: $extraInfo\n" +
+                                        "isAvailable: $isAvailable\n" +
+                                        "isConnected: $isConnected\n" +
+                                        "isRoaming: $isRoaming\n" +
+                                        "isConnectedOrConnecting: $isConnectedOrConnecting\n" +
+                                        "isFailover: $isFailover\n" +
+                                        "state: $state\n" +
+                                        "reason: $reason")
+                            }
+                        } else {
+                            mActivity.snackbar("没有网络")
+                        }
+                    }
+                }
+            }
         })
         addView("录音播放", View.OnClickListener { AHRecorderPlay().startActivity(mActivity) })
         addView("imui界面", View.OnClickListener { ImActivity().startActivity(mActivity) })

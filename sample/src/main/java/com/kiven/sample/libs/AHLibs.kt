@@ -2,64 +2,25 @@ package com.kiven.sample.libs
 
 import android.os.Bundle
 import android.util.Log
-import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
-import android.widget.TextView
 import com.alibaba.android.arouter.launcher.ARouter
 import com.android.volley.Request
 import com.android.volley.RequestQueue
-import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.bumptech.glide.Glide
-import com.flyco.animation.FlipEnter.FlipRightEnter
-import com.flyco.dialog.listener.OnBtnClickL
-import com.flyco.dialog.widget.ActionSheetDialog
-import com.flyco.dialog.widget.MaterialDialog
-import com.flyco.dialog.widget.NormalDialog
-import com.flyco.dialog.widget.NormalListDialog
-import com.google.android.flexbox.AlignContent
-import com.google.android.flexbox.FlexWrap
-import com.google.android.flexbox.FlexboxLayout
-import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
-import com.kiven.kutils.tools.KToast
 import com.kiven.sample.BaseFlexActivityHelper
 import com.kiven.sample.libs.chatkit.AHChatList
 import com.kiven.sample.media.AHGif
 import com.kiven.sample.util.Const
 import com.kiven.sample.util.newDialog
-import com.kiven.sample.util.snackbar
-import com.kiven.sample.xutils.db.AHDbDemo
-import com.kiven.sample.xutils.net.AHNetDemo
-import com.koushikdutta.async.http.AsyncHttpClient
-import com.koushikdutta.async.http.server.AsyncHttpServer
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import okhttp3.Call
-import okhttp3.Callback
-import okhttp3.FormBody
-import okhttp3.OkHttpClient
 import org.jetbrains.anko.dip
-import org.jetbrains.anko.support.v4.nestedScrollView
-import org.xutils.image.ImageOptions
-import java.io.IOException
-import java.io.InputStream
-import java.net.Inet4Address
-import java.net.NetworkInterface
-import java.security.KeyStore
-import java.security.SecureRandom
-import java.security.cert.CertificateFactory
-import java.security.cert.X509Certificate
 import java.text.DateFormat
 import java.util.*
-import javax.net.ssl.KeyManagerFactory
-import javax.net.ssl.SSLContext
-import javax.net.ssl.TrustManagerFactory
 
 /**
  * Created by wangk on 2018/3/27.
@@ -139,11 +100,11 @@ class AHLibs : BaseFlexActivityHelper() {
         addBtn("gif", View.OnClickListener { AHGif().startActivity(mActivity) })
         addBtn("spring for Android", View.OnClickListener { AHSpring().startActivity(mActivity) })
         addBtn("autofittextview") { AHTextViewDemo().startActivity(mActivity) }
-        addBtn("") {  }
-        addBtn("") {  }
-        addBtn("") {  }
-        addBtn("") {  }
-        addBtn("") {  }
+        addBtn("") { }
+        addBtn("") { }
+        addBtn("") { }
+        addBtn("") { }
+        addBtn("") { }
     }
 
 }

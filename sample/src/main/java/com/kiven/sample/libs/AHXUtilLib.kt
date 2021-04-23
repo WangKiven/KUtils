@@ -1,21 +1,17 @@
 package com.kiven.sample.libs
 
 import android.os.Bundle
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import com.bumptech.glide.Glide
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.sample.BaseFlexActivityHelper
 import com.kiven.sample.util.Const
 import com.kiven.sample.util.newDialog
-import com.kiven.sample.util.showImageDialog
 import com.kiven.sample.xutils.db.AHDbDemo
 import com.kiven.sample.xutils.net.AHNetDemo
 import kotlinx.android.synthetic.main.activity_lauch.*
 import org.jetbrains.anko.dip
 import org.xutils.image.ImageOptions
-import org.xutils.x
 
 /**
  * Created by wangk on 2020/12/4.
@@ -36,7 +32,7 @@ class AHXUtilLib : BaseFlexActivityHelper() {
                     val options = ImageOptions.Builder()
                             .setCircular(true)
                             .setAutoRotate(true).setFadeIn(true).build()
-                    org.xutils.x.image().bind(this@apply, urls[count%urls.size], options)
+                    org.xutils.x.image().bind(this@apply, urls[count % urls.size], options)
 
                     count++
                 }

@@ -35,7 +35,7 @@ import com.kiven.sample.R
 import com.kiven.sample.util.Const
 import com.kiven.sample.util.Const.IMAGE_DIR
 import com.kiven.sample.util.showSnack
-import com.kiven.sample.util.snackbar
+import com.kiven.sample.util.showSnack
 import java.io.File
 import java.text.DateFormat
 import java.util.*
@@ -98,7 +98,7 @@ class AHMediaList : KActivityHelper() {
                 if (takePhotoIntent.resolveActivity(mActivity.packageManager) != null) {
                     mActivity.startActivityForResult(takePhotoIntent, 351)
                 } else {
-                    mActivity.snackbar("没有相机")
+                    mActivity.showSnack("没有相机")
                 }
             }
             R.id.item_camera_video -> mActivity.startActivityForResult(Intent(MediaStore.ACTION_VIDEO_CAPTURE),
@@ -296,7 +296,7 @@ class AHMediaList : KActivityHelper() {
         if (bitmap != null)
             showImage(imagePath, bitmap)
         else
-            mActivity.snackbar("获取图片失败：$imagePath")
+            mActivity.showSnack("获取图片失败：$imagePath")
     }
 
 

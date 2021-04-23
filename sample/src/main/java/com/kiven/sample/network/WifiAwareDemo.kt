@@ -14,7 +14,7 @@ import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.tools.KGranting
 import com.kiven.sample.BaseFlexActivityHelper
 import com.kiven.sample.util.showDialogClose
-import com.kiven.sample.util.snackbar
+import com.kiven.sample.util.showSnack
 
 /**
  * https://developer.android.google.cn/guide/topics/connectivity/wifi-aware
@@ -66,15 +66,15 @@ class WifiAwareDemo:BaseFlexActivityHelper() {
                     wifiAwareChangeLisener = object : BroadcastReceiver() {
                         override fun onReceive(context: Context?, intent: Intent?) {
                             if (wifiAware.isAvailable) {
-                                snackbar("功能可用")
+                                showSnack("功能可用")
                             } else {
-                                snackbar("功能不可用")
+                                showSnack("功能不可用")
                             }
                         }
                     }
                     mActivity.registerReceiver(wifiAwareChangeLisener, filter)
                 }
-                mActivity.snackbar("已开启 WiFi感知 监听功能")
+                mActivity.showSnack("已开启 WiFi感知 监听功能")
             }
 
             var wifiAwareSesson: WifiAwareSession? = null
@@ -83,21 +83,21 @@ class WifiAwareDemo:BaseFlexActivityHelper() {
                     super.onAttached(session)
                     session?.apply {
                         wifiAwareSesson = this
-                    } ?: snackbar("WifiAwareSession = null")
+                    } ?: showSnack("WifiAwareSession = null")
                 }
 
                 override fun onAttachFailed() {
                     super.onAttachFailed()
-                    snackbar("onAttachFailed 可能系统拒绝服务吧")
+                    showSnack("onAttachFailed 可能系统拒绝服务吧")
                 }
             }, null)
 
             addBtn("订阅服务") {
-                wifiAwareSesson?.apply { subscribe(this) } ?: snackbar("wifiAwareSesson = null")
+                wifiAwareSesson?.apply { subscribe(this) } ?: showSnack("wifiAwareSesson = null")
             }
 
             addBtn("发布服务") {
-                wifiAwareSesson?.apply { publish(this) } ?: snackbar("wifiAwareSesson = null")
+                wifiAwareSesson?.apply { publish(this) } ?: showSnack("wifiAwareSesson = null")
             }
         }
     }
@@ -122,7 +122,7 @@ class WifiAwareDemo:BaseFlexActivityHelper() {
 
             override fun onMessageReceived(peerHandle: PeerHandle?, message: ByteArray?) {
                 super.onMessageReceived(peerHandle, message)
-                if (message != null) mActivity.snackbar("收到消息：${String(message)}")
+                if (message != null) mActivity.showSnack("收到消息：${String(message)}")
             }
         }, null)
     }
@@ -156,12 +156,12 @@ class WifiAwareDemo:BaseFlexActivityHelper() {
 
             override fun onMessageSendFailed(messageId: Int) {
                 super.onMessageSendFailed(messageId)
-                mActivity.snackbar("消息发送失败：$messageId")
+                mActivity.showSnack("消息发送失败：$messageId")
             }
 
             override fun onMessageSendSucceeded(messageId: Int) {
                 super.onMessageSendSucceeded(messageId)
-                mActivity.snackbar("消息发送成功：$messageId")
+                mActivity.showSnack("消息发送成功：$messageId")
             }
         }, null)
     }

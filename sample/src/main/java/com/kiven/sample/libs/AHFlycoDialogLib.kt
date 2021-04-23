@@ -11,7 +11,7 @@ import com.flyco.dialog.widget.NormalDialog
 import com.flyco.dialog.widget.NormalListDialog
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.sample.BaseFlexActivityHelper
-import com.kiven.sample.util.snackbar
+import com.kiven.sample.util.showSnack
 
 /**
  * Created by wangk on 2020/12/4.
@@ -25,27 +25,27 @@ class AHFlycoDialogLib : BaseFlexActivityHelper() {
         addBtn("NormalDialog", View.OnClickListener {
             val dialog = NormalDialog(mActivity).style(NormalDialog.STYLE_TWO).title("温馨提示").content("打开的NormalDialog")
                     .btnText("确定1", "取消1")
-            dialog.setOnDismissListener { mActivity.snackbar("Dismiss") }
-            dialog.setOnCancelListener { mActivity.snackbar("Cancel") }
+            dialog.setOnDismissListener { mActivity.showSnack("Dismiss") }
+            dialog.setOnCancelListener { mActivity.showSnack("Cancel") }
             dialog.setOnBtnClickL(OnBtnClickL {
-                mActivity.snackbar("click1")
+                mActivity.showSnack("click1")
             }, OnBtnClickL {
-                mActivity.snackbar("click2")
+                mActivity.showSnack("click2")
             })
             dialog.show()
         })
         addBtn("MaterialDialog", View.OnClickListener {
             val dialog = MaterialDialog(mActivity).title("温馨提示").content("打开的MaterialDialog")
                     .btnNum(3).btnText("忽略", "确定1", "取消1")
-            dialog.setOnDismissListener { mActivity.snackbar("Dismiss") }
-            dialog.setOnCancelListener { mActivity.snackbar("Cancel") }
-            dialog.setOnBtnClickL(OnBtnClickL { mActivity.snackbar("click1") }
-                    , OnBtnClickL { mActivity.snackbar("click2") }, OnBtnClickL { mActivity.snackbar("click3") })
+            dialog.setOnDismissListener { mActivity.showSnack("Dismiss") }
+            dialog.setOnCancelListener { mActivity.showSnack("Cancel") }
+            dialog.setOnBtnClickL(OnBtnClickL { mActivity.showSnack("click1") }
+                    , OnBtnClickL { mActivity.showSnack("click2") }, OnBtnClickL { mActivity.showSnack("click3") })
             dialog.show()
         })
         addBtn("NormalListDialog", View.OnClickListener {
             val dialog = NormalListDialog(mActivity, arrayOf("收藏", "打包", "下载", "删除")).apply {
-                setOnOperItemClickL { parent, view, position, id -> mActivity.snackbar("click$position");dismiss() }
+                setOnOperItemClickL { parent, view, position, id -> mActivity.showSnack("click$position");dismiss() }
                 title("请选择")
             }
             dialog.show()
@@ -53,8 +53,8 @@ class AHFlycoDialogLib : BaseFlexActivityHelper() {
         addBtn("ActionSheetDialog", View.OnClickListener {
             val dialog = ActionSheetDialog(mActivity, arrayOf("收藏", "打包", "下载", "删除"), it)
                     .cancelText("取消吗？？？").title("选吧！！！")
-            dialog.setOnOperItemClickL { parent, view, position, id -> mActivity.snackbar("click$position");dialog.dismiss() }
-            dialog.setOnCancelListener { mActivity.snackbar("Cancel") }
+            dialog.setOnOperItemClickL { parent, view, position, id -> mActivity.showSnack("click$position");dialog.dismiss() }
+            dialog.setOnCancelListener { mActivity.showSnack("Cancel") }
             dialog.show()
 
         })

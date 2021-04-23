@@ -27,7 +27,7 @@ import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KGranting
 import com.kiven.sample.R
-import com.kiven.sample.util.snackbar
+import com.kiven.sample.util.showSnack
 import org.jetbrains.anko.frameLayout
 import org.jetbrains.anko.support.v4.nestedScrollView
 
@@ -131,9 +131,9 @@ class AHARCore : KActivityHelper() {
                             else -> {}
                         }
                     }catch (e: UnavailableUserDeclinedInstallationException) {
-                        activity.snackbar("不可用异常")
+                        activity.showSnack("不可用异常")
                     }catch (e:Throwable) {
-                        activity.snackbar("不明异常 ：${e.message}")
+                        activity.showSnack("不明异常 ：${e.message}")
                         e.printStackTrace()
                     }
 

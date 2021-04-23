@@ -15,10 +15,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.sample.R
-import com.kiven.sample.util.getInput
-import com.kiven.sample.util.listPicker
-import com.kiven.sample.util.showSnack
-import com.kiven.sample.util.snackbar
+import com.kiven.sample.util.*
 import kotlinx.android.synthetic.main.ah_noti_test.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -88,7 +85,7 @@ class AHNotiTest : KActivityHelper() {
 
                     GlobalScope.launch(Dispatchers.Main) {
                         if (channelId.isEmpty()) {
-                            mActivity.snackbar("没选择channel, 如果没有的话，请先创建channel")
+                            mActivity.showSnack("没选择channel, 如果没有的话，请先创建channel")
                             return@launch
                         }
 
@@ -249,7 +246,7 @@ class AHNotiTest : KActivityHelper() {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     if (notiManager.areNotificationsEnabled()) {
                         val channels = notiManager.notificationChannels
-                        mActivity.listPicker("选择channel", channels.map { "${it.id}:${it.name} - ${it.group}" }.toTypedArray()) {
+                        mActivity.showListDialog(channels.map { "${it.id}:${it.name} - ${it.group}" }.toTypedArray()) {it, _ ->
                             val intent = Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS)
                             intent.putExtra(Settings.EXTRA_APP_PACKAGE, mActivity.packageName)
                             intent.putExtra(Settings.EXTRA_CHANNEL_ID, channels[it].id)
@@ -308,7 +305,7 @@ class AHNotiTest : KActivityHelper() {
 
             btn_noti_listener_voice_status.setOnClickListener {
                 MyNotificationListenerService.isReadNoti = !MyNotificationListenerService.isReadNoti
-                activity.snackbar("已设置状态(isReadNoti) = ${MyNotificationListenerService.isReadNoti}")
+                activity.showSnack("已设置状态(isReadNoti) = ${MyNotificationListenerService.isReadNoti}")
             }
 
             btn_app_setting.setOnClickListener {

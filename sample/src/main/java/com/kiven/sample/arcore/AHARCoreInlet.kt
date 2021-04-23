@@ -16,7 +16,7 @@ import com.google.ar.core.exceptions.UnavailableUserDeclinedInstallationExceptio
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.tools.KGranting
-import com.kiven.sample.util.snackbar
+import com.kiven.sample.util.showSnack
 import org.jetbrains.anko.support.v4.nestedScrollView
 
 class AHARCoreInlet : KActivityHelper() {
@@ -77,16 +77,16 @@ class AHARCoreInlet : KActivityHelper() {
                             }
                             ArCoreApk.InstallStatus.INSTALL_REQUESTED -> {
                                 //如果 requestInstall() 返回 INSTALL_REQUESTED，则当前 Activity 将暂停，并提示用户安装或更新 ARCore：
-                                activity.snackbar("INSTALL_REQUESTED 需安装或更新 ARCore")
+                                activity.showSnack("INSTALL_REQUESTED 需安装或更新 ARCore")
                             }
                             else -> {
-                                activity.snackbar("else")
+                                activity.showSnack("else")
                             }
                         }
                     } catch (e: UnavailableUserDeclinedInstallationException) {
-                        activity.snackbar("不可用异常")
+                        activity.showSnack("不可用异常")
                     } catch (e: Throwable) {
-                        activity.snackbar("不明异常 ：${e.message}")
+                        activity.showSnack("不明异常 ：${e.message}")
                         e.printStackTrace()
                     }
 

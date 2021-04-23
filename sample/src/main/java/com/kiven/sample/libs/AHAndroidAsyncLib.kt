@@ -7,7 +7,7 @@ import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KNetwork
 import com.kiven.kutils.tools.KToast
 import com.kiven.sample.BaseFlexActivityHelper
-import com.kiven.sample.util.snackbar
+import com.kiven.sample.util.showSnack
 import com.koushikdutta.async.http.AsyncHttpClient
 import com.koushikdutta.async.http.server.AsyncHttpServer
 
@@ -32,7 +32,7 @@ class AHAndroidAsyncLib:BaseFlexActivityHelper() {
                 }
 
                 webSocket.setStringCallback {
-                    mActivity.snackbar("接收到推送：$it")
+                    mActivity.showSnack("接收到推送：$it")
                 }
             }
             server.listen(5001)

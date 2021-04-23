@@ -111,7 +111,7 @@ class AHSmallAction : KActivityHelper() {
             am.killBackgroundProcesses("com.tencent.mm")
             //am.killBackgroundProcesses("com.jeeinc.save.worry")
 
-            activity.snackbar("关闭微信不行，打算关闭自己写的一个App能成功，是我的红米手机系统的限制吗")
+            activity.showSnack("关闭微信不行，打算关闭自己写的一个App能成功，是我的红米手机系统的限制吗")
 
             // 需要系统权限（Manifest.permission.FORCE_STOP_PACKAGES），无法获取。
             /*val method = am::class.java.getMethod("forceStopPackage", String::class.java)
@@ -313,7 +313,7 @@ class AHSmallAction : KActivityHelper() {
                     val telephonyManager = mActivity.getSystemService(Activity.TELEPHONY_SERVICE) as TelephonyManager
                     val simState = telephonyManager.simState
                     if (simState == TelephonyManager.SIM_STATE_ABSENT || simState == TelephonyManager.SIM_STATE_UNKNOWN) {
-                        mActivity.snackbar("未检测到sim卡或当前sim卡不可用，请另行拨号$phoneno")
+                        mActivity.showSnack("未检测到sim卡或当前sim卡不可用，请另行拨号$phoneno")
                     }
                 }
             }
@@ -345,7 +345,7 @@ class AHSmallAction : KActivityHelper() {
         addView("检测网络能力", View.OnClickListener {
             val connectivityManager = mActivity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
-            mActivity.listPicker("方式", arrayOf("新的获取方式（仅23及以上可用）", "老的获取方式")) {
+            mActivity.showListDialog(arrayOf("新的获取方式（仅23及以上可用）", "老的获取方式")) {it, _ ->
                 when (it) {
                     0 -> {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -356,8 +356,8 @@ class AHSmallAction : KActivityHelper() {
                                 KLog.i(capabilities)
                                 KLog.i(transports)
                                 KAlertDialogHelper.Show1BDialog(mActivity, "capabilities：$capabilities\ntransports: $transports")
-                            } ?: mActivity.snackbar("没有网络")
-                        } else mActivity.snackbar("不支持该系统")
+                            } ?: mActivity.showSnack("没有网络")
+                        } else mActivity.showSnack("不支持该系统")
                     }
                     1 -> {
                         val networkInfo = connectivityManager.activeNetworkInfo
@@ -377,7 +377,7 @@ class AHSmallAction : KActivityHelper() {
                                         "reason: $reason")
                             }
                         } else {
-                            mActivity.snackbar("没有网络")
+                            mActivity.showSnack("没有网络")
                         }
                     }
                 }
@@ -386,7 +386,7 @@ class AHSmallAction : KActivityHelper() {
         addView("WiFi感知", View.OnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 WifiAwareDemo().startActivity(mActivity)
-            } else mActivity.snackbar("26以下不能用")
+            } else mActivity.showSnack("26以下不能用")
         })
 
         // https://www.cnblogs.com/brucemengbm/p/6908442.html
@@ -564,7 +564,7 @@ class AHSmallAction : KActivityHelper() {
                 // 一些设备可能禁止了这个功能
                 mActivity.startActivity(Intent("android.intent.action.VIEW", Uri.parse("slice-content://com.kiven.sample/hello")))
             } else {
-                mActivity.snackbar("该版本不支持")
+                mActivity.showSnack("该版本不支持")
             }
         })
         addView("KAlert和定时5秒后重启", View.OnClickListener {

@@ -14,7 +14,7 @@ import com.kiven.sample.BaseFlexActivityHelper
 import com.kiven.sample.util.showDialog
 import com.kiven.sample.util.showDialogClose
 import com.kiven.sample.util.showListDialog
-import com.kiven.sample.util.snackbar
+import com.kiven.sample.util.showSnack
 
 class WifiP2PDemo : BaseFlexActivityHelper() {
     var receiver: BroadcastReceiver? = null
@@ -28,7 +28,7 @@ class WifiP2PDemo : BaseFlexActivityHelper() {
             mChannel = manager.initialize(this, Looper.getMainLooper(), null) ?: return@apply showDialogClose("WifiP2pManager 初始失败")
 
             addBtn("启用监听") {
-                if (receiver != null) return@addBtn snackbar("已启用")
+                if (receiver != null) return@addBtn showSnack("已启用")
 
                 receiver = WiFiDirectBroadcastReceiver(manager, mChannel!!, this)
                 val intentFilter = IntentFilter().apply {
@@ -41,15 +41,15 @@ class WifiP2PDemo : BaseFlexActivityHelper() {
             }
 
             addBtn("寻找设备") {
-                if (receiver == null) return@addBtn snackbar("需先启用监听")
+                if (receiver == null) return@addBtn showSnack("需先启用监听")
 
                 manager.discoverPeers(mChannel!!, object :WifiP2pManager.ActionListener{
                     override fun onSuccess() {
-                        snackbar("开启发现设备功能成功")
+                        showSnack("开启发现设备功能成功")
                     }
 
                     override fun onFailure(reason: Int) {
-                        snackbar("开启发现设备功能失败：$reason")
+                        showSnack("开启发现设备功能失败：$reason")
                     }
                 })
             }
@@ -57,21 +57,21 @@ class WifiP2PDemo : BaseFlexActivityHelper() {
             addBtn("连接设备") {
                 manager.requestPeers(mChannel!!) { peers: WifiP2pDeviceList? ->
                     // Handle peers list
-                    if (peers == null) return@requestPeers activity.snackbar("peers = null")
+                    if (peers == null) return@requestPeers activity.showSnack("peers = null")
                     val deviceList = peers.deviceList.toList()
-                    if (deviceList.isEmpty()) return@requestPeers activity.snackbar("没有可连接设备")
+                    if (deviceList.isEmpty()) return@requestPeers activity.showSnack("没有可连接设备")
 
                     activity.showListDialog(deviceList.map { it.deviceName }) { index, _ ->
                         val config = WifiP2pConfig()
                         config.deviceAddress = deviceList[index].deviceAddress
                         manager.connect(mChannel!!, null, object :WifiP2pManager.ActionListener{
                             override fun onSuccess() {
-                                activity.snackbar("连接设备成功")
+                                activity.showSnack("连接设备成功")
 
                             }
 
                             override fun onFailure(reason: Int) {
-                                activity.snackbar("连接设备失败：$reason")
+                                activity.showSnack("连接设备失败：$reason")
                             }
                         })
                     }
@@ -104,16 +104,16 @@ class WifiP2PDemo : BaseFlexActivityHelper() {
                     when (intent.getIntExtra(WifiP2pManager.EXTRA_WIFI_STATE, -1)) {
                         WifiP2pManager.WIFI_P2P_STATE_ENABLED -> {
                             // Wifi P2P is enabled
-                            activity.snackbar("Wifi P2P 可用")
+                            activity.showSnack("Wifi P2P 可用")
                         }
                         else -> {
                             // Wi-Fi P2P is not enabled
-                            activity.snackbar("Wi-Fi P2P 不可用")
+                            activity.showSnack("Wi-Fi P2P 不可用")
                         }
                     }
                 }
                 WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION -> {
-                    activity.snackbar("搜索设备结束，可连接设备已刷新")
+                    activity.showSnack("搜索设备结束，可连接设备已刷新")
                 }
             }
         }

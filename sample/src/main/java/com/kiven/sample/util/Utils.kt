@@ -25,7 +25,6 @@ import com.flyco.dialog.widget.NormalListDialog
 import com.google.android.material.snackbar.Snackbar
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KAlertDialogHelper
-import com.kiven.kutils.tools.KContext
 import com.kiven.kutils.tools.KGranting
 import com.kiven.kutils.tools.KUtil
 import com.kiven.sample.R
@@ -51,7 +50,7 @@ fun Activity.getInput(inputName: String, text: String, action: (CharSequence) ->
                 if (teamName.isNotBlank()) {
                     action(teamName)
                 } else {
-                    snackbar("$inputName 不能为空")
+                    showSnack("$inputName 不能为空")
                 }
                 dialog.dismiss()
             }
@@ -59,12 +58,12 @@ fun Activity.getInput(inputName: String, text: String, action: (CharSequence) ->
 }
 
 /// 选择列表
-fun Activity.listPicker(title: String, items: Array<String>, action: (Int) -> Unit) {
+/*fun Activity.listPicker(title: String, items: Array<String>, action: (Int) -> Unit) {
     AlertDialog.Builder(this).setItems(items) { dialog, p ->
         action(p)
         dialog.dismiss()
     }.show()
-}
+}*/
 
 /// 打电话
 fun Activity.callPhone(phoneNum: String) {
@@ -131,16 +130,9 @@ fun Activity.showBottomSheetDialog(list: Array<String>, onClickItem: (Int, Strin
     sheetDialog.show()
 }
 
-@Deprecated("不小心谢了两个")
 fun Activity.showSnack(word: String) {
     Snackbar.make(window.decorView.findViewById(android.R.id.content), word, Snackbar.LENGTH_LONG).show()
     Log.i(KLog.getTag(), word)
-}
-
-/// 显示提示
-fun Activity.snackbar(text: String) {
-    Snackbar.make(window.decorView.findViewById(android.R.id.content), text, Snackbar.LENGTH_SHORT).show()
-    KLog.i(text)
 }
 
 fun Activity.showImageDialog(path: String?) {

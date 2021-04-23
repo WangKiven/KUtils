@@ -13,7 +13,7 @@ import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.tools.KUtil
 import com.kiven.sample.R
-import com.kiven.sample.util.snackbar
+import com.kiven.sample.util.showSnack
 import org.jetbrains.anko.button
 import org.jetbrains.anko.dip
 import org.jetbrains.anko.linearLayout
@@ -75,7 +75,7 @@ class ActivityHFloatView : KActivityHelper() {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         startOverlaySetting()
                     } else {
-                        mActivity.snackbar("23以下，该怎么打开呢")
+                        mActivity.showSnack("23以下，该怎么打开呢")
                     }
                 }
             }

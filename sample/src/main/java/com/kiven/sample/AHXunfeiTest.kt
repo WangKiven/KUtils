@@ -17,7 +17,7 @@ import com.kiven.kutils.tools.KString
 import com.kiven.sample.noti.SpeechText
 import com.kiven.sample.util.getInput
 import com.kiven.sample.util.showBottomSheetDialog
-import com.kiven.sample.util.snackbar
+import com.kiven.sample.util.showSnack
 import kotlinx.android.synthetic.main.ah_xunfei_test.*
 
 /**
@@ -168,7 +168,7 @@ class AHXunfeiTest : KActivityHelper() {
             })
             btn_system_listen_voice.setOnClickListener {
                 if (!android.speech.SpeechRecognizer.isRecognitionAvailable(activity)) {
-                    snackbar("系统说没有语言识别服务")
+                    showSnack("系统说没有语言识别服务")
                     return@setOnClickListener
                 }
 
@@ -187,7 +187,7 @@ class AHXunfeiTest : KActivityHelper() {
             }
 
             btn_system_create_voice.setOnClickListener {
-//                snackbar("在监听通知的类MyNotificationListenerService有使用，这里就不写了")
+//                showSnack("在监听通知的类MyNotificationListenerService有使用，这里就不写了")
                 SpeechText.speech(text)
             }
         }

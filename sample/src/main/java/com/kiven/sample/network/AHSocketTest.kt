@@ -1,4 +1,4 @@
-package com.kiven.sample
+package com.kiven.sample.network
 
 import android.os.Bundle
 import android.view.View

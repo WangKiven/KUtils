@@ -82,6 +82,12 @@ fun Activity.showDialog(word: String) {
     KAlertDialogHelper.Show1BDialog(this, word)
     Log.i(KLog.getTag(), word)
 }
+fun Activity.showDialogClose(word: String) {
+    KAlertDialogHelper.Show1BDialog(this, word) {
+        finish()
+    }
+    Log.i(KLog.getTag(), word)
+}
 
 fun Activity.showListDialog(list: List<String>, autoClose: Boolean, onClickItem: (Int, String) -> Unit) {
     showListDialog(list.toTypedArray(), autoClose, onClickItem)

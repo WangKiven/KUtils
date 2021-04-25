@@ -391,6 +391,7 @@ class AHSmallAction : KActivityHelper() {
 
         // https://www.cnblogs.com/brucemengbm/p/6908442.html
         // https://developer.android.google.cn/guide/topics/connectivity/wifip2p
+        // 文档没说的，还需要配置：<uses-feature android:name="android.hardware.wifi.direct" android:required="true"/>
         addView("WiFi P2P", View.OnClickListener {
             WifiP2PDemo().startActivity(mActivity)
         })

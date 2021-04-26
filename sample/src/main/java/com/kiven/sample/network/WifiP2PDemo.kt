@@ -15,10 +15,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.sample.BaseFlexActivityHelper
-import com.kiven.sample.util.showDialog
-import com.kiven.sample.util.showDialogClose
-import com.kiven.sample.util.showListDialog
-import com.kiven.sample.util.showSnack
+import com.kiven.sample.util.*
 
 class WifiP2PDemo : BaseFlexActivityHelper() {
     private var receiver: BroadcastReceiver? = null
@@ -110,6 +107,27 @@ class WifiP2PDemo : BaseFlexActivityHelper() {
 //                manager.requestConnectionInfo(mChannel) {
 //
 //                }
+            }
+
+            val tags = mutableListOf<String>()
+            var count = 0
+            addBtn("+1") {
+                val cc = count++
+
+                val tag = "RxBus.register<String>$cc"
+                tags.add(tag)
+                RxBus.register<String>(this, tag) { KLog.i("rxbus: $cc") }
+            }
+            addBtn("-1") {
+                if (tags.isEmpty()) return@addBtn
+
+                val tag = tags.random()
+                RxBus.unregister(this, tag)
+                tags.remove(tag)
+            }
+            addBtn("post") {
+                if (tags.isEmpty()) return@addBtn
+                RxBus.post(tags.random(), "")
             }
         }
     }

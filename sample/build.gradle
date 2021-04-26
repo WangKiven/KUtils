@@ -250,7 +250,7 @@ dependencies {
 //    implementation 'com.huawei.hms:push:3.0.3.301'
     // firebase
 //    implementation 'com.google.firebase:firebase-analytics:17.4.4'
-    implementation 'com.google.firebase:firebase-messaging:21.0.1'
+    implementation 'com.google.firebase:firebase-messaging:21.1.0'
 //    implementation 'com.google.firebase:firebase-messaging-directboot:20.2.1'//在直接启动模式下接收 FCM 消息
 
     // ARCore https://developers.google.cn/ar/develop/java/enable-arcore
@@ -260,6 +260,11 @@ dependencies {
 
     // tensorFlow: https://www.tensorflow.org/lite/guide/android?hl=zh_cn
     implementation 'org.tensorflow:tensorflow-lite:2.2.0'
+
+    // https://github.com/ReactiveX/RxJava
+    implementation "io.reactivex.rxjava3:rxjava:3.0.12"
+    // https://github.com/ReactiveX/RxAndroid
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
 
     // tbs
     // 与as的profiler有冲突，使用profiler时进入x5 webView页面，会导致程序崩溃

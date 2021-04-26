@@ -13,11 +13,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.tools.KAppHelper
 import com.kiven.kutils.tools.KUtil
 import com.kiven.kutils.widget.KNormalItemView
 import com.kiven.sample.R
+import com.kiven.sample.util.RxBus
 import com.kiven.sample.util.showSnack
 import kotlinx.android.synthetic.main.layout_bottom_sheet_p2p_ui.*
 
@@ -30,10 +30,34 @@ class WifiP2PTool {
     fun registerMessageListener() {}
     fun unRegisterMessageListener() {}
 
+    companion object {
+        const val wiFiP2PBroadcastReceiverTag = "WifiP2PTool.wiFiP2PBroadcastReceiverTag"
+
+
+        private var wiFiP2PBroadcastReceiver: WiFiP2PBroadcastReceiver? = null
+        fun registerReceiver() {
+            if (wiFiP2PBroadcastReceiver == null) {
+                wiFiP2PBroadcastReceiver = WiFiP2PBroadcastReceiver()
+                val intentFilter = IntentFilter().apply {
+                    addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION)
+                    addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION)
+                    addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION)
+                    addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION)
+                }
+                KUtil.getApp().registerReceiver(wiFiP2PBroadcastReceiver, intentFilter)
+            }
+        }
+
+        fun unRegisterReceiver() {
+            if (wiFiP2PBroadcastReceiver != null) {
+                KUtil.getApp().unregisterReceiver(wiFiP2PBroadcastReceiver)
+                wiFiP2PBroadcastReceiver = null
+            }
+        }
+    }
 
     private var wifiP2pManager: WifiP2pManager? = null
     private var wifiP2pChannel: WifiP2pManager.Channel? = null
-    private var wiFiP2PBroadcastReceiver: WiFiP2PBroadcastReceiver? = null
     private fun initWifiP2pManager():Boolean {
         if (wifiP2pChannel == null) {
             val app = KUtil.getApp()
@@ -43,21 +67,12 @@ class WifiP2PTool {
                     ?: return false
 
 
-            wiFiP2PBroadcastReceiver = WiFiP2PBroadcastReceiver(this)
-            val intentFilter = IntentFilter().apply {
-                addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION)
-                addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION)
-                addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION)
-                addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION)
-            }
-            app.registerReceiver(wiFiP2PBroadcastReceiver, intentFilter)
+            registerReceiver()
         }
 
         return true
 
     }
-
-    private var P2PListener:((Intent)->Unit)? = null
 
     private fun showP2PUI() {
         val activity = KAppHelper.getInstance().topActivity ?: return
@@ -71,9 +86,6 @@ class WifiP2PTool {
             adapter = P2PDeviceAdapter(devices) {
 
             }
-        }
-        dialog.setOnDismissListener {
-            P2PListener = null
         }
 
 
@@ -93,7 +105,7 @@ class WifiP2PTool {
         }
         requestDeviceAction()
 
-        P2PListener = { intent ->
+        RxBus.register<Intent>(this, wiFiP2PBroadcastReceiverTag) { intent ->
             when (intent.action) {
                 WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION -> {
                     when (intent.getIntExtra(WifiP2pManager.EXTRA_WIFI_STATE, -1)) {
@@ -129,6 +141,9 @@ class WifiP2PTool {
             }
         })
 
+        dialog.setOnDismissListener {
+
+        }
         dialog.show()
     }
 
@@ -155,9 +170,12 @@ class WifiP2PTool {
         }
     }
 
-    private class WiFiP2PBroadcastReceiver(val tool: WifiP2PTool) : BroadcastReceiver() {
+    private class WiFiP2PBroadcastReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            if (intent != null) tool.P2PListener?.let { it(intent) }
+
+            if (intent != null) {
+                RxBus.post(wiFiP2PBroadcastReceiverTag, intent)
+            }
             /*val activity = KAppHelper.getInstance().topActivity
 
             when (intent?.action) {

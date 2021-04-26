@@ -109,25 +109,24 @@ class WifiP2PDemo : BaseFlexActivityHelper() {
 //                }
             }
 
-            val tags = mutableListOf<String>()
+            val ids = mutableListOf<Int>()
+            val tag = "RxBus.register<String>"
             var count = 0
             addBtn("+1") {
                 val cc = count++
 
-                val tag = "RxBus.register<String>$cc"
-                tags.add(tag)
-                RxBus.register<String>(this, tag) { KLog.i("rxbus: $cc") }
+                val tid = RxBus.register<String>(this, tag) { KLog.i("rxbus: $cc") }
+                ids.add(tid)
             }
             addBtn("-1") {
-                if (tags.isEmpty()) return@addBtn
+                if (ids.isEmpty()) return@addBtn
 
-                val tag = tags.random()
-                RxBus.unregister(this, tag)
-                tags.remove(tag)
+                val tid = ids.random()
+                RxBus.unregisterById(tid)
+                ids.remove(tid)
             }
             addBtn("post") {
-                if (tags.isEmpty()) return@addBtn
-                RxBus.post(tags.random(), "")
+                RxBus.post(tag, "")
             }
         }
     }

@@ -7,15 +7,14 @@ import android.content.IntentFilter
 import android.net.MacAddress
 import android.net.wifi.p2p.WifiP2pConfig
 import android.net.wifi.p2p.WifiP2pDeviceList
-import android.net.wifi.p2p.WifiP2pInfo
 import android.net.wifi.p2p.WifiP2pManager
 import android.os.Bundle
 import android.os.Looper
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.sample.BaseFlexActivityHelper
 import com.kiven.sample.util.*
+import com.kiven.sample.util.RxBus
 
 class WifiP2PDemo : BaseFlexActivityHelper() {
     private var receiver: BroadcastReceiver? = null
@@ -111,11 +110,12 @@ class WifiP2PDemo : BaseFlexActivityHelper() {
 
             val ids = mutableListOf<Int>()
             val tag = "RxBus.register<String>"
+            val owner = activity
             var count = 0
             addBtn("+1") {
                 val cc = count++
 
-                val tid = RxBus.register<String>(this, tag) { KLog.i("rxbus: $cc") }
+                val tid = RxBus.register<String>(owner, tag) { KLog.i("rxbus: $cc") }
                 ids.add(tid)
             }
             addBtn("-1") {
@@ -124,6 +124,9 @@ class WifiP2PDemo : BaseFlexActivityHelper() {
                 val tid = ids.random()
                 RxBus.unregisterById(tid)
                 ids.remove(tid)
+            }
+            addBtn("-all") {
+                RxBus.unregister(owner)
             }
             addBtn("post") {
                 RxBus.post(tag, "")

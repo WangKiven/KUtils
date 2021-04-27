@@ -105,7 +105,7 @@ class WifiAwareDemo:BaseFlexActivityHelper() {
     private var publishDiscoverySession:PublishDiscoverySession? = null
     private fun publish(wifiAware: WifiAwareSession) {
         val config = PublishConfig.Builder()
-                .setServiceName("Aware_File_Share_Service_Name")
+                .setServiceName("AwareFileShareServiceName")
                 /*.apply {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                         // 启用范围设置，在订阅端设置范围
@@ -130,7 +130,7 @@ class WifiAwareDemo:BaseFlexActivityHelper() {
     private var subscribeDiscoverySession: SubscribeDiscoverySession? = null
     private fun subscribe(wifiAware: WifiAwareSession) {
         val config = SubscribeConfig.Builder()
-                .setServiceName("Aware_File_Share_Service_Name")
+                .setServiceName("AwareFileShareServiceName")
                 /*.apply {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                         // 范围设置，需要在发布端设置是否启用

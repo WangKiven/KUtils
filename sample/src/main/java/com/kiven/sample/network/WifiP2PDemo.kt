@@ -87,7 +87,6 @@ class WifiP2PDemo : BaseFlexActivityHelper() {
                         manager.connect(mChannel!!, config, object :WifiP2pManager.ActionListener{
                             override fun onSuccess() {
                                 activity.showSnack("请求连接操作成功（不代表连接成功）")
-
                             }
 
                             override fun onFailure(reason: Int) {
@@ -98,38 +97,15 @@ class WifiP2PDemo : BaseFlexActivityHelper() {
                 }
             }
 
+            val tool = WifiP2PTool()
             addBtn("启用消息监听") {
-                WifiP2PTool().sendMessage()
+                tool.sendMessage()
             }
             addBtn("发送消息") {
 //                if (receiver == null) return@addBtn showSnack("需先启用监听")
 //                manager.requestConnectionInfo(mChannel) {
 //
 //                }
-            }
-
-            val ids = mutableListOf<Int>()
-            val tag = "RxBus.register<String>"
-            val owner = activity
-            var count = 0
-            addBtn("+1") {
-                val cc = count++
-
-                val tid = RxBus.register<String>(owner, tag) { KLog.i("rxbus: $cc") }
-                ids.add(tid)
-            }
-            addBtn("-1") {
-                if (ids.isEmpty()) return@addBtn
-
-                val tid = ids.random()
-                RxBus.unregisterById(tid)
-                ids.remove(tid)
-            }
-            addBtn("-all") {
-                RxBus.unregister(owner)
-            }
-            addBtn("post") {
-                RxBus.post(tag, "")
             }
         }
     }

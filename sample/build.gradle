@@ -262,9 +262,12 @@ dependencies {
     implementation 'org.tensorflow:tensorflow-lite:2.2.0'
 
     // https://github.com/ReactiveX/RxJava
-    implementation "io.reactivex.rxjava3:rxjava:3.0.12"
+//    implementation "io.reactivex.rxjava3:rxjava:3.0.12"
     // https://github.com/ReactiveX/RxAndroid
-    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
+//    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
+
+    // https://github.com/googlearchive/android-nearby
+//    implementation 'com.google.android.gms:play-services-nearby:17.0.0'
 
     // tbs
     // 与as的profiler有冲突，使用profiler时进入x5 webView页面，会导致程序崩溃

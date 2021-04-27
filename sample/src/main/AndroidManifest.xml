@@ -71,6 +71,12 @@
     <!-- WiFi 直连 -->
     <uses-feature android:name="android.hardware.wifi.direct" android:required="true"/>
 
+    <!-- WiFi rtt -->
+    <uses-feature android:name="android.hardware.wifi.rtt" />
+
+    <!-- WiFi 感知，自己拼接的，不知道有没有用 -->
+    <uses-feature android:name="android.hardware.wifi.aware" />
+
     <application
         android:name=".AppContext"
         android:allowBackup="true"

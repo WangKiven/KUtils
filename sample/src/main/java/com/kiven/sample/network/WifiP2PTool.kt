@@ -16,7 +16,7 @@ import com.kiven.kutils.tools.KAppHelper
 import com.kiven.kutils.tools.KUtil
 import com.kiven.kutils.widget.KNormalItemView
 import com.kiven.sample.R
-import com.kiven.sample.util.RxBus
+import com.sxb.kutils_ktx.util.RxBus
 import com.kiven.sample.util.showSnack
 import kotlinx.android.synthetic.main.layout_bottom_sheet_p2p_ui.*
 

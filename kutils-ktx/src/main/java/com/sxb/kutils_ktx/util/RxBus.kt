@@ -1,4 +1,4 @@
-package com.kiven.sample.util
+package com.sxb.kutils_ktx.util
 
 import android.app.Activity
 import android.app.Application
@@ -8,17 +8,14 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.OnLifecycleEvent
 import com.kiven.kutils.tools.KUtil
-import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.disposables.Disposable
-import io.reactivex.rxjava3.subjects.PublishSubject
-import java.util.concurrent.TimeUnit
+import java.util.*
 
 /**
  * Created by kiven
  */
 object RxBus {
     class PostMessage(val eventName: String, val data: Any?)
-    class Register(val owner: Any, val eventName: String, val disposable: Disposable) {
+    class Register(val owner: Any, val eventName: String, val observer: Observer) {
         companion object {
             private var eventIdCount = 0
 
@@ -39,7 +36,11 @@ object RxBus {
     }
 
     val bus by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
-        PublishSubject.create<PostMessage>()
+        object :Observable() {
+            override fun hasChanged(): Boolean {
+                return true
+            }
+        }
     }
     val registers = mutableListOf<Register>()
 
@@ -49,27 +50,24 @@ object RxBus {
             owner.lifecycle.addObserver(lifecycleObserver)
         }
 
-        val observable = bus.ofType(PostMessage::class.java)
-                // 这里加了异常重新订阅
-                .retryWhen {
-                    it.flatMap {
-                        Observable.timer(50,
-                                TimeUnit.MILLISECONDS)
-                    }
-                }
-        val disposable = observable.subscribe {
-            if (it.eventName == eventName) {
-                call(it.data as T)
+        val observer = Observer { _, arg ->
+            val pm = arg as PostMessage
+            if (pm.eventName == eventName) {
+                call(pm.data as T)
             }
         }
+        sync { bus.addObserver(observer) }
 
-        val register = Register(owner, eventName, disposable)
+        val register = Register(owner, eventName, observer)
         sync { registers.add(register) }
         return register.eventId
     }
 
     fun post(eventName: String, data: Any? = null) {
-        bus.onNext(PostMessage(eventName, data))
+        sync {
+
+        }
+        bus.notifyObservers(PostMessage(eventName, data))
     }
 
     @Synchronized
@@ -84,7 +82,7 @@ object RxBus {
         sync {
             registers.removeAll {
                 if (it.owner == owner && (eventName == null || it.eventName == eventName)) {
-                    it.disposable.dispose()
+                    bus.deleteObserver(it.observer)
                     return@removeAll true
                 }
 
@@ -100,7 +98,7 @@ object RxBus {
         sync {
             registers.removeAll {
                 if (it.eventName == eventName) {
-                    it.disposable.dispose()
+                    bus.deleteObserver(it.observer)
                     return@removeAll true
                 }
 
@@ -116,7 +114,7 @@ object RxBus {
         sync {
             registers.removeAll {
                 if (it.eventId == eventId) {
-                    it.disposable.dispose()
+                    bus.deleteObserver(it.observer)
                     return@removeAll true
                 }
 

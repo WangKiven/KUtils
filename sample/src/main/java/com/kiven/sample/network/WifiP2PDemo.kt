@@ -14,7 +14,7 @@ import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.sample.BaseFlexActivityHelper
 import com.kiven.sample.util.*
-import com.kiven.sample.util.RxBus
+import com.sxb.kutils_ktx.util.RxBus
 
 class WifiP2PDemo : BaseFlexActivityHelper() {
     private var receiver: BroadcastReceiver? = null

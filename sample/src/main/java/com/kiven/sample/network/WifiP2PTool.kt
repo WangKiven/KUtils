@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KAppHelper
 import com.kiven.kutils.tools.KUtil
 import com.kiven.kutils.widget.KNormalItemView
@@ -19,22 +20,44 @@ import com.kiven.sample.R
 import com.sxb.kutils_ktx.util.RxBus
 import com.kiven.sample.util.showSnack
 import kotlinx.android.synthetic.main.layout_bottom_sheet_p2p_ui.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import org.jetbrains.anko.doAsync
+import java.net.ServerSocket
+import java.net.Socket
 
 class WifiP2PTool {
     fun sendMessage() {
+        startAccept()
 
         if (initWifiP2pManager())
-            showP2PUI()
+            showP2PUI {
+                wifiP2pManager?.requestGroupInfo(wifiP2pChannel!!) {
+                    KLog.i("requestGroupInfo = $it")
+                    it?.apply {
+
+                        Thread{
+                            val client = clientList.firstOrNull() ?: return@Thread
+                            try {
+                                val socket = Socket(client.deviceAddress, 8899)
+                            } catch (t:Throwable) {
+
+                            }
+                        }.run()
+                    }
+                }
+            }
     }
-    fun registerMessageListener() {}
-    fun unRegisterMessageListener() {}
+    fun registerMessageListener() { startAccept()}
+    fun unRegisterMessageListener() { stopAccept()}
 
     companion object {
         const val wiFiP2PBroadcastReceiverTag = "WifiP2PTool.wiFiP2PBroadcastReceiverTag"
 
 
         private var wiFiP2PBroadcastReceiver: WiFiP2PBroadcastReceiver? = null
-        fun registerReceiver() {
+        private fun registerReceiver() {
             if (wiFiP2PBroadcastReceiver == null) {
                 wiFiP2PBroadcastReceiver = WiFiP2PBroadcastReceiver()
                 val intentFilter = IntentFilter().apply {
@@ -47,11 +70,35 @@ class WifiP2PTool {
             }
         }
 
-        fun unRegisterReceiver() {
+        private fun unRegisterReceiver() {
             if (wiFiP2PBroadcastReceiver != null) {
                 KUtil.getApp().unregisterReceiver(wiFiP2PBroadcastReceiver)
                 wiFiP2PBroadcastReceiver = null
             }
+        }
+
+        private var serverSocket:ServerSocket? = null
+        private fun startAccept() {
+            if (serverSocket == null) serverSocket = ServerSocket(8899)
+            Thread{
+                while (serverSocket != null) {
+                    try {
+                        serverSocket?.accept()?.apply {
+                            val inputStream = getInputStream()
+                        }
+                    } catch (e:Throwable) {
+
+                    }
+
+                }
+            }.run()
+        }
+
+        private fun stopAccept() {
+            serverSocket?.apply {
+                if (!isClosed) close()
+            }
+            serverSocket = null
         }
     }
 
@@ -73,7 +120,7 @@ class WifiP2PTool {
 
     }
 
-    private fun showP2PUI() {
+    private fun showP2PUI(onUIClose:() ->Unit) {
         val activity = KAppHelper.getInstance().topActivity ?: return
 
         val devices = mutableListOf<DeviceState>()
@@ -86,7 +133,7 @@ class WifiP2PTool {
             layoutManager = LinearLayoutManager(activity)
             adapter = P2PDeviceAdapter(devices) { deviceState ->
                 if (!deviceState.isConnected) {
-                    val config = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                    /*val config = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
                         WifiP2pConfig.Builder().apply {
                             // 1 必须设置，不能为空和空字符串
                             // 2 必须以DIRECT-xy.开头（xy是任意两个大小写字母或数字）
@@ -105,6 +152,9 @@ class WifiP2PTool {
                         WifiP2pConfig().apply {
                             deviceAddress = deviceState.wifiP2pDevice!!.deviceAddress
                         }
+                    }*/
+                    val config = WifiP2pConfig().apply {
+                        deviceAddress = deviceState.wifiP2pDevice!!.deviceAddress
                     }
                     wifiP2pManager?.connect(wifiP2pChannel!!, config, object :WifiP2pManager.ActionListener{
                         override fun onSuccess() {
@@ -139,6 +189,7 @@ class WifiP2PTool {
                 devices2.clear()
                 if (it != null) {
                     devices2.add(DeviceState(true, null, it))
+                    KLog.i("requestConnectionInfo = $it")
                 }
 
                 devices.clear()
@@ -193,6 +244,7 @@ class WifiP2PTool {
 
         dialog.setOnDismissListener {
             RxBus.unregister(dialog)
+            onUIClose()
         }
         dialog.show()
     }
@@ -218,7 +270,7 @@ class WifiP2PTool {
                 } else {
                     device.wifiP2pDevice?.apply {
                         setTextName("$deviceName($deviceAddress)")
-                        setTextInfo("拥有者：$isGroupOwner, status: $status")
+                        setTextInfo("它是group拥有者：$isGroupOwner, status: $status")
                         setOnClickListener { onClick(device) }
                     }
                 }

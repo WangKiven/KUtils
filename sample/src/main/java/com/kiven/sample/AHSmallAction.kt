@@ -321,6 +321,7 @@ class AHSmallAction : KActivityHelper() {
 
         // TODO: 2021-04-23 ----------------------------------------------------------
         addTitle("网络相关")
+        addView("socket", View.OnClickListener { AHSocketTest().startActivity(mActivity) })
         addView("检测网络与IP", View.OnClickListener {
             val type = KNetwork.getNetworkType(mActivity)
             val ts = when (type) {
@@ -595,7 +596,6 @@ class AHSmallAction : KActivityHelper() {
         addView("闹钟demo", View.OnClickListener { AHAlarmDemo().startActivity(mActivity) })
         addView("系统数据", View.OnClickListener { AHSysgemData().startActivity(mActivity) })
         addView("url访问测试", View.OnClickListener { AHUrlTest().startActivity(mActivity) })
-        addView("socket", View.OnClickListener { AHSocketTest().startActivity(mActivity) })
         addView("原生分享", View.OnClickListener { AHShare().startActivity(mActivity) })
         addView("剪贴板", View.OnClickListener { KString.setClipText(activity, "这是剪贴内容x") })
         addView("崩溃拦截", View.OnClickListener { throw error("测试崩溃"); })

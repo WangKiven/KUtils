@@ -1,9 +1,11 @@
 package com.kiven.sample.network
 
+import android.Manifest
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.PackageManager
 import android.net.MacAddress
 import android.net.wifi.p2p.WifiP2pConfig
 import android.net.wifi.p2p.WifiP2pDeviceList
@@ -12,9 +14,9 @@ import android.os.Bundle
 import android.os.Looper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
+import com.kiven.kutils.tools.KGranting
 import com.kiven.sample.BaseFlexActivityHelper
 import com.kiven.sample.util.*
-import com.sxb.kutils_ktx.util.RxBus
 
 class WifiP2PDemo : BaseFlexActivityHelper() {
     private var receiver: BroadcastReceiver? = null
@@ -24,6 +26,19 @@ class WifiP2PDemo : BaseFlexActivityHelper() {
         super.onCreate(activity, savedInstanceState)
 
         activity.apply {
+            KGranting.requestPermissions(this, 899,
+                    arrayOf(Manifest.permission.ACCESS_WIFI_STATE, Manifest.permission.CHANGE_WIFI_STATE, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                if (it) {
+                    initView()
+                } else {
+                    showDialogClose("没有权限")
+                }
+            }
+        }
+    }
+
+    private fun initView() {
+        mActivity?.apply {
             val manager: WifiP2pManager  = getSystemService(Context.WIFI_P2P_SERVICE) as WifiP2pManager? ?: return@apply showDialogClose("WifiP2pManager 获取失败")
             mChannel = manager.initialize(this, Looper.getMainLooper(), null) ?: return@apply showDialogClose("WifiP2pManager 初始失败")
 
@@ -43,7 +58,7 @@ class WifiP2PDemo : BaseFlexActivityHelper() {
             addBtn("寻找设备") {
                 if (receiver == null) return@addBtn showSnack("需先启用监听")
 
-                manager.discoverPeers(mChannel!!, object :WifiP2pManager.ActionListener{
+                manager.discoverPeers(mChannel!!, object : WifiP2pManager.ActionListener {
                     override fun onSuccess() {
                         showSnack("开启发现设备功能成功")
                     }
@@ -57,11 +72,11 @@ class WifiP2PDemo : BaseFlexActivityHelper() {
             addBtn("连接设备") {
                 manager.requestPeers(mChannel!!) { peers: WifiP2pDeviceList? ->
                     // Handle peers list
-                    if (peers == null) return@requestPeers activity.showSnack("peers = null")
+                    if (peers == null) return@requestPeers showSnack("peers = null")
                     val deviceList = peers.deviceList.toList()
-                    if (deviceList.isEmpty()) return@requestPeers activity.showSnack("没有可连接设备")
+                    if (deviceList.isEmpty()) return@requestPeers showSnack("没有可连接设备")
 
-                    activity.showListDialog(deviceList.map { it.deviceName }) { index, _ ->
+                    showListDialog(deviceList.map { it.deviceName }) { index, _ ->
 //                        val config = WifiP2pConfig()
 //                        config.deviceAddress = deviceList[index].deviceAddress
                         val config = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
@@ -84,13 +99,13 @@ class WifiP2PDemo : BaseFlexActivityHelper() {
                                 deviceAddress = deviceList[index].deviceAddress
                             }
                         }
-                        manager.connect(mChannel!!, config, object :WifiP2pManager.ActionListener{
+                        manager.connect(mChannel!!, config, object : WifiP2pManager.ActionListener {
                             override fun onSuccess() {
-                                activity.showSnack("请求连接操作成功（不代表连接成功）")
+                                showSnack("请求连接操作成功（不代表连接成功）")
                             }
 
                             override fun onFailure(reason: Int) {
-                                activity.showSnack("请求连接操作失败：$reason")
+                                showSnack("请求连接操作失败：$reason")
                             }
                         })
                     }

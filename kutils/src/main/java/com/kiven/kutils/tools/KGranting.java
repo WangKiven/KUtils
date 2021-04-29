@@ -245,10 +245,17 @@ public class KGranting {
         grants.put(Manifest.permission.CAMERA, "相机");
         grants.put(Manifest.permission.CALL_PHONE, "拨号");
         grants.put(Manifest.permission.RECORD_AUDIO, "录音");
+        grants.put(Manifest.permission.ACCESS_FINE_LOCATION, "精准定位");
 
         String[] tGrantName = new String[tGrant.length];
         for (int i = 0; i < tGrant.length; i++) {
-            tGrantName[i] = grants.get(tGrant[i]);
+            String q = tGrant[i];
+            if (grants.containsKey(q)) {
+                tGrantName[i] = grants.get(tGrant[i]);
+            } else {
+                String[] s = q.split("\\.");
+                tGrantName[i] = s[s.length - 1];
+            }
         }
         requestPermissions(activity, requestCode, tGrant, tGrantName, callBack);
     }

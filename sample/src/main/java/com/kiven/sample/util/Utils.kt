@@ -11,9 +11,11 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.InputType
 import android.util.Log
 import android.view.Gravity
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -34,13 +36,14 @@ import java.util.*
  * Created by wangk on 2019/5/14.
  */
 /// 获取一个输入
-fun Activity.getInput(inputName: String, action: (CharSequence) -> Unit) {
-    getInput(inputName, "", action)
+fun Activity.getInput(inputName: String, text: String = "", inputType: Int = EditorInfo.TYPE_CLASS_TEXT, action: (CharSequence) -> Unit) {
+    getInput(inputName, text, inputType, {}, action)
 }
 
-fun Activity.getInput(inputName: String, text: String, action: (CharSequence) -> Unit) {
+fun Activity.getInput(inputName: String, text: String = "", inputType: Int = EditorInfo.TYPE_CLASS_TEXT, onCancel:()->Unit, action: (CharSequence) -> Unit) {
     val et = EditText(this)
     et.setText(text)
+    et.inputType = inputType
     AlertDialog.Builder(this)
             .setTitle(inputName)
             .setView(et)
@@ -53,6 +56,8 @@ fun Activity.getInput(inputName: String, text: String, action: (CharSequence) ->
                     showSnack("$inputName 不能为空")
                 }
                 dialog.dismiss()
+            }.setOnCancelListener {
+                onCancel()
             }
             .show()
 }
@@ -117,15 +122,18 @@ fun Activity.showListDialog(list: Array<String>, onClickItem: (Int, String) -> U
 }
 
 fun Activity.showBottomSheetDialog(list: List<String>, onClickItem: (Int, String) -> Unit) {
-    showBottomSheetDialog(list.toTypedArray(), onClickItem)
+    showBottomSheetDialog(list.toTypedArray(), {}, onClickItem)
 }
 
-fun Activity.showBottomSheetDialog(list: Array<String>, onClickItem: (Int, String) -> Unit) {
+fun Activity.showBottomSheetDialog(list: Array<String>, onCancel: () -> Unit = {}, onClickItem: (Int, String) -> Unit) {
 
     val sheetDialog = ActionSheetDialog(this, list, null)
     sheetDialog.setOnOperItemClickL { _, _, position, _ ->
         onClickItem(position, list[position])
         sheetDialog.dismiss()
+    }
+    sheetDialog.setOnCancelListener {
+        onCancel()
     }
     sheetDialog.show()
 }
@@ -212,8 +220,13 @@ fun showToast(word: String = "还没做") {
 /**
  * 随机获取相册图片
  */
-fun Activity.randomPhoneImage(call: (Uri) -> Unit) {
-    phoneImages {
+fun Activity.randomPhoneImage(onError: (String) -> Unit = {}, call: (Uri) -> Unit) {
+    phoneImages(onError) {
+        if (it.isEmpty()) {
+            onError("相册空空如也")
+            return@phoneImages
+        }
+
         val id = it.random()[MediaStore.Images.Media._ID]?.toLong() ?: 0L
         val pathUri = ContentUris.withAppendedId(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
@@ -226,7 +239,7 @@ fun Activity.randomPhoneImage(call: (Uri) -> Unit) {
 /**
  * 获取相册图片
  */
-fun Activity.phoneImages(call: (List<Map<String, String>>) -> Unit) {
+fun Activity.phoneImages(onError: (String) -> Unit = {}, call: (List<Map<String, String>>) -> Unit) {
     KGranting.requestAlbumPermissions(this, 887) {
         if (it) {
             Thread {
@@ -261,6 +274,6 @@ fun Activity.phoneImages(call: (List<Map<String, String>>) -> Unit) {
                     }
                 }
             }.start()
-        }
+        } else onError("没有权限")
     }
 }

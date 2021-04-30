@@ -44,7 +44,7 @@ import com.kiven.sample.imui.ImActivity
 import com.kiven.sample.jpushUI.AHImui
 import com.kiven.sample.mimc.ChatMsg
 import com.kiven.sample.mimc.UserManager
-import com.kiven.sample.network.AHSocketTest
+import com.kiven.sample.network.socket.AHSocketTest
 import com.kiven.sample.noti.AHNotiTest
 import com.kiven.sample.service.LiveWallpaper2
 import com.kiven.sample.spss.AHSpssTemple

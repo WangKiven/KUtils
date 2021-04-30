@@ -1,26 +1,34 @@
-package com.kiven.sample.network
+package com.kiven.sample.network.socket
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.TextView
+import androidx.core.net.toFile
 import com.google.android.flexbox.AlignContent
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
-import com.kiven.sample.util.showSnack
+import com.kiven.kutils.tools.KNetwork
+import com.kiven.kutils.tools.KUtil
+import com.kiven.sample.util.*
+import com.sxb.kutils_ktx.util.RxBus
+import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import okhttp3.internal.wait
 import org.jetbrains.anko.support.v4.nestedScrollView
+import java.io.File
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
 import java.net.MulticastSocket
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 /**
  * https://www.cnblogs.com/xujian2014/p/5072215.html
@@ -52,7 +60,8 @@ class AHSocketTest : KActivityHelper() {
                 "\n- 定向广播：将数据报包发送到本网络之外的特定网络的所有主机，然而，由于互联网上的大部分路由器都不转发定向广播消息，所以这里不深入介绍了" +
                 "\n- 本地广播：将数据报包发送到本地网络的所有主机，IPv4的本地广播地址为“255.255.255.255”，路由器不会转发此广播" +
                 "\n- 多播(组播): 一台主机向指定的一组主机发送数据报包. IP网络的组播一般通过组播IP地址来实现。组播IP地址就是D类IP地址，即224.0.0.0至239.255.255.255之间的IP地址" +
-                "\n- https://www.cnblogs.com/xujian2014/p/5072215.html")
+                "\n- https://www.cnblogs.com/xujian2014/p/5072215.html" +
+                "\n- 本机ip：${KNetwork.getIPAddress()}")
 
 
         addView("发送广播获取服务器IP", View.OnClickListener {
@@ -137,8 +146,120 @@ class AHSocketTest : KActivityHelper() {
 
             }
         })
-        addView("", View.OnClickListener { })
-        addView("", View.OnClickListener { })
+
+        val serverSocketPortKey = "AHSocketTest_serverSocketPortKey"
+        var serverSocketPort = KUtil.getSharedPreferencesIntValue(serverSocketPortKey, 9999)
+
+        addView("ServerSocket", View.OnClickListener {
+            activity.getInput("设置监听端口", serverSocketPort.toString(), EditorInfo.TYPE_CLASS_NUMBER) {
+                if (it.isBlank()) return@getInput activity.showSnack("不能为空")
+                serverSocketPort = it.toString().toInt()
+                KUtil.putSharedPreferencesIntValue(serverSocketPortKey, serverSocketPort)
+
+                SocketFactory.createServiceSocket(serverSocketPort)
+            }
+        })
+
+        val socket2IpKey = "AHSocketTest_socket2IpKey"
+        val socket2PortKey = "AHSocketTest_socket2PortKey"
+        var socket2Ip = KUtil.getSharedPreferencesStringValue(socket2IpKey, "192.168.0.145")
+        var socket2Port = KUtil.getSharedPreferencesIntValue(socket2PortKey, 9999)
+        addView("Socket", View.OnClickListener {
+            GlobalScope.launch(Dispatchers.Main){
+                var ip = ""
+                suspendCoroutine<Boolean> { continuation ->
+                    activity.getInput("输入服务器IP", socket2Ip, onCancel = {
+                        continuation.resume(false)
+                    }) {
+                        if (it.isBlank()) {
+                            activity.showSnack("不能为空")
+                        } else {
+                            ip = it.toString()
+                        }
+
+                        continuation.resume(false)
+                    }
+                }
+
+                if (ip.isBlank()) return@launch
+                socket2Ip = ip
+                KUtil.putSharedPreferencesStringValue(socket2IpKey, socket2Ip)
+
+                var port = 0
+                suspendCoroutine<Unit> {continuation ->
+                    activity.getInput("输入服务器端口", socket2Port.toString(), EditorInfo.TYPE_CLASS_NUMBER, {
+                        continuation.resume(Unit)
+                    }) {
+                        if (it.isBlank()) {
+                            activity.showSnack("不能为空")
+                        } else {
+                            port = it.toString().toInt()
+                        }
+                        continuation.resume(Unit)
+                    }
+                }
+
+                if (port == 0) return@launch
+                socket2Port = port
+                KUtil.putSharedPreferencesIntValue(socket2PortKey, socket2Port)
+
+                var messageType = 0
+                suspendCoroutine<Unit> {continuation ->
+                    activity.showBottomSheetDialog(arrayOf("text", "image"), {continuation.resume(Unit)}) { index, _ ->
+                        messageType = index + 1
+                        continuation.resume(Unit)
+                    }
+                }
+
+                when(messageType) {
+                    1 -> {
+                        var text = ""
+                        suspendCoroutine<Unit> { continuation ->
+                            activity.getInput("发送内容", "你若安好，便是晴天。", onCancel = {continuation.resume(Unit)}) {
+                                if (it.isBlank()) activity.showSnack("不能为空")
+                                text = it.toString()
+                                continuation.resume(Unit)
+                            }
+                        }
+
+                        if (text.isBlank()) return@launch
+
+                        withContext(Dispatchers.IO) {
+                            SocketFactory.sendSocketMessage(socket2Ip, socket2Port, SocketFactory.DataType.String, text)
+                        }
+                    }
+                    2 -> {
+                        var uri: Uri? = null
+                        suspendCoroutine<Unit> { continuation ->
+                            activity.randomPhoneImage({
+                                activity.showSnack(it)
+                                continuation.resume(Unit)
+                            }) {
+                                uri = it
+                                continuation.resume(Unit)
+                            }
+                        }
+
+
+                        withContext(Dispatchers.IO) {
+                            uri?.apply {
+                                SocketFactory.sendSocketMessage(socket2Ip, socket2Port, SocketFactory.DataType.Image, this)
+                            }
+                        }
+                    }
+                }
+            }
+        })
+
+        RxBus.register<Message>(activity, SocketFactory.newAccept) {
+            GlobalScope.launch(Dispatchers.Main) {
+                when(it.dataType) {
+                    SocketFactory.DataType.String -> activity.showDialog("收到来自${it.fromIp}的消息：${it.data}")
+                    SocketFactory.DataType.Image -> activity.showImageDialog((it.data as File).absolutePath)
+                    SocketFactory.DataType.File -> activity.showDialog("收到来自${it.fromIp}的文件消息，文件路径${it.data}")
+                }
+            }
+        }
     }
 
     class Datagram(

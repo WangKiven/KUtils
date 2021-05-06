@@ -140,7 +140,9 @@ object SocketFactory {
         if (ss == null || (force && ss.port != port)) {
             socket = Socket(ip, port)
             sockets.add(socket)
-        } else socket = ss
+        } else {
+            socket = ss
+        }
 
         socket.getOutputStream()?.apply {
             when {

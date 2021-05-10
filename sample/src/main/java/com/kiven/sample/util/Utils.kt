@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.ContentUris
 import android.content.Intent
+import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
@@ -22,6 +23,10 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AlertDialog
+import androidx.core.database.getBlobOrNull
+import androidx.core.database.getFloatOrNull
+import androidx.core.database.getIntOrNull
+import androidx.core.database.getStringOrNull
 import com.flyco.dialog.widget.ActionSheetDialog
 import com.flyco.dialog.widget.NormalListDialog
 import com.google.android.material.snackbar.Snackbar
@@ -228,6 +233,7 @@ fun Activity.randomPhoneImage(onError: (String) -> Unit = {}, call: (Uri) -> Uni
         }
 
         val id = it.random()[MediaStore.Images.Media._ID]?.toLong() ?: 0L
+//        val id = it[1][MediaStore.Images.Media._ID]?.toLong() ?: 0L
         val pathUri = ContentUris.withAppendedId(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                 id
@@ -261,8 +267,16 @@ fun Activity.phoneImages(onError: (String) -> Unit = {}, call: (List<Map<String,
                         val map = TreeMap<String, String>()
 
                         for (i in names.indices) {
-                            map[names[i]] = cusor.getString(indexs[i]) ?: ""
-
+//                            map[names[i]] = cusor.getString(indexs[i]) ?: ""
+                            map[names[i]] = when(cusor.getType(indexs[i])) {
+                                Cursor.FIELD_TYPE_FLOAT -> cusor.getFloatOrNull(indexs[i])?.toString() ?: ""
+                                Cursor.FIELD_TYPE_INTEGER -> cusor.getIntOrNull(indexs[i])?.toString() ?: ""
+                                Cursor.FIELD_TYPE_STRING -> cusor.getStringOrNull(indexs[i]) ?: ""
+                                Cursor.FIELD_TYPE_BLOB -> {
+                                    ""
+                                }
+                                else -> ""
+                            }
                         }
                         iDatas.add(map)
                     } while (cusor.moveToNext())

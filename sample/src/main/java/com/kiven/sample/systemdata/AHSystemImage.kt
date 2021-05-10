@@ -12,6 +12,10 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.database.getBlobOrNull
+import androidx.core.database.getFloatOrNull
+import androidx.core.database.getIntOrNull
+import androidx.core.database.getStringOrNull
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -113,7 +117,16 @@ class AHSystemImage : KActivityHelper() {
 //                                val sb = StringBuilder()
 
                                 for (i in names.indices) {
-                                    map[names[i]] = cusor.getString(indexs[i]) ?: ""
+                                    map[names[i]] = when(cusor.getType(indexs[i])) {
+                                        Cursor.FIELD_TYPE_FLOAT -> cusor.getFloatOrNull(indexs[i])?.toString() ?: "空"
+                                        Cursor.FIELD_TYPE_INTEGER -> cusor.getIntOrNull(indexs[i])?.toString() ?: "空"
+                                        Cursor.FIELD_TYPE_STRING -> cusor.getStringOrNull(indexs[i]) ?: "空"
+                                        Cursor.FIELD_TYPE_BLOB -> {
+                                            "数据类型是BLOB, 长度是${cusor.getBlobOrNull(indexs[i])?.size}"
+                                        }
+                                        else -> "无数据类型"
+                                    }
+//                                    map[names[i]] = cusor.getString(indexs[i]) ?: ""
 //                                    sb.append(names[i]).append(" = ").append(getData(indexs[i], types[i])).append(", ")
 
                                 }

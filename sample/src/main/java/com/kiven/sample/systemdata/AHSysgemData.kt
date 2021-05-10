@@ -2,6 +2,7 @@ package com.kiven.sample.systemdata
 
 import android.Manifest
 import android.content.Intent
+import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -12,6 +13,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.core.database.getBlobOrNull
+import androidx.core.database.getFloatOrNull
+import androidx.core.database.getIntOrNull
+import androidx.core.database.getStringOrNull
 import com.google.android.flexbox.AlignContent
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
@@ -46,7 +51,10 @@ class AHSysgemData : KActivityHelper() {
         val addTitle = fun(text: String): TextView {
             val tv = TextView(activity)
             tv.text = text
-            tv.layoutParams = ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.MATCH_PARENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT)
+            tv.layoutParams = ViewGroup.MarginLayoutParams(
+                ViewGroup.MarginLayoutParams.MATCH_PARENT,
+                ViewGroup.MarginLayoutParams.WRAP_CONTENT
+            )
             flexboxLayout.addView(tv)
 
             return tv
@@ -64,14 +72,23 @@ class AHSysgemData : KActivityHelper() {
             AHSystemImage().startActivity(mActivity)
         })
         addView("查询视频", View.OnClickListener {
-            loadData(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, MediaStore.Video.Media.DATE_MODIFIED)
+            loadData(
+                MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                MediaStore.Video.Media.DATE_MODIFIED
+            )
         })
         addView("查询音频", View.OnClickListener {
-            loadData(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, MediaStore.Audio.Media.DATE_MODIFIED)
+            loadData(
+                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                MediaStore.Audio.Media.DATE_MODIFIED
+            )
         })
         addView("查询下载", View.OnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
-                loadData(MediaStore.Downloads.EXTERNAL_CONTENT_URI, MediaStore.Downloads.DATE_MODIFIED)
+                loadData(
+                    MediaStore.Downloads.EXTERNAL_CONTENT_URI,
+                    MediaStore.Downloads.DATE_MODIFIED
+                )
             else mActivity.showSnack("Android Q 开始支持")
         })
 
@@ -81,15 +98,23 @@ class AHSysgemData : KActivityHelper() {
         })
         addTitle("通讯录")
         addView("查询通讯录", View.OnClickListener {
-            loadData(ContactsContract.Contacts.CONTENT_URI, ContactsContract.Contacts.CONTACT_STATUS_TIMESTAMP)
+            loadData(
+                ContactsContract.Contacts.CONTENT_URI,
+                ContactsContract.Contacts.CONTACT_STATUS_TIMESTAMP
+            )
         })
         addTitle("日历: https://www.jianshu.com/p/4820e02b2ee4")
         addView("查询日历", View.OnClickListener {
             // CalendarContract.Calendars.ENTERPRISE_CONTENT_URI
-            KGranting.requestPermissions(mActivity, 788,
-                    arrayOf(Manifest.permission.WRITE_CALENDAR, Manifest.permission.READ_CALENDAR),
-                    arrayOf("日历添加", "日历获取")) {
-                if (it) loadData(CalendarContract.Calendars.CONTENT_URI, CalendarContract.Calendars._ID)
+            KGranting.requestPermissions(
+                mActivity, 788,
+                arrayOf(Manifest.permission.WRITE_CALENDAR, Manifest.permission.READ_CALENDAR),
+                arrayOf("日历添加", "日历获取")
+            ) {
+                if (it) loadData(
+                    CalendarContract.Calendars.CONTENT_URI,
+                    CalendarContract.Calendars._ID
+                )
             }
         })
 
@@ -130,9 +155,15 @@ class AHSysgemData : KActivityHelper() {
 
             val hasP = suspendCoroutine<Boolean> { cc ->
                 GlobalScope.launch(Dispatchers.Main) {
-                    KGranting.requestPermissions(mActivity, 345,
-                            arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS),
-                            arrayOf("内存", "通讯录读取", "通讯录修改")) {
+                    KGranting.requestPermissions(
+                        mActivity, 345,
+                        arrayOf(
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            Manifest.permission.READ_CONTACTS,
+                            Manifest.permission.WRITE_CONTACTS
+                        ),
+                        arrayOf("内存", "通讯录读取", "通讯录修改")
+                    ) {
                         cc.resume(it)
                     }
                 }
@@ -144,34 +175,49 @@ class AHSysgemData : KActivityHelper() {
                 val resolver = mActivity.contentResolver
 
                 resolver.query(
-                        uri,
-                        null,
-                        null,
-                        null,
-                        "$sortedKey desc"
+                    uri,
+                    null,
+                    null,
+                    null,
+                    "$sortedKey desc"
                 )
-                        ?.use { cusor ->
-                            val names = cusor.columnNames
-                            val indexs = names.map { cusor.getColumnIndex(it) }
+                    ?.use { cusor ->
+                        val names = cusor.columnNames
+                        val indexs = names.map { cusor.getColumnIndex(it) }
 
 
-                            cusor.moveToFirst()
-                            do {
+                        var count = 0
+                        if (!cusor.moveToFirst()) return@use
+                        do {
 //                                val map = TreeMap<String, String>()
-                                val sb = StringBuilder()
+                            val sb = StringBuilder("第${count++}条数据: ")
 
-                                for (i in names.indices) {
+                            for (i in names.indices) {
 //                                    map[names[i]] = cusor.getString(indexs[i]) ?: ""
-                                    sb.append(names[i]).append(" = ").append(cusor.getString(indexs[i])).append(", ")
 
+                                val value = when (cusor.getType(indexs[i])) {
+                                    Cursor.FIELD_TYPE_FLOAT -> cusor.getFloatOrNull(indexs[i])
+                                        ?.toString() ?: "空"
+                                    Cursor.FIELD_TYPE_INTEGER -> cusor.getIntOrNull(indexs[i])
+                                        ?.toString() ?: "空"
+                                    Cursor.FIELD_TYPE_STRING -> cusor.getStringOrNull(indexs[i])
+                                        ?: "空"
+                                    Cursor.FIELD_TYPE_BLOB -> {
+                                        "数据类型是BLOB, 长度是${cusor.getBlobOrNull(indexs[i])?.size}"
+                                    }
+                                    else -> "无数据类型"
                                 }
+                                sb.append(names[i]).append(" = ").append(value)
+                                    .append(", ")
+
+                            }
 //                                sb.append(MediaStore.Video.Media.DISPLAY_NAME).append(" = ").append(cusor.getString(cusor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME)))
 //                                iDatas.add(map)
-                                showTip(sb.toString())
-                            } while (cusor.moveToNext())
+                            showTip(sb.toString())
+                        } while (cusor.moveToNext())
 
-                            cusor.close()
-                        }
+                        cusor.close()
+                    }
             }
         }
     }

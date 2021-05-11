@@ -233,7 +233,7 @@ fun Activity.randomPhoneImage(onError: (String) -> Unit = {}, call: (Uri) -> Uni
         }
 
         val id = it.random()[MediaStore.Images.Media._ID]?.toLong() ?: 0L
-//        val id = it[1][MediaStore.Images.Media._ID]?.toLong() ?: 0L
+//        val id = it[0][MediaStore.Images.Media._ID]?.toLong() ?: 0L
         val pathUri = ContentUris.withAppendedId(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                 id

@@ -13,12 +13,18 @@ import com.android.volley.toolbox.Volley
 import com.bumptech.glide.Glide
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
+import com.kiven.kutils.tools.KPath
 import com.kiven.sample.BaseFlexActivityHelper
 import com.kiven.sample.libs.chatkit.AHChatList
 import com.kiven.sample.media.AHGif
 import com.kiven.sample.util.Const
 import com.kiven.sample.util.newDialog
+import com.kiven.sample.util.randomPhoneImage
+import com.kiven.sample.util.showImageDialog
+import id.zelory.compressor.Compressor
+import kotlinx.coroutines.runBlocking
 import org.jetbrains.anko.dip
+import java.io.File
 import java.text.DateFormat
 import java.util.*
 
@@ -40,7 +46,11 @@ class AHLibs : BaseFlexActivityHelper() {
                 if (queue == null) {
                     queue = Volley.newRequestQueue(mActivity)
                 }
-                val request = StringRequest(Request.Method.GET, http, { Log.i(KLog.getTag(), http + DateFormat.getTimeInstance().format(Date())) }, { Log.i(KLog.getTag(), http + DateFormat.getTimeInstance().format(Date())) })
+                val request = StringRequest(
+                    Request.Method.GET,
+                    http,
+                    { Log.i(KLog.getTag(), http + DateFormat.getTimeInstance().format(Date())) },
+                    { Log.i(KLog.getTag(), http + DateFormat.getTimeInstance().format(Date())) })
                 queue!!.add(request)
             }
 
@@ -54,7 +64,10 @@ class AHLibs : BaseFlexActivityHelper() {
 
                 var count = 0
                 val showNext = fun() {
-                    val urls = Const.IMAGES.subList(0, 2) + "/storage/emulated/0/DCIM/Camera/1557910396757.jpg"
+                    val urls = Const.IMAGES.subList(
+                        0,
+                        2
+                    ) + "/storage/emulated/0/DCIM/Camera/1557910396757.jpg"
                     Glide.with(activity).load(urls[count % urls.size]).circleCrop().into(this@apply)
                     count++
                 }
@@ -75,7 +88,13 @@ class AHLibs : BaseFlexActivityHelper() {
         // emoji所有表情(官宣)：http://www.unicode.org/emoji/charts/full-emoji-list.html
         addTitle("emoji")
         // https://github.com/rockerhieu/emojicon
-        addBtn("emojicon", View.OnClickListener { /*AHEmojiconLibs().startActivity(activity)*/DFEmojicon().show(activity.supportFragmentManager, null) })
+        addBtn(
+            "emojicon",
+            View.OnClickListener { /*AHEmojiconLibs().startActivity(activity)*/DFEmojicon().show(
+                activity.supportFragmentManager,
+                null
+            )
+            })
         // https://github.com/rockerhieu/emojiconize
         addBtn("", View.OnClickListener { })
         // https://github.com/w446108264/XhsEmoticonsKeyboard
@@ -87,7 +106,9 @@ class AHLibs : BaseFlexActivityHelper() {
 
         addTitle("其他")
         addBtn("ChatKit", View.OnClickListener { AHChatList().startActivity(activity) })
-        addBtn("MPAndroidChart", View.OnClickListener { AHMPAndroidChart().startActivity(activity) })
+        addBtn(
+            "MPAndroidChart",
+            View.OnClickListener { AHMPAndroidChart().startActivity(activity) })
         // 安卓平台下，图片或视频转化为ascii，图片转化成低多边形风格图形，emoji表情填充图片，合并视频用到ffmpeg库。后期会加入带色彩的ascii码图片或视频
         // https://github.com/LineCutFeng/PlayPicdio
         addBtn("PlayPicdio(图片或视频转化为ascii)", View.OnClickListener { })
@@ -95,12 +116,24 @@ class AHLibs : BaseFlexActivityHelper() {
         // https://github.com/burhanrashid52/PhotoEditor
         addBtn("PhotoEditor(图片编辑)", View.OnClickListener { })
         // https://github.com/alibaba/ARouter ，TODO 需要注意代码混淆和加固的问题, 我们的helper不适用，只能用于activity
-        addBtn("ARouter", View.OnClickListener { ARouter.getInstance().build("/dock/home").navigation() })
-        addBtn("GPUImage & PhotoView", View.OnClickListener { AHGPUImageLib().startActivity(activity) })
+        addBtn(
+            "ARouter",
+            View.OnClickListener { ARouter.getInstance().build("/dock/home").navigation() })
+        addBtn(
+            "GPUImage & PhotoView",
+            View.OnClickListener { AHGPUImageLib().startActivity(activity) })
         addBtn("gif", View.OnClickListener { AHGif().startActivity(mActivity) })
         addBtn("spring for Android", View.OnClickListener { AHSpring().startActivity(mActivity) })
         addBtn("autofittextview") { AHTextViewDemo().startActivity(mActivity) }
-        addBtn("") { }
+        addBtn("Compressor") {
+            activity.randomPhoneImage {
+                runBlocking {
+                    val result = Compressor.compress(activity, File(KPath.getPath(it)))
+
+                    activity.showImageDialog(result.absolutePath)
+                }
+            }
+        }
         addBtn("") { }
         addBtn("") { }
         addBtn("") { }

@@ -247,7 +247,8 @@ public class AHFileManager extends KActivityHelper {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    KLog.i("点击文件 = " + cFile.getAbsolutePath() + "\n修改时间 = " + KString.formatDate(cFile.lastModified()));
+                    KLog.i("点击文件 = " + cFile.getAbsolutePath() + "\n修改时间 = " + KString.formatDate(cFile.lastModified()) +
+                            "\n文件大小 = " + cFile.length()/1024.0 + "k");
 
                     if (cFile.canRead()) {
                         if (cFile.isDirectory()) {

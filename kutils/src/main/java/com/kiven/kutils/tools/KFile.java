@@ -19,6 +19,7 @@ import androidx.annotation.Nullable;
 import com.kiven.kutils.logHelper.KLog;
 
 import java.io.File;
+import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -249,6 +250,38 @@ public class KFile {
             outputStream.write(data);
             outputStream.flush();
             outputStream.close();*/
+        } catch (Exception e) {
+            KLog.e(e);
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * 名为保存，实际是复制
+     * @param file 保存的目标地址
+     * @param data KUtil.getApp().contentResolver.openFileDescriptor(uri, "r")!!.fileDescriptor
+     * @return 是否保存成功
+     */
+    public static boolean saveFile(@NonNull File file, @NonNull FileDescriptor data) {
+        if (file.exists()) {
+            file.delete();
+        }
+
+        try {
+            FileInputStream fileInputStream = new FileInputStream(data);
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            byte[] buff = new byte[1024];
+
+            int readLength = fileInputStream.read(buff);
+            while (readLength > -1) {
+                fileOutputStream.write(buff, 0, readLength);
+                readLength = fileInputStream.read(buff);
+            }
+
+            fileInputStream.close();
+            fileOutputStream.close();
         } catch (Exception e) {
             KLog.e(e);
             return false;

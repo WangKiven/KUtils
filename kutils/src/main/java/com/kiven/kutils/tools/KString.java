@@ -13,6 +13,7 @@ import android.text.Html;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
+import android.text.format.Formatter;
 import android.util.Xml;
 
 import com.kiven.kutils.callBack.Function;
@@ -836,5 +837,12 @@ public class KString {
             }
         }
         return sb.toString();
+    }
+
+    /**
+     * 格式化字节等长度 1024->1KB, 1024*1024->1MB
+     */
+    public static String formatFileSize(long sizeBytes) {
+        return Formatter.formatFileSize(KUtil.getApp(), sizeBytes);
     }
 }

@@ -10,7 +10,7 @@ class ClickNotiActivity : AppCompatActivity() {
 
     //    private lateinit var textView: TextView
     companion object {
-        internal var onClickNotiListener = fun (activity:Activity, contxt:String?) {
+        internal var onClickNotiListener = fun(activity: Activity, contxt: String?) {
             activity.finish()
         }
     }
@@ -35,7 +35,7 @@ class ClickNotiActivity : AppCompatActivity() {
         if (intent != null)
             showIntent(intent, sb)
         else
-            sb.appendln("没有收到Intent")
+            sb.appendLine("没有收到Intent")
 
 //        textView.text = sb.toString()
         KLog.i(sb.toString())

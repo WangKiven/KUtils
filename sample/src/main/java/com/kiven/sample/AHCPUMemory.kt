@@ -5,6 +5,7 @@ import android.app.ActivityManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Process
+import android.text.format.Formatter
 import android.view.View
 import android.widget.TextView
 import com.kiven.kutils.activityHelper.KActivityHelper
@@ -79,25 +80,34 @@ class AHCPUMemory : KActivityHelper() {
                 }
 
                 // 内存
-                val memInfo = mActivity.activityManager.getProcessMemoryInfo(intArrayOf(Process.myPid()))
+                val memInfo =
+                    mActivity.activityManager.getProcessMemoryInfo(intArrayOf(Process.myPid()))
                 if (memInfo.isNotEmpty()) {
                     val totalPss = memInfo[0].totalPss
                     if (totalPss >= 0) {
-                        showText.appendln("mem = ${totalPss / 1024.0} M (总体使用内存，含非java)")
+                        showText.appendLine(
+                            "mem = ${
+                                Formatter.formatFileSize(
+                                    mActivity,
+                                    totalPss.toLong()
+                                )
+                            } (总体使用内存，含非java)"
+                        )
                     }
                 }
 
-                val activityManager = mActivity.getSystemService(Activity.ACTIVITY_SERVICE) as ActivityManager
-                showText.appendln("最大分配内存${activityManager.memoryClass}M(第一种获取方法)")
-                showText.appendln("最大分配内存${activityManager.largeMemoryClass}M(第一种获取方法, 开启largeHeap时)")
+                val activityManager =
+                    mActivity.getSystemService(Activity.ACTIVITY_SERVICE) as ActivityManager
+                showText.appendLine("最大分配内存${activityManager.memoryClass}M(第一种获取方法)")
+                showText.appendLine("最大分配内存${activityManager.largeMemoryClass}M(第一种获取方法, 开启largeHeap时)")
 
                 // Runtime 获取的是jVM里的内存情况
                 val runtime = Runtime.getRuntime()
-                showText.appendln("最大分配内存${toM(runtime.maxMemory())}M(第2种获取方法)")
+                showText.appendLine("最大分配内存${toM(runtime.maxMemory())}M(第2种获取方法)")
 
-                showText.appendln("已分配内存${toM(runtime.totalMemory())}M")
-                showText.appendln("未使用内存${toM(runtime.freeMemory())}M")
-                showText.appendln("已使用内存${toM(runtime.totalMemory() - runtime.freeMemory())}M")
+                showText.appendLine("已分配内存${toM(runtime.totalMemory())}M")
+                showText.appendLine("未使用内存${toM(runtime.freeMemory())}M")
+                showText.appendLine("已使用内存${toM(runtime.totalMemory() - runtime.freeMemory())}M")
 
 
                 resultText = showText.toString()

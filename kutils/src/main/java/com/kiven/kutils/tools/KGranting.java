@@ -141,7 +141,7 @@ public class KGranting {
                 });
             }
 
-            KLog.e("使用fragment请求权限，请使用FragmentActivity作为activity传入");
+//            KLog.e("使用fragment请求权限，请使用FragmentActivity作为activity传入");
         } else
             ActivityCompat.requestPermissions(mActivity, waitGrant,
                     requestCode);

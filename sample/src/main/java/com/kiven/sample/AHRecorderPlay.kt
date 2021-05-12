@@ -9,6 +9,7 @@ import android.media.MediaRecorder
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
+import android.text.format.Formatter
 import androidx.core.widget.NestedScrollView
 import androidx.appcompat.app.AlertDialog
 import android.view.View
@@ -134,7 +135,7 @@ class AHRecorderPlay : KActivityHelper() {
                     val items = Array<String>(files.size) {
                         val file = files[it]
 
-                        "${file.name} - ${file.length() / 1024f}k"
+                        "${file.name} - ${Formatter.formatFileSize(mActivity, file.length())}"
                     }
                     Arrays.sort(items) { o1: String, o2: String ->
                         return@sort o2.compareTo(o1)

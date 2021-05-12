@@ -13,6 +13,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.format.Formatter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -248,7 +249,7 @@ public class AHFileManager extends KActivityHelper {
                 @Override
                 public void onClick(View v) {
                     KLog.i("点击文件 = " + cFile.getAbsolutePath() + "\n修改时间 = " + KString.formatDate(cFile.lastModified()) +
-                            "\n文件大小 = " + cFile.length()/1024.0 + "k");
+                            "\n文件大小 = " + Formatter.formatFileSize(mActivity, cFile.length()));
 
                     if (cFile.canRead()) {
                         if (cFile.isDirectory()) {
@@ -259,7 +260,7 @@ public class AHFileManager extends KActivityHelper {
                                 showImage();
                             } else
                                 new MaterialAlertDialogBuilder(mActivity)
-                                        .setTitle("选择打开方式").setMessage("文件大小" + cFile.length() / 1024.0 + "k")
+                                        .setTitle("选择打开方式").setMessage("文件大小" + Formatter.formatFileSize(mActivity, cFile.length()))
                                         .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {

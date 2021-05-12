@@ -202,10 +202,10 @@ class AHUnicodeList : KActivityHelper() {
                 setOnClickListener {
 
                     val sb = StringBuilder()
-                    sb.appendln("编号：$curCode - ${tv_code.text}")
-                            .appendln("\n对应其他编码")
+                    sb.appendLine("编号：$curCode - ${tv_code.text}")
+                            .appendLine("\n对应其他编码")
                     Charset.availableCharsets().forEach {
-                        sb.appendln("${it.key}:${StringCodeUtil.str2HexStr(tv_text.text.toString(), it.value)}")
+                        sb.appendLine("${it.key}:${StringCodeUtil.str2HexStr(tv_text.text.toString(), it.value)}")
                     }
 
                     val builder = AlertDialog.Builder(mActivity)

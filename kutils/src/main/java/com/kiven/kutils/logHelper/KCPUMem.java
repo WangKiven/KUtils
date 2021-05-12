@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Debug;
 import android.os.Process;
+import android.text.format.Formatter;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -21,6 +22,7 @@ import com.kiven.kutils.activityHelper.KActivityHelper;
 import com.kiven.kutils.activityHelper.KHelperActivity;
 
 import java.io.RandomAccessFile;
+import java.text.Format;
 
 import static android.content.Context.BATTERY_SERVICE;
 
@@ -98,7 +100,7 @@ public class KCPUMem extends KActivityHelper {
                     if (memInfo.length > 0) {
                         int totalPss = memInfo[0].getTotalPss();
                         if (totalPss >= 0) {
-                            sb.append("mem = ").append(totalPss / 1024.0).append(" M (总体使用内存，含非java)\n");
+                            sb.append("mem = ").append(Formatter.formatFileSize(mActivity, totalPss)).append(" (总体使用内存，含非java)\n");
                         }
                     }
 

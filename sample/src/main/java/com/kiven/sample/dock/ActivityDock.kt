@@ -95,8 +95,8 @@ class ActivityDock : KActivity() {
                 val res = packageManager.resolveActivity(dockIntent, 0) ?: return true
 
                 val sb = StringBuilder()
-                sb.appendln("桌面Activity类名：${res.activityInfo.name}")
-                sb.appendln("桌面应用包名：${res.activityInfo.packageName}")
+                sb.appendLine("桌面Activity类名：${res.activityInfo.name}")
+                sb.appendLine("桌面应用包名：${res.activityInfo.packageName}")
 
                 showDialog(sb.toString())
             }

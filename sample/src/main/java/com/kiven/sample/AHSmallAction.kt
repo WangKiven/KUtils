@@ -29,10 +29,7 @@ import com.jaredrummler.android.processes.AndroidProcesses
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
-import com.kiven.kutils.tools.KAlertDialogHelper
-import com.kiven.kutils.tools.KGranting
-import com.kiven.kutils.tools.KNetwork
-import com.kiven.kutils.tools.KString
+import com.kiven.kutils.tools.*
 import com.kiven.sample.actions.BiometricDemo
 import com.kiven.sample.network.WifiAwareDemo
 import com.kiven.sample.network.WifiP2PDemo
@@ -599,6 +596,9 @@ class AHSmallAction : KActivityHelper() {
         addView("原生分享", View.OnClickListener { AHShare().startActivity(mActivity) })
         addView("剪贴板", View.OnClickListener { KString.setClipText(activity, "这是剪贴内容x") })
         addView("崩溃拦截", View.OnClickListener { throw error("测试崩溃"); })
+        addView("获取Application", View.OnClickListener {
+            mActivity.showDialog("获取到的Application：${ApplicationLoader.get()}")
+        })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
     }

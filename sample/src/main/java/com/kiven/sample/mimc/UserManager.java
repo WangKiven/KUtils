@@ -2,9 +2,7 @@ package com.kiven.sample.mimc;
 
 import android.util.Log;
 
-import com.google.gson.Gson;
 import com.kiven.kutils.tools.KUtil;
-import com.kiven.sample.AppContext;
 import com.xiaomi.mimc.MIMCGroupMessage;
 import com.xiaomi.mimc.MIMCMessage;
 import com.xiaomi.mimc.MIMCMessageHandler;

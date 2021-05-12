@@ -18,9 +18,7 @@ import org.xutils.x
  * Created by kiven on 2017/2/16.
  */
 
-class AppContext : KContext() {
-
-
+class App : KContext() {
     override fun attachBaseContext(base: Context) {
         super.attachBaseContext(base)
         MultiDex.install(this)
@@ -35,7 +33,7 @@ class AppContext : KContext() {
 
     override fun init() {
         super.init()
-        KLog.i("AppContext init")
+        KLog.i("App init")
         x.Ext.init(this)
 
 //        KGranting.useFragmentRequest = true

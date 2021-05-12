@@ -83,7 +83,13 @@ public class KUtil {
         KUtil.app = app;
     }
 
-    public static Application getApp() {
+    public static void setConfig(@NonNull Config config) {
+        KUtil.config = config;
+    }
+
+    public synchronized static Application getApp() {
+        if (app == null)
+            app = ApplicationLoader.get();
         return app;
     }
 

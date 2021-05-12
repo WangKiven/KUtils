@@ -9,6 +9,7 @@ import android.os.Environment
 import android.os.Handler
 import android.transition.Slide
 import android.view.Gravity
+import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
@@ -141,6 +142,9 @@ class MainActivity : KActivity() {
             }
             addBtn("DebugView") {
                 AHHelperTest().startActivity(this@MainActivity)
+            }
+            addBtn("获取Application") {
+                showDialog("获取到的Application：${ApplicationLoader.get()}")
             }
 
             addTitle("其他")

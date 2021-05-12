@@ -29,10 +29,11 @@ import com.jaredrummler.android.processes.AndroidProcesses
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
-import com.kiven.kutils.tools.*
+import com.kiven.kutils.tools.KAlertDialogHelper
+import com.kiven.kutils.tools.KGranting
+import com.kiven.kutils.tools.KNetwork
+import com.kiven.kutils.tools.KString
 import com.kiven.sample.actions.BiometricDemo
-import com.kiven.sample.network.WifiAwareDemo
-import com.kiven.sample.network.WifiP2PDemo
 import com.kiven.sample.anim.AHAnim
 import com.kiven.sample.autoService.AHAutoService
 import com.kiven.sample.charCode.AHUnicodeList
@@ -41,6 +42,8 @@ import com.kiven.sample.imui.ImActivity
 import com.kiven.sample.jpushUI.AHImui
 import com.kiven.sample.mimc.ChatMsg
 import com.kiven.sample.mimc.UserManager
+import com.kiven.sample.network.WifiAwareDemo
+import com.kiven.sample.network.WifiP2PDemo
 import com.kiven.sample.network.socket.AHSocketTest
 import com.kiven.sample.noti.AHNotiTest
 import com.kiven.sample.service.LiveWallpaper2
@@ -75,7 +78,10 @@ class AHSmallAction : KActivityHelper() {
         val addTitle = fun(text: String) {
             val tv = TextView(activity)
             tv.text = text
-            tv.layoutParams = ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.MATCH_PARENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT)
+            tv.layoutParams = ViewGroup.MarginLayoutParams(
+                ViewGroup.MarginLayoutParams.MATCH_PARENT,
+                ViewGroup.MarginLayoutParams.WRAP_CONTENT
+            )
             flexboxLayout.addView(tv)
         }
 
@@ -135,7 +141,8 @@ class AHSmallAction : KActivityHelper() {
 
         // 没有系统权限，用不了
         addView("动态壁纸", View.OnClickListener {
-            Snackbar.make(flexboxLayout, "没有系统权限，用不了。看来只能设置静态壁纸了。还是去写桌面应用吧！！", Snackbar.LENGTH_LONG).show()
+            Snackbar.make(flexboxLayout, "没有系统权限，用不了。看来只能设置静态壁纸了。还是去写桌面应用吧！！", Snackbar.LENGTH_LONG)
+                .show()
             val intent = Intent(mActivity, LiveWallpaper2::class.java)
             mActivity.startService(intent)
 //            WallpaperUtil.setLiveWallpaper(mActivity, 322)
@@ -148,8 +155,8 @@ class AHSmallAction : KActivityHelper() {
                 val iv = ImageView(mActivity)
                 iv.setImageBitmap(bp)
                 AlertDialog.Builder(mActivity)
-                        .setView(iv)
-                        .show()
+                    .setView(iv)
+                    .show()
             }
         })
         addView("壁纸是本应用设置的吗", View.OnClickListener {
@@ -170,8 +177,10 @@ class AHSmallAction : KActivityHelper() {
         // http://doc.xfyun.cn/msc_android/%E9%A2%84%E5%A4%87%E5%B7%A5%E4%BD%9C.html
         addView("语音识别与合成", View.OnClickListener {
             // 在里面请求权限太麻烦，由于有多个地方都需要权限，所以在入口出先请求
-            KGranting.requestPermissions(activity, 377, Manifest.permission.RECORD_AUDIO,
-                    "录音") {
+            KGranting.requestPermissions(
+                activity, 377, Manifest.permission.RECORD_AUDIO,
+                "录音"
+            ) {
                 if (it) {
                     AHXunfeiTest().startActivity(mActivity)
                 }
@@ -243,10 +252,15 @@ class AHSmallAction : KActivityHelper() {
         // todo
         addTitle("拨号与电话监听")
         addView("电话监听", View.OnClickListener {
-            KGranting.requestPermissions(mActivity, 989, arrayOf(Manifest.permission.READ_PHONE_STATE,
-                    Manifest.permission.CALL_PHONE, Manifest.permission.RECORD_AUDIO), arrayOf("通话状态", "拨号", "录音")) {
+            KGranting.requestPermissions(
+                mActivity, 989, arrayOf(
+                    Manifest.permission.READ_PHONE_STATE,
+                    Manifest.permission.CALL_PHONE, Manifest.permission.RECORD_AUDIO
+                ), arrayOf("通话状态", "拨号", "录音")
+            ) {
                 if (it) {
-                    val telephonyManager = mActivity.getSystemService(Activity.TELEPHONY_SERVICE) as TelephonyManager
+                    val telephonyManager =
+                        mActivity.getSystemService(Activity.TELEPHONY_SERVICE) as TelephonyManager
                     val lis = object : PhoneStateListener() {
                         var oldTime = 0L
                         var recorder: MediaRecorder? = null
@@ -268,8 +282,17 @@ class AHSmallAction : KActivityHelper() {
                                         try {
                                             setAudioSource(MediaRecorder.AudioSource.MIC) //RECORD_AUDIO权限
                                             setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)//设置音频格式
-                                            setOutputFile(mActivity.getDir(Environment.DIRECTORY_MUSIC, Context.MODE_PRIVATE).absolutePath
-                                                    + "/${SimpleDateFormat("yyyyMMddHHmmss").format(Date())}.3gp")
+                                            setOutputFile(
+                                                mActivity.getDir(
+                                                    Environment.DIRECTORY_MUSIC,
+                                                    Context.MODE_PRIVATE
+                                                ).absolutePath
+                                                        + "/${
+                                                    SimpleDateFormat("yyyyMMddHHmmss").format(
+                                                        Date()
+                                                    )
+                                                }.3gp"
+                                            )
                                             setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)//设置音频编码
                                             prepare()
                                             start()
@@ -301,13 +324,19 @@ class AHSmallAction : KActivityHelper() {
 
         })
         addView("拨号", View.OnClickListener {
-            KGranting.requestPermissions(mActivity, 101, Manifest.permission.CALL_PHONE, "拨号") { isSuccess ->
+            KGranting.requestPermissions(
+                mActivity,
+                101,
+                Manifest.permission.CALL_PHONE,
+                "拨号"
+            ) { isSuccess ->
                 val phoneno = "17132307428"
                 if (isSuccess) {
                     mActivity.callPhone(phoneno)
 
                     // 与拨号并行，检测sim卡状态
-                    val telephonyManager = mActivity.getSystemService(Activity.TELEPHONY_SERVICE) as TelephonyManager
+                    val telephonyManager =
+                        mActivity.getSystemService(Activity.TELEPHONY_SERVICE) as TelephonyManager
                     val simState = telephonyManager.simState
                     if (simState == TelephonyManager.SIM_STATE_ABSENT || simState == TelephonyManager.SIM_STATE_UNKNOWN) {
                         mActivity.showSnack("未检测到sim卡或当前sim卡不可用，请另行拨号$phoneno")
@@ -341,38 +370,47 @@ class AHSmallAction : KActivityHelper() {
             KAlertDialogHelper.Show1BDialog(mActivity, "网络类型：$ts\nIP:${KNetwork.getIPAddress()}")
         })
         addView("检测网络能力", View.OnClickListener {
-            val connectivityManager = mActivity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val connectivityManager =
+                mActivity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
-            mActivity.showListDialog(arrayOf("新的获取方式（仅23及以上可用）", "老的获取方式")) {it, _ ->
+            mActivity.showListDialog(arrayOf("新的获取方式（仅23及以上可用）", "老的获取方式")) { it, _ ->
                 when (it) {
                     0 -> {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)?.apply {
-                                val capabilities = (0..25).filter { hasCapability(it) }.joinToString()
-                                val transports = (0..7).filter { hasTransport(it) }.joinToString()
+                            connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+                                ?.apply {
+                                    val capabilities =
+                                        (0..25).filter { hasCapability(it) }.joinToString()
+                                    val transports =
+                                        (0..7).filter { hasTransport(it) }.joinToString()
 
-                                KLog.i(capabilities)
-                                KLog.i(transports)
-                                KAlertDialogHelper.Show1BDialog(mActivity, "capabilities：$capabilities\ntransports: $transports")
-                            } ?: mActivity.showSnack("没有网络")
+                                    KLog.i(capabilities)
+                                    KLog.i(transports)
+                                    KAlertDialogHelper.Show1BDialog(
+                                        mActivity,
+                                        "capabilities：$capabilities\ntransports: $transports"
+                                    )
+                                } ?: mActivity.showSnack("没有网络")
                         } else mActivity.showSnack("不支持该系统")
                     }
                     1 -> {
                         val networkInfo = connectivityManager.activeNetworkInfo
                         if (networkInfo != null) {
                             networkInfo.apply {
-                                KAlertDialogHelper.Show1BDialog(mActivity, "typeName：$typeName\n" +
-                                        "type: $type\n" +
-                                        "subtypeName: $subtypeName\n" +
-                                        "subtype: $subtype\n" +
-                                        "extraInfo: $extraInfo\n" +
-                                        "isAvailable: $isAvailable\n" +
-                                        "isConnected: $isConnected\n" +
-                                        "isRoaming: $isRoaming\n" +
-                                        "isConnectedOrConnecting: $isConnectedOrConnecting\n" +
-                                        "isFailover: $isFailover\n" +
-                                        "state: $state\n" +
-                                        "reason: $reason")
+                                KAlertDialogHelper.Show1BDialog(
+                                    mActivity, "typeName：$typeName\n" +
+                                            "type: $type\n" +
+                                            "subtypeName: $subtypeName\n" +
+                                            "subtype: $subtype\n" +
+                                            "extraInfo: $extraInfo\n" +
+                                            "isAvailable: $isAvailable\n" +
+                                            "isConnected: $isConnected\n" +
+                                            "isRoaming: $isRoaming\n" +
+                                            "isConnectedOrConnecting: $isConnectedOrConnecting\n" +
+                                            "isFailover: $isFailover\n" +
+                                            "state: $state\n" +
+                                            "reason: $reason"
+                                )
                             }
                         } else {
                             mActivity.showSnack("没有网络")
@@ -445,82 +483,97 @@ class AHSmallAction : KActivityHelper() {
         addView("imui界面", View.OnClickListener { ImActivity().startActivity(mActivity) })
         addView("jpushUI", View.OnClickListener {
 
-            UserManager.getInstance().setHandleMIMCMsgListener(object : UserManager.OnHandleMIMCMsgListener {
-                override fun onHandleMessage(chatMsg: ChatMsg?) {
-                }
+            UserManager.getInstance()
+                .setHandleMIMCMsgListener(object : UserManager.OnHandleMIMCMsgListener {
+                    override fun onHandleMessage(chatMsg: ChatMsg?) {
+                    }
 
-                override fun onHandleGroupMessage(chatMsg: ChatMsg?) {
-                }
+                    override fun onHandleGroupMessage(chatMsg: ChatMsg?) {
+                    }
 
-                override fun onHandleStatusChanged(status: MIMCConstant.OnlineStatus?) {
-                    mActivity.runOnUiThread {
-                        if (status == MIMCConstant.OnlineStatus.ONLINE) {
-                            val ahImui = AHImui()
-                            ahImui.intent
+                    override fun onHandleStatusChanged(status: MIMCConstant.OnlineStatus?) {
+                        mActivity.runOnUiThread {
+                            if (status == MIMCConstant.OnlineStatus.ONLINE) {
+                                val ahImui = AHImui()
+                                ahImui.intent
                                     .putExtra("toAccount", "456")
                                     .putExtra("sessionType", 1)
-                            ahImui.startActivity(mActivity)
+                                ahImui.startActivity(mActivity)
+                            }
                         }
                     }
-                }
 
-                override fun onHandleServerAck(serverAck: MIMCServerAck?) {
-                }
+                    override fun onHandleServerAck(serverAck: MIMCServerAck?) {
+                    }
 
-                override fun onHandleCreateGroup(json: String?, isSuccess: Boolean) {
-                }
+                    override fun onHandleCreateGroup(json: String?, isSuccess: Boolean) {
+                    }
 
-                override fun onHandleQueryGroupInfo(json: String?, isSuccess: Boolean) {
-                }
+                    override fun onHandleQueryGroupInfo(json: String?, isSuccess: Boolean) {
+                    }
 
-                override fun onHandleQueryGroupsOfAccount(json: String?, isSuccess: Boolean) {
-                }
+                    override fun onHandleQueryGroupsOfAccount(json: String?, isSuccess: Boolean) {
+                    }
 
-                override fun onHandleJoinGroup(json: String?, isSuccess: Boolean) {
-                }
+                    override fun onHandleJoinGroup(json: String?, isSuccess: Boolean) {
+                    }
 
-                override fun onHandleQuitGroup(json: String?, isSuccess: Boolean) {
-                }
+                    override fun onHandleQuitGroup(json: String?, isSuccess: Boolean) {
+                    }
 
-                override fun onHandleKickGroup(json: String?, isSuccess: Boolean) {
-                }
+                    override fun onHandleKickGroup(json: String?, isSuccess: Boolean) {
+                    }
 
-                override fun onHandleUpdateGroup(json: String?, isSuccess: Boolean) {
-                }
+                    override fun onHandleUpdateGroup(json: String?, isSuccess: Boolean) {
+                    }
 
-                override fun onHandleDismissGroup(json: String?, isSuccess: Boolean) {
-                }
+                    override fun onHandleDismissGroup(json: String?, isSuccess: Boolean) {
+                    }
 
-                override fun onHandlePullP2PHistory(json: String?, isSuccess: Boolean) {
-                }
+                    override fun onHandlePullP2PHistory(json: String?, isSuccess: Boolean) {
+                    }
 
-                override fun onHandlePullP2THistory(json: String?, isSuccess: Boolean) {
-                }
+                    override fun onHandlePullP2THistory(json: String?, isSuccess: Boolean) {
+                    }
 
-                override fun onHandleSendMessageTimeout(message: MIMCMessage?) {
-                }
+                    override fun onHandleSendMessageTimeout(message: MIMCMessage?) {
+                    }
 
-                override fun onHandleSendGroupMessageTimeout(groupMessage: MIMCGroupMessage?) {
-                }
+                    override fun onHandleSendGroupMessageTimeout(groupMessage: MIMCGroupMessage?) {
+                    }
 
-                override fun onHandleJoinUnlimitedGroup(topicId: Long, code: Int, errMsg: String?) {
-                }
+                    override fun onHandleJoinUnlimitedGroup(
+                        topicId: Long,
+                        code: Int,
+                        errMsg: String?
+                    ) {
+                    }
 
-                override fun onHandleQuitUnlimitedGroup(topicId: Long, code: Int, errMsg: String?) {
-                }
+                    override fun onHandleQuitUnlimitedGroup(
+                        topicId: Long,
+                        code: Int,
+                        errMsg: String?
+                    ) {
+                    }
 
-                override fun onHandleDismissUnlimitedGroup(json: String?, isSuccess: Boolean) {
-                }
+                    override fun onHandleDismissUnlimitedGroup(json: String?, isSuccess: Boolean) {
+                    }
 
-                override fun onHandleQueryUnlimitedGroupMembers(json: String?, isSuccess: Boolean) {
-                }
+                    override fun onHandleQueryUnlimitedGroupMembers(
+                        json: String?,
+                        isSuccess: Boolean
+                    ) {
+                    }
 
-                override fun onHandleQueryUnlimitedGroups(json: String?, isSuccess: Boolean) {
-                }
+                    override fun onHandleQueryUnlimitedGroups(json: String?, isSuccess: Boolean) {
+                    }
 
-                override fun onHandleQueryUnlimitedGroupOnlineUsers(json: String?, isSuccess: Boolean) {
-                }
-            })
+                    override fun onHandleQueryUnlimitedGroupOnlineUsers(
+                        json: String?,
+                        isSuccess: Boolean
+                    ) {
+                    }
+                })
 
             // 登录小米通信
             val mdir = mActivity.getDir("mimc", Context.MODE_PRIVATE)
@@ -548,7 +601,8 @@ class AHSmallAction : KActivityHelper() {
 
             // 不是厂商预装的系统应用，似乎拿不到唯一标识了
 
-            val androidID = Settings.System.getString(mActivity.contentResolver, Settings.Secure.ANDROID_ID)
+            val androidID =
+                Settings.System.getString(mActivity.contentResolver, Settings.Secure.ANDROID_ID)
             sb.append("ANDROID_ID:$androidID\n")// 不同的设备可能会产生相同的ANDROID_ID
 
             sb.append("串号:${Build.SERIAL}\n")
@@ -561,7 +615,12 @@ class AHSmallAction : KActivityHelper() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 // 需要先安装SliceViewer：https://github.com/googlesamples/android-SliceViewer/releases
                 // 一些设备可能禁止了这个功能
-                mActivity.startActivity(Intent("android.intent.action.VIEW", Uri.parse("slice-content://com.kiven.sample/hello")))
+                mActivity.startActivity(
+                    Intent(
+                        "android.intent.action.VIEW",
+                        Uri.parse("slice-content://com.kiven.sample/hello")
+                    )
+                )
             } else {
                 mActivity.showSnack("该版本不支持")
             }
@@ -572,10 +631,15 @@ class AHSmallAction : KActivityHelper() {
                                 manager.killBackgroundProcesses(getPackageName());*/
 
                 val intent = mActivity.packageManager
-                        .getLaunchIntentForPackage(mActivity.packageName)
-                val restartIntent = PendingIntent.getActivity(mActivity, 0, intent, PendingIntent.FLAG_ONE_SHOT)
+                    .getLaunchIntentForPackage(mActivity.packageName)
+                val restartIntent =
+                    PendingIntent.getActivity(mActivity, 0, intent, PendingIntent.FLAG_ONE_SHOT)
                 val mgr = mActivity.getSystemService(Context.ALARM_SERVICE) as AlarmManager?
-                mgr!!.set(AlarmManager.RTC, System.currentTimeMillis() + 5000, restartIntent) // 5秒钟后重启应用
+                mgr!!.set(
+                    AlarmManager.RTC,
+                    System.currentTimeMillis() + 5000,
+                    restartIntent
+                ) // 5秒钟后重启应用
 
                 Process.killProcess(Process.myPid())
             }
@@ -596,9 +660,6 @@ class AHSmallAction : KActivityHelper() {
         addView("原生分享", View.OnClickListener { AHShare().startActivity(mActivity) })
         addView("剪贴板", View.OnClickListener { KString.setClipText(activity, "这是剪贴内容x") })
         addView("崩溃拦截", View.OnClickListener { throw error("测试崩溃"); })
-        addView("获取Application", View.OnClickListener {
-            mActivity.showDialog("获取到的Application：${ApplicationLoader.get()}")
-        })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
     }

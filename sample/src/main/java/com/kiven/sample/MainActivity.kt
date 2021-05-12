@@ -16,10 +16,7 @@ import androidx.lifecycle.MutableLiveData
 import com.kiven.kutils.activityHelper.KFragmentActivity
 import com.kiven.kutils.activityHelper.activity.KActivity
 import com.kiven.kutils.logHelper.KLog
-import com.kiven.kutils.tools.KAlertDialogHelper
-import com.kiven.kutils.tools.KFile
-import com.kiven.kutils.tools.KGranting
-import com.kiven.kutils.tools.KView
+import com.kiven.kutils.tools.*
 import com.kiven.sample.arch.AHArch
 import com.kiven.sample.arcore.AHARCoreInlet
 import com.kiven.sample.floatView.ActivityHFloatView
@@ -51,7 +48,7 @@ class MainActivity : KActivity() {
 
     private fun loadUI() {
         flexbox.apply {
-            addTitle("系统")
+            addTitle("系统 ${KNetwork.getIPAddress() ?: ""}")
             addBtn("原生UI控件") { AHNativeWidget().startActivity(this@MainActivity) }
             addBtn("liveData") {
                 val data = MutableLiveData<Int>()

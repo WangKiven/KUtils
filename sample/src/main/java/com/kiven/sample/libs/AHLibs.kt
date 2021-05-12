@@ -17,10 +17,8 @@ import com.kiven.kutils.tools.KPath
 import com.kiven.sample.BaseFlexActivityHelper
 import com.kiven.sample.libs.chatkit.AHChatList
 import com.kiven.sample.media.AHGif
-import com.kiven.sample.util.Const
-import com.kiven.sample.util.newDialog
-import com.kiven.sample.util.randomPhoneImage
-import com.kiven.sample.util.showImageDialog
+import com.kiven.sample.util.*
+import com.zxy.tiny.Tiny
 import id.zelory.compressor.Compressor
 import kotlinx.coroutines.runBlocking
 import org.jetbrains.anko.dip
@@ -126,7 +124,7 @@ class AHLibs : BaseFlexActivityHelper() {
         addBtn("spring for Android", View.OnClickListener { AHSpring().startActivity(mActivity) })
         addBtn("autofittextview") { AHTextViewDemo().startActivity(mActivity) }
         addBtn("Compressor") {
-            activity.randomPhoneImage {
+            activity.pickPhoneImage {
                 runBlocking {
                     val result = Compressor.compress(activity, File(KPath.getPath(it)))
 
@@ -134,7 +132,19 @@ class AHLibs : BaseFlexActivityHelper() {
                 }
             }
         }
-        addBtn("") { }
+        addBtn("tiny") {
+            activity.pickPhoneImage {
+                runBlocking {
+                    val result = Tiny.getInstance().source(it).asFile()
+                        .withOptions(Tiny.FileCompressOptions()).compressSync()
+
+                    if (result.success) {
+                        activity.showImageDialog(result.outfile)
+                        KLog.i(result.outfile)
+                    }
+                }
+            }
+        }
         addBtn("") { }
         addBtn("") { }
         addBtn("") { }

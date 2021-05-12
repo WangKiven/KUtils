@@ -5,8 +5,6 @@ import android.annotation.SuppressLint
 import android.content.ContentUris
 import android.content.ContentValues
 import android.database.Cursor
-import android.graphics.Bitmap
-import android.graphics.ImageDecoder
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -22,9 +20,7 @@ import com.bumptech.glide.Glide
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
-import com.kiven.kutils.tools.KGranting
-import com.kiven.kutils.tools.KString
-import com.kiven.kutils.tools.KUtil
+import com.kiven.kutils.tools.*
 import com.kiven.sample.R
 import com.kiven.sample.util.*
 import kotlinx.android.synthetic.main.item_image.view.*
@@ -32,7 +28,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.max
@@ -53,7 +48,12 @@ class AHSystemImage : KActivityHelper() {
         }
         setContentView(recyclerView)
 
-        KGranting.requestPermissions(mActivity, 345, Manifest.permission.WRITE_EXTERNAL_STORAGE, "内存") {
+        KGranting.requestPermissions(
+            mActivity,
+            345,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            "内存"
+        ) {
             if (it) loadData()
         }
     }
@@ -68,10 +68,10 @@ class AHSystemImage : KActivityHelper() {
 
                 }*/
                 val projection = arrayOf(
-                        MediaStore.Images.Media._ID,
-                        MediaStore.Images.Media.DISPLAY_NAME,
-                        MediaStore.Images.Media.SIZE,
-                        MediaStore.Images.Media.DATA
+                    MediaStore.Images.Media._ID,
+                    MediaStore.Images.Media.DISPLAY_NAME,
+                    MediaStore.Images.Media.SIZE,
+                    MediaStore.Images.Media.DATA
                 )
 
                 showTip(MediaStore.Images.Media.EXTERNAL_CONTENT_URI.toString())
@@ -83,60 +83,63 @@ class AHSystemImage : KActivityHelper() {
                         MediaStore.Images.Media.DATE_MODIFIED + " desc"
                 )*/
                 resolver.query(
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                        null,
-                        null,
-                        null,
-                        MediaStore.Images.Media.DATE_MODIFIED + " desc"
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    null,
+                    null,
+                    null,
+                    MediaStore.Images.Media.DATE_MODIFIED + " desc"
                 )
-                        ?.use { cusor ->
-                            val names = cusor.columnNames
-                            val indexs = names.map { cusor.getColumnIndex(it) }
+                    ?.use { cusor ->
+                        val names = cusor.columnNames
+                        val indexs = names.map { cusor.getColumnIndex(it) }
 
-                            val types = indexs.map {
-                                try {
-                                    cusor.getType(it)
-                                } catch (e: Throwable) {
-                                    Cursor.FIELD_TYPE_NULL
-                                }
+                        val types = indexs.map {
+                            try {
+                                cusor.getType(it)
+                            } catch (e: Throwable) {
+                                Cursor.FIELD_TYPE_NULL
                             }
-                            val getData = fun(index: Int, type: Int): Any? {
-                                /*return when (type) {
-                                    Cursor.FIELD_TYPE_STRING -> cusor.getString(index)
-                                    Cursor.FIELD_TYPE_INTEGER -> cusor.getInt(index)
-                                    Cursor.FIELD_TYPE_FLOAT -> cusor.getFloat(index)
-                                    else -> null
-                                }*/
-                                return cusor.getString(index)
-                            }
+                        }
+                        val getData = fun(index: Int, type: Int): Any? {
+                            /*return when (type) {
+                                Cursor.FIELD_TYPE_STRING -> cusor.getString(index)
+                                Cursor.FIELD_TYPE_INTEGER -> cusor.getInt(index)
+                                Cursor.FIELD_TYPE_FLOAT -> cusor.getFloat(index)
+                                else -> null
+                            }*/
+                            return cusor.getString(index)
+                        }
 
 
-                            cusor.moveToFirst()
-                            do {
-                                val map = TreeMap<String, String>()
+                        cusor.moveToFirst()
+                        do {
+                            val map = TreeMap<String, String>()
 //                                val sb = StringBuilder()
 
-                                for (i in names.indices) {
-                                    map[names[i]] = when(cusor.getType(indexs[i])) {
-                                        Cursor.FIELD_TYPE_FLOAT -> cusor.getFloatOrNull(indexs[i])?.toString() ?: "空"
-                                        Cursor.FIELD_TYPE_INTEGER -> cusor.getIntOrNull(indexs[i])?.toString() ?: "空"
-                                        Cursor.FIELD_TYPE_STRING -> cusor.getStringOrNull(indexs[i]) ?: "空"
-                                        Cursor.FIELD_TYPE_BLOB -> {
-                                            "数据类型是BLOB, 长度是${cusor.getBlobOrNull(indexs[i])?.size}"
-                                        }
-                                        else -> "无数据类型"
+                            for (i in names.indices) {
+                                map[names[i]] = when (cusor.getType(indexs[i])) {
+                                    Cursor.FIELD_TYPE_FLOAT -> cusor.getFloatOrNull(indexs[i])
+                                        ?.toString() ?: "空"
+                                    Cursor.FIELD_TYPE_INTEGER -> cusor.getIntOrNull(indexs[i])
+                                        ?.toString() ?: "空"
+                                    Cursor.FIELD_TYPE_STRING -> cusor.getStringOrNull(indexs[i])
+                                        ?: "空"
+                                    Cursor.FIELD_TYPE_BLOB -> {
+                                        "数据类型是BLOB, 长度是${cusor.getBlobOrNull(indexs[i])?.size}"
                                     }
+                                    else -> "无数据类型"
+                                }
 //                                    map[names[i]] = cusor.getString(indexs[i]) ?: ""
 //                                    sb.append(names[i]).append(" = ").append(getData(indexs[i], types[i])).append(", ")
 
-                                }
+                            }
 //                                    sb.append(MediaStore.Images.Media.DISPLAY_NAME).append(" = ").append(cusor.getString(cusor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME)))
-                                iDatas.add(map)
+                            iDatas.add(map)
 //                                showTip(sb.toString())
-                            } while (cusor.moveToNext())
+                        } while (cusor.moveToNext())
 
-                            cusor.close()
-                        }
+                        cusor.close()
+                    }
             }
 
             withContext(Dispatchers.Main) {
@@ -158,37 +161,69 @@ class AHSystemImage : KActivityHelper() {
 //                val path = item[MediaStore.Images.Media.DATA]
                 val id = item[MediaStore.Images.Media._ID]?.toLong() ?: 0L
                 val pathUri = ContentUris.withAppendedId(
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                        id
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    id
                 )
 
                 Glide.with(context)
-                        .load(pathUri)
-                        .into(iv_test)
+                    .load(pathUri)
+                    .into(iv_test)
                 tv_position.text = position.toString()
 
                 setOnClickListener {
-                    mActivity.showBottomSheetDialog(arrayOf("查看大图", "显示详细", "修改拍摄时间", "修改添加时间", "修改图片修改时间")) { index, _ ->
+                    /*try {
+                        val file = File(KPath.getPath(pathUri))
+
+                        val type = KFile.checkFileType(file)
+                        KLog.i("type = $type")
+
+
+                        val inputStream = FileInputStream(file)
+
+                        val flags = ByteArray(50)
+                        inputStream.read(flags)
+
+                        val sb = StringBuilder(file.name + ":")
+                        for (i in flags) {
+                            sb.append(" ").append(i)
+                        }
+                        KLog.i(sb.toString())
+
+                        inputStream.close()
+                    } catch (e: Throwable) {
+
+                    }*/
+
+                    mActivity.showBottomSheetDialog(
+                        arrayOf(
+                            "查看大图",
+                            "显示详细",
+                            "修改拍摄时间",
+                            "修改添加时间",
+                            "修改图片修改时间"
+                        )
+                    ) { index, _ ->
                         when (index) {
                             0 -> {
                                 mActivity.showImageDialog(pathUri)
                             }
                             1 -> {
                                 val list = item.toList()
-                                        .sortedWith(kotlin.Comparator { o1, o2 ->
-                                            val b1 = o1.second.isBlank()
-                                            val b2 = o2.second.isBlank()
+                                    .sortedWith(kotlin.Comparator { o1, o2 ->
+                                        val b1 = o1.second.isBlank()
+                                        val b2 = o2.second.isBlank()
 
-                                            if (b1 == b2) {
-                                                return@Comparator o1.first.compareTo(o2.first)
-                                            } else {
-                                                return@Comparator if (b1) 1 else -1
-                                            }
-                                        })
+                                        if (b1 == b2) {
+                                            return@Comparator o1.first.compareTo(o2.first)
+                                        } else {
+                                            return@Comparator if (b1) 1 else -1
+                                        }
+                                    })
                                 mActivity.showListDialog(
-                                        list.map {
-                                            "${it.first}: ${it.second}"
-                                        }, false)
+                                    list.map {
+                                        "${it.first}: ${it.second}"
+                                    }, false
+                                )
                                 { _, ss ->
                                     mActivity.showDialog(ss)
                                 }
@@ -200,7 +235,10 @@ class AHSystemImage : KActivityHelper() {
                                     "datetaken"
                                 val pp = item[key] ?: ""
 
-                                mActivity.getInput(key, format.format(Date(pp.toLongOrNull() ?: 0))){
+                                mActivity.getInput(
+                                    key,
+                                    format.format(Date(pp.toLongOrNull() ?: 0))
+                                ) {
                                     try {
                                         val date = format.parse(it.toString())
                                         date?.apply {
@@ -233,12 +271,12 @@ class AHSystemImage : KActivityHelper() {
             }
         }
 
-        private fun xiugaiDate(id:String, key:String, value:String) {
-            mActivity.getInput(key, format.format(Date((value.toLongOrNull() ?: 0) * 1000L))){
+        private fun xiugaiDate(id: String, key: String, value: String) {
+            mActivity.getInput(key, format.format(Date((value.toLongOrNull() ?: 0) * 1000L))) {
                 try {
                     val date = format.parse(it.toString())
                     date?.apply {
-                        update(id, key, (time/1000).toString())
+                        update(id, key, (time / 1000).toString())
                     }
                 } catch (e: Exception) {
                     KLog.e(e)
@@ -247,11 +285,13 @@ class AHSystemImage : KActivityHelper() {
             }
         }
 
-        private fun update(id:String, fieldName:String, value:String) {
+        private fun update(id: String, fieldName: String, value: String) {
             val cv = ContentValues()
             cv.put(fieldName, value)
-            mActivity.contentResolver.update(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, cv,
-                    MediaStore.Images.Media._ID + "=?", arrayOf(id))
+            mActivity.contentResolver.update(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI, cv,
+                MediaStore.Images.Media._ID + "=?", arrayOf(id)
+            )
 
             loadData()
         }
@@ -259,6 +299,8 @@ class AHSystemImage : KActivityHelper() {
         override fun getItemCount(): Int = datas.size
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
-                object : RecyclerView.ViewHolder(LayoutInflater.from(mActivity).inflate(R.layout.item_image, parent, false)) {}
+            object : RecyclerView.ViewHolder(
+                LayoutInflater.from(mActivity).inflate(R.layout.item_image, parent, false)
+            ) {}
     }
 }

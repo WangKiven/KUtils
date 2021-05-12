@@ -7,3 +7,6 @@ include ':kutils', ':sample', ':kutils-ktx', ':pushlibrary'
 // https://github.com/WangKiven/ChatKit
 //include ':chatkit'
 //project(':chatkit').projectDir = new File('../ChatKit/chatkit')
+
+//include ':tiny'
+//project(':tiny').projectDir = new File('../Tiny/tiny')

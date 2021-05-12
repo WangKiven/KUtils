@@ -147,7 +147,7 @@ public class KFile {
         FileType fileType = FileType.UNKNOWN;
         try {
             FileInputStream inputStream = new FileInputStream(file);
-            int[] flags = new int[5];
+            int[] flags = new int[8];
             flags[0] = inputStream.read();
             flags[1] = inputStream.read();
             if (flags[0] == 255 && flags[1] == 216) {// JPG检测
@@ -176,6 +176,12 @@ public class KFile {
                     fileType = FileType.PNG;
                 }
             }
+
+//            StringBuilder sb = new StringBuilder(file.getName() + ":");
+//            for(int i: flags) {
+//                sb.append(" ").append(i);
+//            }
+//            KLog.i(sb.toString());
 
             inputStream.close();
         } catch (Exception e) {

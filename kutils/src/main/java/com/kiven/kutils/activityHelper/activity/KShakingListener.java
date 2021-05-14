@@ -30,11 +30,11 @@ public class KShakingListener implements SensorEventListener {
 
             float xx = Math.abs(x);
             float yy = Math.abs(y);
-            float zz = Math.abs(z - 9.8f);
+            float zz = Math.abs(z);
 
             double sens = Math.sqrt(xx * xx + yy * yy + zz * zz);
 
-            if (sens > 15) {
+            if (sens > 25) {
                 onShaking.callBack();
 
                 showLogTime = System.currentTimeMillis();

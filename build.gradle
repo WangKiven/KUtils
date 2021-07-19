@@ -1,20 +1,22 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.kotlin_version = '1.4.32'
+    ext.kotlin_version = '1.5.21'
     ext.anko_version = '0.10.8'
 
     // todo 阿里提供的各种厂库替代链接 https://maven.aliyun.com/mvn/view
     repositories {
-        maven { url 'https://maven.aliyun.com/repository/google' }
-        maven { url 'https://maven.aliyun.com/repository/jcenter' }
-        maven { url 'http://maven.aliyun.com/nexus/content/groups/public' }
+//        maven { url 'https://maven.aliyun.com/repository/google' }
+//        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+//        maven { url 'http://maven.aliyun.com/nexus/content/groups/public' }
         maven { url 'http://developer.huawei.com/repo/' }
         google()
+        mavenLocal()
+        mavenCentral()
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.2.1'
+        classpath 'com.android.tools.build:gradle:4.2.2'
 
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlin_version"
@@ -33,7 +35,7 @@ buildscript {
         classpath 'com.google.ar.sceneform:plugin:1.17.1'
 
         // firebase
-        classpath 'com.google.gms:google-services:4.3.5'
+        classpath 'com.google.gms:google-services:4.3.8'
     }
 
     project.ext {
@@ -47,8 +49,8 @@ buildscript {
 // todo 阿里提供的各种厂库替代链接 https://maven.aliyun.com/mvn/view
 allprojects {
     repositories {
-        maven { url 'https://maven.aliyun.com/repository/google' }
-        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+//        maven { url 'https://maven.aliyun.com/repository/google' }
+//        maven { url 'https://maven.aliyun.com/repository/jcenter' }
         maven { url 'https://jitpack.io' }
         maven { url 'http://developer.huawei.com/repo/' }
         google()

@@ -33,13 +33,13 @@ dependencies {
 //    implementation fileTree(dir: 'libs', include: ['*.jar'])
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 //    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.0"
-    compileOnly "com.google.android.material:material:1.3.0"
+    compileOnly "com.google.android.material:material:1.4.0"
 //    compileOnly 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.core:core-ktx:1.3.2'
+    implementation 'androidx.core:core-ktx:1.6.0'
 
 
     // okhttp https://github.com/square/okhttp
-    compileOnly 'com.squareup.okhttp3:okhttp:4.7.2'
+    compileOnly 'com.squareup.okhttp3:okhttp:4.9.0'
 
 
     implementation project(':kutils')
@@ -59,6 +59,6 @@ dependencies {
     implementation fileTree(dir: 'oppoPush', include: ['*.jar', '*.bak'])
     // Firebase
     //implementation 'com.google.firebase:firebase-analytics:17.4.4'
-    compileOnly 'com.google.firebase:firebase-messaging:21.0.1'
+    compileOnly 'com.google.firebase:firebase-messaging:22.0.0'
 //    compileOnly 'com.google.firebase:firebase-messaging-directboot:20.2.2'//在直接启动模式下接收 FCM 消息
 }

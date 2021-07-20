@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.core.widget.NestedScrollView
 import com.google.android.flexbox.AlignContent
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
@@ -14,7 +15,6 @@ import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.sample.R
 import org.jetbrains.anko.backgroundColor
-import org.jetbrains.anko.support.v4.nestedScrollView
 
 /**
  * Created by wangk on 2019/5/29.
@@ -27,7 +27,9 @@ class AHTheme : KActivityHelper() {
         flexboxLayout.flexWrap = FlexWrap.WRAP
         flexboxLayout.alignContent = AlignContent.FLEX_START
 
-        mActivity.nestedScrollView { addView(flexboxLayout) }
+        setContentView(NestedScrollView(activity).apply {
+            addView(flexboxLayout)
+        })
 
         val addTitle = fun(text: String) {
             val tv = TextView(activity)

@@ -8,12 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.core.widget.NestedScrollView
 import com.google.android.flexbox.AlignContent
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
-import org.jetbrains.anko.support.v4.nestedScrollView
 
 
 /**
@@ -26,7 +26,9 @@ class AHMyVpn:KActivityHelper() {
         flexboxLayout.flexWrap = FlexWrap.WRAP
         flexboxLayout.alignContent = AlignContent.FLEX_START
 
-        mActivity.nestedScrollView { addView(flexboxLayout) }
+        setContentView(NestedScrollView(activity).apply {
+            addView(flexboxLayout)
+        })
 
         val addTitle = fun(text: String) {
             val tv = TextView(activity)

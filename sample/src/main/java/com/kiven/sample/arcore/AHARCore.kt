@@ -7,7 +7,9 @@ import android.os.Handler
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.TextView
+import androidx.core.widget.NestedScrollView
 import com.google.android.flexbox.AlignContent
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
@@ -28,8 +30,6 @@ import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KGranting
 import com.kiven.sample.R
 import com.kiven.sample.util.showSnack
-import org.jetbrains.anko.frameLayout
-import org.jetbrains.anko.support.v4.nestedScrollView
 
 /**
  * https://developers.google.cn/ar/develop/java/enable-arcore
@@ -73,19 +73,14 @@ class AHARCore : KActivityHelper() {
                     }
         }
 
-
-
-
-
-        activity.frameLayout {
+        setContentView(FrameLayout(activity).apply {
             id = R.id.ll_root
 
             activity.supportFragmentManager.beginTransaction().add(R.id.ll_root, arFragment, null).commit()
-
-            nestedScrollView {
+            addView(NestedScrollView(activity).apply {
                 addView(flexboxLayout)
-            }
-        }
+            })
+        })
 
         val addTitle = fun(text: String): TextView {
             val tv = TextView(activity)

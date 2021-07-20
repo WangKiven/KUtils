@@ -12,7 +12,6 @@ import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.sample.util.addBtn
 import com.kiven.sample.util.addTitle
-import org.jetbrains.anko.support.v4.nestedScrollView
 
 /**
  * Created by oukobayashi on 2020/7/22.

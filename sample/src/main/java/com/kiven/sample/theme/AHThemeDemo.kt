@@ -1,20 +1,12 @@
 package com.kiven.sample.theme
 
 import android.os.Bundle
-import android.text.util.Linkify
-import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.LinearLayout
-import android.widget.ProgressBar
-import android.widget.SeekBar
-import android.widget.Switch
 import androidx.annotation.StyleRes
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
-import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipGroup
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
@@ -22,8 +14,6 @@ import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KUtil
 import com.kiven.sample.R
 import com.kiven.sample.util.Const
-import org.jetbrains.anko.*
-import org.jetbrains.anko.support.v4.nestedScrollView
 
 /**
  * Created by oukobayashi on 2019-09-17.

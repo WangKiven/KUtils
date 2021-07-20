@@ -1,6 +1,5 @@
 package com.kiven.sample
 
-import android.content.ComponentName
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -9,7 +8,6 @@ import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.sample.util.randomPhoneImage
 import com.kiven.sample.util.showListDialog
-import org.jetbrains.anko.toast
 
 /**
  * Created by oukobayashi on 2020/7/23.

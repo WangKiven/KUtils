@@ -22,11 +22,11 @@ class AHKUtilsWidgetDemo : BaseFlexActivityHelper() {
             rulingSeekbar.apply {
                 setScale(5, 120)
                 progress = 30;
-                addNode(10, 0, true);
-                addNode(30, 2, true);
-                addNode(57, 1, true);
-                addNode(85, 1, false);
-                addNode(110, 2, true);
+                addNode(10, 0, true)
+                addNode(30, 2, true)
+                addNode(57, 1, true)
+                addNode(85, 1, false)
+                addNode(110, 2, true)
             }
 
             gridView.setAdapter(object : UIGridView.Adapter() {

@@ -2,6 +2,7 @@ package com.kiven.sample
 
 import android.app.Activity
 import android.app.ActivityManager
+import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Process
@@ -11,8 +12,6 @@ import android.widget.TextView
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
-import org.jetbrains.anko.activityManager
-import org.jetbrains.anko.doAsync
 import java.io.RandomAccessFile
 
 /**
@@ -34,7 +33,7 @@ class AHCPUMemory : KActivityHelper() {
         super.onCreate(activity, savedInstanceState)
         setContentView(R.layout.ah_cpu_memory)
 
-        doAsync {
+        Thread {
             val procStatFile = try {
                 RandomAccessFile("/proc/stat", "r")
             } catch (e: Exception) {
@@ -81,7 +80,7 @@ class AHCPUMemory : KActivityHelper() {
 
                 // 内存
                 val memInfo =
-                    mActivity.activityManager.getProcessMemoryInfo(intArrayOf(Process.myPid()))
+                    (mActivity.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager).getProcessMemoryInfo(intArrayOf(Process.myPid()))
                 if (memInfo.isNotEmpty()) {
                     val totalPss = memInfo[0].totalPss
                     if (totalPss >= 0) {
@@ -115,7 +114,7 @@ class AHCPUMemory : KActivityHelper() {
 
                 Thread.sleep(500)
             }
-        }
+        }.start()
     }
 
     private fun toM(length: Long): Double = (length * 1.0) / (1024 * 1024)

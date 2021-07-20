@@ -17,6 +17,7 @@ import androidx.core.database.getBlobOrNull
 import androidx.core.database.getFloatOrNull
 import androidx.core.database.getIntOrNull
 import androidx.core.database.getStringOrNull
+import androidx.core.widget.NestedScrollView
 import com.google.android.flexbox.AlignContent
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
@@ -29,7 +30,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.jetbrains.anko.support.v4.nestedScrollView
 import java.util.*
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -46,7 +46,9 @@ class AHSysgemData : KActivityHelper() {
         flexboxLayout.flexWrap = FlexWrap.WRAP
         flexboxLayout.alignContent = AlignContent.FLEX_START
 
-        mActivity.nestedScrollView { addView(flexboxLayout) }
+        setContentView(NestedScrollView(activity).apply {
+            addView(flexboxLayout)
+        })
 
         val addTitle = fun(text: String): TextView {
             val tv = TextView(activity)

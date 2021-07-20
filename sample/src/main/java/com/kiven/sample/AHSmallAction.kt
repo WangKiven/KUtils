@@ -21,6 +21,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.widget.NestedScrollView
 import com.google.android.flexbox.AlignContent
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
@@ -57,7 +58,6 @@ import com.xiaomi.mimc.common.MIMCConstant
 import kotlinx.coroutines.*
 import org.jetbrains.anko.coroutines.experimental.Ref
 import org.jetbrains.anko.coroutines.experimental.asReference
-import org.jetbrains.anko.support.v4.nestedScrollView
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.coroutines.resume
@@ -73,7 +73,9 @@ class AHSmallAction : KActivityHelper() {
         flexboxLayout.flexWrap = FlexWrap.WRAP
         flexboxLayout.alignContent = AlignContent.FLEX_START
 
-        mActivity.nestedScrollView { addView(flexboxLayout) }
+        setContentView(NestedScrollView(activity).apply {
+            addView(flexboxLayout)
+        })
 
         val addTitle = fun(text: String) {
             val tv = TextView(activity)

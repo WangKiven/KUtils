@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.TextView
-import androidx.core.net.toFile
+import androidx.core.widget.NestedScrollView
 import com.google.android.flexbox.AlignContent
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
@@ -20,8 +20,6 @@ import com.sxb.kutils_ktx.util.RxBus
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
-import okhttp3.internal.wait
-import org.jetbrains.anko.support.v4.nestedScrollView
 import java.io.File
 import java.net.DatagramPacket
 import java.net.DatagramSocket
@@ -40,7 +38,9 @@ class AHSocketTest : KActivityHelper() {
         flexboxLayout.flexWrap = FlexWrap.WRAP
         flexboxLayout.alignContent = AlignContent.FLEX_START
 
-        mActivity.nestedScrollView { addView(flexboxLayout) }
+        setContentView(NestedScrollView(activity).apply {
+            addView(flexboxLayout)
+        })
 
         val addTitle = fun(text: String) {
             val tv = TextView(activity)

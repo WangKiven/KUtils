@@ -3,17 +3,13 @@ package com.kiven.sample.media
 import android.os.Bundle
 import android.os.Environment
 import android.view.Gravity
-import android.view.ViewGroup
+import android.widget.Button
 import android.widget.LinearLayout
-import androidx.camera.core.*
-import androidx.lifecycle.LifecycleOwner
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.tools.KUtil
 import com.kiven.sample.util.Const.IMAGE_DIR
-import org.jetbrains.anko.*
 import java.io.File
-import java.util.concurrent.Executor
 
 /**
  * Created by wangk on 2019/5/17.
@@ -38,7 +34,8 @@ class AHCameraxTest : KActivityHelper() {
         val preview = Preview(previewConfig)*/
 
 
-        mActivity.linearLayout {
+        setContentView(LinearLayout(activity).apply {
+
             orientation = LinearLayout.VERTICAL
             gravity = Gravity.CENTER_HORIZONTAL
 
@@ -53,7 +50,7 @@ class AHCameraxTest : KActivityHelper() {
             }*/
 
 
-            button {
+            addView(Button(activity).apply {
                 text = "拍照"
 
                 setOnClickListener {
@@ -68,8 +65,8 @@ class AHCameraxTest : KActivityHelper() {
                         }
                     })*/
                 }
-            }
-        }
+            })
+        })
     }
 
     private fun getFile(fileName: String): File {

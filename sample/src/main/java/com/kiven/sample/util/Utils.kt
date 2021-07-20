@@ -41,7 +41,6 @@ import com.kiven.kutils.tools.KGranting
 import com.kiven.kutils.tools.KUtil
 import com.kiven.sample.R
 import kotlinx.android.synthetic.main.item_image.view.*
-import org.jetbrains.anko.dip
 import java.util.*
 
 /**
@@ -263,7 +262,7 @@ fun Activity.pickPhoneImage(onErrorOrCancel: (String) -> Unit = {}, call: (Uri) 
         val dialog = BottomSheetDialog(this)
 
         val recyclerView = RecyclerView(this)
-        recyclerView.layoutManager = GridLayoutManager(this, KUtil.getScreenWith()/dip(80))
+        recyclerView.layoutManager = GridLayoutManager(this, KUtil.getScreenWith()/KUtil.dip2px(80f))
         recyclerView.adapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             override fun onCreateViewHolder(
                 parent: ViewGroup,

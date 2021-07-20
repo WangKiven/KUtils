@@ -6,10 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import com.kiven.kutils.activityHelper.KHelperActivity
+import com.kiven.kutils.tools.KUtil
 import com.kiven.kutils.widget.UIGridView
 import com.kiven.sample.util.showSnack
 import kotlinx.android.synthetic.main.ah_kutils_widget_demo.*
-import org.jetbrains.anko.dip
 
 /**
  * Created by wangk on 2020/12/6.
@@ -31,7 +31,7 @@ class AHKUtilsWidgetDemo : BaseFlexActivityHelper() {
 
             gridView.setAdapter(object : UIGridView.Adapter() {
                 init {
-                    setChildMargin(dip(5))
+                    setChildMargin(KUtil.dip2px(5f))
                 }
 
                 override fun getGridViewItemCount(): Int {

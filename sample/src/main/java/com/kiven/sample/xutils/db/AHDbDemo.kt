@@ -4,7 +4,6 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.os.Build
 import android.os.Bundle
-import androidx.core.widget.NestedScrollView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -16,11 +15,9 @@ import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.sample.xutils.db.entity.User
-import org.jetbrains.anko.db.TEXT
-import org.jetbrains.anko.db.createTable
-import org.jetbrains.anko.db.select
 import org.xutils.DbManager
 import org.xutils.x
+import androidx.core.widget.NestedScrollView
 
 class AHDbDemo : KActivityHelper() {
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
@@ -64,7 +61,8 @@ class AHDbDemo : KActivityHelper() {
 
         val helper = object : SQLiteOpenHelper(mActivity, "ncustom.db", null, 1) {
             override fun onCreate(db: SQLiteDatabase?) {
-                db?.createTable("Boll", true, Pair("name", TEXT), Pair("date", TEXT))
+//                db?.createTable("Boll", true, Pair("name", TEXT), Pair("date", TEXT))
+                db?.execSQL("CREATE TABLE IF NOT EXISTS Boll(name TEXT, date TEXT)")
             }
 
             override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
@@ -97,12 +95,20 @@ class AHDbDemo : KActivityHelper() {
 
         })
         addView("查询", View.OnClickListener {
-            cDb.select("Boll"/*, "name", "date"*/).exec {
+            /*cDb.select("Boll").exec {
                 if (moveToFirst()) {
                     do {
                         KLog.i("name = ${getString(0)}, date = ${getString(1)}")
                     } while (moveToNext())
                 }
+            }*/
+            cDb.query("Boll", null, null, null, null, null, null).apply {
+                if (moveToFirst()) {
+                    do {
+                        KLog.i("name = ${getString(0)}, date = ${getString(1)}")
+                    } while (moveToNext())
+                }
+                close()
             }
         })
         addView("删除所有表内容", View.OnClickListener {
@@ -111,7 +117,9 @@ class AHDbDemo : KActivityHelper() {
 
         addTitle("结构查询")
         addView("查询数据库结构", View.OnClickListener {
-            cDb.select("sqlite_master").exec {
+//            cDb.select("sqlite_master").exec {
+
+            cDb.query("sqlite_master", null, null, null, null, null, null).apply {
                 KLog.i("count = $count")
                 KLog.i("colo = ${columnNames.contentToString()}")
                 if (moveToFirst()) {
@@ -127,12 +135,17 @@ class AHDbDemo : KActivityHelper() {
                                 " sql = ${getString(4)}")
                     } while (moveToNext())
                 }
+
+                close()
             }
         })
         addView("查询表结构", View.OnClickListener {
             // 有的表可能没有数据，所以不能用getType（），获取数据类型。索性就只获取属性
-            cDb.select("Boll").limit(0).exec {
+//            cDb.select("Boll").limit(0).exec {
+            cDb.query("Boll", null, null, null, null, null, null, "0").apply {
                 KLog.i("colo = ${columnNames.contentToString()}")
+
+                close()
             }
         })
     }

@@ -56,8 +56,6 @@ import com.xiaomi.mimc.MIMCMessage
 import com.xiaomi.mimc.MIMCServerAck
 import com.xiaomi.mimc.common.MIMCConstant
 import kotlinx.coroutines.*
-import org.jetbrains.anko.coroutines.experimental.Ref
-import org.jetbrains.anko.coroutines.experimental.asReference
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.coroutines.resume
@@ -220,29 +218,11 @@ class AHSmallAction : KActivityHelper() {
             KLog.i("start -----------${ct.id}-------${ct.name}-----")
         })
 
-        addView("anko Ref协程", View.OnClickListener {
-            val ref: Ref<AHSmallAction> = this.asReference()
-
-            // 进入协程
-            /*async(UI) {
-                delay(2000)
-
-                // 启动ui线程
-                ref().showDialog("anko Ref协程")
-            }*/
-
-            GlobalScope.launch(Dispatchers.Main) {
-                delay(2000)
-
-                // 启动ui线程
-                ref().showDialog("anko Ref协程")
-            }
-        })
-
         addView("anko bg()协程", View.OnClickListener {
             GlobalScope.launch(Dispatchers.Main) {
                 val data = async {
-                    Thread.sleep(2000)
+//                    Thread.sleep(2000)
+                    delay(2000)
                     "anko bg()协程"
                 }
 

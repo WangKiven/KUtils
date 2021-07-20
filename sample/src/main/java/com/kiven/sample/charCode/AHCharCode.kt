@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.Gravity
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.widget.NestedScrollView
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
@@ -11,7 +12,6 @@ import com.kiven.kutils.tools.KString
 import com.kiven.sample.util.getInput
 import com.kiven.sample.util.showListDialog
 import org.jetbrains.anko.*
-import org.jetbrains.anko.support.v4.nestedScrollView
 import java.nio.charset.Charset
 
 /**
@@ -53,8 +53,9 @@ class AHCharCode : KActivityHelper() {
 
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
-        mActivity.nestedScrollView {
-            linearLayout {
+
+        setContentView(NestedScrollView(activity).apply {
+            addView(LinearLayout(activity).apply {
                 orientation = LinearLayout.VERTICAL
                 topPadding = dip(30)
 
@@ -144,9 +145,8 @@ class AHCharCode : KActivityHelper() {
                             "\n- 符号之组合用附加符号（Combining Diacritical Marks for Symbols，20D0–20FF）" +
                             "\n- 组合用半形符号（Combining Half Marks，FE20–FE2F）"
                 }
-            }
-        }
-
+            })
+        })
 
     }
 }

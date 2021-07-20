@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KPath
+import com.kiven.kutils.tools.KUtil
 import com.kiven.sample.BaseFlexActivityHelper
 import com.kiven.sample.libs.chatkit.AHChatList
 import com.kiven.sample.media.AHGif
@@ -21,7 +22,6 @@ import com.kiven.sample.util.*
 import com.zxy.tiny.Tiny
 import id.zelory.compressor.Compressor
 import kotlinx.coroutines.runBlocking
-import org.jetbrains.anko.dip
 import java.io.File
 import java.text.DateFormat
 import java.util.*
@@ -58,7 +58,7 @@ class AHLibs : BaseFlexActivityHelper() {
         addBtn("OkHttp") { AHOkHttpLib().startActivity(activity) }
         addBtn("glide") {
             val iv = ImageView(activity).apply {
-                layoutParams = ViewGroup.LayoutParams(activity.dip(50), activity.dip(50))
+                layoutParams = ViewGroup.LayoutParams(KUtil.dip2px(50f), KUtil.dip2px(50f))
 
                 var count = 0
                 val showNext = fun() {

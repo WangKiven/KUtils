@@ -5,9 +5,6 @@ import android.os.Bundle
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import org.jetbrains.anko.Orientation
-import org.jetbrains.anko.linearLayout
-import org.jetbrains.anko.textView
 import java.lang.Exception
 
 class ClickNotiActivity : AppCompatActivity() {
@@ -19,12 +16,19 @@ class ClickNotiActivity : AppCompatActivity() {
         textView = TextView(this)
         textView?.text = "没有收到Intent"
 
-        linearLayout {
+        /*linearLayout {
             orientation = LinearLayout.VERTICAL
             textView { text = "你点击了通知" }
 
             addView(textView)
-        }
+        }*/
+        setContentView(LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            addView(TextView(this@ClickNotiActivity).apply {
+                text = "你点击了通知"
+            })
+            addView(textView)
+        })
 
         if (intent != null)
             showIntent(intent)

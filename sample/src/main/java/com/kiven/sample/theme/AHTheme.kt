@@ -14,7 +14,6 @@ import com.google.android.flexbox.FlexboxLayout
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.sample.R
-import org.jetbrains.anko.backgroundColor
 
 /**
  * Created by wangk on 2019/5/29.
@@ -48,7 +47,7 @@ class AHTheme : KActivityHelper() {
         addBtn("Dialog的全屏", View.OnClickListener {
             val textView = TextView(mActivity)
             textView.text = "Hello World!"
-            textView.backgroundColor = Color.WHITE
+            textView.setBackgroundColor(Color.WHITE)
             val dialog = AlertDialog.Builder(mActivity, R.style.Dialog_Nobackground)
                     .setView(textView).create()
             dialog.show()

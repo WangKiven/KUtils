@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.widget.NestedScrollView
 import androidx.emoji.bundled.BundledEmojiCompatConfig
 import androidx.emoji.text.EmojiCompat
 import com.kiven.kutils.activityHelper.KActivityHelper
@@ -15,7 +16,6 @@ import com.vanniktech.emoji.ios.IosEmojiProvider
 import com.vanniktech.emoji.twitter.TwitterEmojiProvider
 import io.github.rockerhieu.emojicon.EmojiconTextView
 import org.jetbrains.anko.linearLayout
-import org.jetbrains.anko.support.v4.nestedScrollView
 import org.jetbrains.anko.textView
 
 /**
@@ -25,7 +25,8 @@ class AHEmoji : KActivityHelper() {
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
 
-        activity.nestedScrollView {
+        setContentView(NestedScrollView(activity).apply {
+
             linearLayout {
                 orientation = LinearLayout.VERTICAL
 
@@ -78,6 +79,6 @@ class AHEmoji : KActivityHelper() {
                 etv.textSize = 25f
                 addView(etv)
             }
-        }
+        })
     }
 }

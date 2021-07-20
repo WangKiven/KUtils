@@ -8,13 +8,14 @@ import android.os.Bundle
 import android.view.View
 import android.widget.RadioButton
 import android.widget.TextView
+import android.widget.Toast
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.sample.R
+import com.kiven.sample.util.showToast
 import kotlinx.android.synthetic.main.ah_toy_vpn.*
 import okhttp3.OkHttpClient
-import org.jetbrains.anko.toast
 
 /**
  * Created by oukobayashi on 2020/6/22.
@@ -131,7 +132,7 @@ class AHToyVpn : KActivityHelper() {
     private fun checkProxyConfigs(proxyHost: String, proxyPort: String): Boolean {
         val hasIncompleteProxyConfigs = proxyHost.isEmpty() != proxyPort.isEmpty()
         if (hasIncompleteProxyConfigs) {
-            mActivity.toast("代理设置不完整。对于HTTP代理，我们需要主机名和端口设置。")
+            showToast("代理设置不完整。对于HTTP代理，我们需要主机名和端口设置。")
         }
         return !hasIncompleteProxyConfigs
     }
@@ -142,7 +143,7 @@ class AHToyVpn : KActivityHelper() {
                         .map { pi -> pi.packageName }
                         .containsAll(packageNames)
         if (!hasCorrectPackageNames) {
-            mActivity.toast("某些指定的包名称与任何已安装的包都不对应。")
+            showToast("某些指定的包名称与任何已安装的包都不对应。")
         }
         return hasCorrectPackageNames
     }

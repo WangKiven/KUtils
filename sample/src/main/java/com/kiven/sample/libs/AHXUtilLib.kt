@@ -4,13 +4,13 @@ import android.os.Bundle
 import android.view.ViewGroup
 import android.widget.ImageView
 import com.kiven.kutils.activityHelper.KHelperActivity
+import com.kiven.kutils.tools.KUtil
 import com.kiven.sample.BaseFlexActivityHelper
 import com.kiven.sample.util.Const
 import com.kiven.sample.util.newDialog
 import com.kiven.sample.xutils.db.AHDbDemo
 import com.kiven.sample.xutils.net.AHNetDemo
 import kotlinx.android.synthetic.main.activity_lauch.*
-import org.jetbrains.anko.dip
 import org.xutils.image.ImageOptions
 
 /**
@@ -24,7 +24,7 @@ class AHXUtilLib : BaseFlexActivityHelper() {
         addBtn("数据库") { AHDbDemo().startActivity(mActivity) }
         addBtn("图片") {
             val iv = ImageView(activity).apply {
-                layoutParams = ViewGroup.LayoutParams(activity.dip(50), activity.dip(50))
+                layoutParams = ViewGroup.LayoutParams(KUtil.dip2px(50f), KUtil.dip2px(50f))
 
                 var count = 0
                 val showNext = fun() {

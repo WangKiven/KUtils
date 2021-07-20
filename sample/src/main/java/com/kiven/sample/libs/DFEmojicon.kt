@@ -8,12 +8,11 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.fragment.app.DialogFragment
+import com.kiven.kutils.tools.KUtil
 import io.github.rockerhieu.emojicon.EmojiconGridFragment
 import io.github.rockerhieu.emojicon.EmojiconTextView
 import io.github.rockerhieu.emojicon.EmojiconsFragment
 import io.github.rockerhieu.emojicon.emoji.Emojicon
-import org.jetbrains.anko.dip
-import org.jetbrains.anko.sp
 
 /**
  * Created by oukobayashi on 2019-07-29.
@@ -42,7 +41,7 @@ class DFEmojicon : DialogFragment(), EmojiconsFragment.OnEmojiconBackspaceClicke
 
                 val fram = FrameLayout(this@run)
                 fram.id = 101
-                addView(fram, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, dip(250)))
+                addView(fram, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, KUtil.dip2px(250f)))
 
                 childFragmentManager.beginTransaction().add(101, EmojiconsFragment()).commit()
             }

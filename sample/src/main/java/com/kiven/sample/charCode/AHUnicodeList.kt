@@ -21,9 +21,6 @@ import com.kiven.sample.AHWebView
 import com.kiven.sample.R
 import com.kiven.sample.util.showListDialog
 import kotlinx.android.synthetic.main.item_unicode.view.*
-import org.jetbrains.anko.dip
-import org.jetbrains.anko.linearLayout
-import org.jetbrains.anko.textView
 import java.io.InputStreamReader
 import java.nio.charset.Charset
 
@@ -49,7 +46,8 @@ class AHUnicodeList : KActivityHelper() {
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
 
-        activity.linearLayout {
+        setContentView(LinearLayout(activity).apply {
+//        activity.linearLayout {
             orientation = LinearLayout.VERTICAL
 
             val flexBox = FlexboxLayout(mActivity)
@@ -112,10 +110,14 @@ class AHUnicodeList : KActivityHelper() {
             }
 
 
-            textView {
+            /*textView {
                 showSel = this
                 onChangeSel()
-            }
+            }*/
+            addView(TextView(activity).apply {
+                showSel = this
+                onChangeSel()
+            })
 
 
             addView(recyclerView)
@@ -125,9 +127,10 @@ class AHUnicodeList : KActivityHelper() {
             layoutManager.justifyContent = JustifyContent.CENTER
 
             recyclerView.layoutManager = layoutManager*/ // 由于要计算每一个单元格的位置，当item太多的时候，会消耗大量内存存储相关数据
-            recyclerView.layoutManager = GridLayoutManager(mActivity, KUtil.getScreenWith() / dip(70))
+            recyclerView.layoutManager = GridLayoutManager(mActivity, KUtil.getScreenWith() / KUtil.dip2px(70f))
             recyclerView.adapter = adapter
-        }
+//        }
+    })
     }
 
     private fun selScroll() {

@@ -12,12 +12,9 @@ import android.widget.LinearLayout
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.tools.KUtil
-import com.kiven.sample.R
 import com.kiven.sample.util.showSnack
 import org.jetbrains.anko.button
-import org.jetbrains.anko.dip
 import org.jetbrains.anko.linearLayout
-import org.jetbrains.anko.sdk27.coroutines.onClick
 
 /**
  * 悬浮框

@@ -20,10 +20,6 @@ import com.kiven.sample.R
 import com.sxb.kutils_ktx.util.RxBus
 import com.kiven.sample.util.showSnack
 import kotlinx.android.synthetic.main.layout_bottom_sheet_p2p_ui.*
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
-import org.jetbrains.anko.doAsync
 import java.net.ServerSocket
 import java.net.Socket
 

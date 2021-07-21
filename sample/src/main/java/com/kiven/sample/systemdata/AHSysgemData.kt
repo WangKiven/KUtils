@@ -6,9 +6,7 @@ import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.CalendarContract
-import android.provider.ContactsContract
-import android.provider.MediaStore
+import android.provider.*
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -145,7 +143,18 @@ class AHSysgemData : KActivityHelper() {
             mActivity.showSnack("No permission to write APN settings")
 //            loadData(Telephony.Carriers.CONTENT_URI, Telephony.Carriers._ID)
         })
-        addView("", View.OnClickListener { })
+        addView("彩信和短信", View.OnClickListener {
+            KGranting.requestPermissions(activity, 898, Manifest.permission.READ_SMS, "短信") {
+                if (it) {
+                    // 彩信和短信是用Telephony.MmsSms.CONTENT_URI,
+                        // 但是我的小米手机报彩信异常，不知道是不是没有收到过彩信所以没用彩信数据库
+                    loadData(
+                        Telephony.Sms.CONTENT_URI,
+                        Telephony.Sms._ID
+                    )
+                }
+            }
+        })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })

@@ -28,6 +28,10 @@ class App : KContext() {
     override fun initOnlyMainProcess() {
         super.initOnlyMainProcess()
 
+//        DoKit.Builder(this)
+//            .productId("需要使用平台功能的话，需要到dokit.cn平台申请id")
+//            .build()
+
         KLog.printDeviceInfo()
     }
 

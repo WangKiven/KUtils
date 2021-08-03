@@ -292,4 +292,9 @@ dependencies {
 
     // https://spring.io/projects/spring-android#learn
     implementation 'org.springframework.android:spring-android-rest-template:2.0.0.M3'
+
+    // 滴滴的Dokit: https://github.com/didi/DoraemonKit
+//    def dokitVersion = "4.2.1"
+//    debugImplementation "io.github.didi.dokit:dokitx:${dokitVersion}"
+//    releaseImplementation "io.github.didi.dokit:dokitx-no-op:${dokitVersion}"
 }

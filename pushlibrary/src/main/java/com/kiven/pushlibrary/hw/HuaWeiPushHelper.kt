@@ -1,6 +1,7 @@
 package com.kiven.pushlibrary.hw
 
 import android.content.Context
+import android.content.pm.PackageManager
 import com.huawei.agconnect.config.AGConnectServicesConfig
 import com.huawei.hms.aaid.HmsInstanceId
 import com.huawei.hms.push.HmsMessaging
@@ -38,7 +39,14 @@ class HuaWeiPushHelper : PushHelper {
     override fun initPush(context: Context) {
         Thread {
             try {
-                val appId = AGConnectServicesConfig.fromContext(context).getString("client/app_id")
+
+                val manifest = context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
+                val bundleData = manifest.metaData ?: throw Throwable("manifest中配置信息为空")
+
+                val appId = bundleData.getString("hms_app_id")?.replaceFirst("HMS_", "") ?: throw Throwable("华为AppID为空")
+
+                // 新版本，不推荐使用agconnect-services.json获取appid了
+//                val appId = AGConnectServicesConfig.fromContext(context).getString("client/app_id")
                 KLog.i("华为appId: $appId")
 
                 // TODO Token发生变化时或者EMUI版本低于10.0以 onNewToken 方法返回。

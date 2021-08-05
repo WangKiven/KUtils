@@ -9,14 +9,14 @@ buildscript {
 //        maven { url 'https://maven.aliyun.com/repository/google' }
 //        maven { url 'https://maven.aliyun.com/repository/jcenter' }
 //        maven { url 'http://maven.aliyun.com/nexus/content/groups/public' }
-        maven { url 'http://developer.huawei.com/repo/' }
         google()
         mavenLocal()
         mavenCentral()
         jcenter()
+        maven { url 'https://developer.huawei.com/repo/' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.2.2'
+        classpath 'com.android.tools.build:gradle:7.0.0'
 
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlin_version"
@@ -29,7 +29,8 @@ buildscript {
 
 
         // 华为推送插件
-        classpath 'com.huawei.agconnect:agcp:1.0.0.300'
+        classpath 'com.huawei.agconnect:agcp:1.4.2.300'
+
 
         // google ar
         classpath 'com.google.ar.sceneform:plugin:1.17.1'
@@ -51,12 +52,12 @@ allprojects {
     repositories {
 //        maven { url 'https://maven.aliyun.com/repository/google' }
 //        maven { url 'https://maven.aliyun.com/repository/jcenter' }
-        maven { url 'https://jitpack.io' }
-        maven { url 'http://developer.huawei.com/repo/' }
         google()
         mavenLocal()
         mavenCentral()
         jcenter()
+        maven { url 'https://jitpack.io' }
+        maven { url 'https://developer.huawei.com/repo/' }
     }
 }
 

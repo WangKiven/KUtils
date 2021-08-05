@@ -9,8 +9,6 @@ android {
     defaultConfig {
         minSdkVersion 17 // 华为推送要求17
         targetSdkVersion 30
-        versionCode 1
-        versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
@@ -47,7 +45,7 @@ dependencies {
 
 
     // 华为推送
-    implementation 'com.huawei.hms:push:4.0.2.300'
+    implementation 'com.huawei.hms:push:5.3.0.304'
     // 小米推送
     api fileTree(dir: 'miPush', include: ['*.jar', '*.bak'])
     // todo vivo推送,fileTree方式编译时要报错，但是能运行。zipTree仅导入了aar中的jar包。

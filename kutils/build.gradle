@@ -7,7 +7,7 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion parent.ext.targetSdkVersion
-        javaCompileOptions.annotationProcessorOptions.includeCompileClasspath = true
+//        javaCompileOptions.annotationProcessorOptions.includeCompileClasspath = true
     }
     buildTypes {
         release {

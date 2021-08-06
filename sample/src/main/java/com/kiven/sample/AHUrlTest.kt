@@ -13,7 +13,6 @@ import com.kiven.kutils.tools.KTextView
 import com.kiven.kutils.tools.KView
 import com.tencent.smtt.export.external.interfaces.IX5WebChromeClient
 import com.tencent.smtt.export.external.interfaces.JsResult
-import com.tencent.smtt.sdk.DownloadListener
 import com.tencent.smtt.sdk.WebChromeClient
 import com.tencent.smtt.sdk.WebSettings
 import com.tencent.smtt.sdk.WebView
@@ -63,60 +62,6 @@ class AHUrlTest : KActivityHelper() {
     }
 
     private fun initX5WebView(webview: WebView) {
-        /*webview.setWebViewClient(object : WebViewClient() {
-            override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-                return false
-            }
-
-            override fun onPageFinished(view: WebView, url: String) {
-                super.onPageFinished(view, url)
-                // mTestHandler.sendEmptyMessage(MSG_OPEN_TEST_URL);
-                mTestHandler.sendEmptyMessageDelayed(com.example.test_webview_demo.BrowserActivity.MSG_OPEN_TEST_URL, 5000) // 5s?
-                if (Build.VERSION.SDK.toInt() >= 16) changGoForwardButton(view)
-            }
-        })*/
-
-        webview.webChromeClient = object : WebChromeClient() {
-
-            var myVideoView: View? = null
-            var myNormalView: View? = null
-            var callback: IX5WebChromeClient.CustomViewCallback? = null
-            // /////////////////////////////////////////////////////////
-//
-            /**
-             * 全屏播放配置
-             */
-            override fun onShowCustomView(view: View,
-                                          customViewCallback: IX5WebChromeClient.CustomViewCallback) {
-                val normalView = findViewById<View>(R.id.web_filechooser) as FrameLayout
-                val viewGroup = normalView.parent as ViewGroup
-                viewGroup.removeView(normalView)
-                viewGroup.addView(view)
-                myVideoView = view
-                myNormalView = normalView
-                callback = customViewCallback
-            }
-
-            override fun onHideCustomView() {
-                if (callback != null) {
-                    callback!!.onCustomViewHidden()
-                    callback = null
-                }
-                if (myVideoView != null) {
-                    val viewGroup = myVideoView!!.parent as ViewGroup
-                    viewGroup.removeView(myVideoView)
-                    viewGroup.addView(myNormalView)
-                }
-            }
-
-            override fun onJsAlert(arg0: WebView, arg1: String, arg2: String,
-                                   arg3: JsResult): Boolean {
-                /**
-                 * 这里写入你自定义的window alert
-                 */
-                return super.onJsAlert(null, arg1, arg2, arg3)
-            }
-        }
 
         webview.setDownloadListener { arg0, arg1, arg2, arg3, arg4 ->
             KLog.i("url: $arg0")

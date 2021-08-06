@@ -11,6 +11,10 @@ import com.kiven.sample.noti.NotificationClickReceiver
 import com.kiven.sample.util.Const
 import com.tencent.smtt.sdk.QbSdk
 import org.xutils.x
+import com.tencent.smtt.export.external.TbsCoreSettings
+
+
+
 
 
 /**
@@ -53,6 +57,12 @@ class App : KContext() {
         ARouter.init(this)
 
 
+        // 在调用TBS初始化、创建WebView之前进行如下配置
+        // 在调用TBS初始化、创建WebView之前进行如下配置
+        val map = mutableMapOf<String, Any>()
+        map[TbsCoreSettings.TBS_SETTINGS_USE_SPEEDY_CLASSLOADER] = true
+        map[TbsCoreSettings.TBS_SETTINGS_USE_DEXLOADER_SERVICE] = true
+        QbSdk.initTbsSettings(map)
         QbSdk.initX5Environment(this, object : QbSdk.PreInitCallback {
             override fun onCoreInitFinished() {
 

@@ -9,7 +9,6 @@ import android.os.Environment
 import android.os.Handler
 import android.transition.Slide
 import android.view.Gravity
-import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
@@ -20,6 +19,7 @@ import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.*
 import com.kiven.sample.arch.AHArch
 import com.kiven.sample.arcore.AHARCoreInlet
+import com.kiven.sample.databinding.MainActivityBinding
 import com.kiven.sample.floatView.ActivityHFloatView
 import com.kiven.sample.font.AHFont
 import com.kiven.sample.gl.AHGL
@@ -32,15 +32,18 @@ import com.kiven.sample.util.addBtn
 import com.kiven.sample.util.addTitle
 import com.kiven.sample.util.showDialog
 import com.kiven.sample.vpn.AHMyVpn
-import kotlinx.android.synthetic.main.main_activity.*
 
 /**
  * Created by wangk on 2020/12/2.
  */
 class MainActivity : KActivity() {
+    lateinit var binding: MainActivityBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.main_activity)
+//        setContentView(R.layout.main_activity)
+        binding = MainActivityBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         setupWindowAnimations()
 
@@ -48,7 +51,7 @@ class MainActivity : KActivity() {
     }
 
     private fun loadUI() {
-        flexbox.apply {
+        binding.flexbox.apply {
             addTitle("系统 ${KNetwork.getIPAddress() ?: ""}")
             addBtn("原生UI控件") { AHNativeWidget().startActivity(this@MainActivity) }
             addBtn("liveData") {

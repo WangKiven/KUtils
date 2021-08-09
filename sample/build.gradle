@@ -241,8 +241,9 @@ dependencies {
     implementation 'com.vanniktech:emoji-twitter:0.6.0'
 
     // ARouter: https://github.com/alibaba/ARouter, TODO 需要注意代码混淆和加固的问题, 我们的helper不适用，只能用于activity
-    implementation 'com.alibaba:arouter-api:1.5.0'
-    kapt 'com.alibaba:arouter-compiler:1.2.2'
+    implementation 'com.alibaba:arouter-api:1.5.2'
+    kapt 'com.alibaba:arouter-compiler:1.5.2'
+
     implementation 'androidx.palette:palette-ktx:1.0.0'
 
     // 华为推送

@@ -78,6 +78,13 @@
     <!-- WiFi 感知，自己拼接的，不知道有没有用 -->
     <uses-feature android:name="android.hardware.wifi.aware" />
 
+    <!-- TextToSpeech 需要TTS_SERVICE权限，没配置也没出现问题，但是在其他app没配置就不行，这里就也加上 -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.TTS_SERVICE" />
+        </intent>
+    </queries>
+
     <application
         android:name=".App"
         android:allowBackup="true"

@@ -1,6 +1,22 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'maven-publish'
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+                groupId = 'com.github.WangKiven.KUtils'
+                artifactId = 'pushlibrary'
+                version = parent.ext.library_version
+            }
+        }
+    }
+}
+
+
 android {
     compileSdkVersion 31
 //    buildToolsVersion "29.0.2"

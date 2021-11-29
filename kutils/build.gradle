@@ -1,4 +1,18 @@
 apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+                groupId = 'com.github.WangKiven.KUtils'
+                artifactId = 'kutils'
+                version = parent.ext.library_version
+            }
+        }
+    }
+}
 
 android {
     compileSdkVersion parent.ext.compileSdkVersion

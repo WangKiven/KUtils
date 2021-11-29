@@ -3,6 +3,7 @@
 buildscript {
     ext.kotlin_version = '1.6.0'
     ext.anko_version = '0.10.8'
+    ext.library_version = '1.4.9'
 
     // todo 阿里提供的各种厂库替代链接 https://maven.aliyun.com/mvn/view
     repositories {

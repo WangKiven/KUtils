@@ -29,7 +29,7 @@ buildscript {
 
 
         // 华为推送插件
-        classpath 'com.huawei.agconnect:agcp:1.4.2.300'
+        classpath 'com.huawei.agconnect:agcp:1.6.0.300'
 
 
         // google ar

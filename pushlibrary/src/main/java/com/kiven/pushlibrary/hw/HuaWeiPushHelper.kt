@@ -11,9 +11,7 @@ import com.kiven.pushlibrary.PushUtil
 import com.kiven.pushlibrary.Web
 
 /**
- * 集成SDK：https://developer.huawei.com/consumer/cn/doc/development/HMS-Library/push-sdk-integrate
- * api：https://developer.huawei.com/consumer/cn/doc/development/HMS-Guides/push-basic-client
- * 客户端错误码：https://developer.huawei.com/consumer/cn/doc/development/HMS-References/push-ErrorEnum4
+ * https://developer.huawei.com/consumer/cn/hms/huawei-pushkit
  *
  * 主题问题：
  *      华为客户端SDK进提供了添加主题、取消主题两个api，所以无法取消之前设置的主题，因为根本不知道之前设置了什么主题

@@ -152,7 +152,7 @@ object AccessibilityUtil {
         if (KString.isBlank(souceId)) {
             nodes = nodeInfo.findAccessibilityNodeInfosByText(txt)
         } else {
-            nodes = nodeInfo.findAccessibilityNodeInfosByViewId(souceId)
+            nodes = nodeInfo.findAccessibilityNodeInfosByViewId(souceId!!)
         }
 
         if (nodes == null || nodes.isEmpty())
@@ -251,7 +251,7 @@ object AccessibilityUtil {
         val nodes: List<AccessibilityNodeInfo>? = if (KString.isBlank(souceId)) {
             nodeInfo.findAccessibilityNodeInfosByText(txt)
         } else {
-            nodeInfo.findAccessibilityNodeInfosByViewId(souceId)
+            nodeInfo.findAccessibilityNodeInfosByViewId(souceId!!)
         }
 
         if (nodes == null || nodes.isEmpty())

@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'maven-publish'
 
+// https://developer.android.com/studio/build/maven-publish-plugin
 afterEvaluate {
     publishing {
         publications {

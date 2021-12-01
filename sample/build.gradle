@@ -273,7 +273,7 @@ dependencies {
     // 与as的profiler有冲突，使用profiler时进入x5 webView页面，会导致程序崩溃
     implementation 'com.tencent.tbs.tbssdk:sdk:43993'
     // gpuimage https://github.com/cats-oss/android-gpuimage
-    implementation 'jp.co.cyberagent.android:gpuimage:2.0.4'
+    implementation 'jp.co.cyberagent.android:gpuimage:2.1.0'
     // https://github.com/koral--/android-gif-drawable
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.19'
     // https://github.com/chrisbanes/PhotoView

@@ -1,8 +1,9 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.kotlin_version = '1.5.31'
+    ext.kotlin_version = '1.6.0'
     ext.anko_version = '0.10.8'
+    ext.library_version = '1.4.9'
 
     // todo 阿里提供的各种厂库替代链接 https://maven.aliyun.com/mvn/view
     repositories {
@@ -21,26 +22,26 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlin_version"
         /*xutils3 提交两个*/
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
+//        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5'
+//        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
 
         // ARouter, 解决arouter加固问题
         classpath "com.alibaba:arouter-register:1.0.2"
 
 
         // 华为推送插件
-        classpath 'com.huawei.agconnect:agcp:1.4.2.300'
+        classpath 'com.huawei.agconnect:agcp:1.6.0.300'
 
 
         // google ar
         classpath 'com.google.ar.sceneform:plugin:1.17.1'
 
         // firebase
-        classpath 'com.google.gms:google-services:4.3.8'
+        classpath 'com.google.gms:google-services:4.3.10'
     }
 
     project.ext {
-        compileSdkVersion = 30
+        compileSdkVersion = 31
         targetSdkVersion = 30
 //        compileSdkVersion = "android-S"
 //        targetSdkVersion = "S"

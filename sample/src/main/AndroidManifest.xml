@@ -31,7 +31,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" /> <!-- 读取联系人权限，上传联系人需要用到此权限 -->
     <uses-permission android:name="android.permission.READ_CONTACTS" /> <!-- 外存储写权限，构建语法需要用到此权限 -->
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
+<!--    <uses-permission android:name="android.permission.READ_CONTACTS" />-->
     <!-- <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/> -->
     <!-- 外存储读权限，构建语法需要用到此权限 -->
     <!-- <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/> -->
@@ -40,10 +40,10 @@
     <!-- 定位信息是敏感信息，可通过Setting.setLocationEnable(false)关闭定位请求 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="com.huawei.android.launcher.permission.CHANGE_BADGE" />
-    <uses-permission android:name="android.permission.CALL_PHONE" /> <!-- 指纹识别，低版本需要 -->
+<!--    <uses-permission android:name="android.permission.CALL_PHONE" /> &lt;!&ndash; 指纹识别，低版本需要 &ndash;&gt;-->
     <uses-permission android:name="android.permission.USE_FINGERPRINT" /> <!-- 生物识别，高版本需要 -->
     <uses-permission android:name="android.permission.USE_BIOMETRIC" /> <!-- 通讯录 -->
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
+<!--    <uses-permission android:name="android.permission.READ_CONTACTS" />-->
     <uses-permission android:name="android.permission.WRITE_CONTACTS" /> <!-- 闹钟 -->
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM" /> <!-- 日历 -->
     <uses-permission android:name="android.permission.READ_CALENDAR" />
@@ -70,7 +70,9 @@
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
 
     <!-- WiFi 直连 -->
-    <uses-feature android:name="android.hardware.wifi.direct" android:required="true"/>
+    <uses-feature
+        android:name="android.hardware.wifi.direct"
+        android:required="true" />
 
     <!-- WiFi rtt -->
     <uses-feature android:name="android.hardware.wifi.rtt" />
@@ -101,7 +103,9 @@
             android:name="com.google.ar.core"
             android:value="optional" /><!-- ARCore 配置 optional：可选AR，required:必须AR-->
 
-        <activity android:name=".noti.ClickNotiActivity">
+        <activity
+            android:name=".noti.ClickNotiActivity"
+            android:exported="false">
             <intent-filter>
                 <!--firebase采用action启动，服务器又不能设置category, 所以需要一个单独的 intent-filter-->
                 <!-- 隐式启动：https://blog.csdn.net/Leo_Liang_jie/article/details/92836838 -->
@@ -125,7 +129,9 @@
             android:name="roboguice.annotations.packages"
             android:value="com.kiven.sample" />
 
-        <activity android:name=".LaunchActivity">
+        <activity
+            android:name=".LaunchActivity"
+            android:exported="true">
             <intent-filter>
 
                 <!-- 应用入口, 多个activity都配置了android.intent.action.MAIN的话，启动App的时候那个在清单文件前面，就启动那个 -->
@@ -140,15 +146,22 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
-        <activity android:name=".ActivityDataBinding" />
-        <activity android:name="com.kiven.kutils.activityHelper.KHelperActivity">
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ActivityDataBinding"
+            android:exported="false" />
+        <activity
+            android:name="com.kiven.kutils.activityHelper.KHelperActivity"
+            android:exported="false">
             <intent-filter>
                 <category android:name="guidebee.intent.category.opengl.SAMPLE_CODE" />
             </intent-filter>
         </activity>
         <activity
             android:name=".dock.ActivityDock"
+            android:exported="true"
             android:icon="@mipmap/ic_launcher_u"
             android:label="KUDock"
             android:theme="@style/ThemeDemo">
@@ -160,19 +173,24 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".helperTest.HelperTestActivity"/>
+        <activity
+            android:name=".helperTest.HelperTestActivity"
+            android:exported="false" />
 
         <!-- x5: 该Service仅在TBS内核首次Dex加载时触发并执行dex2oat任务，任务完成后自动结束 -->
         <service
             android:name="com.tencent.smtt.export.external.DexClassLoaderProviderService"
+            android:exported="false"
             android:label="dexopt"
-            android:process=":dexopt" >
-        </service>
+            android:process=":dexopt" />
 
-        <service android:name=".floatView.ServiceFloat" />
+        <service
+            android:name=".floatView.ServiceFloat"
+            android:exported="false" />
         <service
             android:name=".service.LiveWallpaper"
             android:enabled="true"
+            android:exported="false"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/paper_name"
             android:permission="android.permission.BIND_WALLPAPE">
@@ -202,6 +220,7 @@
         </service> <!-- 无障碍功能 -->
         <service
             android:name=".autoService.AutoInstallService"
+            android:exported="false"
             android:label="巴拉啦无障碍"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
@@ -215,6 +234,7 @@
         </service>
         <service
             android:name=".noti.MyNotificationListenerService"
+            android:exported="false"
             android:label="KUtils监控通知"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
             <intent-filter>
@@ -222,7 +242,9 @@
             </intent-filter>
         </service>
 
-        <activity android:name="com.kiven.kutils.activityHelper.KFragmentActivity" />
+        <activity
+            android:name="com.kiven.kutils.activityHelper.KFragmentActivity"
+            android:exported="false" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -233,13 +255,17 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/filepaths" />
         </provider> <!-- widget start -->
-        <activity android:name=".widget.ConfigureWidget">
+        <activity
+            android:name=".widget.ConfigureWidget"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
 
-        <receiver android:name=".widget.ProviderWidget">
+        <receiver
+            android:name=".widget.ProviderWidget"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -269,6 +295,7 @@
         <!-- vpn -->
         <service
             android:name=".vpn.MyVPNService"
+            android:exported="false"
             android:permission="android.permission.BIND_VPN_SERVICE">
             <intent-filter>
                 <action android:name="android.net.VpnService" />
@@ -279,6 +306,7 @@
         </service>
         <service
             android:name=".vpn.ToyVpnService"
+            android:exported="false"
             android:permission="android.permission.BIND_VPN_SERVICE">
             <intent-filter>
                 <action android:name="android.net.VpnService" />
@@ -290,6 +318,7 @@
         <!-- TileService -->
         <service
             android:name=".service.MyTileService"
+            android:exported="false"
             android:icon="@drawable/ic_vpn"
             android:label="kiven"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
@@ -311,6 +340,7 @@
         <!-- 周期任务帮助 保活任务 -->
         <service
             android:name=".service.PersistentJobService"
+            android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <receiver

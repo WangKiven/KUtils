@@ -342,32 +342,35 @@ fun Activity.phoneImages(
                     null,
                     MediaStore.Images.Media.DATE_MODIFIED + " desc"
                 )?.use { cusor ->
-                    val names = cusor.columnNames
-                    val indexs = names.map { cusor.getColumnIndex(it) }
-
-                    cusor.moveToFirst()
-
-
                     val iDatas = mutableListOf<TreeMap<String, String>>()
-                    do {
-                        val map = TreeMap<String, String>()
 
-                        for (i in names.indices) {
+                    if (cusor.count > 0) {
+                        KLog.i("查到图片${cusor.count}张")
+                        val names = cusor.columnNames
+                        val indexs = names.map { cusor.getColumnIndex(it) }
+
+                        cusor.moveToFirst()
+
+                        do {
+                            val map = TreeMap<String, String>()
+
+                            for (i in names.indices) {
 //                            map[names[i]] = cusor.getString(indexs[i]) ?: ""
-                            map[names[i]] = when (cusor.getType(indexs[i])) {
-                                Cursor.FIELD_TYPE_FLOAT -> cusor.getFloatOrNull(indexs[i])
-                                    ?.toString() ?: ""
-                                Cursor.FIELD_TYPE_INTEGER -> cusor.getIntOrNull(indexs[i])
-                                    ?.toString() ?: ""
-                                Cursor.FIELD_TYPE_STRING -> cusor.getStringOrNull(indexs[i]) ?: ""
-                                Cursor.FIELD_TYPE_BLOB -> {
-                                    ""
+                                map[names[i]] = when (cusor.getType(indexs[i])) {
+                                    Cursor.FIELD_TYPE_FLOAT -> cusor.getFloatOrNull(indexs[i])
+                                        ?.toString() ?: ""
+                                    Cursor.FIELD_TYPE_INTEGER -> cusor.getIntOrNull(indexs[i])
+                                        ?.toString() ?: ""
+                                    Cursor.FIELD_TYPE_STRING -> cusor.getStringOrNull(indexs[i]) ?: ""
+                                    Cursor.FIELD_TYPE_BLOB -> {
+                                        ""
+                                    }
+                                    else -> ""
                                 }
-                                else -> ""
                             }
-                        }
-                        iDatas.add(map)
-                    } while (cusor.moveToNext())
+                            iDatas.add(map)
+                        } while (cusor.moveToNext())
+                    }
 
                     cusor.close()
 

@@ -1,14 +1,30 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'maven-publish'
+
+// https://developer.android.com/studio/build/maven-publish-plugin
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+                groupId = 'com.github.WangKiven.KUtils'
+                artifactId = 'kutils-ktx'
+                version = parent.ext.library_version
+            }
+        }
+    }
+}
+
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
 //    buildToolsVersion "29.0.2"
 
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 30
+        targetSdkVersion 31
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
@@ -25,11 +41,11 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1"
-    compileOnly "com.google.android.material:material:1.4.0"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0"
+    implementation "com.google.android.material:material:1.4.0"
 //    compileOnly 'androidx.appcompat:appcompat:1.2.0'
-    compileOnly 'androidx.core:core-ktx:1.6.0'
+    implementation 'androidx.core:core-ktx:1.7.0'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

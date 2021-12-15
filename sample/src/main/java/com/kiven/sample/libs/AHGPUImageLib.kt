@@ -31,6 +31,7 @@ class AHGPUImageLib : KActivityHelper() {
             field = value
             mActivity.imageView.setImage(value)
             mActivity.imageView_.setImageURI(value)
+            KLog.i(value.toString())
         }
 
     private var filterItem: FilterItem<*>? = null

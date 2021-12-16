@@ -289,7 +289,7 @@ dependencies {
     // https://square.github.io/leakcanary/getting_started/
     // https://www.jianshu.com/p/a5e69a2e093f
     // 与as的profiler有冲突，使用profiler时会导致程序崩溃
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.4'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
 
     // https://spring.io/projects/spring-android#learn
     implementation 'org.springframework.android:spring-android-rest-template:2.0.0.M3'

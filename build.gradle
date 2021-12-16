@@ -17,7 +17,7 @@ buildscript {
         maven { url 'https://developer.huawei.com/repo/' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.3'
+        classpath 'com.android.tools.build:gradle:7.0.4'
 
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlin_version"
@@ -42,7 +42,7 @@ buildscript {
 
     project.ext {
         compileSdkVersion = 31
-        targetSdkVersion = 30
+        targetSdkVersion = 31
 //        compileSdkVersion = "android-S"
 //        targetSdkVersion = "S"
         minSdkVersion = 14

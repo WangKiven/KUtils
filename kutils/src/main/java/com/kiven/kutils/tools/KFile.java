@@ -266,6 +266,7 @@ public class KFile {
 
     /**
      * 名为保存，实际是复制
+     *
      * @param file 保存的目标地址
      * @param data KUtil.getApp().contentResolver.openFileDescriptor(uri, "r")!!.fileDescriptor
      * @return 是否保存成功
@@ -317,6 +318,7 @@ public class KFile {
     public static String readFile(String filePath) {
         return readFile(new File(filePath));
     }
+
     public static String readFile(File file) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             return readFile(file, StandardCharsets.UTF_8);
@@ -328,6 +330,7 @@ public class KFile {
     public static String readFile(String filePath, Charset charset) {
         return readFile(new File(filePath), charset);
     }
+
     public static String readFile(File file, Charset charset) {
         /*InputStreamReader inputReader = null;
         BufferedReader bufferReader = null;
@@ -390,6 +393,7 @@ public class KFile {
     /**
      * 保存图片到图库, 一般在手机存储卡根目录下Pictures文件内。
      * 保存后，可以直接打开相册查看。不用通知图库刷新
+     *
      * @deprecated 建议使用{@link KUtil#saveImage(Bitmap, boolean)}，保存到图库下的默认文件夹。默认文件夹可以使用{@link KUtil#setImageDirName(String)}设置
      */
     @Deprecated

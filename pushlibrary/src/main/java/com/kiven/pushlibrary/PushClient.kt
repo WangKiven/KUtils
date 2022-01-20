@@ -30,7 +30,7 @@ object PushClient {
 
     fun shouldRequestPermission(context: Context): Boolean {
 
-        return when (Build.BRAND.toLowerCase()) {
+        return when (Build.BRAND.lowercase()) {
             "huawei", "honor", "oppo", "vivo", "xiaomi", "redmi" -> false
             else -> {
                 val manifest = context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
@@ -69,7 +69,7 @@ object PushClient {
         val bundleData = context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA).metaData
                 ?: Bundle()
 
-        when (Build.BRAND.toLowerCase()) {
+        when (Build.BRAND.lowercase()) {
             "huawei", "honor" -> {
                 if (bundleData.getBoolean("hms_push_enable", true)) {
                     Web.shouldWebSocket = false

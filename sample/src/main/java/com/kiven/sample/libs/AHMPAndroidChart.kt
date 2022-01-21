@@ -15,7 +15,6 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.sample.R
-import kotlinx.android.synthetic.main.ah_mp_android_chart.*
 import java.util.ArrayList
 
 /**
@@ -25,10 +24,7 @@ class AHMPAndroidChart : KActivityHelper() {
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
         setContentView(R.layout.ah_mp_android_chart)
-
-        mActivity.lineChart.apply {
-
-        }
+        val lineChart = findViewById<LineChart>(R.id.lineChart)
 
 
         val colors = intArrayOf(Color.rgb(137, 230, 81), Color.rgb(240, 240, 30), Color.rgb(89, 199, 250), Color.rgb(250, 104, 104))
@@ -38,7 +34,7 @@ class AHMPAndroidChart : KActivityHelper() {
 //        data.setValueTypeface(mTf)
 
         // add some transparency to the color with "& 0x90FFFFFF"
-        setupChart(mActivity.lineChart, data, colors[(Math.random() * 100 % colors.size).toInt()])
+        setupChart(lineChart, data, colors[(Math.random() * 100 % colors.size).toInt()])
     }
 
     private fun setupChart(chart: LineChart, data: LineData, color: Int) {

@@ -19,7 +19,6 @@ import com.kiven.kutils.widget.KNormalItemView
 import com.kiven.sample.R
 import com.sxb.kutils_ktx.util.RxBus
 import com.kiven.sample.util.showSnack
-import kotlinx.android.synthetic.main.layout_bottom_sheet_p2p_ui.*
 import java.net.ServerSocket
 import java.net.Socket
 
@@ -125,7 +124,8 @@ class WifiP2PTool {
 
         val dialog = BottomSheetDialog(activity)
         dialog.setContentView(R.layout.layout_bottom_sheet_p2p_ui)
-        dialog.recyclerView.apply {
+        val recyclerView = dialog.findViewById<RecyclerView>(R.id.recyclerView)
+        recyclerView?.apply {
             layoutManager = LinearLayoutManager(activity)
             adapter = P2PDeviceAdapter(devices) { deviceState ->
                 if (!deviceState.isConnected) {
@@ -178,7 +178,7 @@ class WifiP2PTool {
                 devices.clear()
                 devices.addAll(devices1 + devices2)
 
-                dialog.recyclerView.adapter?.notifyDataSetChanged()
+                recyclerView?.adapter?.notifyDataSetChanged()
             }
 
             wifiP2pManager?.requestConnectionInfo(wifiP2pChannel!!) {
@@ -190,7 +190,7 @@ class WifiP2PTool {
 
                 devices.clear()
                 devices.addAll(devices1 + devices2)
-                dialog.recyclerView.adapter?.notifyDataSetChanged()
+                recyclerView?.adapter?.notifyDataSetChanged()
             }
         }
         requestDeviceAction()

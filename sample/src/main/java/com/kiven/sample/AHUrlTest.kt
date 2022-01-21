@@ -2,21 +2,15 @@ package com.kiven.sample
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.view.View
-import android.view.ViewGroup
-import android.widget.FrameLayout
-import android.widget.Toast
+import android.widget.*
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KTextView
 import com.kiven.kutils.tools.KView
-import com.tencent.smtt.export.external.interfaces.IX5WebChromeClient
-import com.tencent.smtt.export.external.interfaces.JsResult
-import com.tencent.smtt.sdk.WebChromeClient
+import com.kiven.sample.databinding.AhUrlTestBinding
 import com.tencent.smtt.sdk.WebSettings
 import com.tencent.smtt.sdk.WebView
-import kotlinx.android.synthetic.main.ah_url_test.*
 
 /**
  * Created by oukobayashi on 2019-12-04.
@@ -25,9 +19,10 @@ class AHUrlTest : KActivityHelper() {
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
         mActivity.apply {
-            setContentView(R.layout.ah_url_test)
+            val binding = AhUrlTestBinding.inflate(layoutInflater)
+            setContentView(binding.root)
 
-            webView.apply {
+            binding.webView.apply {
                 KView.initWebView(this)
                 /*webChromeClient =  object :WebChromeClient (){
                     override fun onPermissionRequest(request: PermissionRequest) {
@@ -38,24 +33,25 @@ class AHUrlTest : KActivityHelper() {
 
                 loadUrl("https://www.baidu.com")
             }
-            webView_tbs.apply {
+            binding.webViewTbs.apply {
                 initX5WebView(this)
 
                 loadUrl("https://www.baidu.com")
             }
 
-            btn_go.setOnClickListener {
-                val url = KTextView.getTrim(editText)
-                if (webView.url == url) {
-                    webView.reload()
-                    webView_tbs.reload()
+            findViewById<Button>(R.id.btn_go).setOnClickListener {
+                val url = KTextView.getTrim(findViewById(R.id.editText))
+                if (binding.webView.url == url) {
+                    binding.webView.reload()
+                    binding.webViewTbs.reload()
                 }else {
-                    webView.loadUrl(url)
-                    webView_tbs.loadUrl(url)
+                    binding.webView.loadUrl(url)
+                    binding.webViewTbs.loadUrl(url)
                 }
             }
 
-            btn_change.setOnClickListener {
+            binding.btnChange.setOnClickListener {
+                val viewFlipper = findViewById<ViewFlipper>(R.id.viewFlipper)
                 viewFlipper.displayedChild = (viewFlipper.displayedChild + 1) % viewFlipper.childCount
             }
         }

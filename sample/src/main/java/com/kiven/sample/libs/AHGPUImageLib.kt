@@ -12,25 +12,26 @@ import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.widget.RulingSeekbar
 import com.kiven.sample.R
+import com.kiven.sample.databinding.AhGpuImageLibBinding
+import com.kiven.sample.databinding.ItemGpuTestSeekbarBinding
 import com.kiven.sample.util.randomPhoneImage
 import com.kiven.sample.util.showBottomSheetDialog
 import com.kiven.sample.util.showImageDialog
 import com.kiven.sample.util.showListDialog
 import jp.co.cyberagent.android.gpuimage.GPUImage
 import jp.co.cyberagent.android.gpuimage.filter.*
-import kotlinx.android.synthetic.main.ah_gpu_image_lib.*
-import kotlinx.android.synthetic.main.item_gpu_test_seekbar.view.*
 import java.lang.reflect.Modifier
 
 /**
  * Created by oukobayashi on 2020/7/16.
  */
 class AHGPUImageLib : KActivityHelper() {
+    private lateinit var binding: AhGpuImageLibBinding
     private var imageUri: Uri? = null
         set(value) {
             field = value
-            mActivity.imageView.setImage(value)
-            mActivity.imageView_.setImageURI(value)
+            binding.imageView.setImage(value)
+            binding.imageView1.setImageURI(value)
             KLog.i(value.toString())
         }
 
@@ -38,24 +39,25 @@ class AHGPUImageLib : KActivityHelper() {
         set(value) {
             val b = field != value
             field = value
-            if (b) mActivity.imageView.filter = value?.filter
+            if (b) binding.imageView.filter = value?.filter
             value?.createLeftDrawer()
             if (value == null)
-                mActivity.filterName.text = ""
+                binding.filterName.text = ""
             else {
-                mActivity.filterName.text = "${filters.indexOf(value)} - ${value.name}"
+                binding.filterName.text = "${filters.indexOf(value)} - ${value.name}"
             }
         }
 
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
-        setContentView(R.layout.ah_gpu_image_lib)
+        binding = AhGpuImageLibBinding.inflate(activity.layoutInflater)
+        setContentView(binding.root)
         activity.apply {
-            imageView.setScaleType(GPUImage.ScaleType.CENTER_INSIDE)
+            binding.imageView.setScaleType(GPUImage.ScaleType.CENTER_INSIDE)
             filterItem = filters[0]
             randomPhoneImage { imageUri = it }
 
-            button.setOnClickListener {
+            binding.button.setOnClickListener {
                 showBottomSheetDialog(listOf(
                         "修改属性",
                         "随机图片",
@@ -67,7 +69,7 @@ class AHGPUImageLib : KActivityHelper() {
                 )) { p, _ ->
                     when (p) {
                         0 -> {
-                            drawer.openDrawer(Gravity.LEFT)
+                            binding.drawer.openDrawer(Gravity.LEFT)
                         }
                         1 -> {
                             randomPhoneImage { imageUri = it }
@@ -94,7 +96,7 @@ class AHGPUImageLib : KActivityHelper() {
                             filterItem = filters[i + 1]
                         }
                         6 -> {
-                            imageView.saveToPictures("gpuImages", "image-${System.currentTimeMillis()}") { uri ->
+                            binding.imageView.saveToPictures("gpuImages", "image-${System.currentTimeMillis()}") { uri ->
                                 KLog.i(uri.toString())
                                 showImageDialog(uri)
                             }
@@ -229,7 +231,7 @@ class AHGPUImageLib : KActivityHelper() {
 
             val methods = filter::class.java.declaredMethods
 
-            mActivity.leftDrawer.removeAllViews()
+            binding.leftDrawer.removeAllViews()
 
             for (method in methods) {
                 val parameterTypes = method.parameterTypes
@@ -240,11 +242,12 @@ class AHGPUImageLib : KActivityHelper() {
                             val floatMethod = floatMethods.firstOrNull { it.name == method.name }
                                     ?: FloatMethod(method.name)
 
-                            val itemView = mActivity.layoutInflater.inflate(R.layout.item_gpu_test_seekbar, mActivity.leftDrawer, false)
-                            mActivity.leftDrawer.addView(itemView)
+//                            val itemView = mActivity.layoutInflater.inflate(R.layout.item_gpu_test_seekbar, binding.leftDrawer, false)
+                            val itemBinding = ItemGpuTestSeekbarBinding.inflate(mActivity.layoutInflater)
+                            binding.leftDrawer.addView(itemBinding.root)
 
-                            itemView.name.text = method.name
-                            itemView.seekBar.apply {
+                            itemBinding.name.text = method.name
+                            itemBinding.seekBar.apply {
                                 setScale(0, 100)
                                 progress = (((floatMethod.value - floatMethod.min) / (floatMethod.max - floatMethod.min)) * 100).toInt()
 
@@ -261,10 +264,10 @@ class AHGPUImageLib : KActivityHelper() {
                                         else seekBar.progress / 100f * (floatMethod.max - floatMethod.min) + floatMethod.min
 
                                         method.invoke(filter, value)
-                                        itemView.name.text = "${method.name}:${value}"
+                                        itemBinding.name.text = "${method.name}:${value}"
                                         floatMethod.value = value
 
-                                        mActivity.imageView.filter = filter
+                                        binding.imageView.filter = filter
                                     }
                                 })
                             }

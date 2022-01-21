@@ -15,8 +15,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.sample.R
+import com.kiven.sample.databinding.AhNotiTestBinding
 import com.kiven.sample.util.*
-import kotlinx.android.synthetic.main.ah_noti_test.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -31,13 +31,11 @@ import kotlin.coroutines.suspendCoroutine
 class AHNotiTest : KActivityHelper() {
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
-        setContentView(R.layout.ah_noti_test)
-
-        val root = findViewById<View>(R.id.root)
-
+        val binding = AhNotiTestBinding.inflate(activity.layoutInflater)
+        setContentView(binding.root)
         val notiManager = NotificationManagerCompat.from(mActivity)
 
-        root.apply {
+        binding.apply {
             val changeTopText = fun() {
                 val result = StringBuilder("系统版本号大于26才有通知分组和通知Channel, 当前系统版本号${Build.VERSION.SDK_INT}\n\n")
 
@@ -57,12 +55,12 @@ class AHNotiTest : KActivityHelper() {
                     }
                 }
 
-                tv_count.text = result
+                tvCount.text = result
             }
             changeTopText()
 
             var count = 0
-            btn_send.setOnClickListener {
+            btnSend.setOnClickListener {
 
                 GlobalScope.launch {
                     val channelId = suspendCoroutine<String> {
@@ -90,7 +88,7 @@ class AHNotiTest : KActivityHelper() {
                         }
 
                         val pendingIntent =
-                                if (rg_receiver.checkedRadioButtonId == R.id.rb_receiver_activity)
+                                if (rgReceiver.checkedRadioButtonId == R.id.rb_receiver_activity)
                                     PendingIntent.getActivity(mActivity, 110, Intent(mActivity, ClickNotiActivity::class.java), PendingIntent.FLAG_UPDATE_CURRENT)
                                 else
                                     PendingIntent.getBroadcast(mActivity, 111, Intent(mActivity, NotificationClickReceiver::class.java), PendingIntent.FLAG_UPDATE_CURRENT)
@@ -109,7 +107,7 @@ class AHNotiTest : KActivityHelper() {
                             R.id.rb_delay_5s -> {mBuilder.setTimeoutAfter(5000)} // 华为好像没作用
                         }*/
 
-                        when (rg_noti_group.checkedRadioButtonId) {
+                        when (rgNotiGroup.checkedRadioButtonId) {
                             R.id.rb_noti_group0 -> {
 
                             }
@@ -122,7 +120,7 @@ class AHNotiTest : KActivityHelper() {
                             }
                         }
 
-                        when (rg_delay.checkedRadioButtonId) {
+                        when (rgDelay.checkedRadioButtonId) {
                             R.id.rb_delay_5s -> delay(5000)
                         }
 
@@ -139,7 +137,7 @@ class AHNotiTest : KActivityHelper() {
 
 
 
-            btn_create_group.setOnClickListener {
+            btnCreateGroup.setOnClickListener {
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     mActivity.getInput("分组Id") { groupId ->
@@ -152,10 +150,10 @@ class AHNotiTest : KActivityHelper() {
                     }
 
                 } else {
-                    Snackbar.make(this, "系统低于26", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(root, "系统低于26", Snackbar.LENGTH_SHORT).show()
                 }
             }
-            btn_delete_group.setOnClickListener {
+            btnDeleteGroup.setOnClickListener {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     val groups = notiManager.notificationChannelGroups
 
@@ -166,10 +164,10 @@ class AHNotiTest : KActivityHelper() {
                     }.show()
 
                 } else {
-                    Snackbar.make(this, "系统低于26", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(root, "系统低于26", Snackbar.LENGTH_SHORT).show()
                 }
             }
-            btn_delete_groups.setOnClickListener {
+            btnDeleteGroups.setOnClickListener {
                 notiManager.notificationChannelGroups.forEach {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         notiManager.deleteNotificationChannelGroup(it.id)
@@ -179,7 +177,7 @@ class AHNotiTest : KActivityHelper() {
                 changeTopText()
             }
 
-            btn_create_channel.setOnClickListener {
+            btnCreateChannel.setOnClickListener {
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     mActivity.getInput("channelId") { channelId ->
@@ -199,7 +197,9 @@ class AHNotiTest : KActivityHelper() {
                                 channel.setShowBadge(true)
                                 channel.description = "这是一个测试用的通知分类" // 描述
                                 try {
-                                    channel.setAllowBubbles(true) // 小红点显示。华为崩了，所以放try里面
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                                        channel.setAllowBubbles(true)
+                                    } // 小红点显示。华为崩了，所以放try里面
                                 } catch (e: NoSuchMethodError) {
                                 }
                                 channel.setBypassDnd(true) // 免打扰模式下，允许响铃或震动
@@ -214,11 +214,11 @@ class AHNotiTest : KActivityHelper() {
                         }
                     }
                 } else {
-                    Snackbar.make(this, "系统低于26", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(root, "系统低于26", Snackbar.LENGTH_SHORT).show()
                 }
             }
 
-            btn_delete_channel.setOnClickListener {
+            btnDeleteChannel.setOnClickListener {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     val channels = notiManager.notificationChannels
 
@@ -230,10 +230,10 @@ class AHNotiTest : KActivityHelper() {
                     }.show()
 
                 } else {
-                    Snackbar.make(this, "系统低于26", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(root, "系统低于26", Snackbar.LENGTH_SHORT).show()
                 }
             }
-            btn_delete_channels.setOnClickListener {
+            btnDeleteChannels.setOnClickListener {
                 notiManager.notificationChannels.forEach {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         notiManager.deleteNotificationChannel(it.id)
@@ -242,7 +242,7 @@ class AHNotiTest : KActivityHelper() {
                 changeTopText()
             }
 
-            btn_noti_setting.setOnClickListener {
+            btnNotiSetting.setOnClickListener {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     if (notiManager.areNotificationsEnabled()) {
                         val channels = notiManager.notificationChannels
@@ -254,7 +254,7 @@ class AHNotiTest : KActivityHelper() {
                         }
                     } else { // todo 通知被关闭，不能打开通知管理界面，需要打开应用详情界面去设置
                         val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                        intent.data = Uri.fromParts("package", context.packageName, null)
+                        intent.data = Uri.fromParts("package", activity.packageName, null)
                         mActivity.startActivity(intent)
                     }
                 } else {
@@ -266,7 +266,7 @@ class AHNotiTest : KActivityHelper() {
                 }
             }
 
-            btn_noti_listener_setting.setOnClickListener {
+            btnNotiListenerSetting.setOnClickListener {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
                     val intent = Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
                     mActivity.startActivity(intent)
@@ -276,7 +276,7 @@ class AHNotiTest : KActivityHelper() {
 
             }
 
-            btn_noti_listener_setting_check.setOnClickListener {
+            btnNotiListenerSettingCheck.setOnClickListener {
                 // 网上找到两种方式
 
                 // Settings.Secure.ENABLED_NOTIFICATION_LISTENERS = "enabled_notification_listeners"
@@ -303,15 +303,15 @@ class AHNotiTest : KActivityHelper() {
                 mActivity.showSnack(if (result) "当前状态：开启" else "当前状态：关闭")
             }
 
-            btn_noti_listener_voice_status.setOnClickListener {
+            btnNotiListenerVoiceStatus.setOnClickListener {
                 MyNotificationListenerService.isReadNoti = !MyNotificationListenerService.isReadNoti
                 activity.showSnack("已设置状态(isReadNoti) = ${MyNotificationListenerService.isReadNoti}")
             }
 
-            btn_app_setting.setOnClickListener {
+            btnAppSetting.setOnClickListener {
 
                 val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                intent.data = Uri.fromParts("package", context.packageName, null)
+                intent.data = Uri.fromParts("package", activity.packageName, null)
                 mActivity.startActivity(intent)
             }
         }

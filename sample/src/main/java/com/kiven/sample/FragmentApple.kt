@@ -10,8 +10,8 @@ import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import androidx.fragment.app.Fragment
 import com.kiven.kutils.tools.RequestPermissionFragment
+import com.kiven.sample.databinding.FragmentAppleBinding
 import com.kiven.sample.util.showDialog
-import kotlinx.android.synthetic.main.fragment_apple.*
 
 /**
  * Created by kiven on 2017/3/28.
@@ -25,11 +25,12 @@ class FragmentApple : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val binding = FragmentAppleBinding.bind(view)
 
-        sample_text.setOnClickListener {
-            val alpha = ObjectAnimator.ofFloat(sample_text, "alpha", 0f, 1f)
-            val rgb = ObjectAnimator.ofInt(sample_text, "backgroundColor", Color.RED, Color.GRAY, Color.TRANSPARENT).apply { setEvaluator(ArgbEvaluator()) }
-            val tran = ObjectAnimator.ofFloat(sample_text, "y", sample_text.y, 0f, sample_text.y)
+        binding.sampleText.setOnClickListener {
+            val alpha = ObjectAnimator.ofFloat(binding.sampleText, "alpha", 0f, 1f)
+            val rgb = ObjectAnimator.ofInt(binding.sampleText, "backgroundColor", Color.RED, Color.GRAY, Color.TRANSPARENT).apply { setEvaluator(ArgbEvaluator()) }
+            val tran = ObjectAnimator.ofFloat(binding.sampleText, "y", binding.sampleText.y, 0f, binding.sampleText.y)
 
             val animation = AnimatorSet()
             animation.apply {
@@ -39,7 +40,7 @@ class FragmentApple : Fragment() {
             }.start()
         }
 
-        sample_text2.setOnClickListener { view ->
+        binding.sampleText2.setOnClickListener { view ->
             // 创建动画
             val anim = ValueAnimator.ofObject(TypeEvaluator<Point> { fraction, startValue, endValue ->
                 val startPoint = startValue as Point
@@ -62,7 +63,7 @@ class FragmentApple : Fragment() {
             anim.start()
         }
 
-        btn_test.setOnClickListener {
+        binding.btnTest.setOnClickListener {
             RequestPermissionFragment.requestPermissions(childFragmentManager, arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE)){
                 activity?.showDialog("获取存储权限情况：$it")
             }

@@ -22,9 +22,8 @@ import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KAppTool
 import com.kiven.kutils.tools.KUtil
 import com.kiven.sample.R
+import com.kiven.sample.databinding.ItemAppBinding
 import com.kiven.sample.util.showDialog
-import kotlinx.android.synthetic.main.activity_dock.*
-import kotlinx.android.synthetic.main.item_app.view.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.xutils.x
@@ -60,8 +59,10 @@ class ActivityDock : KActivity() {
         setContentView(R.layout.activity_dock)
         loadBg()
 
-        recyclerView.layoutManager = GridLayoutManager(this, 5)
-        recyclerView.adapter = appAdapter
+        findViewById<RecyclerView>(R.id.recyclerView).apply {
+            layoutManager = GridLayoutManager(this@ActivityDock, 5)
+            adapter = appAdapter
+        }
     }
 
     override fun onResume() {
@@ -228,20 +229,20 @@ class ActivityDock : KActivity() {
 
             val appInfo = apps[position]
 
-            holder.itemView.apply {
+            ItemAppBinding.bind(holder.itemView).apply {
                 val task = MyTask()
-                task.imageView = SoftReference(iv_app_icon)
+                task.imageView = SoftReference(ivAppIcon)
                 task.appInfo = appInfo
                 task.execute()
 
 
-                tv_app_titile.text = appInfo.appTitle
+                tvAppTitile.text = appInfo.appTitle
                 if (appInfo.canStart)
-                    tv_app_titile.setTextColor(if (appInfo.isSystem) Color.RED else Color.BLUE)
+                    tvAppTitile.setTextColor(if (appInfo.isSystem) Color.RED else Color.BLUE)
                 else
-                    tv_app_titile.setTextColor(Color.GRAY)
+                    tvAppTitile.setTextColor(Color.GRAY)
 
-                setOnClickListener {
+                root.setOnClickListener {
                     appInfo.print()
                     startApp(appInfo.packageName)
                 }

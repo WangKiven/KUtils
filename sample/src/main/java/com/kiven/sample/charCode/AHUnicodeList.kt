@@ -19,8 +19,8 @@ import com.kiven.kutils.tools.KString
 import com.kiven.kutils.tools.KUtil
 import com.kiven.sample.AHWebView
 import com.kiven.sample.R
+import com.kiven.sample.databinding.ItemUnicodeBinding
 import com.kiven.sample.util.showListDialog
-import kotlinx.android.synthetic.main.item_unicode.view.*
 import java.io.InputStreamReader
 import java.nio.charset.Charset
 
@@ -189,35 +189,35 @@ class AHUnicodeList : KActivityHelper() {
 
             val curCode = charArray[position]
 
-            holder.itemView.apply {
+            ItemUnicodeBinding.bind(holder.itemView).apply {
                 // 判断字符有没有对应的unicode形式，就是通过unicode中是否定义了字符的unicode写法
                 if (Character.isDefined(curCode)) {
                     // 采用UTF_32 大端解码，如果使用UTF-8需要更复杂的处理
-                    tv_text.text = StringCodeUtil.hexStr2Str(String.format("%08x", curCode), Charsets.UTF_32BE)
-                    tv_text.setTextColor(Color.BLACK)
+                    tvText.text = StringCodeUtil.hexStr2Str(String.format("%08x", curCode), Charsets.UTF_32BE)
+                    tvText.setTextColor(Color.BLACK)
                 } else {
-                    tv_text.text = "XX"
-                    tv_text.setTextColor(Color.GRAY)
+                    tvText.text = "XX"
+                    tvText.setTextColor(Color.GRAY)
                 }
 
-                tv_code.text = String.format("%x", curCode)
+                tvCode.text = String.format("%x", curCode)
 
-                setOnClickListener {
+                root.setOnClickListener {
 
                     val sb = StringBuilder()
-                    sb.appendLine("编号：$curCode - ${tv_code.text}")
+                    sb.appendLine("编号：$curCode - ${tvCode.text}")
                             .appendLine("\n对应其他编码")
                     Charset.availableCharsets().forEach {
-                        sb.appendLine("${it.key}:${StringCodeUtil.str2HexStr(tv_text.text.toString(), it.value)}")
+                        sb.appendLine("${it.key}:${StringCodeUtil.str2HexStr(tvText.text.toString(), it.value)}")
                     }
 
                     val builder = AlertDialog.Builder(mActivity)
                     builder.setMessage(sb.toString())
                     builder.setPositiveButton("复制") { dialog, which ->
-                        KString.setClipText(mActivity, tv_text.text.toString())
+                        KString.setClipText(mActivity, tvText.text.toString())
                     }
                     builder.setNegativeButton("百度") { dialog, which ->
-                        AHWebView().putExtra("url", "https://www.baidu.com/s?wd=${tv_text.text}")
+                        AHWebView().putExtra("url", "https://www.baidu.com/s?wd=${tvText.text}")
                                 .startActivity(mActivity)
                     }
                     builder.setNeutralButton("取消") { dialog, which ->

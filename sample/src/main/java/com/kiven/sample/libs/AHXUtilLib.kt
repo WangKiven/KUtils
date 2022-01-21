@@ -10,7 +10,6 @@ import com.kiven.sample.util.Const
 import com.kiven.sample.util.newDialog
 import com.kiven.sample.xutils.db.AHDbDemo
 import com.kiven.sample.xutils.net.AHNetDemo
-import kotlinx.android.synthetic.main.activity_lauch.*
 import org.xutils.image.ImageOptions
 
 /**

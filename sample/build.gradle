@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+//apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 // 华为插件
@@ -98,6 +98,7 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+        useIR = true
     }
     dataBinding {
         enabled = true
@@ -105,7 +106,7 @@ android {
     buildFeatures {
         viewBinding true
         // Enables Jetpack Compose for this module
-//        compose true
+        compose true
     }
 }
 
@@ -298,4 +299,14 @@ dependencies {
 //    def dokitVersion = "4.2.1"
 //    debugImplementation "io.github.didi.dokit:dokitx:${dokitVersion}"
 //    releaseImplementation "io.github.didi.dokit:dokitx-no-op:${dokitVersion}"
+
+    // Jetpack Compose  https://developer.android.google.cn/jetpack/compose/interop/adding
+    implementation 'androidx.activity:activity-compose:1.4.0'
+    implementation 'androidx.compose.material:material:1.0.5'
+    implementation 'androidx.compose.animation:animation:1.0.5'
+    implementation 'androidx.compose.ui:ui-tooling:1.0.5'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0'
+    // 根据主题支持包使用不同的主题适配器，
+    implementation "com.google.android.material:compose-theme-adapter:1.1.3"
+//    implementation "com.google.accompanist:accompanist-appcompat-theme:0.16.0"
 }

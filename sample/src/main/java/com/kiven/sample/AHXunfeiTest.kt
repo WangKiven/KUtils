@@ -12,13 +12,12 @@ import com.iflytek.cloud.*
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
-import com.kiven.kutils.tools.KGranting
 import com.kiven.kutils.tools.KString
+import com.kiven.sample.databinding.AhXunfeiTestBinding
 import com.kiven.sample.noti.SpeechText
 import com.kiven.sample.util.getInput
 import com.kiven.sample.util.showBottomSheetDialog
 import com.kiven.sample.util.showSnack
-import kotlinx.android.synthetic.main.ah_xunfei_test.*
 
 /**
  * Created by wangk on 2019/5/17.
@@ -39,13 +38,13 @@ class AHXunfeiTest : KActivityHelper() {
 
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
+        val binding = AhXunfeiTestBinding.inflate(activity.layoutInflater)
+        setContentView(binding.root)
 
-        setContentView(R.layout.ah_xunfei_test)
-
-        activity.apply {
+        binding.apply {
             var voiceName = "xiaoyan"
-            btn_voice_name.text = "发音人($voiceName)"
-            btn_voice_name.setOnClickListener {
+            btnVoiceName.text = "发音人($voiceName)"
+            btnVoiceName.setOnClickListener {
                 activity.showBottomSheetDialog(listOf(
                         "讯飞小燕",
                         "讯飞许久",
@@ -55,55 +54,55 @@ class AHXunfeiTest : KActivityHelper() {
                         "讯飞马叔(3-12后需续费)"
                 )) { index, _ ->
                     voiceName = listOf("xiaoyan", "aisjiuxu", "aisxping", "aisjinger", "aisbabyxu", "x_laoma")[index]
-                    btn_voice_name.text = "发音人($voiceName)"
+                    btnVoiceName.text = "发音人($voiceName)"
                 }
             }
 
             var voiceSpeed = 50
-            btn_voice_speed.text = "语速($voiceSpeed)"
-            btn_voice_speed.setOnClickListener {
+            btnVoiceSpeed.text = "语速($voiceSpeed)"
+            btnVoiceSpeed.setOnClickListener {
                 activity.getInput("语速 0~100", voiceSpeed.toString()) {
                     voiceSpeed = KString.toInt(it.toString(), voiceSpeed)
-                    btn_voice_speed.text = "语速($voiceSpeed)"
+                    btnVoiceSpeed.text = "语速($voiceSpeed)"
                 }
             }
 
             var voiceVolume = 50
-            btn_voice_volume.text = "音量($voiceVolume)"
-            btn_voice_volume.setOnClickListener {
+            btnVoiceVolume.text = "音量($voiceVolume)"
+            btnVoiceVolume.setOnClickListener {
                 activity.getInput("音量 0~100", voiceVolume.toString()) {
                     voiceVolume = KString.toInt(it.toString(), voiceVolume)
-                    btn_voice_volume.text = "音量($voiceVolume)"
+                    btnVoiceVolume.text = "音量($voiceVolume)"
                 }
             }
 
             var voicePitch = 50
-            btn_voice_pitch.text = "语调($voiceName)"
-            btn_voice_pitch.setOnClickListener {
+            btnVoicePitch.text = "语调($voiceName)"
+            btnVoicePitch.setOnClickListener {
                 activity.getInput("语调 0~100", voicePitch.toString()) {
                     voicePitch = KString.toInt(it.toString(), voicePitch)
-                    btn_voice_pitch.text = "语调($voicePitch)"
+                    btnVoicePitch.text = "语调($voicePitch)"
                 }
             }
 
             var voiceBg = 0
-            btn_voice_bg.text = "背景音乐($voiceBg)"
-            btn_voice_bg.setOnClickListener {
+            btnVoiceBg.text = "背景音乐($voiceBg)"
+            btnVoiceBg.setOnClickListener {
                 voiceBg = if (voiceBg == 0) 1 else 0
-                btn_voice_bg.text = "背景音乐($voiceBg)"
+                btnVoiceBg.text = "背景音乐($voiceBg)"
             }
 
             var voiceFading = false
-            btn_voice_fading.text = "淡入淡出($voiceFading)"
-            btn_voice_fading.setOnClickListener {
+            btnVoiceFading.text = "淡入淡出($voiceFading)"
+            btnVoiceFading.setOnClickListener {
                 voiceFading = !voiceFading
-                btn_voice_fading.text = "淡入淡出($voiceFading)"
+                btnVoiceFading.text = "淡入淡出($voiceFading)"
             }
 
 
             // 识别语音
             val mAsr = getXunfei()
-            btn_listen_voice.setOnClickListener {
+            btnListenVoice.setOnClickListener {
                 val ret = mAsr.startListening(mRecognizerListener)
                 if (ret != ErrorCode.SUCCESS) {
                     showTip("听写失败,错误码：$ret")
@@ -111,7 +110,7 @@ class AHXunfeiTest : KActivityHelper() {
             }
             // 语音合成
             val mSpeechSynthesizer = SpeechSynthesizer.createSynthesizer(activity) {}
-            btn_create_voice.setOnClickListener {
+            btnCreateVoice.setOnClickListener {
                 mapOf(
                         SpeechConstant.VOICE_NAME to voiceName,// 合成发音人, 默认值：xiaoyan
                         SpeechConstant.SPEED to "$voiceSpeed",// 语速, 默认值50, 值范围：[0, 100]
@@ -134,7 +133,7 @@ class AHXunfeiTest : KActivityHelper() {
             }
 
             // 声纹识别
-            btn_read_voice.setOnClickListener {
+            btnReadVoice.setOnClickListener {
 
             }
 
@@ -166,9 +165,9 @@ class AHXunfeiTest : KActivityHelper() {
                     }
                 }
             })
-            btn_system_listen_voice.setOnClickListener {
+            btnSystemListenVoice.setOnClickListener {
                 if (!android.speech.SpeechRecognizer.isRecognitionAvailable(activity)) {
-                    showSnack("系统说没有语言识别服务")
+                    activity.showSnack("系统说没有语言识别服务")
                     return@setOnClickListener
                 }
 
@@ -181,12 +180,12 @@ class AHXunfeiTest : KActivityHelper() {
                         }
                 )
             }
-            btn_system_listen_voice_stop.setOnClickListener {
+            btnSystemListenVoiceStop.setOnClickListener {
                 mSystemSr.stopListening()// 停止监听
 //                mSystemSr.cancel()// 取消服务
             }
 
-            btn_system_create_voice.setOnClickListener {
+            btnSystemCreateVoice.setOnClickListener {
 //                showSnack("在监听通知的类MyNotificationListenerService有使用，这里就不写了")
                 SpeechText.speech(text)
             }

@@ -2,10 +2,10 @@ package com.kiven.sample
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.TextView
 import com.kiven.kutils.activityHelper.activity.KActivity
 import com.kiven.kutils.tools.*
 import com.sxb.kutils_ktx.util.main
-import kotlinx.android.synthetic.main.activity_lauch.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 
@@ -15,7 +15,7 @@ class LaunchActivity : KActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lauch)
 
-        from.text = "from Kiven\n${BuildConfig.dpkTime}"
+        findViewById<TextView>(R.id.from).text = "from Kiven\n${BuildConfig.dpkTime}"
 
         GlobalScope.main {
             delay(2500)

@@ -8,8 +8,8 @@ import android.widget.ImageView
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.tools.KUtil
 import com.kiven.kutils.widget.UIGridView
+import com.kiven.sample.databinding.AhKutilsWidgetDemoBinding
 import com.kiven.sample.util.showSnack
-import kotlinx.android.synthetic.main.ah_kutils_widget_demo.*
 
 /**
  * Created by wangk on 2020/12/6.
@@ -17,9 +17,10 @@ import kotlinx.android.synthetic.main.ah_kutils_widget_demo.*
 class AHKUtilsWidgetDemo : BaseFlexActivityHelper() {
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
-        setContentView(R.layout.ah_kutils_widget_demo)
         activity.apply {
-            rulingSeekbar.apply {
+            val binding = AhKutilsWidgetDemoBinding.inflate(layoutInflater)
+            setContentView(binding.root)
+            binding.rulingSeekbar.apply {
                 setScale(5, 120)
                 progress = 30;
                 addNode(10, 0, true)
@@ -29,7 +30,7 @@ class AHKUtilsWidgetDemo : BaseFlexActivityHelper() {
                 addNode(110, 2, true)
             }
 
-            gridView.setAdapter(object : UIGridView.Adapter() {
+            binding.gridView.setAdapter(object : UIGridView.Adapter() {
                 init {
                     setChildMargin(KUtil.dip2px(5f))
                 }

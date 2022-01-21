@@ -6,7 +6,7 @@ import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.tools.KNetwork
 import com.kiven.kutils.tools.KString
 import com.kiven.sample.R
-import kotlinx.android.synthetic.main.ah_textview_demo.*
+import com.kiven.sample.databinding.AhTextviewDemoBinding
 import me.grantland.widget.AutofitHelper
 
 /**
@@ -15,12 +15,13 @@ import me.grantland.widget.AutofitHelper
 class AHTextViewDemo : KActivityHelper() {
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
-        setContentView(R.layout.ah_textview_demo)
+        val binding = AhTextviewDemoBinding.inflate(activity.layoutInflater)
+        setContentView(binding.root)
 
 
-        activity.apply {
-            AutofitHelper.create(et_auto)
-            et_auto.setText(KNetwork.getIPAddress() ?: "")
+        binding.apply {
+            AutofitHelper.create(etAuto)
+            etAuto.setText(KNetwork.getIPAddress() ?: "")
             textView2.text = KString.fromHtml(getString(R.string.text_test, 5, 9))
         }
     }

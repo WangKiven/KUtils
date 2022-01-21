@@ -29,10 +29,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.flyco.dialog.widget.ActionSheetDialog
 import com.flyco.dialog.widget.NormalListDialog
-import com.google.android.flexbox.FlexDirection
-import com.google.android.flexbox.FlexWrap
-import com.google.android.flexbox.FlexboxLayoutManager
-import com.google.android.flexbox.JustifyContent
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.kiven.kutils.logHelper.KLog
@@ -40,7 +36,6 @@ import com.kiven.kutils.tools.KAlertDialogHelper
 import com.kiven.kutils.tools.KGranting
 import com.kiven.kutils.tools.KUtil
 import com.kiven.sample.R
-import kotlinx.android.synthetic.main.item_image.view.*
 import java.util.*
 
 /**
@@ -283,8 +278,9 @@ fun Activity.pickPhoneImage(onErrorOrCancel: (String) -> Unit = {}, call: (Uri) 
                     Glide.with(context)
                         .load(pathUri)
                         .thumbnail(0.2f)
-                        .into(iv_test)
-                    tv_position.text = position.toString()
+                        .into(findViewById(R.id.iv_test))
+                    findViewById<TextView>(R.id.tv_position).text = position.toString()
+
 
                     setOnClickListener {
                         dialog.dismiss()

@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.core.database.getBlobOrNull
 import androidx.core.database.getFloatOrNull
 import androidx.core.database.getIntOrNull
@@ -23,7 +24,6 @@ import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.*
 import com.kiven.sample.R
 import com.kiven.sample.util.*
-import kotlinx.android.synthetic.main.item_image.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -167,8 +167,8 @@ class AHSystemImage : KActivityHelper() {
 
                 Glide.with(context)
                     .load(pathUri)
-                    .into(iv_test)
-                tv_position.text = position.toString()
+                    .into(findViewById(R.id.iv_test))
+                findViewById<TextView>(R.id.tv_position).text = position.toString()
 
                 setOnClickListener {
                     /*try {

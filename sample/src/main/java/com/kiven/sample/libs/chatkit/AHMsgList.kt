@@ -6,10 +6,10 @@ import com.google.android.material.snackbar.Snackbar
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.sample.R
+import com.kiven.sample.databinding.AhMsgListBinding
 import com.kiven.sample.util.Const
 import com.stfalcon.chatkit.commons.ImageLoader
 import com.stfalcon.chatkit.messages.MessagesListAdapter
-import kotlinx.android.synthetic.main.ah_msg_list.*
 import java.util.*
 
 /**
@@ -26,26 +26,27 @@ class AHMsgList : KActivityHelper() {
 
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
-        setContentView(R.layout.ah_msg_list)
+        val binding = AhMsgListBinding.inflate(activity.layoutInflater)
+        setContentView(binding.root)
         initBackToolbar(R.id.toolbar)
 
         activity.apply {
-            messagesList.setAdapter(adapter)
+            binding.messagesList.setAdapter(adapter)
             adapter.setOnMessageClickListener {
-                Snackbar.make(messagesList, "别点我", Snackbar.LENGTH_LONG).show()
+                Snackbar.make(binding.messagesList, "别点我", Snackbar.LENGTH_LONG).show()
             }
 
             val mi = DefaultUser(myId, "kee", Const.randomImage())
             val ta = DefaultUser("sss", "kee", Const.randomImage())
             var count = 0
-            input.setInputListener {
+            binding.input.setInputListener {
                 val message = DefaultMessage("12", Date(), if (count %2 == 0) mi else ta, it.toString())
                 adapter.addToStart(message, true)
                 count ++
                 return@setInputListener true
             }
 
-            input.setAttachmentsListener {
+            binding.input.setAttachmentsListener {
                 val message = DefaultImageMessage("12", Date(), if (count %2 == 0) mi else ta, Const.randomImage())
                 adapter.addToStart(message, true)
                 count ++

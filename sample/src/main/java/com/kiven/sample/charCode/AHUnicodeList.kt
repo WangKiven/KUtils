@@ -57,7 +57,7 @@ class AHUnicodeList : KActivityHelper() {
 
             flexBox.apply {
                 addView(Button(mActivity).apply {
-                    text = "选择0号平面分组"
+                    text = "0号平面"
                     setOnClickListener {
                         val fileInput = activity.assets.open("unicode_code_detail.txt")
                         val reader = InputStreamReader(fileInput)
@@ -73,7 +73,7 @@ class AHUnicodeList : KActivityHelper() {
                     }
                 })
                 addView(Button(mActivity).apply {
-                    text = "选择其他平面"
+                    text = "其他平面"
                     setOnClickListener {
                         val groups = arrayOf(
                                 UnicodeGroup("10000", "1FFFF", "多文种补充平面"),
@@ -103,6 +103,14 @@ class AHUnicodeList : KActivityHelper() {
 //                        recyclerView.scrollToPosition(0x6000)
                     }
                 })
+                addView(Button(mActivity).apply {
+                    text = "unicode.org"
+                    setOnClickListener {
+                        AHWebView().putExtra("url", "https://www.unicode.org/charts/")
+                            .startActivity(mActivity)
+                    }
+                })
+
                 addView(Button(mActivity).apply {
                     text = "更多"
                     setOnClickListener { AHCharCode().startActivity(activity) }

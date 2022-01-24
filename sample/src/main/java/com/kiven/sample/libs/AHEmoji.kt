@@ -15,8 +15,6 @@ import com.vanniktech.emoji.google.GoogleEmojiProvider
 import com.vanniktech.emoji.ios.IosEmojiProvider
 import com.vanniktech.emoji.twitter.TwitterEmojiProvider
 import io.github.rockerhieu.emojicon.EmojiconTextView
-import org.jetbrains.anko.linearLayout
-import org.jetbrains.anko.textView
 
 /**
  * Created by oukobayashi on 2019-07-29.
@@ -26,59 +24,98 @@ class AHEmoji : KActivityHelper() {
         super.onCreate(activity, savedInstanceState)
 
         setContentView(NestedScrollView(activity).apply {
+            val es = "😀😊🙂😜😝🤑🤓😎🙄 🐛🦅🙊🐸 🌶🥕🥒🍈 🤾‍♀️🤼‍♀️🤾‍♀️⛹ 🚄🚲🏍🚜 📻📺🔋🔌 ❌♒️♑️⛎ 🇻🇬🇧🇷🇧🇧🇧🇦🇧🇴"
 
-            linearLayout {
+            addView(LinearLayout(activity).apply {
                 orientation = LinearLayout.VERTICAL
 
-                val es = "😀😊🙂😜😝🤑🤓😎🙄 🐛🦅🙊🐸 🌶🥕🥒🍈 🤾‍♀️🤼‍♀️🤾‍♀️⛹ 🚄🚲🏍🚜 📻📺🔋🔌 ❌♒️♑️⛎ 🇻🇬🇧🇷🇧🇧🇧🇦🇧🇴 "
-
-                textView("TextView")
-                textView {
-                    text = es
-                    textSize = 25f
+                val addTitle = fun (txt: String) {
+                    addView(TextView(activity).apply { text = txt })
+                }
+                val addTextView = fun(textView: TextView) {
+                    textView.text = es
+                    textView.textSize = 25f
+                    addView(textView)
                 }
 
-                textView("EmojiconTextView - emojicon库")
-                var etv:TextView = EmojiconTextView(activity)
-                etv.text = es
-                etv.textSize = 25f
-                addView(etv)
+                addTitle("TextView")
+                addTextView(TextView(activity))
 
+                addTitle("EmojiconTextView - emojicon库")
+                addTextView(EmojiconTextView(activity))
 
-                textView("AppCompatTextView - 安卓自带")
-                etv = AppCompatTextView(activity)
-                etv.text = es
-                etv.textSize = 25f
-                addView(etv)
+                addTitle("AppCompatTextView - 安卓自带")
+                addTextView(AppCompatTextView(activity))
 
-                textView("EmojiTextView - 安卓自带")
+                addTitle("EmojiTextView - 安卓自带")
                 EmojiCompat.init(BundledEmojiCompatConfig(activity).setReplaceAll(true))
-                etv = androidx.emoji.widget.EmojiTextView(activity)
-                etv.text = es
-                etv.textSize = 25f
-                addView(etv)
+                addTextView(androidx.emoji.widget.EmojiTextView(activity))
 
-                textView("EmojiTextView - google")
+                addTitle("EmojiTextView - google")
                 EmojiManager.install(GoogleEmojiProvider())
-                etv = EmojiTextView(activity)
-                etv.text = es
-                etv.textSize = 25f
-                addView(etv)
+                addTextView(EmojiTextView(activity))
 
-                textView("EmojiTextView - ios")
+                addTitle("EmojiTextView - ios")
                 EmojiManager.install(IosEmojiProvider())
-                etv = EmojiTextView(activity)
-                etv.text = es
-                etv.textSize = 25f
-                addView(etv)
+                addTextView(EmojiTextView(activity))
 
-                textView("EmojiTextView - twitter")
+                addTitle("EmojiTextView - twitter")
                 EmojiManager.install(TwitterEmojiProvider())
-                etv = EmojiTextView(activity)
-                etv.text = es
-                etv.textSize = 25f
-                addView(etv)
-            }
+                addTextView(EmojiTextView(activity))
+
+            })
+
+//            linearLayout {
+//                orientation = LinearLayout.VERTICAL
+
+
+//                textView("TextView")
+//                textView {
+//                    text = es
+//                    textSize = 25f
+//                }
+//
+//                textView("EmojiconTextView - emojicon库")
+//                var etv:TextView = EmojiconTextView(activity)
+//                etv.text = es
+//                etv.textSize = 25f
+//                addView(etv)
+
+
+//                textView("AppCompatTextView - 安卓自带")
+//                etv = AppCompatTextView(activity)
+//                etv.text = es
+//                etv.textSize = 25f
+//                addView(etv)
+
+//                textView("EmojiTextView - 安卓自带")
+//                EmojiCompat.init(BundledEmojiCompatConfig(activity).setReplaceAll(true))
+//                etv = androidx.emoji.widget.EmojiTextView(activity)
+//                etv.text = es
+//                etv.textSize = 25f
+//                addView(etv)
+
+//                textView("EmojiTextView - google")
+//                EmojiManager.install(GoogleEmojiProvider())
+//                etv = EmojiTextView(activity)
+//                etv.text = es
+//                etv.textSize = 25f
+//                addView(etv)
+
+//                textView("EmojiTextView - ios")
+//                EmojiManager.install(IosEmojiProvider())
+//                etv = EmojiTextView(activity)
+//                etv.text = es
+//                etv.textSize = 25f
+//                addView(etv)
+
+//                textView("EmojiTextView - twitter")
+//                EmojiManager.install(TwitterEmojiProvider())
+//                etv = EmojiTextView(activity)
+//                etv.text = es
+//                etv.textSize = 25f
+//                addView(etv)
+//            }
         })
     }
 }

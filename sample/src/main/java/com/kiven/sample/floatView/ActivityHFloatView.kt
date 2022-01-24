@@ -6,14 +6,18 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.widget.LinearLayout
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Button
+import androidx.compose.material.Text
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.tools.KUtil
 import com.kiven.sample.util.showSnack
-import org.jetbrains.anko.button
-import org.jetbrains.anko.linearLayout
 
 /**
  * 悬浮框
@@ -31,12 +35,10 @@ class ActivityHFloatView : KActivityHelper() {
 
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
-        mActivity.linearLayout {
-            orientation = LinearLayout.VERTICAL
 
-            button {
-                text = "activity float"
-                setOnClickListener {
+        mActivity.setContent {
+            Column(modifier = Modifier.padding(15.dp)) {
+                Button(onClick = {
                     if (activityFloatView == null) {
                         // 应用内悬浮框，生命周期只能在Activity类，退出Activity时，记得关闭悬浮框。否则会报错，甚至崩溃
                         // 这里也可以使用应用外悬浮框，但是记得先开启权限。
@@ -49,11 +51,11 @@ class ActivityHFloatView : KActivityHelper() {
                     } else {
                         activityFloatView!!.showFloat()
                     }
+                }) {
+                    Text(text = "activity float")
                 }
-            }
-            button {
-                text = "activity out float"
-                setOnClickListener {
+
+                Button(onClick = {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         if (!Settings.canDrawOverlays(mActivity)) {
                             startOverlaySetting()
@@ -63,16 +65,18 @@ class ActivityHFloatView : KActivityHelper() {
                     } else {
                         startAppOutFloat()
                     }
+                }) {
+                    Text(text = "activity out float")
                 }
-            }
-            button {
-                text = "设置悬浮框"
-                setOnClickListener {
+
+                Button(onClick = {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         startOverlaySetting()
                     } else {
                         mActivity.showSnack("23以下，该怎么打开呢")
                     }
+                }) {
+                    Text(text = "设置悬浮框")
                 }
             }
         }

@@ -1,14 +1,9 @@
 package com.kiven.sample.charCode
 
 import android.os.Bundle
-import android.view.Gravity
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.selection.SelectionContainer
@@ -43,16 +38,11 @@ import java.nio.charset.Charset
  */
 class AHCharCode : KActivityHelper() {
 
-    private var textView: TextView? = null
-
     private var textCode = "0f5d"
-    private var textChinese = "马" // 马的Unicode为：U+9A6C
+    private var textChinese = "🌶" // 马的Unicode为：U+9A6C
 
-    private var useCharset = Charsets.UTF_8
-        set(value) {
-            field = value
-            textView?.text = "使用编码: $value"
-        }
+
+    private var useCharset = Charsets.UTF_32BE
     private val charsets = arrayOf(
             Charsets.UTF_8,
             Charsets.UTF_16,
@@ -70,7 +60,7 @@ class AHCharCode : KActivityHelper() {
         super.onCreate(activity, savedInstanceState)
 
         activity.setContent {
-            val text = remember { mutableStateOf("点击按钮显示结果") }
+            val text = remember { mutableStateOf("使用编码: $useCharset") }
 
             Column(modifier = Modifier.padding(15.dp).verticalScroll(rememberScrollState())) {
 
@@ -103,6 +93,7 @@ class AHCharCode : KActivityHelper() {
                         cs.mapIndexed { i, c -> "$i - $c" }
                     ) { index, _ ->
                         useCharset = Charset.forName(cs[index])
+                        text.value = "使用编码: $useCharset"
                     }
                 }) {
                     Text(text = "选择编码 - 所有可用编码")
@@ -113,6 +104,7 @@ class AHCharCode : KActivityHelper() {
                         charsets.map { it.toString() }
                     ) { index, _ ->
                         useCharset = charsets[index]
+                        text.value = "使用编码: $useCharset"
                     }
                 }) {
                     Text(text = "选择编码 - 仅列出常用编码")

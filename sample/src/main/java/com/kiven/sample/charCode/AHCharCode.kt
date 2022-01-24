@@ -5,12 +5,22 @@ import android.view.Gravity
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.Text
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
-import androidx.core.widget.NestedScrollView
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
@@ -60,12 +70,13 @@ class AHCharCode : KActivityHelper() {
         super.onCreate(activity, savedInstanceState)
 
         activity.setContent {
-//            PaddingValues(30.dp)
+            val text = remember { mutableStateOf("点击按钮显示结果") }
 
-            Column {
+            Column(modifier = Modifier.padding(15.dp).verticalScroll(rememberScrollState())) {
+
                 Button(onClick = {
                     mActivity.getInput("16进制", textCode) {
-                        textView?.text = StringCodeUtil.hexStr2Str(it.toString(), useCharset)
+                        text.value = StringCodeUtil.hexStr2Str(it.toString(), useCharset)
                         textCode = it.toString()
                     }
                 }) {
@@ -74,7 +85,7 @@ class AHCharCode : KActivityHelper() {
 
                 Button(onClick = {
                     mActivity.getInput("汉字", textChinese) {
-                        textView?.text = StringCodeUtil.str2HexStr(it.toString(), useCharset)
+                        text.value = StringCodeUtil.str2HexStr(it.toString(), useCharset)
                         textChinese = it.toString()
 
                         // 后台输出更多
@@ -107,8 +118,12 @@ class AHCharCode : KActivityHelper() {
                     Text(text = "选择编码 - 仅列出常用编码")
                 }
 
-                Text(text = "点击按钮显示结果")
 
+                SelectionContainer(modifier = Modifier.padding(0.dp, 20.dp).clickable {
+                    KString.setClipText(mActivity, text.value)
+                }) {
+                    Text(text = text.value, fontStyle = FontStyle.Italic, color = Color.Cyan)
+                }
 
                 Text(
                     text = "平面介绍：" +
@@ -129,42 +144,5 @@ class AHCharCode : KActivityHelper() {
                 )
             }
         }
-
-        /*setContentView(NestedScrollView(activity).apply {
-            addView(LinearLayout(activity).apply {
-                orientation = LinearLayout.VERTICAL
-                topPadding = dip(30)
-
-                textView {
-                    textView = this
-                    text = "点击按钮显示结果"
-                    gravity = Gravity.CENTER
-                    left = dip(50)
-                    textSize = 25f
-                    setOnClickListener {
-                        KString.setClipText(mActivity, text.toString())
-                    }
-                }
-
-                textView {
-                    text = "平面介绍：" +
-                            "\n- 常用的平面为0号平面（U+0000 - U+FFFF, 即基本多文种平面）" +
-                            "\n- 1号平面(U+10000 - U+1FFFF): 多文种补充平面" +
-                            "\n- 2号平面(U+20000 - U+2FFFF): 表意文字补充平面" +
-                            "\n- 3号平面(U+30000 - U+3FFFF): 表意文字第三平面（未正式使用）" +
-                            "\n- 4～13号平面(U+40000 - U+DFFFF): （尚未使用）" +
-                            "\n- 14号平面(U+E0000 - U+EFFFF): 特别用途补充平面" +
-                            "\n- 15号平面(U+F0000 - U+FFFFF): 保留作为私人使用区（A区）" +
-                            "\n- 16号平面(U+100000 - U+10FFFF): 保留作为私人使用区（B区）" +
-                            "\n组合字符：" +
-                            "\n- 组合用附加符号（Combining Diacritical Marks，0300–036F）" +
-                            "\n- 组合用附加符号扩展集（Combining Diacritical Marks Extended，1AB0–1AFF）" +
-                            "\n- 组合用附加符号增补集（Combining Diacritical Marks Supplement，1DC0–1DFF）" +
-                            "\n- 符号之组合用附加符号（Combining Diacritical Marks for Symbols，20D0–20FF）" +
-                            "\n- 组合用半形符号（Combining Half Marks，FE20–FE2F）"
-                }
-            })
-        })*/
-
     }
 }

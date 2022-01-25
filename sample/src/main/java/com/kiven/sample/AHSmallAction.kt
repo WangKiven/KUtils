@@ -210,20 +210,16 @@ class AHSmallAction : KActivityHelper() {
                 KLog.i("id = ${cuth.id}, name = ${cuth.name}")
             }
 
-            runBlocking {
-
-            }
-
             val ct = Thread.currentThread()
             KLog.i("start -----------${ct.id}-------${ct.name}-----")
         })
 
-        addView("anko bg()协程", View.OnClickListener {
+        addView("kotlin async", View.OnClickListener {
             GlobalScope.launch(Dispatchers.Main) {
                 val data = async {
 //                    Thread.sleep(2000)
                     delay(2000)
-                    "anko bg()协程"
+                    "kotlin async"
                 }
 
                 // 启动ui线程

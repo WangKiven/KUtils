@@ -194,6 +194,7 @@ class AHSystemImage : KActivityHelper() {
 
                     }*/
 
+                    KLog.i(item.toString())
                     mActivity.showBottomSheetDialog(
                         arrayOf(
                             "查看大图",

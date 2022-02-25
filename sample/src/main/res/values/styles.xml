@@ -85,6 +85,20 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="ThemeDemo4" parent="Theme.Material3.DayNight">
+        <item name="colorPrimary">@color/demo_colorPrimary</item>
+        <item name="colorPrimaryDark">@color/demo_colorPrimaryDark</item>
+        <item name="colorAccent">@color/demo_colorAccent</item>
+
+        <item name="android:textColorPrimary">@color/demo_textColorPrimary</item>
+        <item name="android:fontFamily">@font/font1_regular</item>
+    </style>
+
+    <style name="ThemeDemo4.NoActionBar" parent="ThemeDemo4">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
     <style name="Dialog">
         <item name="android:windowBackground">@android:color/transparent</item><!-- 控制背景 -->
         <!--<item name="android:windowFrame">@null</item>

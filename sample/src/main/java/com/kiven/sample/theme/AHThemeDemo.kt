@@ -80,11 +80,13 @@ class AHThemeDemo : KActivityHelper() {
                 }
             }
             R.id.btn_theme -> {
-                AlertDialog.Builder(mActivity).setItems(arrayOf("全局主题", "自定义主题 双style", "自定义主题 双color", "Material 主题")) { _, position ->
+                AlertDialog.Builder(mActivity).setItems(arrayOf("全局主题", "自定义主题 双style", "自定义主题 双color", "Material3", "Material3 双color", "Material 主题")) { _, position ->
                     themeId = when(position){
                         0 -> R.style.AppTheme
                         1 -> R.style.ThemeDemo
                         2 -> R.style.ThemeDemo2
+                        3 -> R.style.Theme_Material3_DayNight
+                        4 -> R.style.ThemeDemo4
                         else -> R.style.ThemeDemo3
                     }
                     mActivity.recreate()

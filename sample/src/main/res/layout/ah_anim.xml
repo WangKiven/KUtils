@@ -56,7 +56,7 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:scaleType="fitXY"
-            android:src="@drawable/ic_loading_rotate"
+            android:src="@drawable/ic_emoji_nature_light"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
 

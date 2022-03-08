@@ -166,12 +166,12 @@ dependencies {
     implementation('com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:0.11.0@aar') {
         transitive = true
     }
-    implementation 'com.jcodecraeer:xrecyclerview:1.6.0'
-    implementation 'com.flyco.dialog:FlycoDialog_Lib:1.3.2@aar'
 
     implementation 'com.android.volley:volley:1.2.1'
 
+    // https://github.com/google/flexbox-layout
     implementation 'com.google.android:flexbox:2.0.1'
+//    implementation 'com.google.android.flexbox:flexbox:3.0.0'
 
     // https://github.com/koush/AndroidAsync
     implementation 'com.koushikdutta.async:androidasync:2.2.1'
@@ -180,7 +180,7 @@ dependencies {
     // 获取设备正在运行的进程: https://github.com/jaredrummler/AndroidProcesses
     implementation 'com.jaredrummler:android-processes:1.1.1'
 
-    // 二维码
+    // 二维码 https://github.com/zxing/zxing
     implementation 'com.google.zxing:core:3.3.3'
 //    implementation 'com.journeyapps:zxing-android-embedded:3.3.0'
 //    implementation 'cn.bingoogolapple:bga-qrcode-zxing:1.3.6'
@@ -188,8 +188,8 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:4.9.3'
 
 
-    implementation 'cn.jiguang.imui:messagelist:0.7.4'
-    implementation 'cn.jiguang.imui:chatinput:0.9.1'
+    implementation 'cn.jiguang.imui:messagelist:0.8.0'
+    implementation 'cn.jiguang.imui:chatinput:0.10.0'
 
 
     implementation 'com.google.protobuf:protobuf-lite:3.0.0'// 小米即时通讯用到
@@ -208,7 +208,8 @@ dependencies {
 
     // 聊天UI库: https://github.com/stfalcon-studio/ChatKit
     // https://github.com/WangKiven/ChatKit
-    implementation 'com.github.stfalcon:chatkit:0.3.3'
+//    implementation 'com.github.stfalcon:chatkit:0.3.3'
+    implementation 'com.github.stfalcon-studio:Chatkit:v0.4.1'
 //    implementation project(':chatkit')
 
     // 图表库 MPAndroidChart：https://github.com/PhilJay/MPAndroidChart

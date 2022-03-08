@@ -78,9 +78,6 @@ class AHLibs : BaseFlexActivityHelper() {
             activity.newDialog(iv).show()
         }
 
-        addTitle("弹窗")
-        addBtn("FlycoDialog") { AHFlycoDialogLib().startActivity(activity) }
-
 
         // android emoji说明：https://www.jianshu.com/p/d82ac2edc7e8
         // emoji所有表情(官宣)：http://www.unicode.org/emoji/charts/full-emoji-list.html

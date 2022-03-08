@@ -13,7 +13,7 @@ buildscript {
         google()
         mavenLocal()
         mavenCentral()
-        jcenter()
+//        jcenter()
         maven { url 'https://developer.huawei.com/repo/' }
     }
     dependencies {

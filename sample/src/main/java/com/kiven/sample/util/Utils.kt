@@ -21,14 +21,14 @@ import android.view.inputmethod.EditorInfo
 import android.widget.*
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.database.getFloatOrNull
 import androidx.core.database.getIntOrNull
 import androidx.core.database.getStringOrNull
+import androidx.core.view.setPadding
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.flyco.dialog.widget.ActionSheetDialog
-import com.flyco.dialog.widget.NormalListDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.kiven.kutils.logHelper.KLog
@@ -128,19 +128,19 @@ fun Activity.showListDialog(
     autoClose: Boolean,
     onClickItem: (Int, String) -> Unit
 ) {
-    val dialog = NormalListDialog(this, list)
-    dialog.isTitleShow(false)
-    dialog.setOnOperItemClickL { _, _, position, _ ->
-        onClickItem(position, list[position])
+//    val dialog = NormalListDialog(this, list)
+//    dialog.isTitleShow(false)
+//    dialog.setOnOperItemClickL { _, _, position, _ ->
+//        onClickItem(position, list[position])
+//
+//        if (autoClose)
+//            dialog.dismiss()
+//    }
+//    dialog.show()
 
-        if (autoClose)
-            dialog.dismiss()
-    }
-    dialog.show()
-
-    /*AlertDialog.Builder(this).setItems(list) { _, position ->
+    AlertDialog.Builder(this).setItems(list) { _, position ->
         onClickItem(position, list[position])
-    }.setCancelable(autoClose).show()*/
+    }.setCancelable(autoClose).show()
 }
 
 fun Activity.showListDialog(list: Array<String>, onClickItem: (Int, String) -> Unit) {
@@ -156,16 +156,32 @@ fun Activity.showBottomSheetDialog(
     onCancel: () -> Unit = {},
     onClickItem: (Int, String) -> Unit
 ) {
-
-    val sheetDialog = ActionSheetDialog(this, list, null)
-    sheetDialog.setOnOperItemClickL { _, _, position, _ ->
-        onClickItem(position, list[position])
-        sheetDialog.dismiss()
-    }
-    sheetDialog.setOnCancelListener {
-        onCancel()
-    }
-    sheetDialog.show()
+    BottomSheetDialog(this).apply {
+        setContentView(LinearLayoutCompat(context).apply {
+            orientation = LinearLayoutCompat.VERTICAL
+            for ((i, s) in list.withIndex()) {
+                addView(TextView(context).apply {
+                    text = s
+                    setPadding(KUtil.dip2px(10f))
+                    gravity = Gravity.CENTER
+                    setOnClickListener {
+                        onClickItem(i, s)
+                        dismiss()
+                    }
+                })
+            }
+        })
+        setOnCancelListener { onCancel() }
+    }.show()
+//    val sheetDialog = ActionSheetDialog(this, list, null)
+//    sheetDialog.setOnOperItemClickL { _, _, position, _ ->
+//        onClickItem(position, list[position])
+//        sheetDialog.dismiss()
+//    }
+//    sheetDialog.setOnCancelListener {
+//        onCancel()
+//    }
+//    sheetDialog.show()
 }
 
 fun Activity.showSnack(word: String) {

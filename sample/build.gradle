@@ -224,21 +224,23 @@ dependencies {
     // 图表库 MPAndroidChart：https://github.com/PhilJay/MPAndroidChart
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
-    // google-emoji
-    implementation "androidx.emoji:emoji-appcompat:1.1.0"
-    implementation "androidx.emoji:emoji-bundled:1.1.0"
+    // google-emoji  https://developer.android.com/jetpack/androidx/releases/emoji2
+//    implementation "androidx.emoji:emoji-appcompat:1.1.0"
+//    implementation "androidx.emoji:emoji-bundled:1.1.0"
+    def emoji2_version = "1.1.0"
+    implementation "androidx.emoji2:emoji2:$emoji2_version"
+    implementation "androidx.emoji2:emoji2-views:$emoji2_version"
+    implementation "androidx.emoji2:emoji2-views-helper:$emoji2_version"
+    implementation "androidx.emoji2:emoji2-bundled:$emoji2_version"
 
     // 图片信息获取修改
     implementation 'androidx.exifinterface:exifinterface:1.3.3'
 
-    // https://github.com/rockerhieu/emojicon
-    implementation 'io.github.rockerhieu:emojicon:1.4.2'
-
 
     // https://github.com/vanniktech/Emoji
-    implementation 'com.vanniktech:emoji-ios:0.6.0'
-    implementation 'com.vanniktech:emoji-google:0.6.0'
-    implementation 'com.vanniktech:emoji-twitter:0.6.0'
+    implementation 'com.vanniktech:emoji-ios:0.8.0'
+    implementation 'com.vanniktech:emoji-google:0.8.0'
+    implementation 'com.vanniktech:emoji-twitter:0.8.0'
 
     // ARouter: https://github.com/alibaba/ARouter, TODO 需要注意代码混淆和加固的问题, 我们的helper不适用，只能用于activity
     implementation 'com.alibaba:arouter-api:1.5.2'

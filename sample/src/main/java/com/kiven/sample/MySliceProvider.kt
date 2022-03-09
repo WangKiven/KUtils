@@ -65,7 +65,7 @@ class MySliceProvider:SliceProvider() {
                         Intent(context, ClickNotiActivity::class.java),
                         0
                 ),
-                IconCompat.createWithResource(context, R.drawable.ic_launcher),
+                IconCompat.createWithResource(context, R.mipmap.ic_launcher_u),
                 ListBuilder.ICON_IMAGE,
                 "Enter app"
         )

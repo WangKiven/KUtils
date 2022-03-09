@@ -38,7 +38,7 @@ class PersistentService : Service() {
         createChannel()
 
         val mBuilder = NotificationCompat.Builder(this, channelId)
-                .setSmallIcon(R.drawable.ic_launcher)
+                .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle("后台服务已开启-最新消息及时达")
 
         startForeground(System.currentTimeMillis().toInt(), mBuilder.build())

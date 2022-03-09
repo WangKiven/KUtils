@@ -177,8 +177,8 @@ dependencies {
     implementation 'com.android.volley:volley:1.2.1'
 
     // https://github.com/google/flexbox-layout
-    implementation 'com.google.android:flexbox:2.0.1'
-//    implementation 'com.google.android.flexbox:flexbox:3.0.0'
+//    implementation 'com.google.android:flexbox:2.0.1'
+    implementation 'com.google.android.flexbox:flexbox:3.0.0'
 
     // https://github.com/koush/AndroidAsync
     implementation 'com.koushikdutta.async:androidasync:2.2.1'
@@ -195,8 +195,8 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:4.9.3'
 
 
-    implementation 'cn.jiguang.imui:messagelist:0.8.0'
-    implementation 'cn.jiguang.imui:chatinput:0.10.0'
+//    implementation 'cn.jiguang.imui:messagelist:0.8.0'
+//    implementation 'cn.jiguang.imui:chatinput:0.10.0'
 
 
     implementation 'com.google.protobuf:protobuf-lite:3.0.0'// 小米即时通讯用到
@@ -216,7 +216,9 @@ dependencies {
     // 聊天UI库: https://github.com/stfalcon-studio/ChatKit
     // https://github.com/WangKiven/ChatKit
 //    implementation 'com.github.stfalcon:chatkit:0.3.3'
-    implementation 'com.github.stfalcon-studio:Chatkit:v0.4.1'
+    implementation('com.github.stfalcon-studio:Chatkit:v0.4.1') {
+        exclude group: 'com.google.android', module: 'flexbox'
+    }
 //    implementation project(':chatkit')
 
     // 图表库 MPAndroidChart：https://github.com/PhilJay/MPAndroidChart
@@ -267,9 +269,9 @@ dependencies {
     // https://github.com/googlearchive/android-nearby
 //    implementation 'com.google.android.gms:play-services-nearby:17.0.0'
 
-    // tbs
+    // tbs https://x5.tencent.com/tbs/sdk.html
     // 与as的profiler有冲突，使用profiler时进入x5 webView页面，会导致程序崩溃
-    implementation 'com.tencent.tbs.tbssdk:sdk:43993'
+    implementation 'com.tencent.tbs:tbssdk:44165'
     // gpuimage https://github.com/cats-oss/android-gpuimage
     implementation 'jp.co.cyberagent.android:gpuimage:2.1.0'
     // https://github.com/koral--/android-gif-drawable
@@ -290,7 +292,7 @@ dependencies {
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
 
     // https://spring.io/projects/spring-android#learn
-    implementation 'org.springframework.android:spring-android-rest-template:2.0.0.M3'
+//    implementation 'org.springframework.android:spring-android-rest-template:2.0.0.M3'
 
     // 滴滴的Dokit: https://github.com/didi/DoraemonKit
 //    def dokitVersion = "4.2.1"

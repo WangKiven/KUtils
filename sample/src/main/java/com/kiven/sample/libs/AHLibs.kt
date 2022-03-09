@@ -118,7 +118,7 @@ class AHLibs : BaseFlexActivityHelper() {
             "GPUImage & PhotoView",
             View.OnClickListener { AHGPUImageLib().startActivity(activity) })
         addBtn("gif", View.OnClickListener { AHGif().startActivity(mActivity) })
-        addBtn("spring for Android", View.OnClickListener { AHSpring().startActivity(mActivity) })
+//        addBtn("spring for Android", View.OnClickListener { AHSpring().startActivity(mActivity) })
         addBtn("autofittextview") { AHTextViewDemo().startActivity(mActivity) }
         addBtn("Compressor") {
             activity.pickPhoneImage {

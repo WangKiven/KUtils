@@ -43,7 +43,7 @@ class AHKUtilsWidgetDemo : BaseFlexActivityHelper() {
 
                     return (itemView ?: ImageView(context)).also {
                         val iv = it as ImageView
-                        iv.setImageResource(R.mipmap.emoji_0x1f343)
+                        iv.setImageResource(R.mipmap.ic_launcher_u)
                     }
                 }
             })

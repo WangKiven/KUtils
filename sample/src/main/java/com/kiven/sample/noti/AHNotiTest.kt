@@ -94,7 +94,7 @@ class AHNotiTest : KActivityHelper() {
                                     PendingIntent.getBroadcast(mActivity, 111, Intent(mActivity, NotificationClickReceiver::class.java), PendingIntent.FLAG_UPDATE_CURRENT)
 
                         val mBuilder = NotificationCompat.Builder(mActivity, channelId)
-                                .setSmallIcon(R.drawable.ic_launcher)
+                                .setSmallIcon(R.mipmap.ic_launcher)
                                 .setTicker("setTicker是什么$channelId $count") // 通知响起时，状态栏显示的内容
                                 .setContentTitle("setContentTitle是什么$channelId $count")
                                 .setContentText("setContentText是什么$channelId $count")
@@ -129,7 +129,7 @@ class AHNotiTest : KActivityHelper() {
                         changeTopText()
 
                         runUI {
-                            BadgeUtil.setBadgeCount(mActivity, 5, R.drawable.ic_launcher)
+                            BadgeUtil.setBadgeCount(mActivity, 5, R.mipmap.ic_launcher)
                         }
                     }
                 }

@@ -167,7 +167,7 @@
                 android:layout_gravity="bottom"
                 app:fabAlignmentMode="center"
                 app:menu="@menu/show_log"
-                app:navigationIcon="@drawable/aurora_menuitem_camera" />
+                app:navigationIcon="@android:drawable/ic_menu_camera" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab"

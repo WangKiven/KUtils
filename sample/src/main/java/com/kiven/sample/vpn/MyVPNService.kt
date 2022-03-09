@@ -38,7 +38,7 @@ class MyVPNService: VpnService() {
         createChannel()
 
         val mBuilder = NotificationCompat.Builder(this, channelId)
-                .setSmallIcon(R.drawable.ic_launcher)
+                .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle("KUtils VPN已开启")
         startForeground(System.currentTimeMillis().toInt(), mBuilder.build())
 

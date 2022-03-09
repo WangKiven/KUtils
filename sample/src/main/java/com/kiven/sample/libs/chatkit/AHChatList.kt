@@ -27,7 +27,7 @@ class AHChatList : KActivityHelper() {
 //        val listView = RecyclerView(activity)
 //        setContentView(listView)
 
-        val listView = DialogsList(activity)
+        val listView = DialogsList(activity, null)// 不能去 null，否则崩溃
         listView.setAdapter(adapter)
 //        setContentView(listView)
         /*activity.linearLayout {

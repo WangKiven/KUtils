@@ -19,6 +19,7 @@ import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.*
 import com.kiven.sample.arch.AHArch
 import com.kiven.sample.arcore.AHARCoreInlet
+import com.kiven.sample.compose.AHComposeDemo
 import com.kiven.sample.databinding.MainActivityBinding
 import com.kiven.sample.floatView.ActivityHFloatView
 import com.kiven.sample.font.AHFont
@@ -109,7 +110,7 @@ class MainActivity : KActivity() {
                     }
                 }
             }
-
+            addBtn("compose") { AHComposeDemo().startActivity(this@MainActivity) }
 
 
             addTitle("三方库")

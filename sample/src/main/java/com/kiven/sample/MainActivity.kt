@@ -3,10 +3,7 @@ package com.kiven.sample
 import android.Manifest
 import android.content.Context
 import android.content.Intent
-import android.os.Build
-import android.os.Bundle
-import android.os.Environment
-import android.os.Handler
+import android.os.*
 import android.transition.Slide
 import android.view.Gravity
 import androidx.core.app.ActivityCompat
@@ -134,8 +131,13 @@ class MainActivity : KActivity() {
                 }
             }
             addBtn("KView.runUI") {
-                val handler = Handler {
-                    KView.runUI(this@MainActivity, { KAlertDialogHelper.Show1BDialog(this@MainActivity, "LiveData 行不行？") })
+                val handler = Handler(Looper.myLooper()!!) {
+                    KView.runUI(this@MainActivity) {
+                        KAlertDialogHelper.Show1BDialog(
+                            this@MainActivity,
+                            "LiveData 行不行？"
+                        )
+                    }
                     true
                 }
                 handler.sendEmptyMessageDelayed(0, 3000)

@@ -15,7 +15,6 @@ import androidx.compose.ui.unit.dp
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.sample.compose.theme.TestComposeTheme
-import com.kiven.sample.compose.theme.Transparent
 import kotlinx.coroutines.launch
 
 class AHComposeDemo: KActivityHelper() {

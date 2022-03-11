@@ -69,6 +69,10 @@
     <!-- 查看所有App信息 https://developer.android.google.cn/training/basics/intents/package-visibility -->
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
 
+    <!--震动测试-->
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+
     <!-- WiFi 直连 -->
     <uses-feature
         android:name="android.hardware.wifi.direct"

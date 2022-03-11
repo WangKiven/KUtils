@@ -111,6 +111,7 @@ class MainActivity : KActivity() {
                 }
             }
             addBtn("compose") { AHComposeDemo().startActivity(this@MainActivity) }
+            addBtn("声音和震动") { AHSoundShake().startActivity(this@MainActivity) }
 
 
             addTitle("三方库")

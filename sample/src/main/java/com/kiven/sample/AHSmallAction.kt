@@ -2,6 +2,7 @@ package com.kiven.sample
 
 import android.Manifest
 import android.app.*
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -46,6 +47,7 @@ import com.kiven.sample.network.WifiAwareDemo
 import com.kiven.sample.network.WifiP2PDemo
 import com.kiven.sample.network.socket.AHSocketTest
 import com.kiven.sample.noti.AHNotiTest
+import com.kiven.sample.service.LiveWallpaper
 import com.kiven.sample.service.LiveWallpaper2
 import com.kiven.sample.spss.AHSpssTemple
 import com.kiven.sample.systemdata.AHSysgemData
@@ -140,10 +142,21 @@ class AHSmallAction : KActivityHelper() {
 
         // 没有系统权限，用不了
         addView("动态壁纸", View.OnClickListener {
-            Snackbar.make(flexboxLayout, "没有系统权限，用不了。看来只能设置静态壁纸了。还是去写桌面应用吧！！", Snackbar.LENGTH_LONG)
-                .show()
-            val intent = Intent(mActivity, LiveWallpaper2::class.java)
-            mActivity.startService(intent)
+//            mActivity.showSnack("没有系统权限，用不了。看来只能设置静态壁纸了。还是去写桌面应用吧！！")
+            KGranting.requestPermissions(mActivity, 123, Manifest.permission.SET_WALLPAPER, "壁纸设置") {
+                if (it) {
+                    mActivity.showSnack("看看设置成功没")
+//                    val intent = Intent(mActivity, LiveWallpaper2::class.java)
+//                    mActivity.startService(intent)
+                    val intent = Intent("android.service.wallpaper.CHANGE_LIVE_WALLPAPER")
+                    intent.putExtra("android.service.wallpaper.extra.LIVE_WALLPAPER_COMPONENT", ComponentName(mActivity.packageName, LiveWallpaper::class.java.name))
+                    mActivity.startActivity(intent)
+
+                } else {
+                    mActivity.showSnack("没有设置壁纸的权限")
+                }
+            }
+
 //            WallpaperUtil.setLiveWallpaper(mActivity, 322)
         })
         addView("获取在用壁纸", View.OnClickListener {

@@ -145,7 +145,7 @@ class AHSmallAction : KActivityHelper() {
 //            mActivity.showSnack("没有系统权限，用不了。看来只能设置静态壁纸了。还是去写桌面应用吧！！")
             KGranting.requestPermissions(mActivity, 123, Manifest.permission.SET_WALLPAPER, "壁纸设置") {
                 if (it) {
-                    mActivity.showSnack("看看设置成功没")
+//                    mActivity.showSnack("看看设置成功没")
 //                    val intent = Intent(mActivity, LiveWallpaper2::class.java)
 //                    mActivity.startService(intent)
                     val intent = Intent("android.service.wallpaper.CHANGE_LIVE_WALLPAPER")

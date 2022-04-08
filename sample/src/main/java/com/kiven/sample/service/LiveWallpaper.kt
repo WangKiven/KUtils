@@ -4,7 +4,11 @@ import android.graphics.Color
 import android.service.wallpaper.WallpaperService
 import android.view.MotionEvent
 import android.view.SurfaceHolder
+import com.kiven.kutils.logHelper.KLog
 
+/**
+ * 使用opengl: https://github.com/hanschencoder/GLWallpaperService
+ */
 class LiveWallpaper:WallpaperService() {
     override fun onCreateEngine(): Engine {
         return MyEngine()
@@ -28,6 +32,7 @@ class LiveWallpaper:WallpaperService() {
 
         override fun onTouchEvent(event: MotionEvent?) {
             super.onTouchEvent(event)
+            KLog.i("clickk x=${event?.x} y=${event?.y}")
             change()
         }
 
@@ -36,9 +41,14 @@ class LiveWallpaper:WallpaperService() {
                 return
             }
 
-            val canvas = surfaceHolder.lockCanvas() ?: return
-            canvas.drawColor(Color.CYAN)
-//            canvas.restore()
+            try {
+                val canvas = surfaceHolder.lockCanvas() ?: return
+                canvas.drawColor(Color.parseColor("#51313B"))
+
+                surfaceHolder.unlockCanvasAndPost(canvas)
+            } catch (e: Throwable) {
+                KLog.e(e)
+            }
         }
     }
 }

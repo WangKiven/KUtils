@@ -3,6 +3,7 @@ package com.kiven.sample.service;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Handler;
 import android.service.wallpaper.WallpaperService;
@@ -140,7 +141,9 @@ public class LiveWallpaper2 extends WallpaperService {
             if(mTouchX >= 0 && mTouchY >= 0){
                 //  设置画笔的透明度
                 mPaint.setAlpha(255);
-                c.drawBitmap(bitmap,mTouchX,mTouchY,mPaint);
+                if (bitmap != null)
+                    c.drawBitmap(bitmap,mTouchX,mTouchY,mPaint);
+                else c.drawColor(Color.YELLOW);
             }
         }
     }

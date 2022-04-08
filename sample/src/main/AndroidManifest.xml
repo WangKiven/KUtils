@@ -201,7 +201,7 @@
             android:exported="true"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/paper_name"
-            android:permission="android.permission.BIND_WALLPAPE">
+            android:permission="android.permission.BIND_WALLPAPER">
             <intent-filter>
                 <action android:name="android.service.wallpaper.WallpaperService" />
             </intent-filter>
@@ -216,7 +216,7 @@
             android:exported="true"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/paper_name2"
-            android:permission="android.permission.BIND_WALLPAPE"
+            android:permission="android.permission.BIND_WALLPAPER"
             android:process=":remote">
             <intent-filter>
                 <action android:name="android.service.wallpaper.WallpaperService" />

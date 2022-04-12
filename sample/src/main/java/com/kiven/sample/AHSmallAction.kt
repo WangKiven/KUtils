@@ -49,6 +49,7 @@ import com.kiven.sample.network.socket.AHSocketTest
 import com.kiven.sample.noti.AHNotiTest
 import com.kiven.sample.service.LiveWallpaper
 import com.kiven.sample.service.LiveWallpaper2
+import com.kiven.sample.service.MyGLWallpaperService
 import com.kiven.sample.spss.AHSpssTemple
 import com.kiven.sample.systemdata.AHSysgemData
 import com.kiven.sample.util.*
@@ -148,9 +149,17 @@ class AHSmallAction : KActivityHelper() {
 //                    mActivity.showSnack("看看设置成功没")
 //                    val intent = Intent(mActivity, LiveWallpaper2::class.java)
 //                    mActivity.startService(intent)
-                    val intent = Intent("android.service.wallpaper.CHANGE_LIVE_WALLPAPER")
-                    intent.putExtra("android.service.wallpaper.extra.LIVE_WALLPAPER_COMPONENT", ComponentName(mActivity.packageName, LiveWallpaper::class.java.name))
-                    mActivity.startActivity(intent)
+                    activity.showListDialog(arrayOf("LiveWallpaper", "LiveWallpaper2", "MyGLWallpaperService")) { i,_ ->
+                        val wallpaperName = when(i) {
+                            0 -> LiveWallpaper::class.java.name
+                            1 -> LiveWallpaper2::class.java.name
+                            else -> MyGLWallpaperService::class.java.name
+                        }
+
+                        val intent = Intent("android.service.wallpaper.CHANGE_LIVE_WALLPAPER")
+                        intent.putExtra("android.service.wallpaper.extra.LIVE_WALLPAPER_COMPONENT", ComponentName(mActivity.packageName, wallpaperName))
+                        mActivity.startActivity(intent)
+                    }
 
                 } else {
                     mActivity.showSnack("没有设置壁纸的权限")

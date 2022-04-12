@@ -32,23 +32,28 @@ class LiveWallpaper:WallpaperService() {
 
         override fun onTouchEvent(event: MotionEvent?) {
             super.onTouchEvent(event)
-            KLog.i("clickk x=${event?.x} y=${event?.y}")
+            KLog.i("clickk ${event?.action} x=${event?.x} y=${event?.y}")
             change()
         }
 
         private fun change() {
             if (!isVisible) {
+                KLog.i("isVisible = $isVisible")
                 return
             }
 
+            var hasCanvas = false
             try {
-                val canvas = surfaceHolder.lockCanvas() ?: return
+                val canvas = surfaceHolder.lockCanvas() ?: return KLog.i("hasCanvas = $hasCanvas")
                 canvas.drawColor(Color.parseColor("#51313B"))
 
                 surfaceHolder.unlockCanvasAndPost(canvas)
+                hasCanvas = true
             } catch (e: Throwable) {
                 KLog.e(e)
             }
+
+            KLog.i("hasCanvas = $hasCanvas")
         }
     }
 }

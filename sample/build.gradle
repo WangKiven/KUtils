@@ -86,11 +86,9 @@ android {
         }
     }
     packagingOptions {
-        exclude 'META-INF/DEPENDENCIES'
-        exclude 'META-INF/LICENSE'
-        exclude 'META-INF/NOTICE'
-        exclude 'META-INF/license.txt'
-        exclude 'META-INF/notice.txt'
+        resources {
+            excludes += ['META-INF/DEPENDENCIES', 'META-INF/LICENSE', 'META-INF/NOTICE', 'META-INF/license.txt', 'META-INF/notice.txt']
+        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8

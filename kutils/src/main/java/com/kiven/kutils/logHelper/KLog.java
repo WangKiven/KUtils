@@ -12,6 +12,7 @@ import com.kiven.kutils.tools.KUtil;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.net.Inet6Address;
@@ -151,6 +152,7 @@ public class KLog {
         if (KString.isBlank(newTag)) return;
         tag = newTag;
     }
+
     public static String getTag() {
         return tag;
     }
@@ -292,11 +294,7 @@ public class KLog {
 
             if (Modifier.isStatic(modifiers)) {
                 try {
-                    Object value = field.get(cla);
-                    if (value == null) {
-                        sb.append(" = null");
-                    } else
-                        sb.append(" = ").append(value);
+                    sb.append(" = ").append(obj2Str(field.get(cla)));
                 } catch (Exception e) {
                     e.printStackTrace();
                     sb.append(" 值获取异常");
@@ -306,11 +304,7 @@ public class KLog {
                     sb.append("不是静态属性");
                 } else {
                     try {
-                        Object value = field.get(obj);
-                        if (value == null) {
-                            sb.append(" = null");
-                        } else
-                            sb.append(" = ").append(value);
+                        sb.append(" = ").append(obj2Str(field.get(obj)));
                     } catch (Exception e) {
                         e.printStackTrace();
                         sb.append(" 值获取异常");
@@ -324,6 +318,37 @@ public class KLog {
             Log.i(tag, burst);
         }
         addLog(msg);
+    }
+
+    public static String obj2Str(Object obj) {
+        if (obj == null) return "null";
+        if (obj instanceof String) return (String) obj;
+        if (obj instanceof Number) return obj.toString();
+
+        if (obj.getClass().isArray()) {
+            Class subType = obj.getClass().getComponentType();
+            if (subType.isPrimitive()) {
+                if (subType == int.class) return Arrays.toString((int[]) obj);
+                if (subType == boolean.class) return Arrays.toString((boolean[]) obj);
+                if (subType == byte.class) return Arrays.toString((byte[]) obj);
+                if (subType == char.class) return Arrays.toString((char[]) obj);
+                if (subType == double.class) return Arrays.toString((double[]) obj);
+                if (subType == float.class) return Arrays.toString((float[]) obj);
+                if (subType == long.class) return Arrays.toString((long[]) obj);
+                if (subType == short.class) return Arrays.toString((short[]) obj);
+                return obj.toString();
+            }
+            Object[] a = (Object[]) obj;
+            StringBuilder sb = new StringBuilder("[ ");
+            for (int i = 0; i < a.length; i++) {
+                if (i > 0) sb.append(",");
+                sb.append(obj2Str(a[i]));
+            }
+            sb.append(" ]");
+            return sb.toString();
+        }
+
+        return obj.toString();
     }
 
     /**
@@ -424,13 +449,13 @@ public class KLog {
             builder.append("\n").append(name).append(":\t").append(properties.getProperty(name));
         }*/
 
-        for (Map.Entry entry: System.getProperties().entrySet()) {
+        for (Map.Entry entry : System.getProperties().entrySet()) {
             builder.append("\n").append(entry.getKey()).append(":\t").append(entry.getValue());
         }
 
 
         builder.append("\n\n>>>>>>>>>>system env");
-        for (Map.Entry entry: System.getenv().entrySet()) {
+        for (Map.Entry entry : System.getenv().entrySet()) {
             builder.append("\n").append(entry.getKey()).append(":\t").append(entry.getValue());
         }
 

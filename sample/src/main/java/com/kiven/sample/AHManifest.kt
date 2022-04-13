@@ -61,8 +61,27 @@ class AHManifest: BaseFlexActivityHelper() {
                 }
             }
         }
-        addBtn("") {}
-        addBtn("") {}
+        addBtn("getPackageInfo") {
+            activity.showListDialog(arrayOf("GET_ACTIVITIES", "GET_CONFIGURATIONS", "GET_GIDS", "GET_INSTRUMENTATION",
+                "GET_INTENT_FILTERS", "GET_META_DATA", "GET_PERMISSIONS", "GET_PROVIDERS", "GET_RECEIVERS",
+                "GET_SERVICES", "GET_SHARED_LIBRARY_FILES", "GET_SIGNATURES", "GET_SIGNING_CERTIFICATES",
+                "GET_URI_PERMISSION_PATTERNS", "MATCH_UNINSTALLED_PACKAGES", "MATCH_DISABLED_COMPONENTS",
+                "MATCH_DISABLED_UNTIL_USED_COMPONENTS", "MATCH_SYSTEM_ONLY", "MATCH_APEX", "GET_DISABLED_COMPONENTS",
+                "GET_DISABLED_UNTIL_USED_COMPONENTS", "GET_UNINSTALLED_PACKAGES", "GET_ATTRIBUTIONS")) { _, s ->
+                try {
+                    val pmClass = PackageManager::class.java
+                    val field = pmClass.getDeclaredField(s)
+                    val value = field.getInt(pmClass)
+
+                    val info = activity.packageManager.getPackageInfo(activity.packageName, value)
+                    showTip("以下是 $s 配置数据")
+                    KLog.printClassField(info, null, false)
+                } catch (t: Throwable) {
+                    showToast("出现异常 $s")
+                    KLog.e(t)
+                }
+            }
+        }
         addBtn("") {}
         addBtn("") {}
         addBtn("") {}

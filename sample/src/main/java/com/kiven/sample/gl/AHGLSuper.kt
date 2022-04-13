@@ -81,7 +81,7 @@ open class AHGLSuper : KActivityHelper(), GLSurfaceView.Renderer {
         }
 
         // 设置OpenGl ES的版本为2.0，需在manifests配置gl版本。配置后，居然不能绘图
-         surfaceView.setEGLContextClientVersion(2)
+//         surfaceView.setEGLContextClientVersion(2)
         // 设置与当前GLSurfaceView绑定的Renderer
         surfaceView.setRenderer(this)
 

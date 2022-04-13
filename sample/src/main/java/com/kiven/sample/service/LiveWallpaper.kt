@@ -7,7 +7,7 @@ import android.view.SurfaceHolder
 import com.kiven.kutils.logHelper.KLog
 
 /**
- * 使用opengl: https://github.com/hanschencoder/GLWallpaperService
+ *
  */
 class LiveWallpaper:WallpaperService() {
     override fun onCreateEngine(): Engine {

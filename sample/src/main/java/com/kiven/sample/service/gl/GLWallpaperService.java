@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 /**
- * @author chenhang
+ * https://github.com/hanschencoder/GLWallpaperService
  */
 public abstract class GLWallpaperService extends WallpaperService {
 

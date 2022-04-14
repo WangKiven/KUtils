@@ -18,14 +18,14 @@ class MyGLWallpaperService : GLWallpaperService() {
         return object : GLEngine() {
             override fun setupGLSurfaceView(isPreview: Boolean) {
                 setEGLContextClientVersion(2)
-                setEGLConfigChooser(EglConfigChooser(8, 8, 8, 0, 0, 0, 0))
+//                setEGLConfigChooser(EglConfigChooser(8, 8, 8, 0, 0, 0, 0))
                 setRenderer(MyRenderer())
                 renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
             }
         }
     }
 
-    class MyRenderer : GLSurfaceView.Renderer {
+    private class MyRenderer : GLSurfaceView.Renderer {
         lateinit var tle: Triangle
         var dragy = 0f
         override fun onSurfaceCreated(gl: GL10, config: EGLConfig) {

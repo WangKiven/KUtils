@@ -245,6 +245,22 @@
                 android:resource="@xml/my_wallpaper" />
         </service>
 
+        <service
+            android:name=".service.LiveGLWallpaper"
+            android:enabled="true"
+            android:exported="true"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/paper_name"
+            android:permission="android.permission.BIND_WALLPAPER">
+            <intent-filter>
+                <action android:name="android.service.wallpaper.WallpaperService" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.service.wallpaper"
+                android:resource="@xml/my_wallpaper" />
+        </service>
+
         <!-- 无障碍功能 -->
         <service
             android:name=".autoService.AutoInstallService"

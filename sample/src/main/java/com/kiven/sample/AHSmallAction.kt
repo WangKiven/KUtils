@@ -47,6 +47,7 @@ import com.kiven.sample.network.WifiAwareDemo
 import com.kiven.sample.network.WifiP2PDemo
 import com.kiven.sample.network.socket.AHSocketTest
 import com.kiven.sample.noti.AHNotiTest
+import com.kiven.sample.service.LiveGLWallpaper
 import com.kiven.sample.service.LiveWallpaper
 import com.kiven.sample.service.LiveWallpaper2
 import com.kiven.sample.service.MyGLWallpaperService
@@ -145,11 +146,12 @@ class AHSmallAction : KActivityHelper() {
         addView("动态壁纸", View.OnClickListener {
             KGranting.requestPermissions(mActivity, 123, Manifest.permission.SET_WALLPAPER, "壁纸设置") {
                 if (it) {
-                    activity.showListDialog(arrayOf("LiveWallpaper", "LiveWallpaper2", "MyGLWallpaperService")) { i,_ ->
+                    activity.showListDialog(arrayOf("LiveWallpaper", "LiveWallpaper2", "MyGLWallpaperService", "LiveGLWallpaper")) { i,_ ->
                         val wallpaperName = when(i) {
                             0 -> LiveWallpaper::class.java.name
                             1 -> LiveWallpaper2::class.java.name
-                            else -> MyGLWallpaperService::class.java.name
+                            2 -> MyGLWallpaperService::class.java.name
+                            else -> LiveGLWallpaper::class.java.name
                         }
 
                         val intent = Intent("android.service.wallpaper.CHANGE_LIVE_WALLPAPER")

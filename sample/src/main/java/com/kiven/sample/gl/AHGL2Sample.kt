@@ -6,9 +6,13 @@ import com.kiven.sample.gl.body.Triangle
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
-class AHGL2Sample : AHGL2Super() {
+class AHGL2Sample : AHGLSuper() {
 
     lateinit var tle: Triangle
+
+    init {
+        putExtra("glVersion", "2")
+    }
 
     override fun onDrawFrame(gl: GL10) {
         //清除深度缓冲与颜色缓冲
@@ -32,7 +36,7 @@ class AHGL2Sample : AHGL2Super() {
 
     override fun onSurfaceCreated(gl: GL10, config: EGLConfig?) {
         //设置屏幕背景色RGBA
-        GLES20.glClearColor(0f, 0f, 0f, 1.0f)
+        GLES20.glClearColor(0.7f, 0.4f, 0.2f, 1.0f)
         //创建三角形对对象
         tle = Triangle(surfaceView)
         //打开深度检测

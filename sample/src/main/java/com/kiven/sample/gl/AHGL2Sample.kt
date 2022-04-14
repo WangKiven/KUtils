@@ -38,7 +38,7 @@ class AHGL2Sample : AHGLSuper() {
         //设置屏幕背景色RGBA
         GLES20.glClearColor(0.7f, 0.4f, 0.2f, 1.0f)
         //创建三角形对对象
-        tle = Triangle(surfaceView)
+        tle = Triangle(/*surfaceView*/)
         //打开深度检测
         GLES20.glEnable(GLES20.GL_DEPTH_TEST)
     }

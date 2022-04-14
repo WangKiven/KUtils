@@ -25,11 +25,11 @@ public class Triangle {
     int vCount = 0;
     public float xAngle = 0;//绕x轴旋转的角度
 
-    public Triangle(GLSurfaceView mv) {
+    public Triangle(/*GLSurfaceView mv*/) {
         //初始化顶点坐标与着色数据
         initVertexData();
         //初始化shader
-        initShader(mv);
+        initShader(/*mv*/);
     }
 
     public void initVertexData() {
@@ -64,7 +64,7 @@ public class Triangle {
     }
 
     //初始化shader
-    public void initShader(GLSurfaceView mv) {
+    public void initShader(/*GLSurfaceView mv*/) {
         //加载顶点着色器的脚本内容
 //        String mVertexShader = ShaderUtil.loadFromAssetsFile("vertex.sh", mv.getResources());
         String mVertexShader =

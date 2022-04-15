@@ -1,7 +1,6 @@
 package com.kiven.sample.service
 
 import android.content.Context
-import android.graphics.Color
 import android.opengl.GLES20
 import android.opengl.GLSurfaceView
 import android.opengl.Matrix
@@ -98,7 +97,7 @@ class LiveGLWallpaper: WallpaperService() {
             super.onCreate(surfaceHolder)
             setTouchEventsEnabled(true)
         }
-        
+
         var startx = 0f
         var starty = 0f
         override fun onTouchEvent(event: MotionEvent?) {

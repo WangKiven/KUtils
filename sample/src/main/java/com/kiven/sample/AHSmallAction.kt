@@ -6,6 +6,8 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.AudioDeviceInfo
+import android.media.AudioManager
 import android.media.MediaRecorder
 import android.net.ConnectivityManager
 import android.net.Uri
@@ -554,6 +556,42 @@ class AHSmallAction : KActivityHelper() {
         addView("原生分享", View.OnClickListener { AHShare().startActivity(mActivity) })
         addView("剪贴板", View.OnClickListener { KString.setClipText(activity, "这是剪贴内容x") })
         addView("崩溃拦截", View.OnClickListener { throw error("测试崩溃"); })
+        addView("耳机监听", View.OnClickListener {
+            if (!activity.packageManager.hasSystemFeature(PackageManager.FEATURE_AUDIO_OUTPUT)) {
+                showDialog("没有音频输出功能")
+                return@OnClickListener
+            }
+
+            val audioManager = activity.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                val outputDevices = audioManager.getDevices(AudioManager.GET_DEVICES_OUTPUTS)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    val deviceInfo = audioManager.communicationDevice
+                    showTip("在用设备 ${deviceInfo?.id} ${deviceInfo?.productName}")
+                } else {
+                    showTip("isSpeakerphoneOn = ${audioManager.isSpeakerphoneOn}, isBluetoothScoOn = ${audioManager.isBluetoothScoOn}")
+                    showTip("isWiredHeadsetOn = ${audioManager.isWiredHeadsetOn}, isBluetoothA2dpOn = ${audioManager.isBluetoothA2dpOn}")
+                }
+
+                for (outputDevice in outputDevices) {
+                    val type = when(outputDevice.type) {
+                        AudioDeviceInfo.TYPE_BUILTIN_EARPIECE -> "耳机扬声器"
+                        AudioDeviceInfo.TYPE_BUILTIN_SPEAKER -> "内置扬声器系统"
+                        AudioDeviceInfo.TYPE_TELEPHONY -> "电话网络传输音频"
+                        AudioDeviceInfo.TYPE_BLE_HEADSET -> "TYPE_BLE_HEADSET"
+                        AudioDeviceInfo.TYPE_USB_HEADSET -> "TYPE_USB_HEADSET"
+                        AudioDeviceInfo.TYPE_WIRED_HEADSET -> "TYPE_WIRED_HEADSET"
+                        AudioDeviceInfo.TYPE_WIRED_HEADPHONES -> "TYPE_WIRED_HEADPHONES"
+                        else -> "其他 ${outputDevice.type}"
+                    }
+                    showTip("设备${outputDevice.id} ${outputDevice.productName} $type isSink=${outputDevice.isSink} isSource=${outputDevice.isSource}")
+                }
+            } else {
+                showTip("isWiredHeadsetOn = ${audioManager.isWiredHeadsetOn}")
+            }
+        })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
     }

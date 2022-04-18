@@ -566,20 +566,19 @@ class AHSmallAction : KActivityHelper() {
 
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                val outputDevices = audioManager.getDevices(AudioManager.GET_DEVICES_OUTPUTS)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     val deviceInfo = audioManager.communicationDevice
-                    showTip("在用设备 ${deviceInfo?.id} ${deviceInfo?.productName}")
-                } else {
-                    showTip("isSpeakerphoneOn = ${audioManager.isSpeakerphoneOn}, isBluetoothScoOn = ${audioManager.isBluetoothScoOn}")
-                    showTip("isWiredHeadsetOn = ${audioManager.isWiredHeadsetOn}, isBluetoothA2dpOn = ${audioManager.isBluetoothA2dpOn}")
+                    showTip("在用 设备${deviceInfo?.id} ${deviceInfo?.productName}")
                 }
 
+                val outputDevices = audioManager.getDevices(AudioManager.GET_DEVICES_OUTPUTS)
                 for (outputDevice in outputDevices) {
                     val type = when(outputDevice.type) {
-                        AudioDeviceInfo.TYPE_BUILTIN_EARPIECE -> "耳机扬声器"
-                        AudioDeviceInfo.TYPE_BUILTIN_SPEAKER -> "内置扬声器系统"
+                        AudioDeviceInfo.TYPE_BUILTIN_EARPIECE -> "耳机扬声器（不代表使用的耳机）"
+                        AudioDeviceInfo.TYPE_BUILTIN_SPEAKER -> "内置扬声器系统（即单声道扬声器或立体声扬声器）"
                         AudioDeviceInfo.TYPE_TELEPHONY -> "电话网络传输音频"
+                        AudioDeviceInfo.TYPE_BLUETOOTH_SCO -> "用于电话的蓝牙设备"
+                        AudioDeviceInfo.TYPE_BLUETOOTH_A2DP -> "支持A2DP配置文件的蓝牙设备"
                         AudioDeviceInfo.TYPE_BLE_HEADSET -> "TYPE_BLE_HEADSET"
                         AudioDeviceInfo.TYPE_USB_HEADSET -> "TYPE_USB_HEADSET"
                         AudioDeviceInfo.TYPE_WIRED_HEADSET -> "TYPE_WIRED_HEADSET"
@@ -588,9 +587,11 @@ class AHSmallAction : KActivityHelper() {
                     }
                     showTip("设备${outputDevice.id} ${outputDevice.productName} $type isSink=${outputDevice.isSink} isSource=${outputDevice.isSource}")
                 }
-            } else {
-                showTip("isWiredHeadsetOn = ${audioManager.isWiredHeadsetOn}")
             }
+
+            // isSpeakerphoneOn: 检查扬声器是否打开或关闭。isBluetoothScoOn: 检查通信是否使用蓝牙SCO。
+            showTip("isSpeakerphoneOn = ${audioManager.isSpeakerphoneOn}, isBluetoothScoOn = ${audioManager.isBluetoothScoOn}")
+            showTip("isWiredHeadsetOn（有线耳机？） = ${audioManager.isWiredHeadsetOn}, isBluetoothA2dpOn（蓝牙耳机） = ${audioManager.isBluetoothA2dpOn}")
         })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })

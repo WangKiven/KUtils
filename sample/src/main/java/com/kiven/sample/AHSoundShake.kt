@@ -136,9 +136,10 @@ class AHSoundShake: BaseFlexActivityHelper() {
         addBtn("生成音频") {
             val timeLength = 2000 //音频时长, 单位：毫秒
 
-            val random = Random(20)
+//            val random = Random(20)
             val data = createFileData(ByteArray(timeLength * 32) {
-                random.nextInt().toByte()
+//                random.nextInt().toByte()
+                (it % 20).toByte()
             })
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -157,7 +158,7 @@ class AHSoundShake: BaseFlexActivityHelper() {
                         for (i in 0 until l) {
                             buffer[offset + i] = data[(position + i).toInt()]
                         }
-                        showTip("读取 offset=$offset size=$size l=$l")
+                        showTip("读取 position=$position offset=$offset size=$size l=$l")
                         return l
                     }
 

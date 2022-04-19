@@ -6,6 +6,7 @@ import android.content.Context
 import android.media.AudioRecord
 import android.media.MediaPlayer
 import android.media.MediaRecorder
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
@@ -28,6 +29,7 @@ import com.kiven.kutils.tools.KGranting
 import com.kiven.kutils.tools.KToast
 import java.io.File
 import java.util.*
+import kotlin.math.log10
 
 class AHRecorderPlay : KActivityHelper() {
     var tvFb:TextView? = null
@@ -182,7 +184,7 @@ class AHRecorderPlay : KActivityHelper() {
      * url: https://www.jianshu.com/p/de779d509e6c
      * url: https://www.jianshu.com/p/96ee1b7e67e3
      */
-    private fun startRecord(source: Int, encoder: Int, ouputFormat: Int) {
+    private fun startRecord(source: Int, encoder: Int, outputFormat: Int) {
         /**
          *
          * 1. WAV 格式：录音质量高，但是压缩率小，文件大
@@ -191,11 +193,15 @@ class AHRecorderPlay : KActivityHelper() {
          * 4. mp3 格式，使用 MediaRecorder 没有该音频格式输出。一些人的做法是使用 AudioRecord 录音，然后编码成 wav 格式，再转换成 mp3 格式
          */
         if (recorder == null) {
-            val fileName = "${System.currentTimeMillis()}e${encoder}o$ouputFormat"
+            val fileName = "${System.currentTimeMillis()}e${encoder}o$outputFormat"
             val filePath = File(dir(), fileName)
 
 
-            recorder = MediaRecorder()
+            recorder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                MediaRecorder(mActivity)
+            } else {
+                MediaRecorder()
+            }
             recorder?.apply {
                 /**
                  * 设置音频的来源，MIC(主麦克风),DEFAULT(默认)
@@ -208,7 +214,7 @@ class AHRecorderPlay : KActivityHelper() {
                  * ，H263视频/ARM音频编码)、MPEG-4、RAW_AMR(只支持音频且音频编码要求为AMR_NB)
                  */
 //                setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
-                setOutputFormat(ouputFormat)
+                setOutputFormat(outputFormat)
                 /* ②设置音频文件的编码：AAC/AMR_NB/AMR_MB/Default 声音的（波形）的采样 */
 //                setOutputFormat(MediaRecorder.AudioEncoder.AAC)
                 setAudioEncoder(encoder)
@@ -260,7 +266,7 @@ class AHRecorderPlay : KActivityHelper() {
             try {
                 val ratio = maxAmplitude
                 if (ratio > 0) {
-                    val fb = "分贝：${20 * Math.log10(ratio.toDouble())}"
+                    val fb = "分贝：${20 * log10(ratio.toDouble())}"
                     KLog.i(fb)
                     tvFb?.text = fb;
                 }

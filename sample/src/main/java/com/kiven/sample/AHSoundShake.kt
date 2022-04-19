@@ -10,6 +10,10 @@ import com.kiven.sample.util.showDialog
 import com.kiven.sample.util.showSnack
 import com.kiven.sample.util.showTip
 import com.kiven.sample.util.showToast
+import java.io.BufferedOutputStream
+import java.io.FileOutputStream
+import kotlin.math.min
+import kotlin.random.Random
 
 
 class AHSoundShake: BaseFlexActivityHelper() {
@@ -94,6 +98,8 @@ class AHSoundShake: BaseFlexActivityHelper() {
                 AudioManager.ADJUST_RAISE, AudioManager.FLAG_SHOW_UI)
 
             showToast("音量 ${audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)}")
+
+//            audioManager.playSoundEffect(AudioManager.FX_KEY_CLICK)
         }
         addBtn("音量-") {
             val audioManager = activity.getSystemService(Context.AUDIO_SERVICE) as AudioManager
@@ -123,6 +129,52 @@ class AHSoundShake: BaseFlexActivityHelper() {
             }
 
             showToast("静音：$isMute, 音量 ${audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)}")
+        }
+
+        // 生成音频: https://www.yht7.com/news/173702
+        // MediaDataSource: https://blog.csdn.net/weixin_31034309/article/details/114851739
+        addBtn("生成音频") {
+            val timeLength = 2000 //音频时长, 单位：毫秒
+
+            val random = Random(20)
+            val data = createFileData(ByteArray(timeLength * 32) {
+                random.nextInt().toByte()
+            })
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                val player = MediaPlayer()
+                player.setDataSource(object : MediaDataSource() {
+                    override fun close() {
+                    }
+
+                    override fun readAt(
+                        position: Long,
+                        buffer: ByteArray,
+                        offset: Int,
+                        size: Int
+                    ): Int {
+                        val l = min(min(size, buffer.size - offset), (data.size - position).toInt())
+                        for (i in 0 until l) {
+                            buffer[offset + i] = data[(position + i).toInt()]
+                        }
+                        showTip("读取 offset=$offset size=$size l=$l")
+                        return l
+                    }
+
+                    override fun getSize(): Long {
+                        return data.size.toLong()
+                    }
+                })
+                player.setOnCompletionListener {
+                    player.release()
+                    showTip("播放完成")
+                }
+                player.prepare()
+                player.start()
+                showTip("播放开始")
+            } else {
+
+            }
         }
 
         addTitle("硬件")
@@ -188,5 +240,84 @@ class AHSoundShake: BaseFlexActivityHelper() {
             // https://blog.csdn.net/sz_chrome/article/details/107407734
             showToast("没做")
         }
+    }
+
+
+    private fun buildWavHeader(dataLength: Int, srate: Int, channel: Int, format: Int): ByteArray {
+        val header = ByteArray(44)
+        val totalDataLen = (dataLength + 36).toLong()
+        val bitrate = (srate * channel * format).toLong()
+        header[0] = 'R'.code.toByte()
+        header[1] = 'I'.code.toByte()
+        header[2] = 'F'.code.toByte()
+        header[3] = 'F'.code.toByte()
+        header[4] = (totalDataLen and 0xff).toByte()
+        header[5] = (totalDataLen shr 8 and 0xff).toByte()
+        header[6] = (totalDataLen shr 16 and 0xff).toByte()
+        header[7] = (totalDataLen shr 24 and 0xff).toByte()
+        header[8] = 'W'.code.toByte()
+        header[9] = 'A'.code.toByte()
+        header[10] = 'V'.code.toByte()
+        header[11] = 'E'.code.toByte()
+        header[12] = 'f'.code.toByte()
+        header[13] = 'm'.code.toByte()
+        header[14] = 't'.code.toByte()
+        header[15] = ' '.code.toByte()
+        header[16] = format.toByte()
+        header[17] = 0
+        header[18] = 0
+        header[19] = 0
+        header[20] = 1
+        header[21] = 0
+        header[22] = channel.toByte()
+        header[23] = 0
+        header[24] = (srate and 0xff).toByte()
+        header[25] = (srate shr 8 and 0xff).toByte()
+        header[26] = (srate shr 16 and 0xff).toByte()
+        header[27] = (srate shr 24 and 0xff).toByte()
+        header[28] = (bitrate / 8 and 0xff).toByte()
+        header[29] = (bitrate / 8 shr 8 and 0xff).toByte()
+        header[30] = (bitrate / 8 shr 16 and 0xff).toByte()
+        header[31] = (bitrate / 8 shr 24 and 0xff).toByte()
+        header[32] = (channel * format / 8).toByte()
+        header[33] = 0
+        header[34] = 16
+        header[35] = 0
+        header[36] = 'd'.code.toByte()
+        header[37] = 'a'.code.toByte()
+        header[38] = 't'.code.toByte()
+        header[39] = 'a'.code.toByte()
+        header[40] = (dataLength and 0xff).toByte()
+        header[41] = (dataLength shr 8 and 0xff).toByte()
+        header[42] = (dataLength shr 16 and 0xff).toByte()
+        header[43] = (dataLength shr 24 and 0xff).toByte()
+        return header
+    }
+
+    fun createFileData(pcmData: ByteArray): ByteArray {
+        return buildWavHeader(pcmData.size, 16000, 1, 16) + pcmData
+    }
+
+    fun writeToFile(filePath: String?, pcmData: ByteArray): Boolean {
+        var bos: BufferedOutputStream? = null
+        try {
+            bos = BufferedOutputStream(FileOutputStream(filePath))
+            val header = buildWavHeader(pcmData.size, 16000, 1, 16)
+            bos.write(header, 0, 44)
+            bos.write(pcmData)
+            bos.close()
+            return true
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } finally {
+            if (bos != null) {
+                try {
+                    bos.close()
+                } catch (e: Throwable) {
+                    e.printStackTrace()
+                }
+            }
+        }
+        return false
     }
 }

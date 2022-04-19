@@ -171,7 +171,7 @@ class AHSmallAction : KActivityHelper() {
         addView("获取在用壁纸", View.OnClickListener {
             val bp = WallpaperUtil.getDefaultWallpaper(mActivity)
             if (bp == null) {
-                showDialog("获取失败或者为动态壁纸")
+                activity.showDialog("获取失败或者为动态壁纸")
             } else {
                 val iv = ImageView(mActivity)
                 iv.setImageBitmap(bp)
@@ -182,11 +182,11 @@ class AHSmallAction : KActivityHelper() {
         })
         addView("壁纸是本应用设置的吗", View.OnClickListener {
             val yes = WallpaperUtil.wallpaperIsUsed(mActivity)
-            showDialog(if (yes) "是的" else "不是")
+            activity.showDialog(if (yes) "是的" else "不是")
         })
         addView("壁纸是动态壁纸吗", View.OnClickListener {
             val yes = WallpaperUtil.isLivingWallpaper(mActivity)
-            showDialog(if (yes) "是的" else "不是")
+            activity.showDialog(if (yes) "是的" else "不是")
         })
         addView("自定义桌面", View.OnClickListener {
             mActivity.startActivity(Intent(mActivity, ActivityDock::class.java))
@@ -244,7 +244,7 @@ class AHSmallAction : KActivityHelper() {
                 }
 
                 // 启动ui线程
-                showDialog(data.await())
+                activity.showDialog(data.await())
             }
         })
 
@@ -503,7 +503,7 @@ class AHSmallAction : KActivityHelper() {
 
             sb.append("串号:${Build.SERIAL}\n")
 
-            showDialog(sb.toString())
+            activity.showDialog(sb.toString())
         })
         // https://www.jianshu.com/p/a90563606e1f
         // https://developer.android.google.cn/guide/slices/templates
@@ -556,42 +556,7 @@ class AHSmallAction : KActivityHelper() {
         addView("原生分享", View.OnClickListener { AHShare().startActivity(mActivity) })
         addView("剪贴板", View.OnClickListener { KString.setClipText(activity, "这是剪贴内容x") })
         addView("崩溃拦截", View.OnClickListener { throw error("测试崩溃"); })
-        addView("耳机监听", View.OnClickListener {
-            if (!activity.packageManager.hasSystemFeature(PackageManager.FEATURE_AUDIO_OUTPUT)) {
-                showDialog("没有音频输出功能")
-                return@OnClickListener
-            }
-
-            val audioManager = activity.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    val deviceInfo = audioManager.communicationDevice
-                    showTip("在用 设备${deviceInfo?.id} ${deviceInfo?.productName}")
-                }
-
-                val outputDevices = audioManager.getDevices(AudioManager.GET_DEVICES_OUTPUTS)
-                for (outputDevice in outputDevices) {
-                    val type = when(outputDevice.type) {
-                        AudioDeviceInfo.TYPE_BUILTIN_EARPIECE -> "耳机扬声器（不代表使用的耳机）"
-                        AudioDeviceInfo.TYPE_BUILTIN_SPEAKER -> "内置扬声器系统（即单声道扬声器或立体声扬声器）"
-                        AudioDeviceInfo.TYPE_TELEPHONY -> "电话网络传输音频"
-                        AudioDeviceInfo.TYPE_BLUETOOTH_SCO -> "用于电话的蓝牙设备"
-                        AudioDeviceInfo.TYPE_BLUETOOTH_A2DP -> "支持A2DP配置文件的蓝牙设备"
-                        AudioDeviceInfo.TYPE_BLE_HEADSET -> "TYPE_BLE_HEADSET"
-                        AudioDeviceInfo.TYPE_USB_HEADSET -> "TYPE_USB_HEADSET"
-                        AudioDeviceInfo.TYPE_WIRED_HEADSET -> "TYPE_WIRED_HEADSET"
-                        AudioDeviceInfo.TYPE_WIRED_HEADPHONES -> "TYPE_WIRED_HEADPHONES"
-                        else -> "其他 ${outputDevice.type}"
-                    }
-                    showTip("设备${outputDevice.id} ${outputDevice.productName} $type isSink=${outputDevice.isSink} isSource=${outputDevice.isSource}")
-                }
-            }
-
-            // isSpeakerphoneOn: 检查扬声器是否打开或关闭。isBluetoothScoOn: 检查通信是否使用蓝牙SCO。
-            showTip("isSpeakerphoneOn = ${audioManager.isSpeakerphoneOn}, isBluetoothScoOn = ${audioManager.isBluetoothScoOn}")
-            showTip("isWiredHeadsetOn（有线耳机？） = ${audioManager.isWiredHeadsetOn}, isBluetoothA2dpOn（蓝牙耳机） = ${audioManager.isBluetoothA2dpOn}")
+        addView("", View.OnClickListener {
         })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
@@ -608,9 +573,4 @@ class AHSmallAction : KActivityHelper() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         KGranting.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }*/
-
-    private fun showDialog(word: String) {
-        KAlertDialogHelper.Show1BDialog(mActivity, word)
-        Log.i(KLog.getTag(), word)
-    }
 }

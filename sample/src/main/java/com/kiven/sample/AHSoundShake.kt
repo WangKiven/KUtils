@@ -5,13 +5,15 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.media.*
 import android.os.*
+import android.view.inputmethod.EditorInfo
 import com.kiven.kutils.activityHelper.KHelperActivity
-import com.kiven.sample.util.showDialog
-import com.kiven.sample.util.showSnack
-import com.kiven.sample.util.showTip
-import com.kiven.sample.util.showToast
+import com.kiven.kutils.callBack.CallBack
+import com.kiven.kutils.callBack.Function
+import com.kiven.sample.util.*
 import java.io.BufferedOutputStream
 import java.io.FileOutputStream
+import java.util.*
+import kotlin.math.log
 import kotlin.math.min
 import kotlin.random.Random
 
@@ -131,16 +133,47 @@ class AHSoundShake: BaseFlexActivityHelper() {
             showToast("静音：$isMute, 音量 ${audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)}")
         }
 
+        addTitle("生成音频")
+
+        var x = 40
+        var random = Random(x)
+        var audioMode = Function<Int, Number> { it % x }
+        val audioModes = mapOf<String, Function<Int, Number>>(
+            "it % x" to audioMode,
+            "(it + (random.nextInt() * 0.15)) % x" to Function { (it + (random.nextInt(x) * 0.15).toInt()) % x },
+            "(it*it) % x" to Function { (it*it) % x },
+            "log(it.toFloat(), 10f) % x" to Function { log(it.toFloat(), 3f) % x },
+        )
+
+        addBtn("选择音频模式") {
+            activity.showListDialog(audioModes.keys.toTypedArray()) {_,s ->
+                val am = audioModes[s]
+                if (am != null) audioMode = am
+            }
+        }
+        addBtn("设置音频模式变量值") {
+            activity.getInput("x值", x.toString(), EditorInfo.TYPE_CLASS_NUMBER) {
+                x = it.toString().toIntOrNull() ?: 0
+                if (x > 0) {
+                    random = Random(x)
+                }
+            }
+        }
+
         // 生成音频: https://www.yht7.com/news/173702
         // MediaDataSource: https://blog.csdn.net/weixin_31034309/article/details/114851739
         addBtn("生成音频") {
             val timeLength = 2000 //音频时长, 单位：毫秒
 
-//            val random = Random(20)
             val data = createFileData(ByteArray(timeLength * 32) {
-//                random.nextInt().toByte()
-                (it % 20).toByte()
+                try {
+                    audioMode.callBack(it).toByte()
+                } catch (e: Throwable) {
+                    0
+                }
             })
+
+            showTip(data.copyOfRange(44, 300).joinToString{it.toString()})
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 val player = MediaPlayer()
@@ -295,7 +328,7 @@ class AHSoundShake: BaseFlexActivityHelper() {
         return header
     }
 
-    fun createFileData(pcmData: ByteArray): ByteArray {
+    private fun createFileData(pcmData: ByteArray): ByteArray {
         return buildWavHeader(pcmData.size, 16000, 1, 16) + pcmData
     }
 

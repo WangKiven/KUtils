@@ -15,6 +15,7 @@ import java.io.FileOutputStream
 import java.util.*
 import kotlin.math.log
 import kotlin.math.min
+import kotlin.math.sin
 import kotlin.random.Random
 
 
@@ -142,7 +143,7 @@ class AHSoundShake: BaseFlexActivityHelper() {
             "it % x" to audioMode,
             "(it + (random.nextInt() * 0.15)) % x" to Function { (it + (random.nextInt(x) * 0.15).toInt()) % x },
             "(it*it) % x" to Function { (it*it) % x },
-            "log(it.toFloat(), 10f) % x" to Function { log(it.toFloat(), 3f) % x },
+            "sin(it) * x" to Function { sin(it.toDouble()) * x },
         )
 
         addBtn("选择音频模式") {
@@ -191,7 +192,7 @@ class AHSoundShake: BaseFlexActivityHelper() {
                         for (i in 0 until l) {
                             buffer[offset + i] = data[(position + i).toInt()]
                         }
-                        showTip("读取 position=$position offset=$offset size=$size l=$l")
+//                        showTip("读取 position=$position offset=$offset size=$size l=$l")
                         return l
                     }
 

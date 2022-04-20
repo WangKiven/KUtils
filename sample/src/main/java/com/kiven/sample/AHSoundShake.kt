@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.media.*
 import android.os.*
 import android.view.inputmethod.EditorInfo
+import android.widget.Button
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.callBack.CallBack
 import com.kiven.kutils.callBack.Function
@@ -137,13 +138,14 @@ class AHSoundShake: BaseFlexActivityHelper() {
         addTitle("生成音频")
 
         var x = 40
+        var y = 1f
         var random = Random(x)
-        var audioMode = Function<Int, Number> { it % x }
+        var audioMode = Function<Int, Number> { (it * y) % x }
         val audioModes = mapOf<String, Function<Int, Number>>(
-            "it % x" to audioMode,
-            "(it + (random.nextInt() * 0.15)) % x" to Function { (it + (random.nextInt(x) * 0.15).toInt()) % x },
-            "(it*it) % x" to Function { (it*it) % x },
-            "sin(it) * x" to Function { sin(it.toDouble()) * x },
+            "(it * y) % x" to audioMode,
+            "(it*y + (random.nextInt(x) * 0.15)) % x" to Function { (it*y + (random.nextInt(x) * 0.15).toInt()) % x },
+            "(it*it*y) % x" to Function { (it*it*y) % x },
+            "sin(it * 0.1 * y) * x" to Function { sin(it.toDouble() * 0.1 * y) * x },
         )
 
         addBtn("选择音频模式") {
@@ -152,12 +154,22 @@ class AHSoundShake: BaseFlexActivityHelper() {
                 if (am != null) audioMode = am
             }
         }
-        addBtn("设置音频模式变量值") {
-            activity.getInput("x值", x.toString(), EditorInfo.TYPE_CLASS_NUMBER) {
+        addBtn("上限值 x=${x}") { btn ->
+            activity.getInput("上限值 x", x.toString(), EditorInfo.TYPE_CLASS_NUMBER) {
                 x = it.toString().toIntOrNull() ?: 0
                 if (x > 0) {
                     random = Random(x)
                 }
+
+                (btn as Button).text = "上限值 x=${x}"
+            }
+        }
+        addBtn("弹性值 y=${(y*100).toInt()}") { btn ->
+            activity.getInput("弹性值 y", (y * 100).toInt().toString(), EditorInfo.TYPE_CLASS_NUMBER) {
+                val p = it.toString().toIntOrNull() ?: 100
+                y = p / 100f
+
+                (btn as Button).text = "弹性值 y=${(y*100).toInt()}"
             }
         }
 

@@ -17,7 +17,7 @@ import com.kiven.sample.util.addTitle
  * Created by oukobayashi on 2020/7/22.
  */
 open class BaseFlexActivityHelper : KActivityHelper() {
-    private val flexBoxLayout by lazy {
+    protected val flexBoxLayout by lazy {
         FlexboxLayout(mActivity).apply {
             flexWrap = FlexWrap.WRAP
             alignContent = AlignContent.FLEX_START

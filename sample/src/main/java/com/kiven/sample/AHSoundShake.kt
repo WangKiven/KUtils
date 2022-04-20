@@ -5,12 +5,15 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.media.*
 import android.os.*
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.callBack.CallBack
 import com.kiven.kutils.callBack.Function
+import com.kiven.kutils.tools.KUtil
 import com.kiven.sample.util.*
+import com.kiven.sample.widget.CoordinateView
 import java.io.BufferedOutputStream
 import java.io.FileOutputStream
 import java.util.*
@@ -23,6 +26,8 @@ import kotlin.random.Random
 class AHSoundShake: BaseFlexActivityHelper() {
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
+
+        val audioView = CoordinateView(activity, null)
 
         var hasVibrator = false
         val startVibrator = fun (vibrator: Vibrator) {
@@ -186,7 +191,8 @@ class AHSoundShake: BaseFlexActivityHelper() {
                 }
             })
 
-            showTip(data.copyOfRange(44, 300).joinToString{it.toString()})
+//            showTip(data.copyOfRange(44, 300).joinToString{it.toString()})
+            audioView.changeData(data.copyOfRange(44, 1200))
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 val player = MediaPlayer()
@@ -287,6 +293,9 @@ class AHSoundShake: BaseFlexActivityHelper() {
             // https://blog.csdn.net/sz_chrome/article/details/107407734
             showToast("没做")
         }
+
+        addTitle("音频图")
+        flexBoxLayout.addView(audioView, ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.MATCH_PARENT, KUtil.dip2px(200f)))
     }
 
 

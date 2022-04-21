@@ -14,6 +14,7 @@ class CoordinateView(context: Context, attrs: AttributeSet?): View(context, attr
     private var canvasHeight = 0
     private var canvasWidth = 0
     private var data = floatArrayOf()
+    val padding = KUtil.dip2px(10f).toFloat()
     init {
         paint.isAntiAlias = true //抗锯齿
         setLayerType(LAYER_TYPE_SOFTWARE, paint) //关闭硬件加速，否则阴影绘制失败
@@ -22,8 +23,8 @@ class CoordinateView(context: Context, attrs: AttributeSet?): View(context, attr
     fun changeData(newData: ByteArray) {
         val nn = FloatArray(newData.size * 2)
         for ((i, newDatum) in newData.withIndex()) {
-            nn[i*2] = i.toFloat()
-            nn[i*2 + 1] = newDatum.toFloat()
+            nn[i*2] = i.toFloat() + padding
+            nn[i*2 + 1] = newDatum.toFloat() + padding
         }
         data = nn
         invalidate()
@@ -35,7 +36,6 @@ class CoordinateView(context: Context, attrs: AttributeSet?): View(context, attr
         canvasWidth = w
     }
 
-    val padding = KUtil.dip2px(10f).toFloat()
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
         if (canvas == null) return
@@ -44,13 +44,11 @@ class CoordinateView(context: Context, attrs: AttributeSet?): View(context, attr
         paint.color = Color.BLACK
 
         // x轴
-        canvas.drawLine(0f, canvasHeight - padding, canvasWidth.toFloat(), canvasHeight - padding, paint)
+//        canvas.drawLine(0f, canvasHeight - padding, canvasWidth.toFloat(), canvasHeight - padding, paint)
+        canvas.drawLine(0f, padding, canvasWidth.toFloat(), padding, paint)
         // y轴
         canvas.drawLine(padding, canvasHeight.toFloat(), padding, 0f, paint)
         // 数据
-//        for ((i, datum) in data.withIndex()) {
-//
-//        }
         canvas.drawPoints(data, paint)
     }
 

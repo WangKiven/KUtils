@@ -12,6 +12,7 @@ import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.callBack.CallBack
 import com.kiven.kutils.callBack.Function
 import com.kiven.kutils.tools.KUtil
+import com.kiven.kutils.widget.RulingSeekbar
 import com.kiven.sample.util.*
 import com.kiven.sample.widget.CoordinateView
 import java.io.BufferedOutputStream
@@ -140,96 +141,6 @@ class AHSoundShake: BaseFlexActivityHelper() {
             showToast("静音：$isMute, 音量 ${audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)}")
         }
 
-        addTitle("生成音频")
-
-        var x = 40
-        var y = 1f
-        var random = Random(x)
-        var audioMode = Function<Int, Number> { (it * y) % x }
-        val audioModes = mapOf<String, Function<Int, Number>>(
-            "(it * y) % x" to audioMode,
-            "(it*y + (random.nextInt(x) * 0.15)) % x" to Function { (it*y + (random.nextInt(x) * 0.15).toInt()) % x },
-            "(it*it*y) % x" to Function { (it*it*y) % x },
-            "sin(it * 0.1 * y) * x" to Function { sin(it.toDouble() * 0.1 * y) * x },
-        )
-
-        addBtn("选择音频模式") {
-            activity.showListDialog(audioModes.keys.toTypedArray()) {_,s ->
-                val am = audioModes[s]
-                if (am != null) audioMode = am
-            }
-        }
-        addBtn("上限值 x=${x}") { btn ->
-            activity.getInput("上限值 x", x.toString(), EditorInfo.TYPE_CLASS_NUMBER) {
-                x = it.toString().toIntOrNull() ?: 0
-                if (x > 0) {
-                    random = Random(x)
-                }
-
-                (btn as Button).text = "上限值 x=${x}"
-            }
-        }
-        addBtn("弹性值 y=${(y*100).toInt()}") { btn ->
-            activity.getInput("弹性值 y", (y * 100).toInt().toString(), EditorInfo.TYPE_CLASS_NUMBER) {
-                val p = it.toString().toIntOrNull() ?: 100
-                y = p / 100f
-
-                (btn as Button).text = "弹性值 y=${(y*100).toInt()}"
-            }
-        }
-
-        // 生成音频: https://www.yht7.com/news/173702
-        // MediaDataSource: https://blog.csdn.net/weixin_31034309/article/details/114851739
-        addBtn("生成音频") {
-            val timeLength = 2000 //音频时长, 单位：毫秒
-
-            val data = createFileData(ByteArray(timeLength * 32) {
-                try {
-                    audioMode.callBack(it).toByte()
-                } catch (e: Throwable) {
-                    0
-                }
-            })
-
-//            showTip(data.copyOfRange(44, 300).joinToString{it.toString()})
-            audioView.changeData(data.copyOfRange(44, 1200))
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                val player = MediaPlayer()
-                player.setDataSource(object : MediaDataSource() {
-                    override fun close() {
-                    }
-
-                    override fun readAt(
-                        position: Long,
-                        buffer: ByteArray,
-                        offset: Int,
-                        size: Int
-                    ): Int {
-                        val l = min(min(size, buffer.size - offset), (data.size - position).toInt())
-                        for (i in 0 until l) {
-                            buffer[offset + i] = data[(position + i).toInt()]
-                        }
-//                        showTip("读取 position=$position offset=$offset size=$size l=$l")
-                        return l
-                    }
-
-                    override fun getSize(): Long {
-                        return data.size.toLong()
-                    }
-                })
-                player.setOnCompletionListener {
-                    player.release()
-                    showTip("播放完成")
-                }
-                player.prepare()
-                player.start()
-                showTip("播放开始")
-            } else {
-
-            }
-        }
-
         addTitle("硬件")
         addBtn("查看耳机等输出设备信息") {
 //            https://www.runoob.com/w3cnote/android-tutorial-audiomanager.html
@@ -292,6 +203,108 @@ class AHSoundShake: BaseFlexActivityHelper() {
         addBtn("设备插拔监听") {
             // https://blog.csdn.net/sz_chrome/article/details/107407734
             showToast("没做")
+        }
+
+        addTitle("生成音频")
+
+        var x = 40
+        var y = 1f
+        var random = Random(x)
+        var audioMode = Function<Int, Number> { (it * y) % x }
+        val audioModes = mapOf<String, Function<Int, Number>>(
+            "(it * y) % x" to audioMode,
+            "(it*y + (random.nextInt(x) * 0.15)) % x" to Function { (it*y + (random.nextInt(x) * 0.15).toInt()) % x },
+            "(it*it*y) % x" to Function { (it*it*y) % x },
+            "sin(it * 0.1 * y) * x" to Function { sin(it.toDouble() * 0.1 * y) * x },
+        )
+
+        addBtn("选择音频模式") {
+            activity.showListDialog(audioModes.keys.toTypedArray()) {_,s ->
+                val am = audioModes[s]
+                if (am != null) audioMode = am
+            }
+        }
+
+        RulingSeekbar(activity).apply {
+            setScale(0, Byte.MAX_VALUE.toInt())
+            progress = x
+            setFormater {
+                x = it
+                "上限值 x=$it"
+            }
+            flexBoxLayout.addView(this, ViewGroup.MarginLayoutParams(KUtil.getScreenWith() * 60 / 100, KUtil.dip2px(60f)))
+        }
+
+
+//        addBtn("上限值 x=${x}") { btn ->
+//            activity.getInput("上限值 x", x.toString(), EditorInfo.TYPE_CLASS_NUMBER) {
+//                x = it.toString().toIntOrNull() ?: 0
+//                if (x > 0) {
+//                    random = Random(x)
+//                }
+//
+//                (btn as Button).text = "上限值 x=${x}"
+//            }
+//        }
+        addBtn("弹性值 y=${(y*100).toInt()}") { btn ->
+            activity.getInput("弹性值 y", (y * 100).toInt().toString(), EditorInfo.TYPE_CLASS_NUMBER) {
+                val p = it.toString().toIntOrNull() ?: 100
+                y = p / 100f
+
+                (btn as Button).text = "弹性值 y=${(y*100).toInt()}"
+            }
+        }
+
+        // 生成音频: https://www.yht7.com/news/173702
+        // MediaDataSource: https://blog.csdn.net/weixin_31034309/article/details/114851739
+        addBtn("生成音频") {
+            val timeLength = 2000 //音频时长, 单位：毫秒
+
+            val data = createFileData(ByteArray(timeLength * 32) {
+                try {
+                    audioMode.callBack(it).toByte()
+                } catch (e: Throwable) {
+                    0
+                }
+            })
+
+//            showTip(data.copyOfRange(44, 300).joinToString{it.toString()})
+            audioView.changeData(data.copyOfRange(44, 1200))
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                val player = MediaPlayer()
+                player.setDataSource(object : MediaDataSource() {
+                    override fun close() {
+                    }
+
+                    override fun readAt(
+                        position: Long,
+                        buffer: ByteArray,
+                        offset: Int,
+                        size: Int
+                    ): Int {
+                        val l = min(min(size, buffer.size - offset), (data.size - position).toInt())
+                        for (i in 0 until l) {
+                            buffer[offset + i] = data[(position + i).toInt()]
+                        }
+//                        showTip("读取 position=$position offset=$offset size=$size l=$l")
+                        return l
+                    }
+
+                    override fun getSize(): Long {
+                        return data.size.toLong()
+                    }
+                })
+                player.setOnCompletionListener {
+                    player.release()
+                    showTip("播放完成")
+                }
+                player.prepare()
+                player.start()
+                showTip("播放开始")
+            } else {
+
+            }
         }
 
         addTitle("音频图")

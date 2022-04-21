@@ -235,17 +235,6 @@ class AHSoundShake: BaseFlexActivityHelper() {
             flexBoxLayout.addView(this, ViewGroup.MarginLayoutParams(KUtil.getScreenWith() * 60 / 100, KUtil.dip2px(60f)))
         }
 
-
-//        addBtn("上限值 x=${x}") { btn ->
-//            activity.getInput("上限值 x", x.toString(), EditorInfo.TYPE_CLASS_NUMBER) {
-//                x = it.toString().toIntOrNull() ?: 0
-//                if (x > 0) {
-//                    random = Random(x)
-//                }
-//
-//                (btn as Button).text = "上限值 x=${x}"
-//            }
-//        }
         addBtn("弹性值 y=${(y*100).toInt()}") { btn ->
             activity.getInput("弹性值 y", (y * 100).toInt().toString(), EditorInfo.TYPE_CLASS_NUMBER) {
                 val p = it.toString().toIntOrNull() ?: 100

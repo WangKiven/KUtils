@@ -11,6 +11,7 @@ import android.widget.Button
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.callBack.CallBack
 import com.kiven.kutils.callBack.Function
+import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KUtil
 import com.kiven.kutils.widget.RulingSeekbar
 import com.kiven.sample.util.*
@@ -209,13 +210,12 @@ class AHSoundShake: BaseFlexActivityHelper() {
 
         var x = 40
         var y = 1f
-        var random = Random(x)
-        var audioMode = Function<Int, Number> { (it * y) % x }
-        val audioModes = mapOf<String, Function<Int, Number>>(
-            "(it * y) % x" to audioMode,
-            "(it*y + (random.nextInt(x) * 0.15)) % x" to Function { (it*y + (random.nextInt(x) * 0.15).toInt()) % x },
-            "(it*it*y) % x" to Function { (it*it*y) % x },
-            "sin(it * 0.1 * y) * x" to Function { sin(it.toDouble() * 0.1 * y) * x },
+        var audioMode = Function<Float, Number> { it % 127 }
+        val audioModes = mapOf<String, Function<Float, Number>>(
+            "it % 127" to audioMode,
+            "(it + (Random.nextInt(x) * 0.15)) % 127" to Function { (it + (Random.nextInt(x) * 0.15).toInt()) % 127 },
+            "(it*it) % 127" to Function { (it*it) % 127 },
+            "sin(it * 0.1) * 127" to Function { sin(it.toDouble() * 0.1) * 127 },
         )
 
         addBtn("选择音频模式") {
@@ -251,7 +251,7 @@ class AHSoundShake: BaseFlexActivityHelper() {
 
             val data = createFileData(ByteArray(timeLength * 32) {
                 try {
-                    audioMode.callBack(it).toByte()
+                    (audioMode.callBack(it * y).toFloat() * x / Byte.MAX_VALUE).toInt().toByte()
                 } catch (e: Throwable) {
                     0
                 }
@@ -288,9 +288,16 @@ class AHSoundShake: BaseFlexActivityHelper() {
                     player.release()
                     showTip("播放完成")
                 }
-                player.prepare()
-                player.start()
-                showTip("播放开始")
+
+                try {
+                    player.prepare()
+                    player.start()
+                    showTip("播放开始")
+                } catch (e: Throwable) {
+                    player.release()
+                    showTip("出现异常")
+                    KLog.e(e)
+                }
             } else {
 
             }

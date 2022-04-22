@@ -258,7 +258,7 @@ class AHSoundShake: BaseFlexActivityHelper() {
             })
 
 //            showTip(data.copyOfRange(44, 300).joinToString{it.toString()})
-            audioView.changeData(data.copyOfRange(44, 1200))
+            audioView.changeData(data.copyOfRange(44, data.size))
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 val player = MediaPlayer()

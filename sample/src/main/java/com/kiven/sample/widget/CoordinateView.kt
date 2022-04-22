@@ -11,6 +11,7 @@ import com.kiven.kutils.tools.KUtil
 import com.kiven.sample.util.showTip
 import java.util.*
 import kotlin.math.abs
+import kotlin.math.max
 import kotlin.math.min
 
 class CoordinateView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
@@ -33,16 +34,16 @@ class CoordinateView(context: Context, attrs: AttributeSet?) : View(context, att
 
     fun changeData(newData: ByteArray) {
         if (newData.isEmpty()) {
+            data = floatArrayOf()
             invalidate()
             return
         }
         yMin = newData[0].toFloat()
         yMax = yMin
-        val nn = FloatArray(newData.size * 2)
+        val nn = FloatArray(newData.size)
         for ((i, newDatum) in newData.withIndex()) {
-            nn[i * 2] = i.toFloat()
             val y = newDatum.toFloat()
-            nn[i * 2 + 1] = y
+            nn[i] = y
 
             if (yMin > y) yMin = y
             if (yMax < y) yMax = y
@@ -73,23 +74,24 @@ class CoordinateView(context: Context, attrs: AttributeSet?) : View(context, att
         // 数据
         val yCenter = if (yo > yMax && yo > abs(yMin)) 0f else ((yMax + yMin) / 2); // 竖向中间位置的值, 有值超出界面时，才计算
 
-        val v = (xo - padding).toInt() * 2
-        val w = (xo - padding + canvasWidth).toInt() * 2
-//        val dd = when {
-//            data.isEmpty() -> floatArrayOf()
-//            w == v -> floatArrayOf()
-//            else -> data.copyOfRange(min(data.size, v), min(data.size, w))
-//        }
+        val sx = max((xo - padding).toInt(), 0)
+        val dd = when {
+            data.isEmpty() -> floatArrayOf()
+            data.size <= sx -> floatArrayOf()
+            canvasWidth == 0 -> floatArrayOf()
+            else -> data.copyOfRange(min(data.size, sx), min(data.size, sx + canvasWidth))
+                .flatMapIndexed { index, fl -> listOf((index + sx) + padding - xo, yo - fl + yCenter) }.toFloatArray()
+        }
 //        dd.flatMapIndexed { index, fl -> listOf(index.toFloat(), fl) }
 
-        canvas.drawPoints(data.mapIndexed { index, fl -> if (index % 2 == 0) (fl + padding - xo) else (yo - fl + yCenter) }
-            .toFloatArray(), paint)
+        canvas.drawPoints(dd, paint)
 
         // 最大，最小，交叉点
         paint.color = Color.RED
         canvas.drawText(yMax.toString(), padding, yo - yMax + yCenter, paint)
         canvas.drawText(yMin.toString(), padding, yo - yMin + yCenter, paint)
-        canvas.drawText(yCenter.toString(), padding, yo, paint)
+//        paint.color = Color.GREEN
+        canvas.drawText("($xo, $yCenter)", padding, yo, paint)
     }
 
     private var touchX = 0f
@@ -105,8 +107,8 @@ class CoordinateView(context: Context, attrs: AttributeSet?) : View(context, att
                 val mx = xo - x
                 xo = when {
                     mx < 0 -> 0f
-                    data.size /2 < mx -> {
-                        data.size /2f
+                    data.size < mx -> {
+                        data.size.toFloat()
                     }
                     else -> mx
                 }

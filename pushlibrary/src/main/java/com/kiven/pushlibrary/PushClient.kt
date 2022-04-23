@@ -76,7 +76,7 @@ object PushClient {
                     pushHelper = HuaWeiPushHelper()
                 }
             }
-            "oppo" -> {
+            "oppo", "oneplus", "realme" -> {// 一加，oppo, realme
                 if (bundleData.getBoolean("oppo_push_enable", true)) {
                     if (PushManager.isSupportPush(context)) {
                         Web.shouldWebSocket = true

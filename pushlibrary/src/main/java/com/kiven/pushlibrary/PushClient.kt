@@ -8,7 +8,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import androidx.core.content.ContextCompat
-import com.heytap.mcssdk.PushManager
+import com.heytap.msp.push.HeytapPushManager
 import com.kiven.pushlibrary.firebase.FirebaseHelper
 import com.kiven.pushlibrary.hw.HuaWeiPushHelper
 import com.kiven.pushlibrary.mi.MiPushHelper
@@ -78,7 +78,7 @@ object PushClient {
             }
             "oppo", "oneplus", "realme" -> {// 一加，oppo, realme
                 if (bundleData.getBoolean("oppo_push_enable", true)) {
-                    if (PushManager.isSupportPush(context)) {
+                    if (HeytapPushManager.isSupportPush(context)) {
                         Web.shouldWebSocket = true
                         pushHelper = OPPOPushHelper()
                     }

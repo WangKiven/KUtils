@@ -38,7 +38,8 @@
 -keep class com.huawei.hms.**{*;}
 
 # oppo推送
-#-keep public class * extends android.app.Service
+-keep public class * extends android.app.Service
+-keep class com.heytap.msp.** { *;}
 
 # vivo推送
 -dontwarn com.vivo.push.**

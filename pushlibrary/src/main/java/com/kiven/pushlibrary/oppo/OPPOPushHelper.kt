@@ -2,15 +2,17 @@ package com.kiven.pushlibrary.oppo
 
 import android.content.Context
 import android.content.pm.PackageManager
-import com.heytap.mcssdk.PushManager
-import com.heytap.mcssdk.callback.PushAdapter
-import com.heytap.mcssdk.mode.ErrorCode
+import com.heytap.msp.push.HeytapPushManager
+import com.heytap.msp.push.callback.ICallBackResultService
+import com.heytap.msp.push.mode.ErrorCode
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.pushlibrary.PushHelper
 import com.kiven.pushlibrary.Web
 
 /**
  * 标签 别名 账号都不能用了，已标记过时
+ *
+ * https://open.oppomobile.com/new/developmentDoc/info?id=11221
  */
 class OPPOPushHelper : PushHelper {
     override var hasInitSuccess: Boolean = false
@@ -23,8 +25,7 @@ class OPPOPushHelper : PushHelper {
         val appSecret = bundleData.getString("oppo_app_secret")
                 ?: throw Throwable("oppo APPSecret为空")
 
-        PushManager.getInstance().register(context, appKey,
-                appSecret, object : PushAdapter() {
+        HeytapPushManager.register(context, appKey, appSecret, object : ICallBackResultService {
             override fun onRegister(responseCode: Int, registerID: String?) {
                 if (responseCode == ErrorCode.SUCCESS) {
                     KLog.i("OPPO推送注册成功, registerID = $registerID")
@@ -42,11 +43,28 @@ class OPPOPushHelper : PushHelper {
                     KLog.i("OPPO推送注销失败，responseCode = $responseCode")
                 }
             }
-            // // TODO: 2020-01-06 标签 别名 账号都不能用了，已标记过时
+
+            override fun onSetPushTime(p0: Int, p1: String?) {
+            }
+
+            override fun onGetPushStatus(code: Int, status: Int) {
+                if (code == 0 && status == 0) {
+                    KLog.i("Push状态正常")
+                } else {
+                    KLog.i("Push状态错误 code=$code,status=$status")
+                }
+            }
+
+            override fun onGetNotificationStatus(p0: Int, p1: Int) {
+            }
+
+            override fun onError(p0: Int, p1: String?) {
+            }
         })
         hasInitSuccess = true
     }
 
+    // TODO: 2020-01-06 标签 别名 账号都不能用了，已标记过时
     override fun setTags(context: Context, tags: Set<String>) {
     }
 }

@@ -24,7 +24,7 @@ android {
 
 
     defaultConfig {
-        minSdkVersion 17 // 华为推送要求17
+        minSdkVersion 19 // 华为推送要求17，oppo推送要求19
         targetSdkVersion 31
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -70,8 +70,16 @@ dependencies {
     //  解压命令：unzip -n vivo_pushsdk-v2.9.0.0.aar -d tmp/
 //    implementation fileTree(dir: 'vivoPush', include: ['*.jar', '*.bak', '*.aar'])
     implementation zipTree('vivoPush/vivo_pushsdk_v3.0.0.0_480.aar')
-    // OPPO推送
-    implementation fileTree(dir: 'oppoPush', include: ['*.jar', '*.bak'])
+
+    // todo OPPO推送, 文档使用的是 implementation(name: 'push-3.0.0', ext: 'aar')
+    //  需要配置 repositories { flatDir { dirs 'libs' } }，但是在这里不适用（这本来是一个SDK，其他应用不方便这样导入）
+//    implementation fileTree(dir: 'oppoPush', include: ['*.jar', '*.bak'])
+    implementation zipTree('oppoPush/push-3.0.0.aar')
+    //以下依赖都需要添加
+    implementation 'com.google.code.gson:gson:2.8.9'
+    implementation 'commons-codec:commons-codec:1.10'
+    implementation 'androidx.annotation:annotation:1.3.0'
+
     // Firebase
     //implementation 'com.google.firebase:firebase-analytics:17.4.4'
     implementation 'com.google.firebase:firebase-messaging:23.0.0'

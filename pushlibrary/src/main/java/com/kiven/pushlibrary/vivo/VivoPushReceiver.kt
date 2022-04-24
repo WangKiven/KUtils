@@ -10,7 +10,7 @@ import com.vivo.push.sdk.OpenClientPushMessageReceiver
  * Created by oukobayashi on 2020-01-06.
  */
 class VivoPushReceiver : OpenClientPushMessageReceiver() {
-    // TODO: 2021/1/7   vivo推送api3.0.0.0废弃了该回调
+    // TODO: 2021/1/7   vivo推送api3.0.0.0废弃了该回调，3.0.0.2又恢复了该方法
 //    override fun onNotificationMessageClicked(p0: Context?, p1: UPSNotificationMessage?) {
 //        if (p0 == null || p1 == null) return
 //        KLog.i("vivo 点击了通知")

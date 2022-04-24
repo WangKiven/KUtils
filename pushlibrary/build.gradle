@@ -69,7 +69,7 @@ dependencies {
     //  解压AAR后，查看除了jar有用，其他文件都没用，所有使用zipTree
     //  解压命令：unzip -n vivo_pushsdk-v2.9.0.0.aar -d tmp/
 //    implementation fileTree(dir: 'vivoPush', include: ['*.jar', '*.bak', '*.aar'])
-    implementation zipTree('vivoPush/vivo_pushsdk_v3.0.0.0_480.aar')
+    implementation zipTree('vivoPush/vivo_pushSDK_v3.0.0.4_484.aar')
 
     // todo OPPO推送, 文档使用的是 implementation(name: 'push-3.0.0', ext: 'aar')
     //  需要配置 repositories { flatDir { dirs 'libs' } }，但是在这里不适用（这本来是一个SDK，其他应用不方便这样导入）

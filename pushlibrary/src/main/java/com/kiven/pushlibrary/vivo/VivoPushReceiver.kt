@@ -8,6 +8,8 @@ import com.vivo.push.sdk.OpenClientPushMessageReceiver
 
 /**
  * Created by oukobayashi on 2020-01-06.
+ *
+ * https://dev.vivo.com.cn/documentCenter/doc/364
  */
 class VivoPushReceiver : OpenClientPushMessageReceiver() {
     // TODO: 2021/1/7   vivo推送api3.0.0.0废弃了该回调，3.0.0.2又恢复了该方法

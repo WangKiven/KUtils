@@ -665,7 +665,7 @@ public class KString {
 
     /**
      * 检查是否是电话号码
-     * 12 开头的 11 位 字符串。
+     * 1[3-9] 开头的 11 位 字符串。
      * 注意：需要严格控制输入，必须为数字
      */
     public static boolean checkIsPhoneNumber2(CharSequence num) {

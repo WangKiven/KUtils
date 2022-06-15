@@ -11,12 +11,20 @@
         android:layout_height="60dp" />
 
     <com.kiven.kutils.widget.KNormalItemView
-        android:id="@+id/item"
+        android:id="@+id/item1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
         android:onClick="onClick"
-        app:item_title="KNormalItemView"/>
+        app:item_title="RecyclerView嵌套UIGridView"/>
+
+    <com.kiven.kutils.widget.KNormalItemView
+        android:id="@+id/item2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:onClick="onClick"
+        app:item_title="RecyclerView嵌套RecyclerView"/>
 
 
 

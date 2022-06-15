@@ -54,6 +54,12 @@ class AHKUtilsWidgetDemo : BaseFlexActivityHelper() {
 
     override fun onClick(view: View?) {
         super.onClick(view)
+        when(view?.id) {
+            R.id.item1 -> {
+                AHGvInRecyclerView().startActivity(mActivity)
+            }
+            R.id.item2 -> {}
+        }
         mActivity.showSnack("你点击了KNormalItemView")
     }
 }

@@ -216,12 +216,13 @@ fun Activity.showImageDialog(uri: Uri) {
 }
 
 fun Activity.showImageDialog(bitmap: Bitmap) {
-    val dialog = object : Dialog(this, R.style.Dialog) {
+    val dialog = object : Dialog(this, R.style.AppTheme_ImageDialog) {
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
             val imageView = ImageView(context)
             setContentView(imageView)
             imageView.setImageBitmap(bitmap)
+            imageView.setOnClickListener { dismiss() }
         }
     }
     dialog.show()

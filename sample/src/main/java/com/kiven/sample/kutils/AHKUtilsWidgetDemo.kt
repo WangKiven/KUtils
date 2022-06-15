@@ -1,4 +1,4 @@
-package com.kiven.sample
+package com.kiven.sample.kutils
 
 import android.content.Context
 import android.os.Bundle
@@ -8,6 +8,8 @@ import android.widget.ImageView
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.tools.KUtil
 import com.kiven.kutils.widget.UIGridView
+import com.kiven.sample.BaseFlexActivityHelper
+import com.kiven.sample.R
 import com.kiven.sample.databinding.AhKutilsWidgetDemoBinding
 import com.kiven.sample.util.showSnack
 

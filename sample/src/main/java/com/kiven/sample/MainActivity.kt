@@ -22,6 +22,7 @@ import com.kiven.sample.floatView.ActivityHFloatView
 import com.kiven.sample.font.AHFont
 import com.kiven.sample.gl.AHGL
 import com.kiven.sample.helperTest.AHHelperTest
+import com.kiven.sample.kutils.AHKUtilsWidgetDemo
 import com.kiven.sample.libs.AHLibs
 import com.kiven.sample.media.AHMediaList
 import com.kiven.sample.push.AHSxbPush

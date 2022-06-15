@@ -92,7 +92,7 @@ public class UIGridView extends ViewGroup {
         if (gridViewAdapter == null) {
             return;
         }
-        gridViewAdapter.addAllItemView();
+        gridViewAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -313,27 +313,14 @@ public class UIGridView extends ViewGroup {
             return itemView;
         }
 
-        final Handler ch = new Handler(new Handler.Callback() {
-            @Override
-            public boolean handleMessage(Message msg) {
+        final Handler ch = new Handler(msg -> {
+            synchronized (this) {
                 addAllItemView();
-                return true;
             }
+            return true;
         });
         public void notifyDataSetChanged() {
             if (mGridView != null) {
-                /*x.task().run(new Runnable() {
-                    @Override
-                    public void run() {
-                        x.task().post(new Runnable() {
-                            @Override
-                            public void run() {
-                                addAllItemView();
-                            }
-                        });
-                    }
-                });*/
-
                 new Thread() {
                     @Override
                     public void run() {
@@ -344,7 +331,7 @@ public class UIGridView extends ViewGroup {
         }
 
         private void addAllItemView() {
-            List<View> itemVies = new ArrayList<>();
+            /*List<View> itemVies = new ArrayList<>();
             for (int i = 0; i < mGridView.getChildCount(); i++) {
                 itemVies.add(mGridView.getChildAt(i));
             }
@@ -362,13 +349,34 @@ public class UIGridView extends ViewGroup {
                 ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(0, 0);
                 params.width = isSingleCol ? ViewGroup.LayoutParams.MATCH_PARENT : ViewGroup.LayoutParams.WRAP_CONTENT;
                 params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-//                ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(isSingleCol? ViewGroup.LayoutParams.MATCH_PARENT: ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 params.setMargins(childMarginLeft, childMarginTop, childMarginRight, childMarginBottom);
 
                 if (mGridView.indexOfChild(itemView) < 0) {
                     mGridView.addView(itemView, params);
                 } else {
 
+                }
+            }*/
+
+            final int oldChildCount = mGridView.getChildCount();
+            final int newChildCount = getGridViewItemCount();
+            for (int i = 0; i < newChildCount; i++) {
+                final boolean useOld = i + 1 <= oldChildCount;
+                View itemView = getItemView(mGridView.getContext(), useOld ? mGridView.getChildAt(i) : null, mGridView, i);
+
+                if (!useOld) {
+                    ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(0, 0);
+                    params.width = isSingleCol ? ViewGroup.LayoutParams.MATCH_PARENT : ViewGroup.LayoutParams.WRAP_CONTENT;
+                    params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                    params.setMargins(childMarginLeft, childMarginTop, childMarginRight, childMarginBottom);
+
+                    mGridView.addView(itemView, params);
+                }
+            }
+
+            if (newChildCount < oldChildCount) {
+                for (int i = 0; i < oldChildCount - newChildCount; i++) {
+                    mGridView.removeViewAt(oldChildCount - i - 1);
                 }
             }
         }

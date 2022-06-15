@@ -48,6 +48,7 @@ class AHGvInRecyclerView : KActivityHelper() {
     }
 
     // 依赖
+    private var holderInitCount = 0
     private inner class MyHolder(v: View) : RecyclerView.ViewHolder(v) {
         private lateinit var data: List<Long>
         private val tv1: TextView = v.findViewById(R.id.tv1)
@@ -55,6 +56,7 @@ class AHGvInRecyclerView : KActivityHelper() {
         private val checkBox: CheckBox = v.findViewById(R.id.checkbox)
         private val adapter = ImageAdapter()
         private var isChecked = false
+        private val initCount = (holderInitCount++)
 
         init {
             gridView.setAdapter(adapter)
@@ -66,7 +68,7 @@ class AHGvInRecyclerView : KActivityHelper() {
 
         fun bindData(data: List<Long>) {
             this.data = data
-            tv1.text = position.toString()
+            tv1.text = "position$position/adapterPosition$adapterPosition/layoutPosition$layoutPosition/absoluteAdapterPosition$absoluteAdapterPosition/oldPosition$oldPosition/bindingAdapterPosition$bindingAdapterPosition/holder计数$initCount"
 
             adapter.changeData(data.map {
                 val uri = ContentUris.withAppendedId(

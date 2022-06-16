@@ -6,7 +6,7 @@ pluginManagement {
 //        maven { url 'http://maven.aliyun.com/nexus/content/groups/public' }
         gradlePluginPortal()
         maven { url 'https://maven.aliyun.com/repository/google' }
-//        google()
+        google()
         mavenLocal()
         mavenCentral()
 //        jcenter()

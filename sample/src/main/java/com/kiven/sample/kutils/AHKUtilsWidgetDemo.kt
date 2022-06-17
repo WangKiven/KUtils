@@ -58,7 +58,9 @@ class AHKUtilsWidgetDemo : BaseFlexActivityHelper() {
             R.id.item1 -> {
                 AHGvInRecyclerView().startActivity(mActivity)
             }
-            R.id.item2 -> {}
+            R.id.item2 -> {
+                AHInRecyclerView().startActivity(mActivity)
+            }
         }
         mActivity.showSnack("你点击了KNormalItemView")
     }

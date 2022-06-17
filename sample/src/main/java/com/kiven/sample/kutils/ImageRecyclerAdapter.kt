@@ -3,12 +3,14 @@ package com.kiven.sample.kutils
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.kiven.kutils.tools.KAppHelper
 import com.kiven.kutils.tools.KUtil
+import com.kiven.sample.R
 import com.kiven.sample.util.showImageDialog
 import java.io.File
 
@@ -24,11 +26,17 @@ class ImageRecyclerAdapter(val context: Context, private val itemWidth:Float = 1
         notifyDataSetChanged()
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return object : RecyclerView.ViewHolder(ImageView(context)) {}
+        // TODO ImageView 在 ConstraintLayout中固定宽高比为 1：1，在嵌套的RecyclerView和NestScrollView里面才能正常显示
+        //  否则，概率出现部分RecyclerView的内容显示不完整
+        //  高度不固定的情况，目前没找到解决方法
+//        return object : RecyclerView.ViewHolder(ImageView(context)) {}
+        return object : RecyclerView.ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_image, parent, false)) {}
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        (holder.itemView as ImageView).apply {
+        (holder.itemView.findViewById<ImageView>(R.id.iv_test)).apply {
+            adjustViewBounds = true
+
             val item  = data[position]
 
             Glide.with(context!!).let {

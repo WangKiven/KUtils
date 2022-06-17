@@ -26,6 +26,14 @@
         android:onClick="onClick"
         app:item_title="RecyclerView嵌套RecyclerView"/>
 
+    <com.kiven.kutils.widget.KNormalItemView
+        android:id="@+id/item3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:onClick="onClick"
+        app:item_title="NestScrollView嵌套RecyclerView"/>
+
 
 
     <com.kiven.kutils.widget.UIGridView

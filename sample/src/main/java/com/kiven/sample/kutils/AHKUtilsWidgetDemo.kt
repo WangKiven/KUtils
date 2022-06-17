@@ -61,6 +61,9 @@ class AHKUtilsWidgetDemo : BaseFlexActivityHelper() {
             R.id.item2 -> {
                 AHInRecyclerView().startActivity(mActivity)
             }
+            R.id.item3 -> {
+                AHRecyclerInScrollView().startActivity(mActivity)
+            }
         }
         mActivity.showSnack("你点击了KNormalItemView")
     }

@@ -36,7 +36,7 @@ class AHInRecyclerView : KActivityHelper() {
         mActivity.phoneImages {
             for (i in 0..1000) {
 //                val r = 1 + (Math.random() * 100).toInt() % 6
-                val r = 9
+                val r = 7
                 val ims = List(r) { _ ->
                     it.random()[MediaStore.Images.Media._ID]?.toLong() ?: 0L
                 }

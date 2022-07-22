@@ -3,7 +3,6 @@ package com.kiven.sample.kutils
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -13,7 +12,6 @@ import com.bumptech.glide.Glide
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KAppHelper
 import com.kiven.kutils.tools.KUtil
-import com.kiven.sample.R
 import com.kiven.sample.util.showImageDialog
 import com.kiven.sample.util.showToast
 import java.io.File

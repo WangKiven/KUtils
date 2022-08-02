@@ -32,6 +32,8 @@ public class KUncaughtExceptionHandler implements Thread.UncaughtExceptionHandle
     private boolean hasRun = false;
     @Override
     public void uncaughtException(@NonNull Thread t, @NonNull Throwable e) {
+        e.printStackTrace();// 控制台输出异常
+
         if (hasRun) return;// 由于KContext中两次调用register(),防止导致循环运行该方法。因为其他程序有可能也要拦截崩溃异常
         hasRun = true;
 

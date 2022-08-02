@@ -40,12 +40,12 @@ buildscript {
         classpath 'com.google.ar.sceneform:plugin:1.17.1'
 
         // firebase
-        classpath 'com.google.gms:google-services:4.3.10'
+        classpath 'com.google.gms:google-services:4.3.13'
     }
 
     project.ext {
-        compileSdkVersion = 31
-        targetSdkVersion = 31
+        compileSdkVersion = 32
+        targetSdkVersion = 32
 //        compileSdkVersion = "android-S"
 //        targetSdkVersion = "S"
         minSdkVersion = 14

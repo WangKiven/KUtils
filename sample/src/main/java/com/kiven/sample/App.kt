@@ -29,19 +29,17 @@ class App : KContext() {
         KLog.i("AppContext attachBaseContext")
     }
 
-    override fun initOnlyMainProcess() {
-        super.initOnlyMainProcess()
-
+    override fun onCreate(isMain: Boolean) {
+        super.onCreate(isMain)
+        if (isMain) {
 //        DoKit.Builder(this)
 //            .productId("需要使用平台功能的话，需要到dokit.cn平台申请id")
 //            .build()
 
-        KLog.printDeviceInfo()
-    }
+            KLog.printDeviceInfo()
+        }
 
-    override fun init() {
-        super.init()
-        KLog.i("App init")
+
         x.Ext.init(this)
 
 //        KGranting.useFragmentRequest = true

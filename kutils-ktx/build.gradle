@@ -17,13 +17,13 @@ afterEvaluate {
 }
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 32
 //    buildToolsVersion "29.0.2"
 
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 31
+        targetSdkVersion 32
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
@@ -41,7 +41,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1"
     implementation "com.google.android.material:material:1.6.1"
 //    compileOnly 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.core:core-ktx:1.8.0'

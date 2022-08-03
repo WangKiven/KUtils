@@ -53,7 +53,7 @@ dependencies {
 
 
     // okhttp https://github.com/square/okhttp
-    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
+    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
 
 
     implementation project(':kutils')

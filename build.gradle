@@ -2,8 +2,8 @@
 
 buildscript {
     ext {
-        compose_version = '1.1.1'
-        kotlin_version = '1.6.10'
+        compose_version = '1.2.0'
+        kotlin_version = '1.7.0'
         library_version = '1.4.9'
     }
 
@@ -33,7 +33,7 @@ buildscript {
 
 
         // 华为推送插件
-        classpath 'com.huawei.agconnect:agcp:1.6.5.300'
+        classpath 'com.huawei.agconnect:agcp:1.7.0.300'
 
 
         // google ar

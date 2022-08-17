@@ -19,7 +19,6 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.flexbox.FlexboxLayoutManager;
-import com.google.android.material.snackbar.Snackbar;
 import com.kiven.kutils.R;
 import com.kiven.kutils.activityHelper.KActivityHelper;
 import com.kiven.kutils.activityHelper.KHelperActivity;
@@ -64,11 +63,11 @@ class KAHDebugActionEdit extends KActivityHelper {
                 MyAdapter otherAdapter = (MyAdapter) rv_other.getAdapter();
 
                 if (isEditing) {
-                    ImageViewCompat.setImageTintList(iv_edit, ContextCompat.getColorStateList(mActivity, R.color.design_default_color_secondary_variant));
+                    ImageViewCompat.setImageTintList(iv_edit, ContextCompat.getColorStateList(mActivity, com.google.android.material.R.color.design_default_color_secondary_variant));
                     quickAdapter.editType = 0;
                     otherAdapter.editType = 0;
                 } else {
-                    ImageViewCompat.setImageTintList(iv_edit, ContextCompat.getColorStateList(mActivity, R.color.design_default_color_error));
+                    ImageViewCompat.setImageTintList(iv_edit, ContextCompat.getColorStateList(mActivity, com.google.android.material.R.color.design_default_color_error));
                     quickAdapter.editType = 2;
                     otherAdapter.editType = 1;
                 }

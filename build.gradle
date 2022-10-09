@@ -2,8 +2,8 @@
 
 buildscript {
     ext {
-        compose_version = '1.2.0'
-        kotlin_version = '1.7.0'
+        compose_version = '1.2.1'
+        kotlin_version = '1.7.10'
         library_version = '1.4.9'
     }
 
@@ -20,7 +20,7 @@ buildscript {
         maven { url 'https://developer.huawei.com/repo/' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.2.2'
+        classpath 'com.android.tools.build:gradle:7.3.0'
 
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 //        classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlin_version"
@@ -40,12 +40,12 @@ buildscript {
         classpath 'com.google.ar.sceneform:plugin:1.17.1'
 
         // firebase
-        classpath 'com.google.gms:google-services:4.3.13'
+        classpath 'com.google.gms:google-services:4.3.14'
     }
 
     project.ext {
-        compileSdkVersion = 32
-        targetSdkVersion = 32
+        compileSdkVersion = 33
+        targetSdkVersion = 33
 //        compileSdkVersion = "android-S"
 //        targetSdkVersion = "S"
         minSdkVersion = 14

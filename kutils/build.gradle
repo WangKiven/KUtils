@@ -30,6 +30,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    namespace 'com.kiven.kutils'
 }
 
 /*group = 'com.kiven.kutils'

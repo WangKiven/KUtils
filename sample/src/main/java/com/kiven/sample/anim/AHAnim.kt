@@ -244,7 +244,7 @@ class AHAnim : KActivityHelper() {
                 val anim = ViewAnimationUtils.createCircularReveal(iv_2, 50, 50
                         , Math.hypot(50.0, 50.0).toFloat(), 0f)
                 anim.addListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator?) {
+                    override fun onAnimationEnd(animation: Animator) {
                         iv_2.visibility = View.GONE
                     }
                 })

@@ -1,5 +1,6 @@
 package com.kiven.sample.util
 
+import android.annotation.TargetApi
 import android.app.Activity
 import android.app.Dialog
 import android.content.ContentUris
@@ -12,6 +13,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.provider.Settings
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -394,4 +396,10 @@ fun Activity.phoneImages(
             }.start()
         } else onError("没有权限")
     }
+}
+@TargetApi(Build.VERSION_CODES.M)
+fun Activity.startOverlaySetting() {
+    val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
+    intent.data = Uri.parse("package:$packageName")
+    startActivity(intent)
 }

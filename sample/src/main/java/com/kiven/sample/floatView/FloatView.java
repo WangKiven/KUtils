@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.kiven.kutils.callBack.CallBack;
 import com.kiven.kutils.tools.KUtil;
 import com.kiven.sample.autoService.wechat.WXConst;
 
@@ -35,11 +36,20 @@ public class FloatView {
 //    Button mFloatView;
 
     private Context context;
+    private String text;
+    private CallBack onClick;
     private static final String TAG = "FloatView";
 
     public FloatView(Context context, WindowManager windowManager, boolean isOverlay) {
+        this(context, windowManager, "省", isOverlay, null);
+    }
+
+    public FloatView(Context context, WindowManager windowManager, String text, boolean isOverlay, CallBack onClick) {
         this.context = context;
         mWindowManager = windowManager;
+        this.text = text;
+        this.onClick = onClick;
+
         if (isOverlay) {// 应用外悬浮
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;// TYPE_APPLICATION 才是activity内
@@ -88,7 +98,7 @@ public class FloatView {
         //浮动窗口按钮
 //        mFloatView = (Button)mFloatLayout.findViewById(R.id.float_id);
         Button mFloatView = new Button(context);
-        mFloatView.setText("省");
+        mFloatView.setText(text);
 
         mFloatLayout.addView(mFloatView, new LinearLayout.LayoutParams(KUtil.dip2px(50), KUtil.dip2px(50)));
 
@@ -130,6 +140,7 @@ public class FloatView {
                             WXConst.logType++;
 
                             Toast.makeText(context, "onClickss" + WXConst.logType, Toast.LENGTH_SHORT).show();
+                            if (onClick != null) onClick.callBack();
                         }
                         break;
                 }

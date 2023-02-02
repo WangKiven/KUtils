@@ -41,6 +41,7 @@ import com.kiven.sample.actions.BiometricDemo
 import com.kiven.sample.anim.AHAnim
 import com.kiven.sample.autoService.AHAutoService
 import com.kiven.sample.charCode.AHUnicodeList
+import com.kiven.sample.cutImage.AHCutImage
 import com.kiven.sample.dock.ActivityDock
 import com.kiven.sample.imui.ImActivity
 import com.kiven.sample.mimc.ChatMsg
@@ -556,8 +557,7 @@ class AHSmallAction : KActivityHelper() {
         addView("原生分享", View.OnClickListener { AHShare().startActivity(mActivity) })
         addView("剪贴板", View.OnClickListener { KString.setClipText(activity, "这是剪贴内容x") })
         addView("崩溃拦截", View.OnClickListener { throw error("测试崩溃"); })
-        addView("", View.OnClickListener {
-        })
+        addView("截屏截图", View.OnClickListener { AHCutImage().startActivity(mActivity) })
         addView("", View.OnClickListener { })
         addView("", View.OnClickListener { })
     }

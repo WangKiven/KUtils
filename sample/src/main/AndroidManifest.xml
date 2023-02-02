@@ -197,6 +197,11 @@
             android:name=".floatView.ServiceFloat"
             android:exported="false" />
         <service
+            android:name=".cutImage.CutScreenService"
+            android:foregroundServiceType="mediaProjection"
+            android:enabled="true"
+            android:exported="true" />
+        <service
             android:name=".service.LiveWallpaper"
             android:enabled="true"
             android:exported="true"

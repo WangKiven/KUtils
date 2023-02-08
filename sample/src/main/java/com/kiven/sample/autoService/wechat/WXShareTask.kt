@@ -22,7 +22,7 @@ class WXShareTask(
         val isSendAll: Boolean = false,// 是否发送给所有好友
         val isSendTags: Boolean = false,// 是否发送给标签好友，true: 发送给标签好友，false: 发送给不是这些标签的好友
         val tagForFriends: List<String>? = null, // 对应的标签，null: 不根据标签发送
-        val msgForSend: String = "买车就用省心宝，卖车更要用省心宝，省心宝 你值得拥有，✌️",// 要发送的文案
+        val msgForSend: String = "今天是个好日子，✌️",// 要发送的文案
 
         val mediaCount: Int = 0 // 要发送的图片数量
 ) : AutoInstallService.AccessibilityTask {

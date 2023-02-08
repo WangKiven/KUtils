@@ -5,7 +5,7 @@
     <string name="paper_name">KPaper</string>
     <string name="paper_name2">KPaper2</string>
 
-    <string name="auto_access_service_description">Kiven的无障碍助手</string>
+    <string name="auto_access_service_description">无障碍助手【KUSample】</string>
     <string name="auto_access_service_dist_package">com.tencent.mm</string>
 
     <string name="auto_access_service_dist_package1">com.jeeinc.save.worry</string>

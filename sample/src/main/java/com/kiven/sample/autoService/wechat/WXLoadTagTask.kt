@@ -194,7 +194,7 @@ class WXLoadTagTask : AutoInstallService.AccessibilityTask {
                 tasks[0].moveToFront()
                 KLog.i("xxxxxxxxxxxxxx:::::${tasks.size}")
             }else {
-                showToast("标签获取完成，请回到【省心宝汽车】")
+                showToast("标签获取完成，请回到【KUSample】")
                 service.performGlobalAction(AccessibilityService.GLOBAL_ACTION_RECENTS)
 
 

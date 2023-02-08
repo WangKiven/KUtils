@@ -269,7 +269,7 @@
         <service
             android:name=".autoService.AutoInstallService"
             android:exported="false"
-            android:label="巴拉啦无障碍"
+            android:label="无障碍助手【KUSample】"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />

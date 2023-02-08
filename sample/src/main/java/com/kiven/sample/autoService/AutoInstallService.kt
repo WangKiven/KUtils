@@ -42,7 +42,7 @@ class AutoInstallService : AccessibilityService() {
             return;*/
 
         if (KLog.isDebug()) {
-            when (WXConst.logType % 3) {
+            when (WXConst.logType % 2) {
                 0 -> {}
                 1 -> {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -65,8 +65,11 @@ class AutoInstallService : AccessibilityService() {
                                 )
                         )
                     }
+                    rootInActiveWindow?.let {
+                        AccessibilityUtil.printTree(it)
+                    }
                 }
-                2 -> {
+                /*2 -> {
                     rootInActiveWindow?.let {
                         AccessibilityUtil.printTree(it)
                     }
@@ -75,7 +78,7 @@ class AutoInstallService : AccessibilityService() {
                     event.source?.let {
                         AccessibilityUtil.printTree(it)
                     }
-                }
+                }*/
             }
         }
 
@@ -180,7 +183,7 @@ class AutoInstallService : AccessibilityService() {
                 // 请在手机【无障碍】设置中，开启省心宝提供的【微信分享助手】开始获取微信好友标签，点确定去开启。
                 KAlertDialogHelper.Show2BDialog(
                         mActivity,
-                        "请在手机【无障碍】设置中，开启由【省心宝汽车】提供的【微信分享助手】，点确定去开启。"
+                        "请在手机【无障碍】设置中，开启由【KUSample】提供的【无障碍助手】，点确定去开启。"
                 ) {
                     AccessibilityUtil.jumpToSetting(mActivity)
                 }

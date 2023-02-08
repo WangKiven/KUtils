@@ -55,6 +55,9 @@ class CutScreenService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
+        initCall = null
+        onClick = null
+        text = "帅"
 
         floatView?.hideFloat()
         floatView = null

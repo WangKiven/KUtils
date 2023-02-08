@@ -50,6 +50,7 @@ class AHCutImage: BaseFlexActivityHelper() {
                 KLog.e(e)
             }
         }
+
         addTitle("MediaProjectionManager，必须开启前台服务功能并通知，否则高系统会报异常")
 
         addBtn("开启截图前台服务") {
@@ -114,6 +115,7 @@ class AHCutImage: BaseFlexActivityHelper() {
     override fun onDestroy() {
         super.onDestroy()
         media?.stop()
+        imageReader = null
         stopAppOutFloat()
     }
 

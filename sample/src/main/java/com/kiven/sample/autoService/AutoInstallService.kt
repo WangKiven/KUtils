@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.os.Build
 import android.os.Handler
+import android.os.Looper
 import android.view.WindowManager
 import android.view.accessibility.AccessibilityEvent
 import com.kiven.kutils.logHelper.KLog
@@ -19,22 +20,7 @@ import com.kiven.sample.floatView.FloatView
  * xml配置详解：https://www.jianshu.com/p/ef01ce654302
  */
 class AutoInstallService : AccessibilityService() {
-    private val mHandler = Handler()
-
-    private var floatView: FloatView? = null
-
-    override fun onCreate() {
-        super.onCreate()
-        // y由于是后台服务，必须是应用外悬浮
-        if (KLog.isDebug()){
-            floatView = FloatView(
-                    baseContext,
-                    application.getSystemService(Context.WINDOW_SERVICE) as WindowManager,
-                    true
-            )
-            floatView?.showFloat()
-        }
-    }
+    private val mHandler = Handler(Looper.getMainLooper())
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
         /*if (event == null || !event.getPackageName().toString()
@@ -82,7 +68,7 @@ class AutoInstallService : AccessibilityService() {
             }
         }
 
-        if (task != null) task!!.onAccessibilityEvent(this, event)
+        if (task != null) task!!.onAccessibilityEvent(event)
     }
 
 
@@ -92,28 +78,11 @@ class AutoInstallService : AccessibilityService() {
 
         mInstance = this
 
-        // 退出设置界面，后面再优化
-//        performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK)
-//        performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK)
-
-        /*
-        // 这种方法，startActivityForResult 获取不到返回值
-        val ah = AHWXShareTag()
-        ah.intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        ah.intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        ah.startActivity(this)*/
-//        onConnectedCall?.callBack(this)
-
-
-        /*mHandler.postDelayed({
-
-            // 任务处理
-            if (task != null) task!!.onServiceConnected(this@AutoInstallService)
-        }, DELAY_PAGE)*/
         closeSettingAndNext()
     }
 
     private fun closeSettingAndNext() {
+        // 推一页
         performGlobalAction(GLOBAL_ACTION_BACK)
 
         mHandler.postDelayed({
@@ -121,7 +90,7 @@ class AutoInstallService : AccessibilityService() {
                 closeSettingAndNext()
             } else {
                 // 任务处理
-                if (task != null) task!!.onServiceConnected(this@AutoInstallService)
+                task?.registerService(this@AutoInstallService)
             }
 
         }, DELAY_PAGE)
@@ -133,6 +102,7 @@ class AutoInstallService : AccessibilityService() {
 //        performGlobalAction(GLOBAL_ACTION_BACK)
 //        mHandler.postDelayed({ performGlobalAction(GLOBAL_ACTION_BACK) }, DELAY_PAGE)
 
+        task?.close()
         mInstance = null
     }
 
@@ -143,30 +113,21 @@ class AutoInstallService : AccessibilityService() {
         // 服务停止，重新进入系统设置界面
         AccessibilityUtil.jumpToSetting(this)
 
+        task?.close()
         mInstance = null
-
-        floatView?.hideFloat()
-    }
-
-    interface AccessibilityTask {
-        fun onAccessibilityEvent(service: AccessibilityService, event: AccessibilityEvent?)
-
-        fun onServiceConnected(service: AccessibilityService)
     }
 
     companion object {
-        private var mInstance: AutoInstallService? = null
-
-        private val isStarted: Boolean
-            get() = mInstance != null
+        var mInstance: AutoInstallService? = null
+            private set
 
         private const val DELAY_PAGE = 500L // 页面切换时间
 
-        private var task: AccessibilityTask? = null
+        private var task: AutoTaskInterface? = null
 
         fun startWXTask(
                 mActivity: Activity,
-                task: AccessibilityTask
+                task: AutoTaskInterface
         ) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (!KUtil.canDrawOverlays()) {
@@ -177,9 +138,10 @@ class AutoInstallService : AccessibilityService() {
                 }
             }
 
+            AutoInstallService.task?.close()
             AutoInstallService.task = task
 
-            if (!isStarted) {
+            if (mInstance == null) {
                 // 请在手机【无障碍】设置中，开启省心宝提供的【微信分享助手】开始获取微信好友标签，点确定去开启。
                 KAlertDialogHelper.Show2BDialog(
                         mActivity,
@@ -188,10 +150,11 @@ class AutoInstallService : AccessibilityService() {
                     AccessibilityUtil.jumpToSetting(mActivity)
                 }
             } else {
-                KAppTool.startApp(
+                /*KAppTool.startApp(
                         mActivity,
                         mActivity.getString(R.string.auto_access_service_dist_package)
-                )
+                )*/
+                task.registerService(mInstance!!)
             }
         }
     }

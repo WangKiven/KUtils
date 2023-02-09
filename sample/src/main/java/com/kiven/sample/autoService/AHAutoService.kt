@@ -57,7 +57,7 @@ class AHAutoService : KActivityHelper() {
             txtTag.text = "未选择标签"
         }
 
-        val startWXTask = fun(task: AutoInstallService.AccessibilityTask) {
+        val startWXTask = fun(task: AutoTaskInterface) {
             AutoInstallService.startWXTask(mActivity, task)
         }
 

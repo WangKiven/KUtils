@@ -1,10 +1,12 @@
 package com.kiven.sample.autoService.wechat
 
 import android.accessibilityservice.AccessibilityService
+import android.content.Context
 import android.graphics.Rect
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.*
@@ -13,7 +15,9 @@ import com.kiven.kutils.tools.KString
 import com.kiven.sample.R
 import com.kiven.sample.autoService.AccessibilityUtil
 import com.kiven.sample.autoService.AutoInstallService
+import com.kiven.sample.autoService.AutoTaskInterface
 import com.kiven.sample.autoService.wechat.WXConst.Page.*
+import com.kiven.sample.floatView.FloatView
 import com.kiven.sample.util.showToast
 import kotlinx.coroutines.*
 
@@ -25,7 +29,10 @@ class WXShareTask(
         val msgForSend: String = "今天是个好日子，✌️",// 要发送的文案
 
         val mediaCount: Int = 0 // 要发送的图片数量
-) : AutoInstallService.AccessibilityTask {
+) : AutoTaskInterface {
+    override var isClose: Boolean = false
+    private var mService: AutoInstallService? = null
+    private var floatView: FloatView? = null
 
     // 用作记录用户选择的标签包含哪些好友
     private val tagAndFriends = mutableMapOf<String, MutableList<String>>()
@@ -45,9 +52,6 @@ class WXShareTask(
     // 3 所有操作完成（因为先发送文案，所以发送图片完成就完成所有操作了）
     private var curState = 0
 
-
-    private var service: AccessibilityService? = null
-    //    var events = mutableListOf<Pair<String, Int>>()
     private var lashChangeTime = 0L
 
     init {
@@ -58,7 +62,7 @@ class WXShareTask(
 
                 runBlocking(Dispatchers.Main) {
                     if (System.currentTimeMillis() - lashChangeTime > 500) {
-                        service?.rootInActiveWindow?.apply {
+                        mService?.rootInActiveWindow?.apply {
 
                             deal(this)
 
@@ -70,12 +74,9 @@ class WXShareTask(
         }
     }
 
-    override fun onAccessibilityEvent(service: AccessibilityService, event: AccessibilityEvent?) {
-        if (event == null) return
-
+    override fun onAccessibilityEvent(event: AccessibilityEvent) {
         val eventNode = event.source ?: return
-
-        this.service = service
+        val service = mService ?: return
 
 
         lashChangeTime = event.eventTime
@@ -99,35 +100,14 @@ class WXShareTask(
         eventNode.recycle()
     }
 
-    private suspend fun deal(/*event: AccessibilityEvent, */rootNode: AccessibilityNodeInfo) {
-        // 拦截滚动和点击
-        /*if (event.eventType == AccessibilityEvent.TYPE_VIEW_CLICKED || event.eventType == AccessibilityEvent.TYPE_VIEW_SCROLLED) {
-//            KLog.i("点击或滚动：：：：：：：：：：：：：" + event.source.className)
-            return
-        }
-
-        if (event.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
-            curWXUI = event.className.toString()
-        }
-
-        // 有点系统的微信略过了 MassSendMsgUI 的通知，这里需要手动检测
-        if (curWXUI == MassSendSelectContactUI || curWXUI == SelectLabelContactUI) {
-            val titile = AccessibilityUtil.findNodeById(rootNode, "android:id/text1")
-            if (titile != null && TextUtils.equals(titile.text, "群发")) {
-                val tts = rootNode.findAccessibilityNodeInfosByText("你将发消息")
-                if (tts != null && tts.isNotEmpty()) {
-                    curWXUI = MassSendMsgUI
-                }
-            }
-        }*/
-
+    private suspend fun deal(rootNode: AccessibilityNodeInfo) {
         if (curWXUI == null) return
 
         if (curState >= 3) {
 
             // 分享完成，清空缓存图片, 需要退出发送界面后再清空
             if (curWXUI != MassSendMsgUI)
-                WXConst.clearShareWXTempDir(service!!)
+                WXConst.clearShareWXTempDir(mService!!)
             return
         }
 
@@ -541,7 +521,27 @@ class WXShareTask(
         fun deal(rootNode: AccessibilityNodeInfo)
     }*/
 
-    override fun onServiceConnected(service: AccessibilityService) {
-        KAppTool.startApp(service, service.getString(R.string.auto_access_service_dist_package))
+    override fun registerService(service: AutoInstallService) {
+        mService = service
+
+        floatView = FloatView(
+            service,
+            service.getSystemService(Context.WINDOW_SERVICE) as WindowManager,
+            "回",
+            true
+        ) {
+            KAppTool.startApp(service, service.packageName)
+        }
+        floatView?.showFloat()
+    }
+
+    override fun close() {
+        if (isClose) return
+
+        floatView?.hideFloat()
+    }
+
+    override fun pause() {
+
     }
 }

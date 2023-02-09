@@ -20,6 +20,7 @@ import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KUtil
 import com.kiven.sample.BaseFlexActivityHelper
+import com.kiven.sample.autoService.AutoInstallService
 import com.kiven.sample.floatView.ServiceFloat
 import com.kiven.sample.util.showImageDialog
 import com.kiven.sample.util.showToast
@@ -109,6 +110,11 @@ class AHCutImage: BaseFlexActivityHelper() {
             bitmaps.lastOrNull()?.apply {
                 activity.showImageDialog(this)
             }
+        }
+
+        addTitle("AccessibilityService")
+        addBtn("开始") {
+            AutoInstallService.startWXTask(activity, CutImageAutoTask())
         }
     }
 

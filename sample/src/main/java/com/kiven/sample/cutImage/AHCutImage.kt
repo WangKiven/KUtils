@@ -1,8 +1,10 @@
 package com.kiven.sample.cutImage
 
 import android.app.Service
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.graphics.ImageFormat
 import android.hardware.display.DisplayManager
 import android.media.ImageReader
@@ -11,7 +13,6 @@ import android.media.projection.MediaProjectionManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
@@ -21,14 +22,12 @@ import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KUtil
 import com.kiven.sample.BaseFlexActivityHelper
 import com.kiven.sample.autoService.AutoInstallService
-import com.kiven.sample.floatView.ServiceFloat
 import com.kiven.sample.util.showImageDialog
 import com.kiven.sample.util.showToast
 import com.kiven.sample.util.startOverlaySetting
 
 class AHCutImage: BaseFlexActivityHelper() {
     private val mediaProjectionManager by lazy { mActivity.getSystemService(Service.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager }
-    private lateinit var launcher: ActivityResultLauncher<Intent>
     private var media: MediaProjection? = null
     private var imageReader: ImageReader? = null
     private val bitmaps = mutableListOf<Bitmap>()
@@ -38,7 +37,7 @@ class AHCutImage: BaseFlexActivityHelper() {
 
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
-        launcher = activity.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        val launcher1 = activity.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.data == null) return@registerForActivityResult
 
             try {
@@ -100,7 +99,7 @@ class AHCutImage: BaseFlexActivityHelper() {
 
         addBtn("请求屏幕截图权限") {
             if (imageReader == null) {
-                launcher.launch(mediaProjectionManager.createScreenCaptureIntent())
+                launcher1.launch(mediaProjectionManager.createScreenCaptureIntent())
             } else {
                 showToast("已获得权限")
             }
@@ -115,6 +114,20 @@ class AHCutImage: BaseFlexActivityHelper() {
         addTitle("AccessibilityService")
         addBtn("开始") {
             AutoInstallService.startWXTask(activity, CutImageAutoTask())
+        }
+
+        addTitle("当前截图")
+        addBtn("view 截图1") {
+            it.setDrawingCacheEnabled(true)
+            it.buildDrawingCache()
+            val bitmap: Bitmap = it.getDrawingCache()
+            bitmaps.add(bitmap)
+        }
+        addBtn("view 截图2") {
+            val bitmap = Bitmap.createBitmap(flexBoxLayout.width, flexBoxLayout.height, Bitmap.Config.RGB_565)
+            val canvas = Canvas(bitmap)
+            flexBoxLayout.draw(canvas)
+            bitmaps.add(bitmap)
         }
     }
 

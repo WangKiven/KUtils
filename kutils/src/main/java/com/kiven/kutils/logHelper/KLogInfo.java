@@ -7,8 +7,10 @@ package com.kiven.kutils.logHelper;
 public class KLogInfo {
     public String codePosition;
     public String log;
+    public Long time;
 
     public KLogInfo(String codePosition, String log) {
+        time = System.currentTimeMillis();
         this.codePosition = codePosition;
         this.log = log;
     }

@@ -51,7 +51,7 @@ public class KLog {
     protected static void addLog(String log) {
 
         synchronized (logs) {
-            if (logs.size() > 200) {
+            if (logs.size() > 500) {
                 logs.removeLast();
                 logs.removeLast();
             }

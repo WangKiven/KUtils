@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Parcel
 import android.os.Parcelable
 import com.kiven.kutils.callBack.Consumer
+import com.kiven.kutils.tools.KAlertDialogHelper
 import com.kiven.kutils.tools.KAppTool
 import kotlinx.coroutines.*
 
@@ -42,13 +43,19 @@ fun Activity.downloadApk(url: String, call: Consumer<Float>) {
             val query = DownloadManager.Query().setFilterById(downloadId)
             val cursor = dm.query(query) ?: break
             if (cursor.moveToNext()) {
-                if (cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)) == DownloadManager.STATUS_SUCCESSFUL) {
+                val status = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
+                if (status == DownloadManager.STATUS_SUCCESSFUL) {
 
                     val f = dm.getUriForDownloadedFile(downloadId)
                     runOnUiThread {
                         KAppTool.installApk(this, f)
                     }
 
+                    break
+                }
+
+                if (status == DownloadManager.STATUS_FAILED) {
+                    KAlertDialogHelper.Show1BDialog(this, "下载失败")
                     break
                 }
             }

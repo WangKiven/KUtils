@@ -117,7 +117,7 @@ public class KShowLog extends KActivityHelper implements AdapterView.OnItemClick
         for (KLogInfo logInfo : mData) {
             if (logInfo.log != null && logInfo.log.contains(searchText)) {
                 if (showSearch) {
-                    searchs.add(new KLogInfo(logInfo.codePosition, logInfo.log.replace(searchText, "<font color='red'>" + searchText + "</font>")));
+                    searchs.add(new KLogInfo(logInfo.log.replace(searchText, "<font color='red'>" + searchText + "</font>"), logInfo.codePosition, logInfo.codePositionStack));
                 } else {
                     searchs.add(logInfo);
                 }
@@ -160,7 +160,7 @@ public class KShowLog extends KActivityHelper implements AdapterView.OnItemClick
         KLogInfo logInfo = (KLogInfo) parent.getItemAtPosition(position);
         final String log = logInfo.log;
 
-        final String[] poss = Pattern.compile(",").split(logInfo.codePosition);
+        final String[] poss = Pattern.compile(",").split(logInfo.codePositionStack);
 
         String slog = log + "\n";
         for (String pp : poss) {

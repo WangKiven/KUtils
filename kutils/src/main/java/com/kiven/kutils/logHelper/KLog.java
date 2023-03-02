@@ -7,12 +7,12 @@ import android.content.pm.ConfigurationInfo;
 import android.os.Build;
 import android.util.Log;
 
+import com.kiven.kutils.callBack.Supplier;
 import com.kiven.kutils.tools.KString;
 import com.kiven.kutils.tools.KUtil;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.net.Inet6Address;
@@ -24,16 +24,12 @@ import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
 
 /**
  * 不建议直接使用, 建议在项目中重写
  * Created by Kiven on 2014/12/12.
  */
 public class KLog {
-
-    private static KLog myLog;
 
     private static boolean showAtLine = true;
 
@@ -47,8 +43,9 @@ public class KLog {
      * 日志记录操作
      *
      * @param log log
+     * @return
      */
-    protected static void addLog(String log) {
+    protected static KLogInfo addLog(String log) {
 
         synchronized (logs) {
             if (logs.size() > 500) {
@@ -57,7 +54,9 @@ public class KLog {
             }
 
             StackTraceElement[] sts = Thread.currentThread().getStackTrace();
-            String po = "";
+
+            String codePosition = null;
+            StringBuilder codePositionStack = new StringBuilder();
             if (sts != null) {
                 int i = 0;
                 for (StackTraceElement st : sts) {
@@ -65,41 +64,33 @@ public class KLog {
                     if (i > 10) {
                         break;
                     }
+
+                    String s = (st.getClassName() + "." + st.getMethodName() + "("
+                            + st.getFileName() + ":" + st.getLineNumber() + ")");
                     if (i == 1) {
-                        po += (st.getClassName() + "." + st.getMethodName() + "("
-                                + st.getFileName() + ":" + st.getLineNumber() + ")");
+                        codePositionStack.append(s);
                     } else {
-                        po += (", " + st.getClassName() + "." + st.getMethodName() + "("
-                                + st.getFileName() + ":" + st.getLineNumber() + ")");
+                        codePositionStack.append(", ").append(s);
+                    }
+
+                    if (codePosition == null) {
+                        if (st.isNativeMethod()) {continue;}
+                        if (st.getClassName().equals(Thread.class.getName())) {continue;}
+                        if (st.getClassName().equals(KLog.class.getName())) {continue;}
+
+                        codePosition = " at " + st.getClassName() + "." + st.getMethodName() + "("
+                                + st.getFileName() + ":" + st.getLineNumber() + ")";
                     }
                 }
             }
-            logs.addFirst(new KLogInfo(po, log));
+            KLogInfo info = new KLogInfo(log, codePosition, codePositionStack.toString());
+            logs.addFirst(info);
+            return info;
         }
     }
 
     public static LinkedList<KLogInfo> getLogs() {
         return logs;
-    }
-
-    /**
-     * 单例ULog
-     *
-     * @return 获取到的单例
-     */
-    public static KLog getInstans() {
-
-        if (myLog != null) {
-
-            return myLog;
-        } else {
-
-            myLog = new KLog();
-
-        }
-
-        return myLog;
-
     }
 
     /**
@@ -116,7 +107,7 @@ public class KLog {
      *
      * @return 代码位置
      */
-    public static String findLog() {
+    /*public static String findLog() {
 
         if (!showAtLine) {
             return "";
@@ -135,16 +126,12 @@ public class KLog {
 
                 continue;
             }
-            if (st.getClassName().endsWith(getInstans().getClass().getName())) {
-
-                continue;
-            }
             return " at " + st.getClassName() + "." + st.getMethodName() + "("
                     + st.getFileName() + ":" + st.getLineNumber() + ")";
         }
         return "";
 
-    }
+    }*/
 
     private static String tag = "KLog_default";
 
@@ -159,46 +146,86 @@ public class KLog {
 
     public static void d(String debugInfo) {
         if (isDebug()) {
-            for (String burst : burstLog(debugInfo + findLog())) {
+            KLogInfo info = addLog(debugInfo);
+            for (String burst : burstLog(info.log + info.codePosition)) {
                 Log.d(tag, burst);
             }
-            addLog(debugInfo);
+        }
+    }
+    public static void d(Supplier<String> call) {
+        if (isDebug()) {
+            KLogInfo info = addLog(call.callBack());
+            for (String burst : burstLog(info.log + info.codePosition)) {
+                Log.d(tag, burst);
+            }
         }
     }
 
     public static void e(String errorInfo) {
         if (isDebug()) {
-            for (String burst : burstLog(errorInfo + findLog())) {
+            KLogInfo info = addLog(errorInfo);
+            for (String burst : burstLog(info.log + info.codePosition)) {
                 Log.e(tag, burst);
             }
-            addLog(errorInfo);
+        }
+    }
+    public static void e(Supplier<String> call) {
+        if (isDebug()) {
+            KLogInfo info = addLog(call.callBack());
+            for (String burst : burstLog(info.log + info.codePosition)) {
+                Log.e(tag, burst);
+            }
         }
     }
 
     public static void v(String msg) {
         if (isDebug()) {
-            for (String burst : burstLog(msg + findLog())) {
+            KLogInfo info = addLog(msg);
+            for (String burst : burstLog(info.log + info.codePosition)) {
                 Log.v(tag, burst);
             }
-            addLog(msg);
+        }
+    }
+    public static void v(Supplier<String> call) {
+        if (isDebug()) {
+            KLogInfo info = addLog(call.callBack());
+            for (String burst : burstLog(info.log + info.codePosition)) {
+                Log.v(tag, burst);
+            }
         }
     }
 
     public static void i(String msg) {
         if (isDebug()) {
-            for (String burst : burstLog(msg + findLog())) {
+            KLogInfo info = addLog(msg);
+            for (String burst : burstLog(info.log + info.codePosition)) {
                 Log.i(tag, burst);
             }
-            addLog(msg);
+        }
+    }
+    public static void i(Supplier<String> call) {
+        if (isDebug()) {
+            KLogInfo info = addLog(call.callBack());
+            for (String burst : burstLog(info.log + info.codePosition)) {
+                Log.i(tag, burst);
+            }
         }
     }
 
     public static void w(String msg) {
         if (isDebug()) {
-            for (String burst : burstLog(msg + findLog())) {
+            KLogInfo info = addLog(msg);
+            for (String burst : burstLog(info.log + info.codePosition)) {
                 Log.w(tag, burst);
             }
-            addLog(msg);
+        }
+    }
+    public static void w(Supplier<String> call) {
+        if (isDebug()) {
+            KLogInfo info = addLog(call.callBack());
+            for (String burst : burstLog(info.log + info.codePosition)) {
+                Log.w(tag, burst);
+            }
         }
     }
 
@@ -313,11 +340,15 @@ public class KLog {
             }
         }
 
-        String msg = new String(sb);
+        /*String msg = new String(sb);
         for (String burst : burstLog(msg + findLog())) {
             Log.i(tag, burst);
         }
-        addLog(msg);
+        addLog(msg);*/
+        KLogInfo info = addLog(new String(sb));
+        for (String burst : burstLog(info.log + info.codePosition)) {
+            Log.i(tag, burst);
+        }
     }
 
     public static String obj2Str(Object obj) {
@@ -360,7 +391,7 @@ public class KLog {
         Application app = KUtil.getApp();
 
         StringBuilder builder = new StringBuilder();
-        builder.append("\n屏幕密度（0.75 / 1.0 / 1.5）:").append(KUtil.getScreenDensity())
+        builder.append("printDeviceInfo：\n屏幕密度（0.75 / 1.0 / 1.5）:").append(KUtil.getScreenDensity())
                 .append("\n屏幕密度DPI（120 / 160 / 240）:").append(KUtil.getScreenDensityDpi()).append("  每英寸多少像素")
                 .append("\n屏幕宽度(px):").append(KUtil.getScreenWith())
                 .append("\n屏幕高度(px):").append(KUtil.getScreenHeight())
@@ -460,10 +491,15 @@ public class KLog {
         }
 
 
-        String msg = new String(builder);
+        /*String msg = new String(builder);
         for (String burst : burstLog(msg + findLog())) {
             Log.i(tag, burst);
         }
-        addLog(msg);
+        addLog(msg);*/
+
+        KLogInfo info = addLog(new String(builder));
+        for (String burst : burstLog(info.log + info.codePosition)) {
+            Log.i(tag, burst);
+        }
     }
 }

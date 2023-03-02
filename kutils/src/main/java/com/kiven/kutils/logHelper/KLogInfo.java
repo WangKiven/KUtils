@@ -5,13 +5,15 @@ package com.kiven.kutils.logHelper;
  */
 
 public class KLogInfo {
-    public String codePosition;
     public String log;
+    public String codePosition;
+    public String codePositionStack;
     public Long time;
 
-    public KLogInfo(String codePosition, String log) {
+    public KLogInfo(String log, String codePosition, String codePositionStack) {
         time = System.currentTimeMillis();
-        this.codePosition = codePosition;
         this.log = log;
+        this.codePosition = codePosition;
+        this.codePositionStack = codePositionStack;
     }
 }

@@ -2,7 +2,7 @@
 
 buildscript {
     ext {
-        compose_version = '1.2.1'
+        compose_version = '1.3.3'
         kotlin_version = '1.7.10'
         library_version = '1.4.9'
     }
@@ -20,7 +20,7 @@ buildscript {
         maven { url 'https://developer.huawei.com/repo/' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.4.1'
+        classpath 'com.android.tools.build:gradle:7.4.2'
 
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 //        classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlin_version"

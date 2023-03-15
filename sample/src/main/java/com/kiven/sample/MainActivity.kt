@@ -162,6 +162,10 @@ class MainActivity : KActivity() {
             addBtn("ARCore") { AHARCoreInlet().startActivity(this@MainActivity) }
             addBtn("三方平台推送") { AHSxbPush().startActivity(this@MainActivity) }
             addBtn("cpu、内存管理") { AHCPUMemory().startActivity(this@MainActivity) }
+            addBtn("KLog") {
+                KLog.i { return@i "天道酬勤" }
+                KLog.i("nini")
+            }
         }
     }
 

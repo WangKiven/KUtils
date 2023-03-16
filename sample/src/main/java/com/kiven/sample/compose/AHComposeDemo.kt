@@ -3,6 +3,7 @@ package com.kiven.sample.compose
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -23,6 +24,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.google.android.material.bottomappbar.BottomAppBar
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.sample.R
@@ -53,12 +55,14 @@ fun TestContent() {
         ModalNavigationDrawer(
             drawerState = drawerState,
             drawerContent = {
-                Button(onClick = { scope.launch { drawerState.close() } }) {
-                    Text(text = "点我")
+                Column(modifier = Modifier.background(Color.White).width(300.dp).fillMaxHeight()) {
+                    Button(onClick = { scope.launch { drawerState.close() } }) {
+                        Text(text = "点我")
+                    }
                 }
             },
             gesturesEnabled = true,
-            scrimColor = Color.Cyan,
+//            scrimColor = Color.Cyan,
             content = {
                 Scaffold(
                     snackbarHost = { SnackbarHost(hostState = snackbarHostState)},

@@ -24,7 +24,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.google.android.material.bottomappbar.BottomAppBar
+import androidx.navigation.*
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.kiven.kutils.activityHelper.KActivityHelper
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.sample.R
@@ -37,10 +40,29 @@ class AHComposeDemo : KActivityHelper() {
         super.onCreate(activity, savedInstanceState)
 
         activity.setContent {
-            TestContent()
+            MainNavHost()
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Nav.controller = null
+    }
 }
+
+@Composable
+fun MainNavHost() {
+    val navController = rememberNavController()
+    Nav.controller = navController
+
+    val graph = navController.createGraph("home") {
+        composable("home") { TestContent() }
+        composable("hello") { Greeting(name = "compose") }
+    }
+    NavHost(navController, graph)
+}
+
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TestContent() {
@@ -55,8 +77,11 @@ fun TestContent() {
         ModalNavigationDrawer(
             drawerState = drawerState,
             drawerContent = {
-                Column(modifier = Modifier.background(Color.White).width(300.dp).fillMaxHeight()) {
-                    Button(onClick = { scope.launch { drawerState.close() } }) {
+                Column(modifier = Modifier
+                    .background(Color.White)
+                    .width(300.dp)
+                    .fillMaxHeight()) {
+                    Button(onClick = { scope.launch { drawerState.close(); Nav.navigate("hello") } }) {
                         Text(text = "点我")
                     }
                 }

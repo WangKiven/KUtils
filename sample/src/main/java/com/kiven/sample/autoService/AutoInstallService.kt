@@ -2,17 +2,15 @@ package com.kiven.sample.autoService
 
 import android.accessibilityservice.AccessibilityService
 import android.app.Activity
-import android.content.Context
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
-import android.view.WindowManager
 import android.view.accessibility.AccessibilityEvent
 import com.kiven.kutils.logHelper.KLog
-import com.kiven.kutils.tools.*
-import com.kiven.sample.R
+import com.kiven.kutils.tools.KAlertDialogHelper
+import com.kiven.kutils.tools.KAppHelper
+import com.kiven.kutils.tools.KUtil
 import com.kiven.sample.autoService.wechat.WXConst
-import com.kiven.sample.floatView.FloatView
 
 /**
  * https://www.jianshu.com/p/04ebe2641290

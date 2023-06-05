@@ -35,8 +35,9 @@ public class KLog {
 
     private static final LinkedList<KLogInfo> logs = new LinkedList<KLogInfo>();
 
+    public static int bugType = 0;// 日志类型：0：默认类型，1：打印，2：不打印
     public static boolean isDebug() {
-        return KUtil.getConfig().isDebug();
+        return bugType > 0? bugType == 1: KUtil.getConfig().isDebug();
     }
 
     /**

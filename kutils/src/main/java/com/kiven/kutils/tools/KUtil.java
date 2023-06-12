@@ -473,6 +473,20 @@ public class KUtil {
         }
     }
 
+    /**
+     * 获取厂商，这个方法不重要，重要的是我在这里的说明
+     * 统计某个app后活动的值，统计量从大到小：HUAWEI，OPPO，vivo，Xiaomi，HONOR，samsung，OnePlus，realme，PTAC，meizu，motorola，CMDC，DOOV，nubia，Meitu，Meizu，deltainno，Tianyi，Liantong，Sony，Lenovo，blackshark，TDTech，Blephone，smartisan，Hisense，Google
+     * 可以看出：
+     *      华为系有 HUAWEI、HONOR，
+     *      小米系有 Xiaomi，没有出现 Redmi，
+     *      OPPO系有 OPPO、OnePlus、realme，OPPO的推送是否适用两个子品牌？需要验证。
+     *      vivo系有 vivo，
+     *      其他非主流就不管了。
+     */
+    public static String getManufacturer() {
+        return Build.MANUFACTURER;
+    }
+
     // todo -------------------------- Overlay ----------------------------
     @RequiresApi(api = Build.VERSION_CODES.M)
     public static boolean canDrawOverlays() {

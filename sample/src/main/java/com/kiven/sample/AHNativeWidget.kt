@@ -1,11 +1,17 @@
 package com.kiven.sample
 
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import androidx.appcompat.widget.PopupMenu
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.kiven.kutils.activityHelper.KHelperActivity
 import com.kiven.sample.helperTest.AHHelperTest
 import com.kiven.sample.libs.AHTextViewDemo
+import com.kiven.sample.media.AHMediaList
+import com.kiven.sample.util.showListDialog
+import com.kiven.sample.util.showSnack
 import com.kiven.sample.util.showToast
 
 /**
@@ -43,7 +49,7 @@ class AHNativeWidget :BaseFlexActivityHelper() {
         }
         addBtn("TextView风格") { AHTextViewDemo().startActivity(activity) }
         addBtn("Toolbar") { AHHelperTest().startActivity(activity) }
-        addBtn("") {}
+        addBtn("相册/视频") { AHMediaList().startActivity(activity) }
         addBtn("") {}
         addBtn("") {}
     }

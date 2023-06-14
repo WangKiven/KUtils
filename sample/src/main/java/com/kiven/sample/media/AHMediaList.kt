@@ -17,6 +17,10 @@ import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.registerForActivityResult
 import androidx.core.content.FileProvider
 import androidx.exifinterface.media.ExifInterface
 import com.google.android.exoplayer2.MediaItem
@@ -34,6 +38,8 @@ import com.kiven.kutils.tools.*
 import com.kiven.sample.R
 import com.kiven.sample.util.Const
 import com.kiven.sample.util.Const.IMAGE_DIR
+import com.kiven.sample.util.showImageDialog
+import com.kiven.sample.util.showListDialog
 import com.kiven.sample.util.showSnack
 import java.io.File
 import java.text.DateFormat
@@ -45,9 +51,27 @@ import java.util.*
  */
 class AHMediaList : KActivityHelper() {
 
+    private lateinit var pickerLaunch: ActivityResultLauncher<PickVisualMediaRequest>
+    private lateinit var pickerMultipleLaunch: ActivityResultLauncher<PickVisualMediaRequest>
+
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
         setContentView(R.layout.ah_media_list)
+
+        pickerLaunch = activity.registerForActivityResult(ActivityResultContracts.PickVisualMedia()) {
+            it ?: return@registerForActivityResult
+
+            // 持有保留访问权限，默认情况下，系统会授予应用对媒体文件的访问权限，直到设备重启或应用停止运行。如果您的应用执行长时间运行的工作（例如在后台上传大型文件），您可能需要将此访问权限保留更长时间。
+            val flag = Intent.FLAG_GRANT_READ_URI_PERMISSION
+            mActivity.contentResolver.takePersistableUriPermission(it, flag)
+
+            // 显示
+            showImage(it)
+        }
+
+        pickerMultipleLaunch = activity.registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia()) {
+            if (it != null && it.isNotEmpty()) showImage(it[0])
+        }
 
         val permissions =
             arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
@@ -66,6 +90,41 @@ class AHMediaList : KActivityHelper() {
         when (view?.id) {
             R.id.item_mp4 -> VideoSurfaceDemo().startActivity(mActivity)
             R.id.item_gif -> AHGif().startActivity(mActivity)
+            R.id.item_open_image_picker_13 -> {
+                // https://developer.android.google.cn/about/versions/13/features/photopicker?hl=zh-cn
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU)
+                    return mActivity.showSnack("系统版本太低")
+
+                mActivity.showListDialog(listOf("单张", "多张")) {i, _ ->
+                    when(i) {
+                        0 -> {
+                            val intent = Intent(MediaStore.ACTION_PICK_IMAGES)
+                            intent.type = "video/*"// 没有这个的话，视频图片都可选
+                            mActivity.startActivityForResult(intent, 345)
+                        }
+                        1 -> {
+                            val maxNumPhotosAndVideos = 10
+                            val intent = Intent(MediaStore.ACTION_PICK_IMAGES)
+                            intent.putExtra(MediaStore.EXTRA_PICK_IMAGES_MAX, maxNumPhotosAndVideos)
+                            intent.type = "image/*"// 没有这个的话，视频图片都可选
+                            mActivity.startActivityForResult(intent, 345)
+                        }
+                    }
+                }
+            }
+            R.id.item_open_image_picker_13_jitpack -> {
+                // https://developer.android.google.cn/training/data-storage/shared/photopicker?hl=zh-cn
+                mActivity.showListDialog(listOf("单张（并保留访问权限）", "多张", "gif")) { i, _ ->
+                    when(i) {
+                        0 -> pickerLaunch.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
+                        1 -> pickerMultipleLaunch.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                        2 -> {
+                            val mimeType = "image/gif"
+                            pickerMultipleLaunch.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.SingleMimeType(mimeType)))
+                        }
+                    }
+                }
+            }
             R.id.item_open_image_picker -> mActivity.startActivityForResult(
                 Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI), 345
             )
@@ -249,20 +308,14 @@ class AHMediaList : KActivityHelper() {
         }
         when (requestCode) {
             345 -> {
-                val uri = data?.data ?: return
-
-                selPath = KPath.getPath(uri)
-                KLog.i(selPath)
-                KLog.i(uri.toString())
-
-                if (selPath.endsWith(".mp4")) {
-
-                    val video = VideoSurfaceDemo()
-                    video.putExtra("mp4Path", uri)
-                    video.startActivity(mActivity)
-                } else {
-                    showImage(selPath)
+                var uri = data?.data
+                if (uri == null) {
+                    val cd = data?.clipData
+                    if (cd != null && cd.itemCount > 0)
+                        uri = cd.getItemAt(0).uri
                 }
+                if (uri == null) return mActivity.showSnack("uri = null")
+                showImage(uri)
                 /*if (uri.toString().contains("video")) {
                     val video = VideoSurfaceDemo()
                     video.putExtra("mp4Path", uri)
@@ -312,6 +365,23 @@ class AHMediaList : KActivityHelper() {
                     Log.i(KLog.getTag(), "uri = null")
                 }
             }
+        }
+    }
+
+
+    private fun showImage(uri: Uri) {
+        selPath = KPath.getPath(uri) ?: return mActivity.showSnack("uri解析失败：$uri")
+        KLog.i(selPath)
+        KLog.i(uri.toString())
+
+        if (selPath.endsWith(".mp4")) {
+
+            val video = VideoSurfaceDemo()
+            video.putExtra("mp4Path", uri)
+            video.startActivity(mActivity)
+        } else {
+//                    showImage(selPath)
+            mActivity.showImageDialog(uri)
         }
     }
 

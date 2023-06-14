@@ -12,6 +12,8 @@ import com.kiven.sample.util.showListDialog
 /**
  * Created by oukobayashi on 2020/7/23.
  * https://blog.csdn.net/baihua2001cn/article/details/86678416
+ * https://developer.android.google.cn/training/sharing/send?hl=zh-cn
+ * https://developer.android.google.cn/training/secure-file-sharing?hl=zh-cn
  */
 class AHShare : BaseFlexActivityHelper() {
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {

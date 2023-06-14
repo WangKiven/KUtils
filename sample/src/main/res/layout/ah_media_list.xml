@@ -34,6 +34,24 @@
             android:text="选择视频或图片" />
 
         <com.kiven.kutils.widget.KNormalItemView
+            android:id="@+id/item_open_image_picker_13"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="onClick"
+            app:item_title="调用系统相册选择图片(仅>=android13.0可用)" />
+
+        <com.kiven.kutils.widget.KNormalItemView
+            android:id="@+id/item_open_image_picker_13_jitpack"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="onClick"
+            app:item_title="Jetpack 照片选择器" />
+
+        <com.kiven.kutils.widget.KNormalItemView
             android:id="@+id/item_open_image_picker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -14,6 +14,17 @@ import java.lang.reflect.Method;
 
 public class KOpenSetting {
 
+    public static void openAppSetting(@NonNull Context context) {
+        Intent i = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        i.setData(Uri.fromParts("package", context.getPackageName(), null));
+        context.startActivity(i);
+    }
+
+    public static void openWifiSetting(@NonNull Context context) {
+        Intent i = new Intent(Settings.ACTION_WIFI_SETTINGS);
+        context.startActivity(i);
+    }
+
     /**
      * 获取应用自启动设置状态
      *

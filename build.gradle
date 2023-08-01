@@ -33,14 +33,14 @@ buildscript {
 
 
         // 华为推送插件
-        classpath 'com.huawei.agconnect:agcp:1.7.0.300'
+        classpath 'com.huawei.agconnect:agcp:1.9.1.300'
 
 
         // google ar
         classpath 'com.google.ar.sceneform:plugin:1.17.1'
 
         // firebase
-        classpath 'com.google.gms:google-services:4.3.14'
+        classpath 'com.google.gms:google-services:4.3.15'
     }
 
     project.ext {

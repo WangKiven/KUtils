@@ -2,12 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <!-- 小米推送 -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <!--<permission android:name="com.xiaomi.mipushdemo.permission.MIPUSH_RECEIVE"
         android:protectionLevel="signature" /> todo 这里com.xiaomi.mipushdemo改成app的包名
@@ -77,18 +73,35 @@
             android:enabled="true">
         </activity>
         <service
+            android:name="com.xiaomi.push.service.XMPushService"
+            android:enabled="true"
+            android:process=":pushservice" />
+
+        <!--注：此service必须在3.0.1版本以后（包括3.0.1版本）加入-->
+        <service
+            android:name="com.xiaomi.push.service.XMJobService"
+            android:enabled="true"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:process=":pushservice" />
+
+        <!--注：com.xiaomi.xmsf.permission.MIPUSH_RECEIVE这里的包名不能改为app的包名-->
+        <service
             android:name="com.xiaomi.mipush.sdk.PushMessageHandler"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="true"
+            android:permission="com.xiaomi.xmsf.permission.MIPUSH_RECEIVE" />
+
+        <!--注：此service必须在2.2.5版本以后（包括2.2.5版本）加入-->
         <service
             android:name="com.xiaomi.mipush.sdk.MessageHandleService"
-            android:enabled="true" /> <!--注：此service必须在2.2.5版本以后（包括2.2.5版本）加入-->
+            android:enabled="true" />
         <receiver
-            android:name="com.xiaomi.push.service.receivers.NetworkStatusReceiver"
-            android:exported="true">
+            android:name="com.xiaomi.push.service.receivers.PingReceiver"
+            android:exported="false"
+            android:process=":pushservice">
             <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="com.xiaomi.push.PING_TIMER" />
             </intent-filter>
         </receiver>
 
@@ -145,7 +158,8 @@
         <!-- 华为推送 -->
         <service
             android:name="com.kiven.pushlibrary.hw.HuaWeiPushService"
-            android:exported="false">
+            android:exported="false"
+            android:directBootAware="true">
             <intent-filter>
                 <action android:name="com.huawei.push.action.MESSAGING_EVENT" />
             </intent-filter>

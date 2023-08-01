@@ -28,11 +28,11 @@
 
 # 华为推送 https://developer.huawei.com/consumer/cn/doc/development/HMS-Guides/Preparations
 #-ignorewarning
-#-keepattributes *Annotation*
+-keepattributes *Annotation*
 -keepattributes Exceptions
 -keepattributes InnerClasses
-#-keepattributes Signature
-#-keepattributes SourceFile,LineNumberTable
+-keepattributes Signature
+-keepattributes SourceFile,LineNumberTable
 -keep class com.hianalytics.android.**{*;}
 -keep class com.huawei.updatesdk.**{*;}
 -keep class com.huawei.hms.**{*;}

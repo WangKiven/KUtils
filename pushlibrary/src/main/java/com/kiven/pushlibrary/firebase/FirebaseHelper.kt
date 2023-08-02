@@ -16,7 +16,7 @@ import com.kiven.pushlibrary.Web
 class FirebaseHelper : PushHelper {
     override var hasInitSuccess: Boolean = false
 
-    override fun initPush(context: Context) {
+    override fun initPush(context: Context, isAgreePrivacy: Boolean) {
         // 此值一经设置便会持久保存，不受应用重启的影响
 //        FirebaseMessaging.getInstance().isAutoInitEnabled = true
 

@@ -58,8 +58,14 @@ object PushClient {
             projectKey: String,
             host: String,
             ishttps: Boolean,
+            isAgreePrivacy: Boolean,
             isDebug: Boolean
     ) {
+        if (pushHelper != null) {
+            pushHelper?.initPush(context, isAgreePrivacy)
+            return;
+        }
+
         Web.context = context.applicationContext
         Web.projectKey = projectKey
         Web.host = host
@@ -121,7 +127,7 @@ object PushClient {
             }
         }
 
-        pushHelper?.initPush(context)
+        pushHelper?.initPush(context, isAgreePrivacy)
     }
 
     fun findData(intent: Intent?): String? {

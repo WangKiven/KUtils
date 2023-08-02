@@ -17,7 +17,7 @@ import com.xiaomi.mipush.sdk.PushConfiguration
 class MiPushHelper : PushHelper {
     override var hasInitSuccess: Boolean = false
 
-    override fun initPush(context: Context) {
+    override fun initPush(context: Context, isAgreePrivacy: Boolean) {
 //        if (!shouldInitMiPush()) return
 
         val manifest = context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)

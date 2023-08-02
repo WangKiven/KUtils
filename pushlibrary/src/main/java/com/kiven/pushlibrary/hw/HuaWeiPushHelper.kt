@@ -34,7 +34,7 @@ class HuaWeiPushHelper : PushHelper {
      *
      * 华为测试机token: 0865265045829291300005487100CN01
      */
-    override fun initPush(context: Context) {
+    override fun initPush(context: Context, isAgreePrivacy: Boolean) {
         Thread {
             try {
 

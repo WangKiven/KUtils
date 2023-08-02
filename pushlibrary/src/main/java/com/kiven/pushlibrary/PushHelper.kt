@@ -7,7 +7,7 @@ import android.content.Context
  */
 internal interface PushHelper {
     var hasInitSuccess:Boolean
-    fun initPush(context: Context)
+    fun initPush(context: Context, isAgreePrivacy: Boolean)
     fun setTags(context: Context, tags:Set<String>)
 //    fun clearTags(context: Context)
 //    fun setAccount(context: Context, account:String)

@@ -12,9 +12,9 @@
     <!-- vivo推送 -->
     <!--<uses-permission   android:name="android.permission.INTERNET"/>-->
 
-    <!-- OPPO推送 -->
-    <uses-permission android:name="com.coloros.mcs.permission.RECIEVE_MCS_MESSAGE" />
-    <uses-permission android:name="com.heytap.mcs.permission.RECIEVE_MCS_MESSAGE" />
+    <!-- OPPO推送，2023-8-2发现文档里面没有这两行了 -->
+    <!--<uses-permission android:name="com.coloros.mcs.permission.RECIEVE_MCS_MESSAGE" />
+    <uses-permission android:name="com.heytap.mcs.permission.RECIEVE_MCS_MESSAGE" />-->
 
     <!-- 华为 -->
     <queries>
@@ -123,6 +123,7 @@
         <!-- vivo推送 -->
         <service
             android:name="com.vivo.push.sdk.service.CommandClientService"
+            android:permission="com.push.permission.UPSTAGESERVICE"
             android:exported="true" />
 
         <receiver android:name=".vivo.VivoPushReceiver"

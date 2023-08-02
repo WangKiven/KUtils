@@ -17,7 +17,7 @@ import com.kiven.pushlibrary.Web
 class OPPOPushHelper : PushHelper {
     override var hasInitSuccess: Boolean = false
 
-    override fun initPush(context: Context) {
+    override fun initPush(context: Context, isAgreePrivacy: Boolean) {
         val manifest = context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
         val bundleData = manifest.metaData ?: throw Throwable("manifest中oppo配置信息为空")
 

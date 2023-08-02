@@ -5,6 +5,9 @@ import com.kiven.kutils.logHelper.KLog
 import com.kiven.pushlibrary.PushHelper
 import com.kiven.pushlibrary.Web
 import com.vivo.push.PushClient
+import com.vivo.push.PushConfig
+import com.vivo.push.listener.IPushQueryActionListener
+
 
 /**
  *
@@ -35,17 +38,30 @@ class VivoPushHelper : PushHelper {
         PushClient.getInstance(context).topics*/
     }
 
-    override fun initPush(context: Context) {
+    override fun initPush(context: Context, isAgreePrivacy: Boolean) {
         PushClient.getInstance(context).apply {
 
-            if (!hasInitSuccess) {
+            /*if (!hasInitSuccess) {
                 initialize()
                 hasInitSuccess = true
-            }
+            }*/
+            val config = PushConfig.Builder()
+                .agreePrivacyStatement(isAgreePrivacy)
+                .build()
+            initialize(config)
+
             turnOnPush {
                 if (it == 0 || it == 1) {// 0操作成功; 1操作成功，此动作在未操作前已经设置成功
-                    if (regId.isNotBlank())
-                        Web.register(context, regId, 3)//设备类型 0 不明，1 iOS, 2 华为, 3 vivo, 4 oppo, 5 小米
+                    getRegId(object : IPushQueryActionListener{
+                        override fun onSuccess(p0: String?) {
+
+                            if (p0?.isNotBlank() == true)
+                                Web.register(context, p0, 3)//设备类型 0 不明，1 iOS, 2 华为, 3 vivo, 4 oppo, 5 小米
+                        }
+
+                        override fun onFail(p0: Int?) {
+                        }
+                    })
                 } else KLog.i("操作失败")
             }
         }

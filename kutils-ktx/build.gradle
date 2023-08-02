@@ -17,7 +17,7 @@ afterEvaluate {
 }
 
 android {
-    compileSdkVersion 33
+    compileSdk 33
 //    buildToolsVersion "29.0.2"
 
 

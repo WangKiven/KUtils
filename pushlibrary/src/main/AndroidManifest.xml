@@ -133,6 +133,19 @@
                 <action android:name="com.vivo.pushclient.action.RECEIVE" />
             </intent-filter>
         </receiver>
+        <!-- vivo推送 下面是复制的Vi波提供的aar包中manifest.xml中的，不然初始化报错 -->
+        <meta-data
+            android:name="sdk_version_vivo"
+            android:value="488" />
+
+        <meta-data
+            android:name="local_iv"
+            android:value="MzMsMzQsMzUsMzYsMzcsMzgsMzksNDAsNDEsMzIsMzgsMzcsMzYsMzUsMzQsMzMsI0AzNCwzMiwzMywzNywzMywzNCwzMiwzMywzMywzMywzNCw0MSwzNSwzNSwzMiwzMiwjQDMzLDM0LDM1LDM2LDM3LDM4LDM5LDQwLDQxLDMyLDM4LDM3LDMzLDM1LDM0LDMzLCNAMzQsMzIsMzMsMzcsMzMsMzQsMzIsMzMsMzMsMzMsMzQsNDEsMzUsMzIsMzIsMzI" /> <!-- 支持性能监控 -->
+        <meta-data
+            android:name="com.vivo.push.support_monitor"
+            android:value="1" />
+
+
 
 
         <!-- OPPO推送 -->

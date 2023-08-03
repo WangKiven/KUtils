@@ -70,21 +70,21 @@ dependencies {
 
     // 小米推送 https://dev.mi.com/console/doc/detail?pId=2625
 //    api fileTree(dir: 'miPush', include: ['*.jar', '*.bak', '*.aar'])
-//    implementation zipTree('miPush/MiPush_SDK_Client_5_7_8-C_3rd.aar')
-    implementation files('miPush/MiPush_SDK_Client_5_7_8-C_3rd.aar')
+    implementation zipTree('miPush/MiPush_SDK_Client_5_7_8-C_3rd.aar')
+//    implementation files('miPush/MiPush_SDK_Client_5_7_8-C_3rd.aar')
 
     // todo vivo推送,fileTree方式编译时要报错，但是能运行。zipTree仅导入了aar中的jar包。
     //  解压AAR后，查看除了jar有用，其他文件都没用，所有使用zipTree
     //  解压命令：unzip -n vivo_pushsdk-v2.9.0.0.aar -d tmp/
 //    implementation fileTree(dir: 'vivoPush', include: ['*.jar', '*.bak', '*.aar'])
-//    implementation zipTree('vivoPush/vivo_pushSDK_v3.0.0.7_488.aar')
-    implementation files("vivoPush/vivo_pushSDK_v3.0.0.7_488.aar")
+    implementation zipTree('vivoPush/vivo_pushSDK_v3.0.0.7_488.aar')
+//    implementation files("vivoPush/vivo_pushSDK_v3.0.0.7_488.aar")
 
     // todo OPPO推送, 文档使用的是 implementation(name: 'push-3.0.0', ext: 'aar')
     //  需要配置 repositories { flatDir { dirs 'libs' } }，但是在这里不适用（这本来是一个SDK，其他应用不方便这样导入）
 //    implementation fileTree(dir: 'oppoPush', include: ['*.jar', '*.bak'])
-//    implementation zipTree('oppoPush/com.heytap.msp_3.1.0.aar')
-    implementation files('oppoPush/com.heytap.msp_3.1.0.aar')
+    implementation zipTree('oppoPush/com.heytap.msp_3.1.0.aar')
+//    implementation files('oppoPush/com.heytap.msp_3.1.0.aar')
     //以下依赖都需要添加
     implementation 'com.google.code.gson:gson:2.9.1'
     implementation 'commons-codec:commons-codec:1.15'

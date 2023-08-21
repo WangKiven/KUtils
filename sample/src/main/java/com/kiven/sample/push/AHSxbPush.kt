@@ -125,11 +125,11 @@ class AHSxbPush : KActivityHelper() {
                 ), arrayOf("识别码", "存储")) {
                     if (it) {
                         if (!PushClient.hasInit)
-                            PushClient.initPush(mActivity, projectKey, host, ishttps, true)
+                            PushClient.initPush(mActivity, projectKey, host, ishttps, true, true)
                     }
                 }
             } else {
-                PushClient.initPush(mActivity, projectKey, host, ishttps, true)
+                PushClient.initPush(mActivity, projectKey, host, ishttps, true, true)
             }
         })
 

@@ -86,7 +86,9 @@ internal object Web {
 
     private var registerTaskId = 0L
     private fun register(taskId: Long, tokenOrIdN: String, platformN: Int) {
-        if (registerTaskId != taskId) return
+        if (registerTaskId != taskId || host.isBlank()) return
+        KLog.i("host = $host")
+        KLog.i("registerUrl = $registerUrl")
 
         Thread {
             try {
@@ -182,7 +184,7 @@ internal object Web {
 
     private var accountTaskId = 0L
     private fun bindAccount(taskId: Long, accountN: String) {
-        if (accountTaskId != taskId) return
+        if (accountTaskId != taskId || host.isBlank()) return
 
         Thread {
             while (tokenOrId.isBlank()) {
@@ -227,7 +229,7 @@ internal object Web {
 
     private var tagsTaskId = 0L
     private fun setTags(taskId: Long, tagOrTopicsN: String) {
-        if (tagsTaskId != taskId) return
+        if (tagsTaskId != taskId || host.isBlank()) return
 
         Thread {
             while (tokenOrId.isBlank()) {
@@ -262,6 +264,8 @@ internal object Web {
     }
 
     fun onClick(msgUnicode: String, isDebug: Boolean, serverKey: String) {
+        if (host.isBlank()) return
+
         Thread {
             while (tokenOrId.isBlank()) {
                 Thread.sleep(5000)

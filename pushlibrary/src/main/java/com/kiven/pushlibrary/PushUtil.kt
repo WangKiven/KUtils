@@ -106,7 +106,7 @@ object PushUtil {
         ii.putExtra("argu", argument)
         ii.putExtra("sArgu", sArgument)
         val pendingIntent =
-            PendingIntent.getActivity(context, 110, ii, PendingIntent.FLAG_UPDATE_CURRENT)
+            PendingIntent.getActivity(context, 110, ii, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
         val mBuilder = NotificationCompat.Builder(context, getChannelId(context))
             .setSmallIcon(context.applicationContext.applicationInfo.icon)

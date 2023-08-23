@@ -4,6 +4,7 @@
     <!-- 小米推送 -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <!--<permission android:name="com.xiaomi.mipushdemo.permission.MIPUSH_RECEIVE"
         android:protectionLevel="signature" /> todo 这里com.xiaomi.mipushdemo改成app的包名

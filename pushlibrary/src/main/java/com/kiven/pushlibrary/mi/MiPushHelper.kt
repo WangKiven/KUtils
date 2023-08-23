@@ -15,7 +15,7 @@ import com.xiaomi.mipush.sdk.PushConfiguration
  * SDK使用指南：https://dev.mi.com/console/doc/detail?pId=41
  *
  *
- * 2023-8-21测试车小花二手车发现app的通知是关闭的并且开启不了。但是重新打包安卓推送开关是开启的。
+ * 2023-8-21测试车小花二手车发现app的通知是关闭的并且开启不了。但是添加<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />后重新打包安卓推送开关是开启的。
  */
 class MiPushHelper : PushHelper {
     override var hasInitSuccess: Boolean = false

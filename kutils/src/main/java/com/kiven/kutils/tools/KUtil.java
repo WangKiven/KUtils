@@ -47,6 +47,8 @@ public class KUtil {
         private String tag = "kutils";
         private String CONFIG_SHARED_PREFERENCES = "KContext.ACCOUNT_CONFIG";
 
+        public String fileprovider = "";
+
         public void setDebug(boolean debug) {
             isDebug = debug;
         }

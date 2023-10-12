@@ -8,9 +8,13 @@ import android.os.Build;
 import android.util.Log;
 
 import com.kiven.kutils.callBack.Supplier;
+import com.kiven.kutils.tools.KFile;
 import com.kiven.kutils.tools.KString;
 import com.kiven.kutils.tools.KUtil;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Field;
@@ -18,8 +22,11 @@ import java.lang.reflect.Modifier;
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.Locale;
@@ -42,9 +49,6 @@ public class KLog {
 
     /**
      * 日志记录操作
-     *
-     * @param log log
-     * @return
      */
     protected static KLogInfo addLog(String log) {
 
@@ -86,8 +90,60 @@ public class KLog {
             }
             KLogInfo info = new KLogInfo(log, codePosition, codePositionStack.toString());
             logs.addFirst(info);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        saveLog2File(info);
+                    } catch (Throwable e) {
+                        e.printStackTrace();
+                        outputStream = null;
+                    }
+                }
+            }).start();
             return info;
         }
+    }
+
+
+    private static FileOutputStream outputStream;
+    private static Long outputStreamUpdateTime = 0L;
+    private static int outputStreamLineCount = 0;
+    private static synchronized void saveLog2File(KLogInfo info) throws Exception {
+        if (outputStream == null || outputStreamLineCount > 2000) {
+            if (outputStream != null) {
+                outputStream.close();
+            }
+            File dir = KUtil.getApp().getCacheDir();
+            if (dir.exists()) {
+                File[] c = dir.listFiles();
+                int curDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+                for (File file : c) {
+                    String name = file.getName();
+                    if (name.startsWith("KLog日志")) {
+                        String ds = name.substring(14, 16);
+                        try {
+                            int d = Integer.parseInt(ds);
+                            if (curDay < 6) {
+                                if (d + curDay < 30) file.delete();
+                            } else {
+                                if (d > curDay || d < curDay - 6) file.delete();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            file.delete();
+                        }
+                    }
+                }
+            }
+            outputStream = new FileOutputStream(KFile.createNameFile("KLog日志"
+                    + DateFormat.getDateTimeInstance().format(new Date()) + " " + android.os.Process.myPid() + ".txt", dir), true);
+            outputStreamUpdateTime = System.currentTimeMillis();
+            outputStreamLineCount = 0;
+        }
+        String s = "\n" + new Date(info.time).toLocaleString() + " " + info.log + " at " + info.codePosition;
+        outputStream.write(s.getBytes());
+        outputStreamLineCount ++;
     }
 
     public static LinkedList<KLogInfo> getLogs() {

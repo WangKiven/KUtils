@@ -3,13 +3,16 @@ package com.kiven.kutils.logHelper;
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -313,7 +316,38 @@ public class AHFileManager extends KActivityHelper {
 
                                                                     tv.setText(KFile.readFile(cFile, charset));
 
-                                                                    new AlertDialog.Builder(mActivity).setView(scrollView).show();
+                                                                    new AlertDialog.Builder(mActivity)
+                                                                            .setView(scrollView)
+                                                                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                                                                @Override
+                                                                                public void onClick(DialogInterface dialog, int which) {
+
+                                                                                }
+                                                                            })
+                                                                            .setPositiveButton("导出", new DialogInterface.OnClickListener() {
+                                                                                @Override
+                                                                                public void onClick(DialogInterface dialog, int which) {
+
+                                                                                    Uri txtUri;
+                                                                                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                                                                                        txtUri = Uri.fromFile(cFile);
+                                                                                    } else {
+                                                                                        if (KUtil.getConfig().fileprovider.isEmpty()) {
+                                                                                            KLog.i("未配置 fileprovider");
+                                                                                            return;
+                                                                                        }
+                                                                                        txtUri = FileProvider.getUriForFile(mActivity, KUtil.getConfig().fileprovider, cFile);
+                                                                                    }
+
+                                                                                    Intent i = new Intent(Intent.ACTION_SEND);
+                                                                                    i.setType("text/plain");
+                                                                                    i.putExtra(Intent.EXTRA_STREAM, txtUri);
+                                                                                    i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+                                                                                    mActivity.startActivity(Intent.createChooser(i, "弹出显示的标题x"));
+                                                                                }
+                                                                            })
+                                                                            .show();
 
                                                                 }
                                                             }).show();

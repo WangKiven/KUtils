@@ -280,7 +280,13 @@ public class AHFileManager extends KActivityHelper {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
                                                 if (cFile.length() / 1024 > 100) {
-                                                    KAlertDialogHelper.Show1BDialog(mActivity, "文件太大了，会卡！");
+//                                                    KAlertDialogHelper.Show1BDialog(mActivity, "文件太大了，会卡！");
+                                                    KAlertDialogHelper.Show2BDialog(mActivity, "提示", "文件太大了，会卡！", "知道了", "导出", new View.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(View view) {
+                                                            extFile();
+                                                        }
+                                                    });
                                                 } else {
                                                     new AlertDialog.Builder(mActivity)
                                                             .setTitle("选择编码")
@@ -327,24 +333,7 @@ public class AHFileManager extends KActivityHelper {
                                                                             .setPositiveButton("导出", new DialogInterface.OnClickListener() {
                                                                                 @Override
                                                                                 public void onClick(DialogInterface dialog, int which) {
-
-                                                                                    Uri txtUri;
-                                                                                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-                                                                                        txtUri = Uri.fromFile(cFile);
-                                                                                    } else {
-                                                                                        if (KUtil.getConfig().fileprovider.isEmpty()) {
-                                                                                            KLog.i("未配置 fileprovider");
-                                                                                            return;
-                                                                                        }
-                                                                                        txtUri = FileProvider.getUriForFile(mActivity, KUtil.getConfig().fileprovider, cFile);
-                                                                                    }
-
-                                                                                    Intent i = new Intent(Intent.ACTION_SEND);
-                                                                                    i.setType("text/plain");
-                                                                                    i.putExtra(Intent.EXTRA_STREAM, txtUri);
-                                                                                    i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-                                                                                    mActivity.startActivity(Intent.createChooser(i, "弹出显示的标题x"));
+                                                                                    extFile();
                                                                                 }
                                                                             })
                                                                             .show();
@@ -359,6 +348,26 @@ public class AHFileManager extends KActivityHelper {
                     }
                 }
             });
+        }
+
+        private void extFile() {
+            Uri txtUri;
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                txtUri = Uri.fromFile(cFile);
+            } else {
+                if (KUtil.getConfig().fileprovider.isEmpty()) {
+                    KLog.i("未配置 fileprovider");
+                    return;
+                }
+                txtUri = FileProvider.getUriForFile(mActivity, KUtil.getConfig().fileprovider, cFile);
+            }
+
+            Intent i = new Intent(Intent.ACTION_SEND);
+            i.setType("text/plain");
+            i.putExtra(Intent.EXTRA_STREAM, txtUri);
+            i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+            mActivity.startActivity(Intent.createChooser(i, "弹出显示的标题x"));
         }
 
         LFile cFile;

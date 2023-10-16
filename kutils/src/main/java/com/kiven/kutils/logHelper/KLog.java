@@ -110,7 +110,7 @@ public class KLog {
     private static Long outputStreamUpdateTime = 0L;
     private static int outputStreamLineCount = 0;
     private static synchronized void saveLog2File(KLogInfo info) throws Exception {
-        if (outputStream == null || outputStreamLineCount > 2000) {
+        if (outputStream == null || outputStreamLineCount > 10000) {
             if (outputStream != null) {
                 outputStream.close();
             }

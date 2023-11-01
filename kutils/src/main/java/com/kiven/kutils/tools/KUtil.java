@@ -101,31 +101,6 @@ public class KUtil {
     public static boolean isDebug() {
         return config.isDebug;
     }
-    /*private static String CONFIG_SHARED_PREFERENCES = "KContext.ACCOUNT_CONFIG";
-
-    public static void setConfigSharedPreferences(@NonNull String configSharedPreferences) {
-        CONFIG_SHARED_PREFERENCES = configSharedPreferences;
-    }
-
-
-    private static String imageDirName = "kUtilsImage";
-
-    public static void setImageDirName(@NonNull String dirName) {
-        imageDirName = dirName;
-    }
-
-
-    private static String fileDirName = "kUtilsFile";
-
-    public static void setFileDirName(@NonNull String dirName) {
-        fileDirName = dirName;
-    }
-
-    private static String tag = "kutils";
-
-    public static void setTag(@NonNull String tag) {
-        KUtil.tag = tag;
-    }*/
 
     /**
      * 像素转化

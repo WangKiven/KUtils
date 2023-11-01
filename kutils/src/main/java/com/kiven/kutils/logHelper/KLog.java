@@ -38,13 +38,11 @@ import java.util.Map;
  */
 public class KLog {
 
-    private static boolean showAtLine = true;
-
     private static final LinkedList<KLogInfo> logs = new LinkedList<KLogInfo>();
 
     public static int bugType = 0;// 日志类型：0：默认类型，1：打印，2：不打印
     public static boolean isDebug() {
-        return bugType > 0? bugType == 1: KUtil.getConfig().isDebug();
+        return bugType > 0? bugType == 1: KUtil.isDebug();
     }
 
     /**
@@ -114,24 +112,37 @@ public class KLog {
             if (outputStream != null) {
                 outputStream.close();
             }
-            File dir = KUtil.getApp().getCacheDir();
+            /*File cDir = KUtil.getApp().getCacheDir();
+            if (cDir.exists()) {
+                File[] c = cDir.listFiles();
+                if (c != null && c.length > 0) {
+                    for (File file: c) {
+                        if (file.isFile() && file.getName().startsWith("KLog日志")) {
+                            file.delete();
+                        }
+                    }
+                }
+            }*/
+            File dir = new File(KUtil.getApp().getCacheDir(), "KLog日志");
             if (dir.exists()) {
                 File[] c = dir.listFiles();
                 int curDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-                for (File file : c) {
-                    String name = file.getName();
-                    if (name.startsWith("KLog日志")) {
-                        String ds = name.substring(14, 16);
-                        try {
-                            int d = Integer.parseInt(ds);
-                            if (curDay < 6) {
-                                if (d + curDay < 30) file.delete();
-                            } else {
-                                if (d > curDay || d < curDay - 6) file.delete();
+                if (c != null && c.length > 0) {
+                    for (File file : c) {
+                        String name = file.getName();
+                        if (name.startsWith("KLog日志")) {
+                            String ds = name.substring(14, 16);
+                            try {
+                                int d = Integer.parseInt(ds);
+                                if (curDay < 3) {
+                                    if (d + curDay < 30) file.delete();
+                                } else {
+                                    if (d > curDay || d < curDay - 3) file.delete();
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                file.delete();
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            file.delete();
                         }
                     }
                 }
@@ -150,46 +161,6 @@ public class KLog {
         return logs;
     }
 
-    /**
-     * 是否显示在哪一行
-     *
-     * @param b 是否显示
-     */
-    public static void setShowAtLine(boolean b) {
-        showAtLine = b;
-    }
-
-    /**
-     * 获取代码位置
-     *
-     * @return 代码位置
-     */
-    /*public static String findLog() {
-
-        if (!showAtLine) {
-            return "";
-        }
-
-        StackTraceElement[] sts = Thread.currentThread().getStackTrace();
-        if (sts == null) {
-            return null;
-        }
-        for (StackTraceElement st : sts) {
-            if (st.isNativeMethod()) {
-
-                continue;
-            }
-            if (st.getClassName().equals(Thread.class.getName())) {
-
-                continue;
-            }
-            return " at " + st.getClassName() + "." + st.getMethodName() + "("
-                    + st.getFileName() + ":" + st.getLineNumber() + ")";
-        }
-        return "";
-
-    }*/
-
     private static String tag = "KLog_default";
 
     public static void setTag(String newTag) {
@@ -204,85 +175,95 @@ public class KLog {
     public static void d(String debugInfo) {
         if (isDebug()) {
             KLogInfo info = addLog(debugInfo);
-            for (String burst : burstLog(info.log + info.codePosition)) {
-                Log.d(tag, burst);
-            }
+            if (KUtil.isDebug())
+                for (String burst : burstLog(info.log + info.codePosition)) {
+                    Log.d(tag, burst);
+                }
         }
     }
     public static void d(Supplier<String> call) {
         if (isDebug()) {
             KLogInfo info = addLog(call.callBack());
-            for (String burst : burstLog(info.log + info.codePosition)) {
-                Log.d(tag, burst);
-            }
+            if (KUtil.isDebug())
+                for (String burst : burstLog(info.log + info.codePosition)) {
+                    Log.d(tag, burst);
+                }
         }
     }
 
     public static void e(String errorInfo) {
         if (isDebug()) {
             KLogInfo info = addLog(errorInfo);
-            for (String burst : burstLog(info.log + info.codePosition)) {
-                Log.e(tag, burst);
-            }
+            if (KUtil.isDebug())
+                for (String burst : burstLog(info.log + info.codePosition)) {
+                    Log.e(tag, burst);
+                }
         }
     }
     public static void e(Supplier<String> call) {
         if (isDebug()) {
             KLogInfo info = addLog(call.callBack());
-            for (String burst : burstLog(info.log + info.codePosition)) {
-                Log.e(tag, burst);
-            }
+            if (KUtil.isDebug())
+                for (String burst : burstLog(info.log + info.codePosition)) {
+                    Log.e(tag, burst);
+                }
         }
     }
 
     public static void v(String msg) {
         if (isDebug()) {
             KLogInfo info = addLog(msg);
-            for (String burst : burstLog(info.log + info.codePosition)) {
-                Log.v(tag, burst);
-            }
+            if (KUtil.isDebug())
+                for (String burst : burstLog(info.log + info.codePosition)) {
+                    Log.v(tag, burst);
+                }
         }
     }
     public static void v(Supplier<String> call) {
         if (isDebug()) {
             KLogInfo info = addLog(call.callBack());
-            for (String burst : burstLog(info.log + info.codePosition)) {
-                Log.v(tag, burst);
-            }
+            if (KUtil.isDebug())
+                for (String burst : burstLog(info.log + info.codePosition)) {
+                    Log.v(tag, burst);
+                }
         }
     }
 
     public static void i(String msg) {
         if (isDebug()) {
             KLogInfo info = addLog(msg);
-            for (String burst : burstLog(info.log + info.codePosition)) {
-                Log.i(tag, burst);
-            }
+            if (KUtil.isDebug())
+                for (String burst : burstLog(info.log + info.codePosition)) {
+                    Log.i(tag, burst);
+                }
         }
     }
     public static void i(Supplier<String> call) {
         if (isDebug()) {
             KLogInfo info = addLog(call.callBack());
-            for (String burst : burstLog(info.log + info.codePosition)) {
-                Log.i(tag, burst);
-            }
+            if (KUtil.isDebug())
+                for (String burst : burstLog(info.log + info.codePosition)) {
+                    Log.i(tag, burst);
+                }
         }
     }
 
     public static void w(String msg) {
         if (isDebug()) {
             KLogInfo info = addLog(msg);
-            for (String burst : burstLog(info.log + info.codePosition)) {
-                Log.w(tag, burst);
-            }
+            if (KUtil.isDebug())
+                for (String burst : burstLog(info.log + info.codePosition)) {
+                    Log.w(tag, burst);
+                }
         }
     }
     public static void w(Supplier<String> call) {
         if (isDebug()) {
             KLogInfo info = addLog(call.callBack());
-            for (String burst : burstLog(info.log + info.codePosition)) {
-                Log.w(tag, burst);
-            }
+            if (KUtil.isDebug())
+                for (String burst : burstLog(info.log + info.codePosition)) {
+                    Log.w(tag, burst);
+                }
         }
     }
 
@@ -403,9 +384,10 @@ public class KLog {
         }
         addLog(msg);*/
         KLogInfo info = addLog(new String(sb));
-        for (String burst : burstLog(info.log + info.codePosition)) {
-            Log.i(tag, burst);
-        }
+        if (KUtil.isDebug())
+            for (String burst : burstLog(info.log + info.codePosition)) {
+                Log.i(tag, burst);
+            }
     }
 
     public static String obj2Str(Object obj) {
@@ -555,8 +537,9 @@ public class KLog {
         addLog(msg);*/
 
         KLogInfo info = addLog(new String(builder));
-        for (String burst : burstLog(info.log + info.codePosition)) {
-            Log.i(tag, burst);
-        }
+        if (KUtil.isDebug())
+            for (String burst : burstLog(info.log + info.codePosition)) {
+                Log.i(tag, burst);
+            }
     }
 }

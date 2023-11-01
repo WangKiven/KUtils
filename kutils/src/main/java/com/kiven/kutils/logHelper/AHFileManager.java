@@ -49,6 +49,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class AHFileManager extends KActivityHelper {
+    public static String pathKey = "KActivityHelper.pathKey";
     private GridViewAdapter gridViewAdapter = new GridViewAdapter();
 
     private final ArrayList<LFile> modules = new ArrayList<>();
@@ -128,6 +129,22 @@ public class AHFileManager extends KActivityHelper {
         }
         recyclerView.setAdapter(childAdapter);
 
+        if (savedInstanceState == null) {
+            Intent i = activity.getIntent();
+            String p = i.getStringExtra(pathKey);
+            if (p != null && !p.isEmpty()) {
+                File file = new File(p);
+                if (file.exists()) {
+                    if (file.isDirectory()) {
+                        selDir.add(new LFile(file));
+                    } else {
+                        selDir.add(new LFile(file.getParent()));
+                    }
+                } else {
+                    KAlertDialogHelper.Show1BDialog(activity, "初始路径不存在");
+                }
+            }
+        }
         onSelectedDir();
     }
 

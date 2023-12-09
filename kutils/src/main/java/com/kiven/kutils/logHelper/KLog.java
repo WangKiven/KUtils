@@ -23,6 +23,7 @@ import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -131,7 +132,7 @@ public class KLog {
                     for (File file : c) {
                         String name = file.getName();
                         if (name.startsWith("KLog日志")) {
-                            String ds = name.substring(14, 16);
+                            String ds = name.substring(12, 14);
                             try {
                                 int d = Integer.parseInt(ds);
                                 if (curDay < 3) {
@@ -148,7 +149,7 @@ public class KLog {
                 }
             }
             outputStream = new FileOutputStream(KFile.createNameFile("KLog日志"
-                    + DateFormat.getDateTimeInstance().format(new Date()) + " " + android.os.Process.myPid() + ".txt", dir), true);
+                    + new SimpleDateFormat("yy-MM-dd HH:mm:ss").format(new Date()) + " " + android.os.Process.myPid() + ".txt", dir), true);
             outputStreamUpdateTime = System.currentTimeMillis();
             outputStreamLineCount = 0;
         }

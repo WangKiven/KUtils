@@ -55,7 +55,7 @@ class EntityAppInfo(private val packageManager: PackageManager, private val appl
 
             firstInstallTime = packageInfo.firstInstallTime
             lastUpdateTime = packageInfo.lastUpdateTime
-            curVersion = packageInfo.versionName
+            curVersion = packageInfo.versionName ?: ""
             curVersionCode = packageInfo.versionCode
             permissions = packageInfo.permissions ?: arrayOf()
         } catch (e: PackageManager.NameNotFoundException) {

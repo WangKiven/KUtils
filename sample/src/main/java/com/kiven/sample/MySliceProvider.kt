@@ -55,7 +55,7 @@ class MySliceProvider:SliceProvider() {
                 ).build()
     }
 
-    fun createActivityAction(): SliceAction? {
+    private fun createActivityAction(): SliceAction? {
         return if (context == null) {
             null
         } else SliceAction.create(

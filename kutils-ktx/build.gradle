@@ -15,6 +15,19 @@ apply plugin: 'maven-publish'
         }
     }
 }*/
+publishing {
+    publications {
+        release(MavenPublication) {
+            groupId = 'com.github.WangKiven.KUtils'
+            artifactId = 'kutils-ktx'
+            version = parent.ext.library_version
+
+            afterEvaluate {
+                from components.release
+            }
+        }
+    }
+}
 
 android {
     namespace 'com.sxb.kutils_ktx'

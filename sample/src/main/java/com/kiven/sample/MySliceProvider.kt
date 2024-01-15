@@ -63,7 +63,7 @@ class MySliceProvider:SliceProvider() {
                         context,
                         0,
                         Intent(context, ClickNotiActivity::class.java),
-                        0
+                    PendingIntent.FLAG_IMMUTABLE or 0
                 ),
                 IconCompat.createWithResource(context!!, R.mipmap.ic_launcher_u),
                 ListBuilder.ICON_IMAGE,

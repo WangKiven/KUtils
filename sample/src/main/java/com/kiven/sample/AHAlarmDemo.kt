@@ -118,7 +118,9 @@ class AHAlarmDemo : KActivityHelper() {
             val alarmManager = mActivity.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
 //            val pi = PendingIntent.getBroadcast(mActivity, 888, Intent(AlarmClock.ACTION_SHOW_ALARMS), 0)
-            val pi = PendingIntent.getActivity(mActivity, 888, Intent(mActivity, ActivityDock::class.java), 0)
+
+//            val pi = PendingIntent.getActivity(mActivity, 888, Intent(mActivity, ActivityDock::class.java), 0)
+            val pi = PendingIntent.getActivity(mActivity, 888, Intent(mActivity, ActivityDock::class.java), PendingIntent.FLAG_IMMUTABLE or 0)
 
             alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 5000, pi)
         })

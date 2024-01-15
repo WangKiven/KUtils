@@ -44,7 +44,7 @@ public class ProviderWidget extends AppWidgetProvider {
             int appWidgetId = appWidgetIds[i];
 
             Intent intent2 = new Intent(context, LaunchActivity.class);
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent2, 0);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent2, PendingIntent.FLAG_IMMUTABLE);
 
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
             views.setTextColor(R.id.tv_title, Color.CYAN);

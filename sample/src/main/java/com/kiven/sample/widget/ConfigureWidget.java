@@ -31,7 +31,8 @@ public class ConfigureWidget extends KActivity {
             mAppWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
 
             Intent intent2 = new Intent(this, LaunchActivity.class);
-            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent2, 0);
+//            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent2, 0);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent2, PendingIntent.FLAG_IMMUTABLE);
 
             RemoteViews views = new RemoteViews(this.getPackageName(), R.layout.widget_layout);
             views.setTextColor(R.id.tv_title, Color.CYAN);

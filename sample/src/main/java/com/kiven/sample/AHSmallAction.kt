@@ -529,8 +529,8 @@ class AHSmallAction : KActivityHelper() {
 
                 val intent = mActivity.packageManager
                     .getLaunchIntentForPackage(mActivity.packageName)
-                val restartIntent =
-                    PendingIntent.getActivity(mActivity, 0, intent, PendingIntent.FLAG_ONE_SHOT)
+//                val restartIntent = PendingIntent.getActivity(mActivity, 0, intent, PendingIntent.FLAG_ONE_SHOT)
+                val restartIntent = PendingIntent.getActivity(mActivity, 0, intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_ONE_SHOT)
                 val mgr = mActivity.getSystemService(Context.ALARM_SERVICE) as AlarmManager?
                 mgr!!.set(
                     AlarmManager.RTC,

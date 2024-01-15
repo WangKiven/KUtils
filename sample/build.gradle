@@ -36,7 +36,7 @@ android {
         }
     }
 
-    compileSdkVersion parent.ext.compileSdkVersion
+    compileSdk parent.ext.compileSdkVersion
 //    buildToolsVersion parent.ext.buildToolsVersion
 
     defaultConfig {
@@ -91,11 +91,12 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
+
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
 //        useIR = true // 新类型推断算法 (默认启用) https://blog.csdn.net/u011430427/article/details/119921473
     }
     dataBinding {
@@ -108,7 +109,7 @@ android {
     }
     composeOptions {
 //        kotlinCompilerExtensionVersion compose_version
-        kotlinCompilerExtensionVersion '1.3.0'
+        kotlinCompilerExtensionVersion '1.5.4'
         kotlinCompilerVersion parent.ext.kotlin_version
     }
     namespace 'com.kiven.sample'
@@ -139,11 +140,11 @@ dependencies {
 
     implementation 'androidx.multidex:multidex:2.0.1'
 
-    implementation "com.google.android.material:material:1.8.0"
-    implementation "androidx.recyclerview:recyclerview:1.3.0"
+    implementation "com.google.android.material:material:1.11.0"
+    implementation "androidx.recyclerview:recyclerview:1.3.2"
 
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.core:core-ktx:1.12.0'
 
     // animation & transition
     implementation "androidx.dynamicanimation:dynamicanimation:1.0.0"
@@ -240,8 +241,8 @@ dependencies {
     implementation 'com.vanniktech:emoji-twitter:0.8.0'
 
     // ARouter: https://github.com/alibaba/ARouter, TODO 需要注意代码混淆和加固的问题, 我们的helper不适用，只能用于activity
-    implementation 'com.alibaba:arouter-api:1.5.2'
-    kapt 'com.alibaba:arouter-compiler:1.5.2'
+//    implementation 'com.alibaba:arouter-api:1.5.2'
+//    kapt 'com.alibaba:arouter-compiler:1.5.2'
 
     implementation 'androidx.palette:palette-ktx:1.0.0'
 

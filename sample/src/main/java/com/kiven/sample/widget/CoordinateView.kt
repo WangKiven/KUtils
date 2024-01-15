@@ -58,9 +58,8 @@ class CoordinateView(context: Context, attrs: AttributeSet?) : View(context, att
         canvasWidth = w
     }
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        if (canvas == null) return
 
 //        canvas.drawColor(Color.WHITE);// 背景，不需要绘制背景，父类super.onDraw(canvas)已经实现了背景绘制
         paint.color = Color.BLACK

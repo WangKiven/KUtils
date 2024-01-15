@@ -16,7 +16,7 @@ import android.widget.ImageView
 import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.alibaba.android.arouter.facade.annotation.Route
+//import com.alibaba.android.arouter.facade.annotation.Route
 import com.kiven.kutils.activityHelper.activity.KActivity
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KAppTool
@@ -39,7 +39,7 @@ import kotlin.collections.ArrayList
  * 桌面检测与设置：https://blog.csdn.net/weixin_41549915/article/details/81633354
  * Android获取应用信息(AndroidManifest): https://www.jianshu.com/p/94dfcb869995
  */
-@Route(path = "/dock/home")
+//@Route(path = "/dock/home")
 class ActivityDock : KActivity() {
 
     private val apps: MutableList<EntityAppInfo> = ArrayList()

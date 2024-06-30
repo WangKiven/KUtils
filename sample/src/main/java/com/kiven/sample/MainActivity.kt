@@ -164,7 +164,7 @@ class MainActivity : KActivity() {
             addBtn("cpu、内存管理") { AHCPUMemory().startActivity(this@MainActivity) }
             addBtn("KLog") {
                 KLog.i { return@i "天道酬勤" }
-                KLog.i("nini")
+                KLog.i("nini", 1)
             }
         }
     }

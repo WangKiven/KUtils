@@ -50,6 +50,9 @@ public class KLog {
      * 日志记录操作
      */
     protected static KLogInfo addLog(String log) {
+        return addLog(log, 0);
+    }
+    protected static KLogInfo addLog(String log, int status) {
 
         synchronized (logs) {
             if (logs.size() > 500) {
@@ -63,9 +66,10 @@ public class KLog {
             StringBuilder codePositionStack = new StringBuilder();
             if (sts != null) {
                 int i = 0;
+                int rightI = 0;
                 for (StackTraceElement st : sts) {
                     i++;
-                    if (i > 10) {
+                    if (i > 15) {
                         break;
                     }
 
@@ -82,8 +86,13 @@ public class KLog {
                         if (st.getClassName().equals(Thread.class.getName())) {continue;}
                         if (st.getClassName().equals(KLog.class.getName())) {continue;}
 
-                        codePosition = " at " + st.getClassName() + "." + st.getMethodName() + "("
-                                + st.getFileName() + ":" + st.getLineNumber() + ")";
+                        rightI++;
+
+                        if (rightI > status) {
+                            codePosition = " at " + st.getClassName() + "." + st.getMethodName() + "(" + st.getFileName() + ":" + st.getLineNumber() + ")";
+                            break;
+                        }
+
                     }
                 }
             }
@@ -231,8 +240,11 @@ public class KLog {
     }
 
     public static void i(String msg) {
+        i(msg, 0);
+    }
+    public static void i(String msg, int status) {
         if (isDebug()) {
-            KLogInfo info = addLog(msg);
+            KLogInfo info = addLog(msg, status);
             if (KUtil.isDebug())
                 for (String burst : burstLog(info.log + info.codePosition)) {
                     Log.i(tag, burst);

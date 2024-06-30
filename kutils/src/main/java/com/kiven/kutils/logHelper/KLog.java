@@ -30,6 +30,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -44,6 +45,13 @@ public class KLog {
     public static int bugType = 0;// 日志类型：0：默认类型，1：打印，2：不打印
     public static boolean isDebug() {
         return bugType > 0? bugType == 1: KUtil.isDebug();
+    }
+
+    private static ArrayList<String> otherStackList = new ArrayList<String>();
+
+    public static void updateOtherStack(List<String> list) {
+        otherStackList.clear();
+        otherStackList.addAll(list);
     }
 
     /**
@@ -83,13 +91,23 @@ public class KLog {
 
                     if (codePosition == null) {
                         if (st.isNativeMethod()) {continue;}
-                        if (st.getClassName().equals(Thread.class.getName())) {continue;}
-                        if (st.getClassName().equals(KLog.class.getName())) {continue;}
+                        String className = st.getClassName();
+                        if (className.equals(Thread.class.getName())) {continue;}
+                        if (className.equals(KLog.class.getName())) {continue;}
+
+                        boolean isOtherStack = false;
+                        for (String it : otherStackList) {
+                            if (className.equals(it)) {
+                                isOtherStack = true;
+                                break;
+                            }
+                        }
+                        if (isOtherStack) continue;
 
                         rightI++;
 
                         if (rightI > status) {
-                            codePosition = " at " + st.getClassName() + "." + st.getMethodName() + "(" + st.getFileName() + ":" + st.getLineNumber() + ")";
+                            codePosition = " at " + className + "." + st.getMethodName() + "(" + st.getFileName() + ":" + st.getLineNumber() + ")";
                             break;
                         }
 

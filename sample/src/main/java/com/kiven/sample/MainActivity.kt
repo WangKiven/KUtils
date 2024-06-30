@@ -163,6 +163,10 @@ class MainActivity : KActivity() {
             addBtn("三方平台推送") { AHSxbPush().startActivity(this@MainActivity) }
             addBtn("cpu、内存管理") { AHCPUMemory().startActivity(this@MainActivity) }
             addBtn("KLog") {
+                KLog.updateOtherStack(listOf(MainActivity::class.java.name))
+                KLog.i { return@i "天道酬勤" }
+                KLog.i("nini", 1)
+                KLog.updateOtherStack(listOf())
                 KLog.i { return@i "天道酬勤" }
                 KLog.i("nini", 1)
             }

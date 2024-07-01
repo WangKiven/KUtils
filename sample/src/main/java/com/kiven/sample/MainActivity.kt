@@ -164,17 +164,21 @@ class MainActivity : KActivity() {
             addBtn("三方平台推送") { AHSxbPush().startActivity(this@MainActivity) }
             addBtn("cpu、内存管理") { AHCPUMemory().startActivity(this@MainActivity) }
             addBtn("KLog") {
-                KLog.updateOtherStack(listOf(MainActivity::class.java.name, "com.kiven.sample.util.UtilsKt"))
-                KLog.i { return@i "天道酬勤" }
-                KLog.i("nini", 1)
-                showTip("ninix\n")
-
-                KLog.updateOtherStack(listOf())
-                KLog.i { return@i "天道酬勤" }
-                KLog.i("nini", 1)
-                showTip("ninix\n")
+                testKLog()
             }
         }
+    }
+
+    private fun testKLog() {
+        KLog.updateOtherStack(listOf("com.kiven.sample.util.UtilsKt"))
+        KLog.i { return@i "天道酬勤" }
+        KLog.i("nini", 1)
+        showTip("Hello KLog.")
+
+        KLog.updateOtherStack(listOf())
+        KLog.i { return@i "天道酬勤" }
+        KLog.i("nini", 1)
+        showTip("Hello KLog.")
     }
 
     private fun setupWindowAnimations() {

@@ -116,6 +116,13 @@ KLog.i("Hello KLog.");
 KLog.d("Hello KLog.");
 KLog.e("Hello KLog.");
 KLog.w("Hello KLog.");
+
+// KLog升级功能
+
+// 1 输出位置需要忽略的类
+KLog.updateOtherStack(listOf("com.kiven.sample.util.UtilsKt"))
+// 2 获取输出位置时，跳过指定次数的有用位置
+KLog.i("Hello KLog.", 1)
 ```
 - 运行App，摇动手机或者点击右侧中间位置的呼吸按钮，出现功能弹窗，选择Log图标<img src="kutils/src/main/res/mipmap-xxhdpi/k_ic_text_log.png" width="30"/>进入日志查看界面
 

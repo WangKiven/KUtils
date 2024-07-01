@@ -30,6 +30,7 @@ import com.kiven.sample.theme.AHTheme
 import com.kiven.sample.util.addBtn
 import com.kiven.sample.util.addTitle
 import com.kiven.sample.util.showDialog
+import com.kiven.sample.util.showTip
 import com.kiven.sample.vpn.AHMyVpn
 
 /**
@@ -163,12 +164,15 @@ class MainActivity : KActivity() {
             addBtn("三方平台推送") { AHSxbPush().startActivity(this@MainActivity) }
             addBtn("cpu、内存管理") { AHCPUMemory().startActivity(this@MainActivity) }
             addBtn("KLog") {
-                KLog.updateOtherStack(listOf(MainActivity::class.java.name))
+                KLog.updateOtherStack(listOf(MainActivity::class.java.name, "com.kiven.sample.util.UtilsKt"))
                 KLog.i { return@i "天道酬勤" }
                 KLog.i("nini", 1)
+                showTip("ninix\n")
+
                 KLog.updateOtherStack(listOf())
                 KLog.i { return@i "天道酬勤" }
                 KLog.i("nini", 1)
+                showTip("ninix\n")
             }
         }
     }

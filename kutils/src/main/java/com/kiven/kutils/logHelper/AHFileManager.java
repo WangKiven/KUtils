@@ -45,6 +45,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -330,7 +331,11 @@ public class AHFileManager extends KActivityHelper {
                                     charset = Charset.forName("US_ASCII");
                                     break;
                                 case 2:
-                                    charset = Charset.forName("ISO-8859-1");
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                                        charset = StandardCharsets.ISO_8859_1;
+                                    } else {
+                                        charset = Charset.forName("ISO-8859-1");
+                                    }
                                     break;
                                 case 3:
                                     charset = Charset.forName("UTF-16");

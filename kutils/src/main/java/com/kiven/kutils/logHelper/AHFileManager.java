@@ -23,11 +23,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
 import com.kiven.kutils.R;
 import com.kiven.kutils.activityHelper.KActivityHelper;
 import com.kiven.kutils.activityHelper.KHelperActivity;
@@ -276,95 +278,98 @@ public class AHFileManager extends KActivityHelper {
                             selDir.add(cFile);
                             onSelectedDir();
                         } else {
-                            if (KFile.checkFileType(cFile) != KFile.FileType.UNKNOWN) {
-                                showImage();
-                            } else
-                                new MaterialAlertDialogBuilder(mActivity)
-                                        .setTitle("选择打开方式").setMessage("文件大小" + Formatter.formatFileSize(mActivity, cFile.length()))
-                                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-
-                                            }
-                                        })
-                                        .setNeutralButton("图片", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
+                            new MaterialAlertDialogBuilder(mActivity)
+                                .setTitle("选择打开方式 " + Formatter.formatFileSize(mActivity, cFile.length()))
+                                .setItems(new String[]{"导出", "显示图片", "显示文档", "取消"}, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    switch (i) {
+                                        case 0:
+                                            extFile();
+                                            break;
+                                        case 1:
+                                            if (KFile.checkFileType(cFile) != KFile.FileType.UNKNOWN) {
                                                 showImage();
+                                            } else {
+                                                Toast.makeText(mActivity, "不是图片", Toast.LENGTH_LONG).show();
                                             }
-                                        })
-                                        .setPositiveButton("文档", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                if (cFile.length() / 1024 > 100) {
-//                                                    KAlertDialogHelper.Show1BDialog(mActivity, "文件太大了，会卡！");
-                                                    KAlertDialogHelper.Show2BDialog(mActivity, "提示", "文件太大了，会卡！", "知道了", "导出", new View.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(View view) {
-                                                            extFile();
-                                                        }
-                                                    });
-                                                } else {
-                                                    new AlertDialog.Builder(mActivity)
-                                                            .setTitle("选择编码")
-                                                            .setItems(new CharSequence[]{
-                                                                    "UTF-8", "US_ASCII", "ISO-8859-1", "UTF-16", "UTF-16BE", "UTF-16LE"
-                                                            }, new DialogInterface.OnClickListener() {
-                                                                @Override
-                                                                public void onClick(DialogInterface dialog, int which) {
-                                                                    Charset charset;
-                                                                    switch (which) {
-                                                                        case 1:
-                                                                            charset = Charset.forName("US_ASCII");
-                                                                            break;
-                                                                        case 2:
-                                                                            charset = Charset.forName("ISO-8859-1");
-                                                                            break;
-                                                                        case 3:
-                                                                            charset = Charset.forName("UTF-16");
-                                                                            break;
-                                                                        case 4:
-                                                                            charset = Charset.forName("UTF-16BE");
-                                                                            break;
-                                                                        case 5:
-                                                                            charset = Charset.forName("UTF-16LE");
-                                                                            break;
-                                                                        default:
-                                                                            charset = Charset.forName("UTF-8");
-                                                                    }
-
-                                                                    ScrollView scrollView = new ScrollView(mActivity);
-                                                                    TextView tv = new TextView(mActivity);
-                                                                    scrollView.addView(tv);
-
-                                                                    tv.setText(KFile.readFile(cFile, charset));
-
-                                                                    new AlertDialog.Builder(mActivity)
-                                                                            .setView(scrollView)
-                                                                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                                                                                @Override
-                                                                                public void onClick(DialogInterface dialog, int which) {
-
-                                                                                }
-                                                                            })
-                                                                            .setPositiveButton("导出", new DialogInterface.OnClickListener() {
-                                                                                @Override
-                                                                                public void onClick(DialogInterface dialog, int which) {
-                                                                                    extFile();
-                                                                                }
-                                                                            })
-                                                                            .show();
-
-                                                                }
-                                                            }).show();
-                                                }
-                                            }
-                                        })
-                                        .show();
+                                            break;
+                                        case 2:
+                                            showFile();
+                                            break;
+                                    }
+                                    dialogInterface.dismiss();
+                                }
+                            }).show();
                         }
                     }
                 }
             });
+        }
+
+        private void showFile() {
+            if (cFile.length() / 1024 > 100) {
+//                                                    KAlertDialogHelper.Show1BDialog(mActivity, "文件太大了，会卡！");
+                KAlertDialogHelper.Show2BDialog(mActivity, "提示", "文件太大了，会卡！", "知道了", "导出", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        extFile();
+                    }
+                });
+            } else {
+                new AlertDialog.Builder(mActivity)
+                    .setTitle("选择编码")
+                    .setItems(new CharSequence[]{
+                        "UTF-8", "US_ASCII", "ISO-8859-1", "UTF-16", "UTF-16BE", "UTF-16LE"
+                    }, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Charset charset;
+                            switch (which) {
+                                case 1:
+                                    charset = Charset.forName("US_ASCII");
+                                    break;
+                                case 2:
+                                    charset = Charset.forName("ISO-8859-1");
+                                    break;
+                                case 3:
+                                    charset = Charset.forName("UTF-16");
+                                    break;
+                                case 4:
+                                    charset = Charset.forName("UTF-16BE");
+                                    break;
+                                case 5:
+                                    charset = Charset.forName("UTF-16LE");
+                                    break;
+                                default:
+                                    charset = Charset.forName("UTF-8");
+                            }
+
+                            ScrollView scrollView = new ScrollView(mActivity);
+                            TextView tv = new TextView(mActivity);
+                            scrollView.addView(tv);
+
+                            tv.setText(KFile.readFile(cFile, charset));
+
+                            new AlertDialog.Builder(mActivity)
+                                .setView(scrollView)
+                                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                    }
+                                })
+                                .setPositiveButton("导出", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        extFile();
+                                    }
+                                })
+                                .show();
+
+                        }
+                    }).show();
+            }
         }
 
         private void extFile() {
@@ -373,18 +378,20 @@ public class AHFileManager extends KActivityHelper {
                 txtUri = Uri.fromFile(cFile);
             } else {
                 if (KUtil.getConfig().fileprovider.isEmpty()) {
-                    KLog.i("未配置 fileprovider");
+                    Toast.makeText(mActivity, "未配置 fileprovider", Toast.LENGTH_LONG).show();
                     return;
                 }
                 txtUri = FileProvider.getUriForFile(mActivity, KUtil.getConfig().fileprovider, cFile);
             }
 
+            boolean isImage = KFile.checkFileType(cFile) != KFile.FileType.UNKNOWN;
+
             Intent i = new Intent(Intent.ACTION_SEND);
-            i.setType("text/plain");
+            i.setType(isImage? "image/*": "text/plain");
             i.putExtra(Intent.EXTRA_STREAM, txtUri);
             i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
-            mActivity.startActivity(Intent.createChooser(i, "弹出显示的标题x"));
+            mActivity.startActivity(Intent.createChooser(i, "分享文件"));
         }
 
         LFile cFile;

@@ -7,6 +7,7 @@ import androidx.multidex.MultiDex
 //import com.alibaba.android.arouter.launcher.ARouter
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.KContext
+import com.kiven.kutils.tools.KUtil
 import com.kiven.sample.noti.NotificationClickReceiver
 import com.kiven.sample.util.Const
 import com.tencent.smtt.sdk.QbSdk
@@ -27,6 +28,16 @@ class App : KContext() {
         super.attachBaseContext(base)
         MultiDex.install(this)
         KLog.i("AppContext attachBaseContext")
+    }
+
+    override fun isDebug(): Boolean {
+        return BuildConfig.DEBUG
+    }
+    override fun initKUtil() {
+        KUtil.init(this, KUtil.Config().apply {
+            isDebug = BuildConfig.DEBUG
+            fileprovider = "com.kiven.sample.fileprovider"
+        })
     }
 
     override fun onCreate(isMain: Boolean) {

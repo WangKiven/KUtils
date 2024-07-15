@@ -33,18 +33,23 @@ import com.kiven.kutils.activityHelper.KHelperActivity;
 import com.kiven.kutils.tools.KString;
 import com.kiven.kutils.tools.KUtil;
 
+import java.io.File;
+import java.io.FilenameFilter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-public class KShowLog extends KActivityHelper implements AdapterView.OnItemClickListener {
+public class KShowFileLog extends KActivityHelper implements AdapterView.OnItemClickListener {
 
     private ListView listView;
 
     private MyAdapter myAdapter;
-    private List<KLogInfo> mData;
+    private List<KLogInfo> mData = new ArrayList<>();
+    private File[] fileList = new File[]{};
     /**
      * 高亮显示匹配结果
      */
@@ -62,6 +67,20 @@ public class KShowLog extends KActivityHelper implements AdapterView.OnItemClick
 
         listView = findViewById(R.id.listView);
 
+        File dir = new File(KUtil.getApp().getCacheDir(), "KLog日志");
+
+        fileList = dir.listFiles(new FilenameFilter() {
+            @Override
+            public boolean accept(File file, String s) {
+                if (s.startsWith("KLog日志")) {
+                    try {
+                        KLog.dateFormat.parse(s.substring(6, 23));
+                    } catch (Throwable t) {}
+                }
+                return false;
+            }
+        });
+//        Arrays.sort();
         mData = new ArrayList<KLogInfo>(KLog.getLogs());
 
         listView.setDividerHeight(5);
@@ -74,11 +93,8 @@ public class KShowLog extends KActivityHelper implements AdapterView.OnItemClick
     public boolean onCreateOptionsMenu(Menu menu) {
         mActivity.getMenuInflater().inflate(R.menu.show_log, menu);
         menu.add(0, Menu.FIRST + 1000, 0, "高亮结果");
-        menu.add(0, Menu.FIRST + 1001, 1, "文件目录");
-        menu.add(0, Menu.FIRST + 1002, 2, "查看应用相关");
-        menu.add(0, Menu.FIRST + 1003, 3, "内存CPU情况");
-        menu.add(0, Menu.FIRST + 1004, 4, "打印设备信息");
-        menu.add(0, Menu.FIRST + 1005, 5, "查看日志文件");
+        menu.add(0, Menu.FIRST + 1001, 1, "选择文件");
+        menu.add(0, Menu.FIRST + 1002, 2, "导出");
 
         MenuItem searchItem = menu.findItem(R.id.search);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
@@ -143,12 +159,6 @@ public class KShowLog extends KActivityHelper implements AdapterView.OnItemClick
             Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
             intent.setData(Uri.fromParts("package", mActivity.getPackageName(), null));
             mActivity.startActivity(intent);
-        } else if (i == Menu.FIRST + 1003) {
-            new KCPUMem().startActivity(mActivity);
-        } else if (i == Menu.FIRST + 1004) {
-            KLog.printDeviceInfo();
-        } else if (i == Menu.FIRST + 1005) {
-            new KShowFileLog().startActivity(mActivity);
         }
         return true;
     }

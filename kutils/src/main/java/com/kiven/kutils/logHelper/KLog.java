@@ -176,14 +176,15 @@ public class KLog {
                 }
             }
             outputStream = new FileOutputStream(KFile.createNameFile("KLog日志"
-                    + new SimpleDateFormat("yy-MM-dd HH:mm:ss").format(new Date()) + " " + android.os.Process.myPid() + ".txt", dir), true);
+                    + dateFormat.format(new Date()) + " " + android.os.Process.myPid() + ".txt", dir), true);
             outputStreamUpdateTime = System.currentTimeMillis();
             outputStreamLineCount = 0;
         }
-        String s = "\n" + new Date(info.time).toLocaleString() + " " + info.log + " at " + info.codePosition;
+        String s = "\n" + dateFormat.format(new Date(info.time)) + " " + info.log + " at " + info.codePosition;
         outputStream.write(s.getBytes());
         outputStreamLineCount ++;
     }
+    public static SimpleDateFormat dateFormat = new SimpleDateFormat("yy-MM-dd HH:mm:ss.SSS");
 
     public static LinkedList<KLogInfo> getLogs() {
         return logs;

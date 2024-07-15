@@ -140,21 +140,10 @@ public class KLog {
             if (outputStream != null) {
                 outputStream.close();
             }
-            /*File cDir = KUtil.getApp().getCacheDir();
-            if (cDir.exists()) {
-                File[] c = cDir.listFiles();
-                if (c != null && c.length > 0) {
-                    for (File file: c) {
-                        if (file.isFile() && file.getName().startsWith("KLog日志")) {
-                            file.delete();
-                        }
-                    }
-                }
-            }*/
             File dir = new File(KUtil.getApp().getCacheDir(), "KLog日志");
             if (dir.exists()) {
                 File[] c = dir.listFiles();
-                int curDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+                /*int curDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
                 if (c != null && c.length > 0) {
                     for (File file : c) {
                         String name = file.getName();
@@ -173,6 +162,26 @@ public class KLog {
                             }
                         }
                     }
+                }*/
+                long curTime = System.currentTimeMillis();
+                if (c != null && c.length > 0) {
+                    for (File file : c) {
+                        String name = file.getName();
+                        if (file.isFile() && name.startsWith("KLog日志")) {
+                            try {
+                                String ds = name.substring(6, 27);//KLog日志24-07-15 14:26:53.269 31356.txt
+                                long d = dateFormat.parse(ds).getTime();
+                                if (curTime - d > 1000*60*60*24*7) {
+                                    file.delete();
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                file.delete();
+                            }
+                        } else {
+                            KUtil.deleteFile(file, true);
+                        }
+                    }
                 }
             }
             outputStream = new FileOutputStream(KFile.createNameFile("KLog日志"
@@ -180,7 +189,7 @@ public class KLog {
             outputStreamUpdateTime = System.currentTimeMillis();
             outputStreamLineCount = 0;
         }
-        String s = "\n" + dateFormat.format(new Date(info.time)) + " " + info.log + " at " + info.codePosition;
+        String s = "\n" + dateFormat.format(info.time) + " " + info.log + " at " + info.codePosition;
         outputStream.write(s.getBytes());
         outputStreamLineCount ++;
     }

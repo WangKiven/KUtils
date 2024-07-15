@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.TextUtils;
+import android.text.format.Formatter;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -165,17 +166,20 @@ public class KShowLog extends KActivityHelper implements AdapterView.OnItemClick
     private void extLogFile() {
         File dir = new File(KUtil.getApp().getCacheDir(), "KLog日志");
         File[] fileList = dir.listFiles();
-        String[] names = Arrays.stream(fileList).map(new Function<File, Object>() {
+        if (fileList == null || fileList.length == 0) {
+            Toast.makeText(mActivity, "没有日志文件", Toast.LENGTH_LONG).show();
+            return;
+        }
+        String[] names = new String[fileList.length];
+        for (int i = 0; i < fileList.length; i++) {
+            names[i] = fileList[i].getName().replace("KLog日志", "") + " " + Formatter.formatFileSize(mActivity, fileList[i].length());
+        }
+        Arrays.sort(names, new Comparator<String>() {
             @Override
-            public Object apply(File file) {
-                return file.getName();
+            public int compare(String s, String t1) {
+                return t1.compareTo(s);
             }
-        }).sorted(new Comparator<Object>() {
-            @Override
-            public int compare(Object o, Object t1) {
-                return ((String) t1).compareTo((String) o);
-            }
-        }).toArray(String[]::new);
+        });
         new MaterialAlertDialogBuilder(mActivity)
             .setTitle("选择导出的文件")
             .setItems(names, new DialogInterface.OnClickListener() {
@@ -281,13 +285,15 @@ public class KShowLog extends KActivityHelper implements AdapterView.OnItemClick
                 textView.setPadding(30, 30, 30, 30);
                 textView.setTextColor(Color.BLACK);
                 textView.setBackgroundColor(Color.WHITE);
-                textView.setMaxLines(5);
+                textView.setMaxLines(7);
+                textView.setSingleLine(false);
                 convertView = textView;
             } else {
                 textView = (TextView) convertView;
             }
 
-            textView.setText(KString.fromHtml(position + "：" + searchData.get(position).log));
+            KLogInfo info = searchData.get(position);
+            textView.setText(KString.fromHtml(position + "(" + KLog.dateFormat.format(info.time) + ")：\n" + info.log));
 
             return convertView;
         }

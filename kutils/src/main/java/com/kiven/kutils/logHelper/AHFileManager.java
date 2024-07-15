@@ -1,6 +1,7 @@
 package com.kiven.kutils.logHelper;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -286,7 +287,7 @@ public class AHFileManager extends KActivityHelper {
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     switch (i) {
                                         case 0:
-                                            extFile();
+                                            extFile(mActivity, cFile);
                                             break;
                                         case 1:
                                             if (KFile.checkFileType(cFile) != KFile.FileType.UNKNOWN) {
@@ -314,7 +315,7 @@ public class AHFileManager extends KActivityHelper {
                 KAlertDialogHelper.Show2BDialog(mActivity, "提示", "文件太大了，会卡！", "知道了", "导出", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        extFile();
+                        extFile(mActivity, cFile);
                     }
                 });
             } else {
@@ -367,7 +368,7 @@ public class AHFileManager extends KActivityHelper {
                                 .setPositiveButton("导出", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        extFile();
+                                        extFile(mActivity, cFile);
                                     }
                                 })
                                 .show();
@@ -375,28 +376,6 @@ public class AHFileManager extends KActivityHelper {
                         }
                     }).show();
             }
-        }
-
-        private void extFile() {
-            Uri txtUri;
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-                txtUri = Uri.fromFile(cFile);
-            } else {
-                if (KUtil.getConfig().fileprovider.isEmpty()) {
-                    Toast.makeText(mActivity, "未配置 fileprovider", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                txtUri = FileProvider.getUriForFile(mActivity, KUtil.getConfig().fileprovider, cFile);
-            }
-
-            boolean isImage = KFile.checkFileType(cFile) != KFile.FileType.UNKNOWN;
-
-            Intent i = new Intent(Intent.ACTION_SEND);
-            i.setType(isImage? "image/*": "text/plain");
-            i.putExtra(Intent.EXTRA_STREAM, txtUri);
-            i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-            mActivity.startActivity(Intent.createChooser(i, "分享文件"));
         }
 
         LFile cFile;
@@ -419,6 +398,28 @@ public class AHFileManager extends KActivityHelper {
 
             tv_num.setText(file.name);
         }
+    }
+
+    public static void extFile(Activity activity, File cFile) {
+        Uri txtUri;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            txtUri = Uri.fromFile(cFile);
+        } else {
+            if (KUtil.getConfig().fileprovider.isEmpty()) {
+                Toast.makeText(activity, "未配置 fileprovider", Toast.LENGTH_LONG).show();
+                return;
+            }
+            txtUri = FileProvider.getUriForFile(activity, KUtil.getConfig().fileprovider, cFile);
+        }
+
+        boolean isImage = KFile.checkFileType(cFile) != KFile.FileType.UNKNOWN;
+
+        Intent i = new Intent(Intent.ACTION_SEND);
+        i.setType(isImage? "image/*": "text/plain");
+        i.putExtra(Intent.EXTRA_STREAM, txtUri);
+        i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        activity.startActivity(Intent.createChooser(i, "分享文件"));
     }
 
     private class MyAdapter extends RecyclerView.Adapter<MyHolder> {

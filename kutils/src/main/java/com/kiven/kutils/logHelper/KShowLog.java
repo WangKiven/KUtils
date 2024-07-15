@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.TextUtils;
@@ -33,10 +32,14 @@ import com.kiven.kutils.activityHelper.KHelperActivity;
 import com.kiven.kutils.tools.KString;
 import com.kiven.kutils.tools.KUtil;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 
 public class KShowLog extends KActivityHelper implements AdapterView.OnItemClickListener {
@@ -78,7 +81,7 @@ public class KShowLog extends KActivityHelper implements AdapterView.OnItemClick
         menu.add(0, Menu.FIRST + 1002, 2, "查看应用相关");
         menu.add(0, Menu.FIRST + 1003, 3, "内存CPU情况");
         menu.add(0, Menu.FIRST + 1004, 4, "打印设备信息");
-        menu.add(0, Menu.FIRST + 1005, 5, "查看日志文件");
+        menu.add(0, Menu.FIRST + 1005, 5, "导出日志文件");
 
         MenuItem searchItem = menu.findItem(R.id.search);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
@@ -148,7 +151,8 @@ public class KShowLog extends KActivityHelper implements AdapterView.OnItemClick
         } else if (i == Menu.FIRST + 1004) {
             KLog.printDeviceInfo();
         } else if (i == Menu.FIRST + 1005) {
-            new KShowFileLog().startActivity(mActivity);
+//            new KShowFileLog().startActivity(mActivity);
+            extLogFile();
         }
         return true;
     }
@@ -156,6 +160,30 @@ public class KShowLog extends KActivityHelper implements AdapterView.OnItemClick
     @Override
     protected Class getActivityClas() {
         return KHelperActivity.class;
+    }
+
+    private void extLogFile() {
+        File dir = new File(KUtil.getApp().getCacheDir(), "KLog日志");
+        File[] fileList = dir.listFiles();
+        String[] names = Arrays.stream(fileList).map(new Function<File, Object>() {
+            @Override
+            public Object apply(File file) {
+                return file.getName();
+            }
+        }).sorted(new Comparator<Object>() {
+            @Override
+            public int compare(Object o, Object t1) {
+                return ((String) t1).compareTo((String) o);
+            }
+        }).toArray(String[]::new);
+        new MaterialAlertDialogBuilder(mActivity)
+            .setTitle("选择导出的文件")
+            .setItems(names, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    AHFileManager.extFile(mActivity, fileList[i]);
+                }
+            }).show();
     }
 
     @Override

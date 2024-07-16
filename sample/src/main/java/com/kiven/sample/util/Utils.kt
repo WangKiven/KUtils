@@ -364,27 +364,30 @@ fun Activity.phoneImages(
                         val names = cusor.columnNames
                         val indexs = names.map { cusor.getColumnIndex(it) }
 
-                        cusor.moveToFirst()
 
-                        do {
-                            val map = TreeMap<String, String>()
+                        if (!cusor.moveToFirst()) {
+                            KLog.i("没查询到图片数据")
+                        } else {
+                            do {
+                                val map = TreeMap<String, String>()
 
-                            for (i in names.indices) {
+                                for (i in names.indices) {
 //                            map[names[i]] = cusor.getString(indexs[i]) ?: ""
-                                map[names[i]] = when (cusor.getType(indexs[i])) {
-                                    Cursor.FIELD_TYPE_FLOAT -> cusor.getFloatOrNull(indexs[i])
-                                        ?.toString() ?: ""
-                                    Cursor.FIELD_TYPE_INTEGER -> cusor.getIntOrNull(indexs[i])
-                                        ?.toString() ?: ""
-                                    Cursor.FIELD_TYPE_STRING -> cusor.getStringOrNull(indexs[i]) ?: ""
-                                    Cursor.FIELD_TYPE_BLOB -> {
-                                        ""
+                                    map[names[i]] = when (cusor.getType(indexs[i])) {
+                                        Cursor.FIELD_TYPE_FLOAT -> cusor.getFloatOrNull(indexs[i])
+                                            ?.toString() ?: ""
+                                        Cursor.FIELD_TYPE_INTEGER -> cusor.getIntOrNull(indexs[i])
+                                            ?.toString() ?: ""
+                                        Cursor.FIELD_TYPE_STRING -> cusor.getStringOrNull(indexs[i]) ?: ""
+                                        Cursor.FIELD_TYPE_BLOB -> {
+                                            ""
+                                        }
+                                        else -> ""
                                     }
-                                    else -> ""
                                 }
-                            }
-                            iDatas.add(map)
-                        } while (cusor.moveToNext())
+                                iDatas.add(map)
+                            } while (cusor.moveToNext())
+                        }
                     }
 
                     cusor.close()

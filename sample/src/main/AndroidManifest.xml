@@ -95,6 +95,9 @@
 
     <!--设置壁纸的权限-->
     <uses-permission android:name="android.permission.SET_WALLPAPER"/>
+    <!-- Devices running Android 13 (API level 33) or higher -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
 
     <application
         android:name=".App"

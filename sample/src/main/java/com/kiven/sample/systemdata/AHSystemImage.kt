@@ -48,11 +48,21 @@ class AHSystemImage : KActivityHelper() {
         }
         setContentView(recyclerView)
 
+        val permissions = mutableListOf<String>()
+        val permissionNames= mutableListOf<String>()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            permissions.addAll(arrayOf(Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO))
+            permissionNames.addAll(arrayOf("照片", "视频"))
+        } else {
+            permissions.addAll(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE))
+            permissionNames.addAll(arrayOf("内存"))
+        }
+
         KGranting.requestPermissions(
             mActivity,
             345,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            "内存"
+            permissions.toTypedArray(),
+            permissionNames.toTypedArray()
         ) {
             if (it) loadData()
         }
@@ -111,10 +121,13 @@ class AHSystemImage : KActivityHelper() {
                         }
 
 
-                        cusor.moveToFirst()
+                        if (!cusor.moveToFirst()) {
+                            KLog.i("没查询到图片数据")
+                            cusor.close()
+                            return@use
+                        }
                         do {
                             val map = TreeMap<String, String>()
-//                                val sb = StringBuilder()
 
                             for (i in names.indices) {
                                 map[names[i]] = when (cusor.getType(indexs[i])) {
@@ -223,7 +236,7 @@ class AHSystemImage : KActivityHelper() {
                                 mActivity.showListDialog(
                                     list.map {
                                         "${it.first}: ${it.second}"
-                                    }, false
+                                    }, true
                                 )
                                 { _, ss ->
                                     mActivity.showDialog(ss)

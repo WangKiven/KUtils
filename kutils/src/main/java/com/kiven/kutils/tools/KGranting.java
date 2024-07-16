@@ -307,7 +307,12 @@ public class KGranting {
      * 请求访问相册需要的权限
      */
     public static void requestAlbumPermissions(@NonNull Activity activity, int requestCode, GrantingCallBack callBack) {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            requestPermissions(activity, requestCode,
+                new String[]{Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO},
+                new String[]{"照片", "视频"},
+                callBack);
+        } else if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
             String[] grant = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE};
             requestPermissions(activity, requestCode, grant, callBack);
         }

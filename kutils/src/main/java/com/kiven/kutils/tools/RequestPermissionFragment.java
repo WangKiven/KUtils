@@ -7,6 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -16,12 +19,15 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.kiven.kutils.callBack.Consumer;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class RequestPermissionFragment extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.M)
     private RequestPermissionFragment() {
     }
 
-    public static void requestPermissions(@NonNull FragmentManager manager, @NonNull String[] pers, @NonNull Consumer<Boolean> call) {
+    public static void requestPermissions(@NonNull FragmentManager manager, @NonNull String[] pers, @NonNull Consumer<Map<String, Boolean>> call) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             RequestPermissionFragment fragment = new RequestPermissionFragment();
             fragment.pers = pers;
@@ -29,7 +35,11 @@ public class RequestPermissionFragment extends Fragment {
 
             fragment.show(manager);
         } else {
-            call.callBack(true);
+            Map<String, Boolean> map = new HashMap<>();
+            for (String per : pers) {
+                map.put(per, true);
+            }
+            call.callBack(map);
         }
     }
 
@@ -40,7 +50,7 @@ public class RequestPermissionFragment extends Fragment {
     }
 
     private String[] pers;
-    private Consumer<Boolean> call;
+    private Consumer<Map<String, Boolean>> call;
 
     @Nullable
     @Override
@@ -53,29 +63,20 @@ public class RequestPermissionFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        requestPermissions(pers, 777);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        for (int grantResult : grantResults) {
-            if (grantResult != PackageManager.PERMISSION_GRANTED) {
-                call.callBack(false);
+        ActivityResultLauncher<String[]> requestPermissions = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), new ActivityResultCallback<Map<String, Boolean>>() {
+            @Override
+            public void onActivityResult(Map<String, Boolean> o) {
                 dismiss();
-                return;
+                call.callBack(o);
             }
-        }
-
-        call.callBack(true);
-        dismiss();
+        });
+        requestPermissions.launch(pers);
     }
 
     private void dismiss() {
-        FragmentManager fragmentManager = getFragmentManager();
-        if (fragmentManager != null) {
-            FragmentTransaction ft = fragmentManager.beginTransaction();
-            ft.remove(this);
-            ft.commit();
-        }
+        FragmentManager fragmentManager = getParentFragmentManager();
+        FragmentTransaction ft = fragmentManager.beginTransaction();
+        ft.remove(this);
+        ft.commit();
     }
 }

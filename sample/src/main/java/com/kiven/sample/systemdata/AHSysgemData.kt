@@ -107,7 +107,7 @@ class AHSysgemData : KActivityHelper() {
         addView("查询日历", View.OnClickListener {
             // CalendarContract.Calendars.ENTERPRISE_CONTENT_URI
             KGranting.requestPermissions(
-                mActivity, 788,
+                mActivity,
                 arrayOf(Manifest.permission.WRITE_CALENDAR, Manifest.permission.READ_CALENDAR),
                 arrayOf("日历添加", "日历获取")
             ) {
@@ -144,7 +144,7 @@ class AHSysgemData : KActivityHelper() {
 //            loadData(Telephony.Carriers.CONTENT_URI, Telephony.Carriers._ID)
         })
         addView("彩信和短信", View.OnClickListener {
-            KGranting.requestPermissions(activity, 898, Manifest.permission.READ_SMS, "短信") {
+            KGranting.requestPermissions(activity, Manifest.permission.READ_SMS, "短信") {
                 if (it) {
                     // 彩信和短信是用Telephony.MmsSms.CONTENT_URI,
                         // 但是我的小米手机报彩信异常，不知道是不是没有收到过彩信所以没用彩信数据库
@@ -167,7 +167,7 @@ class AHSysgemData : KActivityHelper() {
             val hasP = suspendCoroutine<Boolean> { cc ->
                 GlobalScope.launch(Dispatchers.Main) {
                     KGranting.requestPermissions(
-                        mActivity, 345,
+                        mActivity,
                         arrayOf(
                             Manifest.permission.WRITE_EXTERNAL_STORAGE,
                             Manifest.permission.READ_CONTACTS,

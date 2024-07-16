@@ -66,7 +66,7 @@ class BiometricDemo(val mActivity: Activity) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             // 好像不需要在这里请求权限，在maiifest设置就够了
-            KGranting.requestPermissions(mActivity, 234, Manifest.permission.USE_BIOMETRIC, "指纹") {
+            KGranting.requestPermissions(mActivity, Manifest.permission.USE_BIOMETRIC, "指纹") {
                 if (it) {
                     val bp = BiometricPrompt.Builder(mActivity)
                             .setTitle("指生物别测试")

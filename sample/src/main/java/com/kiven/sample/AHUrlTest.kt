@@ -63,9 +63,6 @@ class AHUrlTest : KActivityHelper() {
 
                 loadUrl("https://www.baidu.com")
             }
-            /*val requestPermissions = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
-            }
-            requestPermissions.launch(arrayOf())*/
             findViewById<Button>(R.id.btn_go).setOnClickListener {
                 val url = KTextView.getTrim(findViewById(R.id.editText))
                 if (binding.webView.url == url) {

@@ -66,8 +66,8 @@ public class AHFileManager extends KActivityHelper {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (!KGranting.useFragmentRequest)
-            KGranting.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        if (!KGranting.useFragmentRequest)
+//            KGranting.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override
@@ -81,7 +81,7 @@ public class AHFileManager extends KActivityHelper {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             childAdapter.notifyDataSetChanged();
         } else {
-            KGranting.requestPermissions(mActivity, 345, Manifest.permission.WRITE_EXTERNAL_STORAGE, "存储空间", new KGranting.GrantingCallBack() {
+            KGranting.requestPermissions(mActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE, "存储空间", new KGranting.GrantingCallBack() {
                 @Override
                 public void onGrantSuccess(boolean isSuccess) {
                     if (isSuccess) {

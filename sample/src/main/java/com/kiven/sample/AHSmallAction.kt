@@ -147,7 +147,7 @@ class AHSmallAction : KActivityHelper() {
 
         // 没有系统权限，用不了
         addView("动态壁纸", View.OnClickListener {
-            KGranting.requestPermissions(mActivity, 123, Manifest.permission.SET_WALLPAPER, "壁纸设置") {
+            KGranting.requestPermissions(mActivity, Manifest.permission.SET_WALLPAPER, "壁纸设置") {
                 if (it) {
                     activity.showListDialog(arrayOf("LiveWallpaper", "LiveWallpaper2", "MyGLWallpaperService", "LiveGLWallpaper")) { i,_ ->
                         val wallpaperName = when(i) {
@@ -200,7 +200,7 @@ class AHSmallAction : KActivityHelper() {
         addView("语音识别与合成", View.OnClickListener {
             // 在里面请求权限太麻烦，由于有多个地方都需要权限，所以在入口出先请求
             KGranting.requestPermissions(
-                activity, 377, Manifest.permission.RECORD_AUDIO,
+                activity, Manifest.permission.RECORD_AUDIO,
                 "录音"
             ) {
                 if (it) {
@@ -253,7 +253,7 @@ class AHSmallAction : KActivityHelper() {
         addTitle("拨号与电话监听")
         addView("电话监听", View.OnClickListener {
             KGranting.requestPermissions(
-                mActivity, 989, arrayOf(
+                mActivity, arrayOf(
                     Manifest.permission.READ_PHONE_STATE,
                     Manifest.permission.CALL_PHONE, Manifest.permission.RECORD_AUDIO
                 ), arrayOf("通话状态", "拨号", "录音")
@@ -326,7 +326,6 @@ class AHSmallAction : KActivityHelper() {
         addView("拨号", View.OnClickListener {
             KGranting.requestPermissions(
                 mActivity,
-                101,
                 Manifest.permission.CALL_PHONE,
                 "拨号"
             ) { isSuccess ->

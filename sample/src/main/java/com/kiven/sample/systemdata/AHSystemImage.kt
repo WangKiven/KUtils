@@ -11,6 +11,7 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.database.getBlobOrNull
 import androidx.core.database.getFloatOrNull
 import androidx.core.database.getIntOrNull
@@ -24,8 +25,10 @@ import com.kiven.kutils.logHelper.KLog
 import com.kiven.kutils.tools.*
 import com.kiven.sample.R
 import com.kiven.sample.util.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
@@ -33,9 +36,9 @@ import java.util.*
 import kotlin.math.max
 
 /**
- * Created by oukobayashi on 2019-11-12.
+ * Created by Kiven on 2019-11-12.
  */
-class AHSystemImage : KActivityHelper() {
+class AHSystemImage : KActivityHelper(), CoroutineScope by MainScope() {
     private val adapter = MyAdapter()
     private val datas = mutableListOf<TreeMap<String, String>>()
 
@@ -48,50 +51,25 @@ class AHSystemImage : KActivityHelper() {
         }
         setContentView(recyclerView)
 
-        val permissions = mutableListOf<String>()
-        val permissionNames= mutableListOf<String>()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            permissions.addAll(arrayOf(Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO))
-            permissionNames.addAll(arrayOf("照片", "视频"))
-        } else {
-            permissions.addAll(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE))
-            permissionNames.addAll(arrayOf("内存"))
-        }
-
-        KGranting.requestPermissions(
-            mActivity,
-            345,
-            permissions.toTypedArray(),
-            permissionNames.toTypedArray()
-        ) {
+        KGranting.requestAlbumPermissions(mActivity) {
             if (it) loadData()
         }
     }
 
     private fun loadData() {
-        GlobalScope.launch {
+        launch {
             val iDatas = mutableListOf<TreeMap<String, String>>()
 
             withContext(Dispatchers.IO) {
                 val resolver = mActivity.contentResolver
-                /*resolver.openFileDescriptor(Uri.parse(imags[0]), "rwt")?.use {
-
-                }*/
-                val projection = arrayOf(
+                /*val projection = arrayOf(
                     MediaStore.Images.Media._ID,
                     MediaStore.Images.Media.DISPLAY_NAME,
                     MediaStore.Images.Media.SIZE,
                     MediaStore.Images.Media.DATA
-                )
+                )*/
 
                 showTip(MediaStore.Images.Media.EXTERNAL_CONTENT_URI.toString())
-                /*resolver.query(
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                        projection,
-                        MediaStore.Images.Media.MIME_TYPE + "=? or " + MediaStore.Images.Media.MIME_TYPE + "=?",
-                        arrayOf("image/jpeg", "image/png"),
-                        MediaStore.Images.Media.DATE_MODIFIED + " desc"
-                )*/
                 resolver.query(
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                     null,
@@ -102,24 +80,6 @@ class AHSystemImage : KActivityHelper() {
                     ?.use { cusor ->
                         val names = cusor.columnNames
                         val indexs = names.map { cusor.getColumnIndex(it) }
-
-                        val types = indexs.map {
-                            try {
-                                cusor.getType(it)
-                            } catch (e: Throwable) {
-                                Cursor.FIELD_TYPE_NULL
-                            }
-                        }
-                        val getData = fun(index: Int, type: Int): Any? {
-                            /*return when (type) {
-                                Cursor.FIELD_TYPE_STRING -> cusor.getString(index)
-                                Cursor.FIELD_TYPE_INTEGER -> cusor.getInt(index)
-                                Cursor.FIELD_TYPE_FLOAT -> cusor.getFloat(index)
-                                else -> null
-                            }*/
-                            return cusor.getString(index)
-                        }
-
 
                         if (!cusor.moveToFirst()) {
                             KLog.i("没查询到图片数据")
@@ -142,13 +102,9 @@ class AHSystemImage : KActivityHelper() {
                                     }
                                     else -> "无数据类型"
                                 }
-//                                    map[names[i]] = cusor.getString(indexs[i]) ?: ""
-//                                    sb.append(names[i]).append(" = ").append(getData(indexs[i], types[i])).append(", ")
 
                             }
-//                                    sb.append(MediaStore.Images.Media.DISPLAY_NAME).append(" = ").append(cusor.getString(cusor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME)))
                             iDatas.add(map)
-//                                showTip(sb.toString())
                         } while (cusor.moveToNext())
 
                         cusor.close()

@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,6 +21,7 @@ import com.kiven.kutils.callBack.Consumer;
 import com.kiven.kutils.logHelper.KLog;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -32,10 +34,10 @@ public class KGranting {
     // todo 全局设置，是否通过fragment请求权限。不要频繁改变该值，否则会出问题。
     //  false: 通过activity请求，需要在activity中配置onRequestPermissionsResult().
     //  true: activity中的onRequestPermissionsResult()必须调用super.onRequestPermissionsResult()，否则回调会出问题
-    public static boolean useFragmentRequest = true;
+//    public static boolean useFragmentRequest = true;
 
     private Activity mActivity;
-    private int requestCode;
+//    private int requestCode;
     private String[] waitGrant;// 待授权数组
     private List<String> grantName;// 授权名称
     private GrantingCallBack callBack;
@@ -43,13 +45,9 @@ public class KGranting {
     // 是否显示权限申请失败提示
     private boolean isShowErrorTip = true;
 
-    private KGranting(@NonNull Activity activity, int requestCode, @NonNull String[] tGrant, @NonNull String[] tGrantName, GrantingCallBack callBack) {
-        this(activity, requestCode, tGrant, tGrantName, true, callBack);
-    }
-
-    private KGranting(@NonNull Activity activity, int requestCode, @NonNull String[] tGrant, @NonNull String[] tGrantName, boolean isShowErrorTip, GrantingCallBack callBack) {
+    private KGranting(@NonNull Activity activity/*, int requestCode*/, @NonNull String[] tGrant, @NonNull String[] tGrantName, boolean isShowErrorTip, GrantingCallBack callBack) {
         mActivity = activity;
-        this.requestCode = requestCode;
+//        this.requestCode = requestCode;
         this.isShowErrorTip = isShowErrorTip;
         this.callBack = callBack;
 
@@ -100,7 +98,7 @@ public class KGranting {
                     .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            requestPermissions();
+                            tRequestPermissions(mActivity, waitGrant, KGranting.this::onResult);
                         }
                     })
                     .setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -116,35 +114,43 @@ public class KGranting {
                     .create()
                     .show();
         } else {
-            requestPermissions();
+            tRequestPermissions(mActivity, waitGrant, this::onResult);
         }
     }
-
-    private void requestPermissions() {
-        if (useFragmentRequest) {
-            granting = null;
-
-            if (mActivity instanceof FragmentActivity) {
-                FragmentActivity fragmentActivity = (FragmentActivity) mActivity;
-                RequestPermissionFragment.requestPermissions(fragmentActivity.getSupportFragmentManager(), waitGrant, new Consumer<Boolean>() {
-                    @Override
-                    public void callBack(Boolean param) {
-                        onResult(param);
+    private void tRequestPermissions(Activity activity, String[] permissions, Consumer<Boolean> call) {
+        requestPermissions(activity, permissions, new Consumer<Map<String, Boolean>>() {
+            @Override
+            public void callBack(Map<String, Boolean> param) {
+                for (Map.Entry<String, Boolean> e : param.entrySet()) {
+                    if (!e.getValue()) {
+                        call.callBack(false);
+                        return;
                     }
-                });
-            } else {
-                RequestPermissionFragment2.requestPermissions(mActivity.getFragmentManager(), waitGrant, new Consumer<Boolean>() {
-                    @Override
-                    public void callBack(Boolean param) {
-                        onResult(param);
-                    }
-                });
+                }
+
+                call.callBack(true);
             }
+        });
+    }
 
-//            KLog.e("使用fragment请求权限，请使用FragmentActivity作为activity传入");
-        } else
-            ActivityCompat.requestPermissions(mActivity, waitGrant,
-                    requestCode);
+    private static void requestPermissions(Activity activity, String[] permissions, Consumer<Map<String, Boolean>> call) {
+//        ActivityCompat.requestPermissions(activity, permissions, requestCode); todo 老版本的使用方法，淘汰
+        granting = null;
+
+        Consumer<Map<String, Boolean>> mCall = new Consumer<Map<String, Boolean>>() {
+            @Override
+            public void callBack(Map<String, Boolean> param) {
+                KLog.i("权限值：" + param.toString());
+                call.callBack(param);
+            }
+        };
+
+        if (activity instanceof FragmentActivity) {
+            FragmentActivity fragmentActivity = (FragmentActivity) activity;
+            RequestPermissionFragment.requestPermissions(fragmentActivity.getSupportFragmentManager(), permissions, mCall);
+        } else {
+            RequestPermissionFragment2.requestPermissions(activity.getFragmentManager(), permissions, mCall);
+        }
     }
 
     private void onResult(boolean isSuccess) {
@@ -207,9 +213,9 @@ public class KGranting {
     /**
      * 请求多个授权
      */
-    public static void requestPermissions(@NonNull Activity activity, int requestCode, @NonNull String[] tGrant, @NonNull String[] tGrantName, boolean isShowErrorTip, GrantingCallBack callBack) {
+    public static void requestPermissions(@NonNull Activity activity/*, int requestCode*/, @NonNull String[] tGrant, @NonNull String[] tGrantName, boolean isShowErrorTip, GrantingCallBack callBack) {
         if (granting == null) {
-            granting = new KGranting(activity, requestCode, tGrant, tGrantName, isShowErrorTip, callBack);
+            granting = new KGranting(activity/*, requestCode*/, tGrant, tGrantName, isShowErrorTip, callBack);
             granting.startCheck();
 
         } else {
@@ -220,22 +226,22 @@ public class KGranting {
         }
     }
 
-    public static void requestPermissions(@NonNull Activity activity, int requestCode, @NonNull String[] tGrant, @NonNull String[] tGrantName, GrantingCallBack callBack) {
-        requestPermissions(activity, requestCode, tGrant, tGrantName, true, callBack);
+    public static void requestPermissions(@NonNull Activity activity/*, int requestCode*/, @NonNull String[] tGrant, @NonNull String[] tGrantName, GrantingCallBack callBack) {
+        requestPermissions(activity/*, requestCode*/, tGrant, tGrantName, true, callBack);
     }
 
     /**
      * 请求单个授权
      */
-    public static void requestPermissions(@NonNull Activity activity, int requestCode, @NonNull String tGrant, @NonNull String tGrantName, GrantingCallBack callBack) {
-        requestPermissions(activity, requestCode, new String[]{tGrant}, new String[]{tGrantName}, callBack);
+    public static void requestPermissions(@NonNull Activity activity/*, int requestCode*/, @NonNull String tGrant, @NonNull String tGrantName, GrantingCallBack callBack) {
+        requestPermissions(activity/*, requestCode*/, new String[]{tGrant}, new String[]{tGrantName}, callBack);
     }
 
     /**
      * 请求多个授权, 不需描述。
      * 描述不全面，如需跟多权限，需在此添加
      */
-    public static void requestPermissions(@NonNull Activity activity, int requestCode, @NonNull String[] tGrant, GrantingCallBack callBack) {
+    public static void requestPermissions(@NonNull Activity activity,/* int requestCode, */@NonNull String[] tGrant, GrantingCallBack callBack) {
         Map<String, String> grants = new TreeMap<>();
         grants.put(Manifest.permission.WRITE_EXTERNAL_STORAGE, "内存");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -257,15 +263,15 @@ public class KGranting {
                 tGrantName[i] = s[s.length - 1];
             }
         }
-        requestPermissions(activity, requestCode, tGrant, tGrantName, callBack);
+        requestPermissions(activity/*, requestCode*/, tGrant, tGrantName, callBack);
     }
 
     /**
      * 请求单个授权, 不需描述
-     * 描述不全面，如需跟多权限，需在{@link #requestPermissions(Activity, int, String[], GrantingCallBack)}添加
+     * 描述不全面，如需跟多权限，需在{@link #requestPermissions(Activity, String[], GrantingCallBack)}添加
      */
-    public static void requestPermissions(@NonNull Activity activity, int requestCode, @NonNull String tGrant, GrantingCallBack callBack) {
-        requestPermissions(activity, requestCode, new String[]{tGrant}, callBack);
+    public static void requestPermissions(@NonNull Activity activity/*, int requestCode*/, @NonNull String tGrant, GrantingCallBack callBack) {
+        requestPermissions(activity/*, requestCode*/, new String[]{tGrant}, callBack);
     }
 
     /**
@@ -290,41 +296,73 @@ public class KGranting {
     /**
      * 请求录音需要的权限
      */
-    public static void requestRecordAudioPermissions(@NonNull Activity activity, int requestCode, GrantingCallBack callBack) {
+    public static void requestRecordAudioPermissions(@NonNull Activity activity/*, int requestCode*/, GrantingCallBack callBack) {
         String[] grant = new String[]{Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE};
-        requestPermissions(activity, requestCode, grant, callBack);
+        requestPermissions(activity/*, requestCode*/, grant, callBack);
     }
 
     /**
      * 请求拍照需要的权限
      */
-    public static void requestTakePhotoPermissions(@NonNull Activity activity, int requestCode, GrantingCallBack callBack) {
+    public static void requestTakePhotoPermissions(@NonNull Activity activity/*, int requestCode*/, GrantingCallBack callBack) {
         String[] grant = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
-        requestPermissions(activity, requestCode, grant, callBack);
+        requestPermissions(activity/*, requestCode*/, grant, callBack);
     }
 
     /**
      * 请求访问相册需要的权限
      */
-    public static void requestAlbumPermissions(@NonNull Activity activity, int requestCode, GrantingCallBack callBack) {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
-            requestPermissions(activity, requestCode,
+    public static void requestAlbumPermissions(@NonNull Activity activity, GrantingCallBack callBack) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            String[] permissions = new String[]{Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO, Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED};
+
+            for (String permission : permissions) {
+                if (ContextCompat.checkSelfPermission(activity, permission) == PackageManager.PERMISSION_GRANTED) {
+                    callBack.onGrantSuccess(true);
+                    return;
+                }
+            }
+
+            KAlertDialogHelper.Show2BDialog(
+                activity, "提示", "请授权访问 相册", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        requestPermissions(activity, permissions, new Consumer<Map<String, Boolean>>() {
+                            @Override
+                            public void callBack(Map<String, Boolean> param) {
+                                for (Map.Entry<String, Boolean> e : param.entrySet()) {
+                                    if (e.getValue()) {
+                                        callBack.onGrantSuccess(true);
+                                        return;
+                                    }
+                                }
+
+                                callBack.onGrantSuccess(false);
+                                KAlertDialogHelper.Show1BDialog(activity, "您未全部授权相关权限，您可以在设置中打开相关权限。");
+                            }
+                        });
+                    }
+                }
+            );
+        } else if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            requestPermissions(activity,
                 new String[]{Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO},
                 new String[]{"照片", "视频"},
                 callBack);
         } else if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            String[] grant = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE};
-            requestPermissions(activity, requestCode, grant, callBack);
+            requestPermissions(activity, Manifest.permission.READ_EXTERNAL_STORAGE, callBack);
+        } else {
+            callBack.onGrantSuccess(true);
         }
     }
 
     /**
      * 处理授权结果
      */
-    public static void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull final int[] grantResults) {
+    /*public static void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull final int[] grantResults) {
         if (useFragmentRequest) return;
 
         if (granting != null) granting.onResult(granting.checkResult(grantResults));
         granting = null;
-    }
+    }*/
 }

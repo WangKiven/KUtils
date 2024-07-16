@@ -76,7 +76,7 @@ class AHMediaList : KActivityHelper() {
         val permissions =
             arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
         val permissionInfos = arrayOf("存储空间", "相机")
-        KGranting.requestPermissions(mActivity, 345, permissions, permissionInfos) { isSuccess ->
+        KGranting.requestPermissions(mActivity, permissions, permissionInfos) { isSuccess ->
             if (!isSuccess) {
                 finish()
             }

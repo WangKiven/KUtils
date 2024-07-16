@@ -16,12 +16,15 @@ import androidx.annotation.RequiresApi;
 
 import com.kiven.kutils.callBack.Consumer;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class RequestPermissionFragment2  extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.M)
     public RequestPermissionFragment2() {
     }
 
-    public static void requestPermissions(@NonNull FragmentManager manager, @NonNull String[] pers, @NonNull Consumer<Boolean> call) {
+    public static void requestPermissions(@NonNull FragmentManager manager, @NonNull String[] pers, @NonNull Consumer<Map<String, Boolean>> call) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             RequestPermissionFragment2 fragment = new RequestPermissionFragment2();
             fragment.pers = pers;
@@ -29,7 +32,11 @@ public class RequestPermissionFragment2  extends Fragment {
 
             fragment.show(manager);
         } else {
-            call.callBack(true);
+            Map<String, Boolean> map = new HashMap<>();
+            for (String per : pers) {
+                map.put(per, true);
+            }
+            call.callBack(map);
         }
     }
 
@@ -40,7 +47,7 @@ public class RequestPermissionFragment2  extends Fragment {
     }
 
     private String[] pers;
-    private Consumer<Boolean> call;
+    private Consumer<Map<String, Boolean>> call;
 
     @Nullable
     @Override
@@ -58,15 +65,12 @@ public class RequestPermissionFragment2  extends Fragment {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        for (int grantResult : grantResults) {
-            if (grantResult != PackageManager.PERMISSION_GRANTED) {
-                call.callBack(false);
-                dismiss();
-                return;
-            }
+        Map<String, Boolean> map = new HashMap<>();
+        for (int i = 0; i < permissions.length; i++) {
+            map.put(permissions[i], grantResults[i] == PackageManager.PERMISSION_GRANTED);
         }
+        call.callBack(map);
 
-        call.callBack(true);
         dismiss();
     }
 

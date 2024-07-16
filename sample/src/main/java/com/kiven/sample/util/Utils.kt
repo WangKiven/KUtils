@@ -347,7 +347,7 @@ fun Activity.phoneImages(
     onError: (String) -> Unit = {},
     call: (List<Map<String, String>>) -> Unit
 ) {
-    KGranting.requestAlbumPermissions(this, 887) {
+    KGranting.requestAlbumPermissions(this) {
         if (it) {
             Thread {
                 contentResolver.query(

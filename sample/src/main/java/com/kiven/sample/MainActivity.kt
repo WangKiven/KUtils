@@ -80,7 +80,7 @@ class MainActivity : KActivity() {
             addBtn("服务自启动与保活") { AHAutoStartAndLiving().startActivity(this@MainActivity) }
             addBtn("VPN") { AHMyVpn().startActivity(this@MainActivity) }
             addBtn("打印各文件路径") {
-                KGranting.requestPermissions(this@MainActivity, 345, Manifest.permission.WRITE_EXTERNAL_STORAGE, "存储空间") { isSuccess ->
+                KGranting.requestPermissions(this@MainActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE, "存储空间") { isSuccess ->
                     if (isSuccess) {
                         KLog.i("" + KFile.createFile("tmp", ".img", getDir(Environment.DIRECTORY_PICTURES, Context.MODE_PRIVATE))!!.absolutePath)
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -125,7 +125,7 @@ class MainActivity : KActivity() {
                 AHKUtilsWidgetDemo().startActivity(this@MainActivity)
             }
             addBtn("KGranting") {
-                KGranting.requestAlbumPermissions(this@MainActivity, 233) {
+                KGranting.requestAlbumPermissions(this@MainActivity) {
                     if (it) {
                         showDialog("获取到了相册权限")
                     } else {

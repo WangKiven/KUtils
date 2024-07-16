@@ -64,7 +64,7 @@ class AHRecorderPlay : KActivityHelper() {
         }
 
 
-        KGranting.requestPermissions(mActivity, 1001, arrayOf(Manifest.permission.RECORD_AUDIO,
+        KGranting.requestPermissions(mActivity, arrayOf(Manifest.permission.RECORD_AUDIO,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE),
                 arrayOf("录音", "存储")) {
             if (!it) {

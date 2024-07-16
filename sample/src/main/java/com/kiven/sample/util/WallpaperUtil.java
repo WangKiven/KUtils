@@ -25,7 +25,7 @@ public class WallpaperUtil {
      * @param paramActivity
      */
     public static void setLiveWallpaper(final Activity paramActivity, final int requestCode) {
-        KGranting.requestPermissions(paramActivity, 344, new String[]{Manifest.permission.SET_WALLPAPER, Manifest.permission.BIND_WALLPAPER}, new String[]{"设置壁纸", "绑定壁纸"}, new KGranting.GrantingCallBack() {
+        KGranting.requestPermissions(paramActivity, new String[]{Manifest.permission.SET_WALLPAPER, Manifest.permission.BIND_WALLPAPER}, new String[]{"设置壁纸", "绑定壁纸"}, new KGranting.GrantingCallBack() {
             @Override
             public void onGrantSuccess(boolean isSuccess) {
                 try {

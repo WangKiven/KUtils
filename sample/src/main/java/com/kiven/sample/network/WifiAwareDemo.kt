@@ -39,7 +39,7 @@ class WifiAwareDemo:BaseFlexActivityHelper() {
         super.onCreate(activity, savedInstanceState)
         activity.apply {
 
-            KGranting.requestPermissions(this, 899,
+            KGranting.requestPermissions(this,
                     arrayOf(Manifest.permission.ACCESS_WIFI_STATE, Manifest.permission.CHANGE_WIFI_STATE, Manifest.permission.ACCESS_FINE_LOCATION),
                     arrayOf("ACCESS_WIFI_STATE", "CHANGE_WIFI_STATE", "ACCESS_FINE_LOCATION")) {
                 if (it) {

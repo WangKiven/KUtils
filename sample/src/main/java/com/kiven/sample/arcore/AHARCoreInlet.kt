@@ -61,7 +61,7 @@ class AHARCoreInlet : KActivityHelper() {
         addView("go", View.OnClickListener {
             if (session != null) return@OnClickListener
 
-            KGranting.requestPermissions(activity, 233, Manifest.permission.CAMERA) {
+            KGranting.requestPermissions(activity, Manifest.permission.CAMERA) {
                 if (it) {
                     try {
                         when (ArCoreApk.getInstance().requestInstall(activity, true)) {

@@ -41,6 +41,7 @@ import com.kiven.sample.util.Const.IMAGE_DIR
 import com.kiven.sample.util.showImageDialog
 import com.kiven.sample.util.showListDialog
 import com.kiven.sample.util.showSnack
+import com.kiven.sample.util.showToast
 import java.io.File
 import java.text.DateFormat
 import java.util.*
@@ -289,7 +290,8 @@ class AHMediaList : KActivityHelper() {
     }
 
     private fun getFile(fileName: String): File {
-        val dir = File(Environment.getExternalStorageDirectory(), IMAGE_DIR)
+        val dir = File(mActivity.externalCacheDir, IMAGE_DIR)
+
         if (!dir.exists()) {
             dir.mkdirs()
         }
@@ -339,8 +341,9 @@ class AHMediaList : KActivityHelper() {
                 }*/
             }
             347 -> KAlertDialogHelper.Show1BDialog(mActivity, data?.data?.path ?: "路径获取失败")
-            348 -> cropImage(KPath.getPath(data?.data))
+            348 -> data?.data?.apply { cropImage(this) }
             349 -> showImage(cropPath)
+//            349 -> mActivity.showImageDialog(data!!.extras!!.getParcelable<Bitmap>("data")!!)
             350 -> {
                 /*val retriever = MediaMetadataRetriever()
                 retriever.setDataSource(mActivity, data?.data)
@@ -410,23 +413,27 @@ class AHMediaList : KActivityHelper() {
     }
 
     var cropPath = ""
-    private fun cropImage(cameraPath: String) {
-        cropPath = getFile(System.currentTimeMillis().toString() + ".jpg").absolutePath
+    private fun cropImage(cameraPath: Uri) {
+        val outFile = getFile(System.currentTimeMillis().toString() + ".jpg")
+        cropPath = outFile.absolutePath
 
         val `in` = Intent("com.android.camera.action.CROP")
 
-        `in`.putExtra(
-            android.provider.MediaStore.EXTRA_OUTPUT,
-            Uri.fromFile(File(cropPath))
-        )
-        `in`.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        // 需要裁减的图片格式
-        val f = File(cameraPath)
-        if (Build.VERSION.SDK_INT >= 24) {
-            `in`.setDataAndType(getImageContentUri(mActivity, f), "image/*")
+
+        if (Build.VERSION.SDK_INT < 24) {
+            `in`.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(outFile))
         } else {
-            `in`.setDataAndType(Uri.fromFile(f), "image/*")
+            `in`.putExtra(
+                MediaStore.EXTRA_OUTPUT,
+                FileProvider.getUriForFile(mActivity, Const.FILEPROVIDER_AUTHORITY, outFile)
+            )
         }
+        `in`.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        `in`.putExtra("return-data", false)
+//        `in`.putExtra("return-data", true)
+
+        // 需要裁减的图片格式
+        `in`.setDataAndType(cameraPath, "image/*")
         // 允许裁减
         `in`.putExtra("crop", "true")
         // 剪裁后ImageView显时图片的宽
@@ -436,7 +443,6 @@ class AHMediaList : KActivityHelper() {
         // 设置剪裁框的宽高比例
         `in`.putExtra("aspectX", 1)
         `in`.putExtra("aspectY", 1)
-        `in`.putExtra("return-data", false)
         `in`.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString())
         `in`.putExtra("noFaceDetection", true)
         mActivity.startActivityForResult(`in`, 349)
@@ -464,9 +470,15 @@ class AHMediaList : KActivityHelper() {
             if (imageFile.exists()) {
                 val values = ContentValues()
                 values.put(MediaStore.Images.Media.DATA, filePath)
-                return context.contentResolver.insert(
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values
-                )
+                try {
+                    return context.contentResolver.insert(
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values
+                    )
+                } catch (e: Throwable) {
+                    KLog.e(e)
+                    showToast("数据处理异常：${e.message}")
+                    return null
+                }
             } else {
                 return null
             }

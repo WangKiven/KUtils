@@ -36,7 +36,7 @@ class App : KContext() {
     override fun initKUtil() {
         KUtil.init(this, KUtil.Config().apply {
             isDebug = BuildConfig.DEBUG
-            fileprovider = "com.kiven.sample.fileprovider"
+            fileprovider = Const.FILEPROVIDER_AUTHORITY
         })
     }
 

@@ -418,6 +418,8 @@ class AHMediaList : KActivityHelper() {
         cropPath = outFile.absolutePath
 
         val `in` = Intent("com.android.camera.action.CROP")
+        // 需要裁减的图片格式
+        `in`.setDataAndType(cameraPath, "image/*")
 
 
         if (Build.VERSION.SDK_INT < 24) {
@@ -430,10 +432,7 @@ class AHMediaList : KActivityHelper() {
         }
         `in`.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)
         `in`.putExtra("return-data", false)
-//        `in`.putExtra("return-data", true)
 
-        // 需要裁减的图片格式
-        `in`.setDataAndType(cameraPath, "image/*")
         // 允许裁减
         `in`.putExtra("crop", "true")
         // 剪裁后ImageView显时图片的宽
@@ -445,6 +444,7 @@ class AHMediaList : KActivityHelper() {
         `in`.putExtra("aspectY", 1)
         `in`.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString())
         `in`.putExtra("noFaceDetection", true)
+
         mActivity.startActivityForResult(`in`, 349)
     }
 

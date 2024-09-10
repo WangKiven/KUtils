@@ -24,6 +24,7 @@ import com.kiven.sample.compose.Nav
 import com.kiven.sample.compose.PageName
 import com.kiven.sample.compose.firstBaselineToTop
 import com.kiven.sample.compose.theme.Purple700
+import com.kiven.sample.util.showToast
 import kotlinx.coroutines.launch
 
 @Preview(showBackground = true)
@@ -36,6 +37,9 @@ fun HomePage() {
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val snackbarHostState = remember { SnackbarHostState() }
+    val showDialog = remember {
+        mutableStateOf(false)
+    }
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -155,6 +159,10 @@ fun HomePage() {
                         Text(text = "下一页")
                     }
 
+                    Button(onClick = { showDialog.value = true }) {
+                        Text(text = "dialog")
+                    }
+
                     Image(
                         painter = painterResource(id = R.mipmap.ic_launcher_u),
                         contentDescription = "",
@@ -166,6 +174,11 @@ fun HomePage() {
                     Text("paddingFrom(FirstBaseline, before = 24.dp)", Modifier.paddingFrom(
                         FirstBaseline, before = 24.dp))
 
+                    if (showDialog.value) MyDialog(message = "我是提示框哦~", onClick = {
+                        showDialog.value = false
+                        showToast("点击值 $it")
+                    })
+
                 }
             }
         }
@@ -176,4 +189,17 @@ fun HomePage() {
 @Composable
 fun Greeting(name: String) {
     Text(text = "Hello $name!")
+}
+
+@Composable
+fun MyDialog(message: String, onClick: (Int) -> Unit = {}, title: String = "提示") {
+    AlertDialog(
+        title = { Text(text = title) },
+        text = { Text(text = message) },
+        onDismissRequest = { onClick(0) },
+        confirmButton = {
+        TextButton(onClick = { onClick(1) }) {
+            Text(text = "确定")
+        }
+    })
 }

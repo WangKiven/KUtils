@@ -4,6 +4,7 @@ import android.annotation.TargetApi
 import android.app.Activity
 import android.app.Dialog
 import android.content.ContentUris
+import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.graphics.Bitmap
@@ -28,6 +29,9 @@ import androidx.core.database.getFloatOrNull
 import androidx.core.database.getIntOrNull
 import androidx.core.database.getStringOrNull
 import androidx.core.view.setPadding
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -43,6 +47,11 @@ import java.util.*
 /**
  * Created by wangk on 2019/5/14.
  */
+
+
+// At the top level of your kotlin file:
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+
 /// 获取一个输入
 fun Activity.getInput(
     inputName: String,

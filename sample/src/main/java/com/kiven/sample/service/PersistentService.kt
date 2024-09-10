@@ -9,8 +9,6 @@ import android.app.job.JobScheduler
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import android.net.NetworkRequest
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
@@ -45,6 +43,7 @@ class PersistentService : Service() {
 
         // 周期任务保活
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            // todo JobScheduler 已过时，可以用 WorkManager 替代
             val jobScheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler?
             if (jobScheduler != null) {
                 val jobId = 10001

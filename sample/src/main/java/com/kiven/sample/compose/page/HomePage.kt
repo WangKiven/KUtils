@@ -31,8 +31,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomePage() {
     // todo https://developer.android.google.cn/jetpack/compose/layouts/material
+// https://developer.android.google.cn/develop/ui/compose/documentation?hl=zh-cn
 //  https://developer.android.google.cn/jetpack/compose/designsystems/material2-material3?hl=zh-cn
-
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val snackbarHostState = remember { SnackbarHostState() }
@@ -58,8 +58,11 @@ fun HomePage() {
                     CenterAlignedTopAppBar(
                         title = { Text(text = "title") },
                         actions = {
-                            Text(text = "菜单")
-                            Text(text = "设置", Modifier.padding(15.dp), textAlign = TextAlign.End)
+                            Text(text = "菜单", textAlign = TextAlign.End)
+
+                            TextButton(onClick = { Nav.navigate(PageName.setting) }, Modifier.padding(15.dp)) {
+                                Text(text = "设置", color = Color.White)
+                            }
                         },
                         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                             containerColor = Purple700,

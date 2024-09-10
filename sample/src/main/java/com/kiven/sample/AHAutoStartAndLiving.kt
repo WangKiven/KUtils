@@ -18,35 +18,13 @@ import com.kiven.kutils.tools.KUtil
 import com.kiven.sample.service.PersistentService
 
 /**
- * Created by oukobayashi on 2019-12-23.
+ * Created by kiven on 2019-12-23.
  */
-class AHAutoStartAndLiving : KActivityHelper() {
+class AHAutoStartAndLiving : BaseFlexActivityHelper() {
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
 
-        val flexboxLayout = FlexboxLayout(activity)
-        flexboxLayout.flexWrap = FlexWrap.WRAP
-        flexboxLayout.alignContent = AlignContent.FLEX_START
-
-        setContentView(NestedScrollView(activity).apply {
-            addView(flexboxLayout)
-        })
-
-        val addTitle = fun(text: String) {
-            val tv = TextView(activity)
-            tv.text = text
-            tv.layoutParams = ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.MATCH_PARENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT)
-            flexboxLayout.addView(tv)
-        }
-
-        val addView = fun(text: String, click: View.OnClickListener) {
-            val btn = Button(activity)
-            btn.text = text
-            btn.setOnClickListener(click)
-            flexboxLayout.addView(btn)
-        }
-
-        addView("加入白名单", View.OnClickListener {
+        addBtn("加入白名单", View.OnClickListener {
             // 需配置权限<uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
             val powerManager = mActivity.getSystemService(Context.POWER_SERVICE) as PowerManager?
             powerManager ?: return@OnClickListener
@@ -56,9 +34,9 @@ class AHAutoStartAndLiving : KActivityHelper() {
             }
         })
 
-        addView("启动服务", View.OnClickListener { KUtil.startService(PersistentService::class.java)})
-        addView("", View.OnClickListener {})
-        addView("", View.OnClickListener {})
-        addView("", View.OnClickListener {})
+        addBtn("启动服务", View.OnClickListener { KUtil.startService(PersistentService::class.java)})
+        addBtn("", View.OnClickListener {})
+        addBtn("", View.OnClickListener {})
+        addBtn("", View.OnClickListener {})
     }
 }

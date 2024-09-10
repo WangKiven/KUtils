@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.kiven.sample.compose.Nav
+import com.kiven.sample.compose.NavBackButton
 import com.kiven.sample.compose.theme.Purple700
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -20,6 +21,7 @@ fun HelloPage(name: String = "Compose") {
         topBar = {
             CenterAlignedTopAppBar(
                 title = { Text(text = "问候") },
+                navigationIcon = { NavBackButton()},
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = Purple700,
                     titleContentColor = Color.White,

@@ -1,7 +1,16 @@
 package com.kiven.sample.compose
 
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonColors
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.navigation.*
 import androidx.navigation.compose.composable
+import com.kiven.sample.R
 import com.kiven.sample.compose.page.Greeting
 import com.kiven.sample.compose.page.HelloPage
 import com.kiven.sample.compose.page.HomePage
@@ -38,5 +47,12 @@ fun NavGraphBuilder.router() {
         defaultValue = "世界"
     })) {
         HelloPage(it.arguments?.getString("name") ?: "中国")
+    }
+}
+
+@Composable
+fun NavBackButton() {
+    IconButton(onClick = { Nav.popBackStack() }, colors = IconButtonColors(Color.White, Color.Red, Color.Yellow, Color.Green)) {
+        Icon(painter = painterResource(id = R.drawable.abc_ic_arrow_forward), contentDescription = "back", modifier = Modifier.rotate(180f))
     }
 }

@@ -191,6 +191,7 @@ fun Greeting(name: String) {
     Text(text = "Hello $name!")
 }
 
+// https://developer.android.google.cn/develop/ui/compose/components/dialog?hl=zh-cn
 @Composable
 fun MyDialog(message: String, onClick: (Int) -> Unit = {}, title: String = "提示") {
     AlertDialog(

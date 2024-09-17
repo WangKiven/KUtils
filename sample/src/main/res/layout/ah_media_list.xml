@@ -137,6 +137,16 @@
             app:item_title="视频缩略图" />
 
         <com.kiven.kutils.widget.KNormalItemView
+            android:id="@+id/item_manage_file"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="onClick"
+            app:item_title="管理媒体文件" />
+
+        <com.kiven.kutils.widget.KNormalItemView
             android:id="@+id/item_camerax"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

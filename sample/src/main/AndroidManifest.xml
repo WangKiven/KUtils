@@ -101,6 +101,10 @@
     <!-- Devices running Android 14 (API level 34) or higher -->
     <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
 
+    <!-- 媒体文件管理, 有这个权限，删除修改图片时不用弹窗 -->
+    <uses-permission android:name="android.permission.MANAGE_MEDIA" />
+    <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION" />
+
     <application
         android:name=".App"
         android:allowBackup="true"

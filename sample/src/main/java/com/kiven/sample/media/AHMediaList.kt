@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.media.MediaMetadataRetriever
 import android.media.ThumbnailUtils
 import android.net.Uri
 import android.os.Build
@@ -15,6 +16,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
+import android.util.Size
 import android.view.View
 import android.widget.ImageView
 import androidx.activity.result.ActivityResultLauncher
@@ -22,6 +24,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.registerForActivityResult
 import androidx.core.content.FileProvider
+import androidx.core.net.toFile
 import androidx.exifinterface.media.ExifInterface
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
@@ -38,6 +41,8 @@ import com.kiven.kutils.tools.*
 import com.kiven.sample.R
 import com.kiven.sample.util.Const
 import com.kiven.sample.util.Const.IMAGE_DIR
+import com.kiven.sample.util.phoneImages
+import com.kiven.sample.util.pickPhoneImage
 import com.kiven.sample.util.showImageDialog
 import com.kiven.sample.util.showListDialog
 import com.kiven.sample.util.showSnack
@@ -176,6 +181,9 @@ class AHMediaList : KActivityHelper() {
             R.id.item_video_thumb -> mActivity.startActivityForResult(
                 Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI), 350
             )
+            R.id.item_manage_file -> {
+                AHMediaManager().startActivity(mActivity)
+            }
             R.id.item_camerax -> AHCameraxTest().startActivity(mActivity)
             R.id.item_exoplayer -> {
                 /// https://github.com/google/ExoPlayer
@@ -341,23 +349,36 @@ class AHMediaList : KActivityHelper() {
                 }*/
             }
             347 -> KAlertDialogHelper.Show1BDialog(mActivity, data?.data?.path ?: "路径获取失败")
-            348 -> data?.data?.apply { cropImage(this) }
+            348 -> data?.data?.apply {
+                cropImage(this)
+            }
             349 -> showImage(cropPath)
 //            349 -> mActivity.showImageDialog(data!!.extras!!.getParcelable<Bitmap>("data")!!)
             350 -> {
-                /*val retriever = MediaMetadataRetriever()
+                val retriever = MediaMetadataRetriever()
                 retriever.setDataSource(mActivity, data?.data)
-                val bmp = retriever.frameAtTime
-                retriever.release()*/
+                val bmp = retriever.frameAtTime ?: return
+                retriever.release()
 
-                val path = KPath.getPath(data?.data)
-                val bmp =
-                    ThumbnailUtils.createVideoThumbnail(path, MediaStore.Video.Thumbnails.MINI_KIND)
+                mActivity.showImageDialog(bmp)
+
+                /*val bmp = mActivity.contentResolver.loadThumbnail(data!!.data!!, Size(300, 300), null)
+                mActivity.showImageDialog(bmp)*/
+
+
+                /*val uri = data?.data ?: return
+
+                val bmp = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    ThumbnailUtils.createVideoThumbnail(uri.toFile(), Size(100, 100), null)
+                } else {
+                    ThumbnailUtils.createVideoThumbnail(KPath.getPath(uri), MediaStore.Video.Thumbnails.MINI_KIND)
+                }
+
                 if (bmp == null) {
                     KToast.ToastMessage("获取视频文件缩略图失败")
                 } else {
-                    showImage(path, bmp)
-                }
+                    mActivity.showImageDialog(bmp)
+                }*/
             }
             351 -> {
                 data?.extras?.apply {
@@ -420,7 +441,6 @@ class AHMediaList : KActivityHelper() {
         val `in` = Intent("com.android.camera.action.CROP")
         // 需要裁减的图片格式
         `in`.setDataAndType(cameraPath, "image/*")
-
 
         if (Build.VERSION.SDK_INT < 24) {
             `in`.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(outFile))

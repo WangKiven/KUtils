@@ -142,6 +142,7 @@ class AHMediaManager: BaseFlexActivityHelper() {
 
         }
 
+        // todo 红米k40游戏增强版测试，还是把图片放到回收站了
         addBtn("createDeleteRequest() 删除文件") {
             tUri = null
 

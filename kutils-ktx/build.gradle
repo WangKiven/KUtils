@@ -31,13 +31,13 @@ publishing {
 
 android {
     namespace 'com.sxb.kutils_ktx'
-    compileSdk 34
+    compileSdk 35
 //    buildToolsVersion "29.0.2"
 
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 34
+        targetSdkVersion 35
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'

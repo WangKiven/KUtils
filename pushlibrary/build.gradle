@@ -32,13 +32,12 @@ publishing {
 
 android {
     namespace 'com.kiven.pushlibrary'
-    compileSdk 34
-//    buildToolsVersion "29.0.2"
+    compileSdk 35
 
 
     defaultConfig {
         minSdkVersion 19 // 华为推送要求17，oppo推送要求19
-        targetSdkVersion 34
+        targetSdkVersion 35
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'

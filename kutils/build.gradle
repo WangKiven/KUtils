@@ -30,11 +30,11 @@ publishing {
 
 android {
     namespace 'com.kiven.kutils'
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 34
+        targetSdkVersion 35
 //        javaCompileOptions.annotationProcessorOptions.includeCompileClasspath = true
     }
     buildTypes {

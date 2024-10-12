@@ -458,9 +458,9 @@ class AHSmallAction : KActivityHelper() {
             val info = mActivity.packageManager.getPackageInfo(mActivity.packageName, flag)
 
             val sign = if (Build.VERSION.SDK_INT >= 28) {
-                info.signingInfo.apkContentsSigners
+                info.signingInfo!!.apkContentsSigners
             } else
-                info.signatures
+                info.signatures!!
 
             val ss = StringBuffer()
             for (si in sign) {

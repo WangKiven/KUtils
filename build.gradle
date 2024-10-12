@@ -44,12 +44,16 @@ buildscript {
     }
 
     project.ext {
-        compileSdkVersion = 34
-        targetSdkVersion = 34
+        compileSdkVersion = 35
+        targetSdkVersion = 35
 //        compileSdkVersion = "android-S"
 //        targetSdkVersion = "S"
         minSdkVersion = 14
     }
+}
+
+plugins {
+    id 'com.google.devtools.ksp' version '1.9.20-1.0.13' apply false
 }
 
 task clean(type: Delete) {

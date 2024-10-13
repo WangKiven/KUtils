@@ -100,7 +100,7 @@ dependencies {
 
     // todo OPPO推送, 文档使用的是 implementation(name: 'push-3.0.0', ext: 'aar')
     //  需要配置 repositories { flatDir { dirs 'libs' } }，但是在这里不适用（这本来是一个SDK，其他应用不方便这样导入）
-//    implementation fileTree(dir: 'oppoPush', include: ['*.jar', '*.bak'])
+//    implementation fileTree(dir: 'oppoPush', include: ['*.aar'])
     implementation zipTree('oppoPush/com.heytap.msp_3.1.0.aar')
 //    implementation files('oppoPush/com.heytap.msp_3.1.0.aar')
     //以下依赖都需要添加

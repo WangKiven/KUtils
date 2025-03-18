@@ -43,8 +43,12 @@ class MainActivity : KActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        setContentView(R.layout.main_activity)
+
         binding = MainActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
+        setSupportActionBar(binding.toolbar)
 
         setupWindowAnimations()
 

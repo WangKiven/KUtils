@@ -29,7 +29,23 @@
         <item name="android:textAllCaps">false</item>
     </style>
 
-    <style name="AppTheme.NoActionBar">
+    <style name="AppTheme2" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryDark</item>
+        <item name="colorOnPrimary">@color/white</item>
+
+        <item name="colorSecondary">#cda4d9</item>
+        <item name="colorSecondaryVariant">#967ace</item>
+        <item name="colorOnSecondary">@color/black</item>
+
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
+
+        <item name="colorPrimaryContainer">#11000000</item>
+
+    </style>
+
+    <style name="AppTheme.NoActionBar" parent="AppTheme">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>

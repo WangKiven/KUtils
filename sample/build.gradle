@@ -111,6 +111,8 @@ android {
         viewBinding true
         // Enables Jetpack Compose for this module
         compose true
+
+        buildConfig true// BuildConfig  https://blog.csdn.net/2301_79344902/article/details/144637819
     }
     composeOptions {
 //        kotlinCompilerExtensionVersion compose_version

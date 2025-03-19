@@ -30,7 +30,7 @@ dependencyResolutionManagement {
 }
 rootProject.name = "KUtils"
 
-include ':kutils', ':sample', ':kutils-ktx', ':pushlibrary'
+include ':kutils', ':sample', ':kutils-ktx'//, ':pushlibrary'
 
 // https://github.com/WangKiven/xUtils3
 //include ':xutils'

@@ -4,11 +4,9 @@ import android.content.Context
 import android.content.pm.PackageManager
 import com.kiven.kutils.logHelper.KLog
 import com.kiven.pushlibrary.PushHelper
-import com.kiven.pushlibrary.Web
 import com.xiaomi.channel.commonutils.logger.LoggerInterface
 import com.xiaomi.mipush.sdk.Logger
 import com.xiaomi.mipush.sdk.MiPushClient
-import com.xiaomi.mipush.sdk.PushConfiguration
 
 /**
  * 接入指南：https://dev.mi.com/console/doc/detail?pId=100

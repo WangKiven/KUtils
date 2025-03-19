@@ -26,7 +26,6 @@ import com.kiven.sample.helperTest.AHHelperTest
 import com.kiven.sample.kutils.AHKUtilsWidgetDemo
 import com.kiven.sample.libs.AHLibs
 import com.kiven.sample.media.AHMediaList
-import com.kiven.sample.push.AHSxbPush
 import com.kiven.sample.theme.AHTheme
 import com.kiven.sample.util.addBtn
 import com.kiven.sample.util.addTitle
@@ -166,7 +165,7 @@ class MainActivity : KActivity() {
             addBtn("小功能") { AHSmallAction().startActivity(this@MainActivity) }
             addBtn("遍历字体") { AHFont().startActivity(this@MainActivity) }
             addBtn("ARCore") { AHARCoreInlet().startActivity(this@MainActivity) }
-            addBtn("三方平台推送") { AHSxbPush().startActivity(this@MainActivity) }
+//            addBtn("三方平台推送") { AHSxbPush().startActivity(this@MainActivity) }
             addBtn("cpu、内存管理") { AHCPUMemory().startActivity(this@MainActivity) }
             addBtn("KLog") {
                 testKLog()

@@ -146,7 +146,8 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     implementation project(':kutils')
     implementation project(':kutils-ktx')
-    implementation project(':pushlibrary')
+//    implementation project(':pushlibrary')
+//    implementation 'com.github.WangKiven.KUtils:pushlibrary:1.7.0'
 //    implementation project(':xutils')
     implementation 'com.github.WangKiven:xUtils3:3.9.0-k'
 

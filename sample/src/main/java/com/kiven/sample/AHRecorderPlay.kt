@@ -41,6 +41,7 @@ class AHRecorderPlay : KActivityHelper() {
         val flexboxLayout = FlexboxLayout(activity)
         flexboxLayout.flexWrap = FlexWrap.WRAP
         flexboxLayout.alignContent = AlignContent.FLEX_START
+        flexboxLayout.fitsSystemWindows = true
 
         val scroll = NestedScrollView(activity)
         scroll.addView(flexboxLayout)

@@ -24,6 +24,7 @@ class AHFont : KActivityHelper() {
     override fun onCreate(activity: KHelperActivity, savedInstanceState: Bundle?) {
         super.onCreate(activity, savedInstanceState)
         val listView = ListView(activity)
+        listView.fitsSystemWindows = true
         setContentView(listView)
 
 

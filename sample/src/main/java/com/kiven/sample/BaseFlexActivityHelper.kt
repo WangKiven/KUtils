@@ -21,6 +21,7 @@ open class BaseFlexActivityHelper : KActivityHelper() {
         FlexboxLayout(mActivity).apply {
             flexWrap = FlexWrap.WRAP
             alignContent = AlignContent.FLEX_START
+            fitsSystemWindows = true
         }
     }
 

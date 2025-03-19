@@ -29,6 +29,7 @@ class AHARCoreInlet : KActivityHelper() {
         val flexboxLayout = FlexboxLayout(activity)
         flexboxLayout.flexWrap = FlexWrap.WRAP
         flexboxLayout.alignContent = AlignContent.FLEX_START
+        flexboxLayout.fitsSystemWindows = true
 
 
         setContentView(NestedScrollView(activity).apply {
